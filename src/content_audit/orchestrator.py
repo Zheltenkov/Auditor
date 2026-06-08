@@ -12,6 +12,7 @@ from content_audit.extraction import extract_entities
 from content_audit.ingestion import discover_content_units, load_unit_files
 from content_audit.manifest import apply_unit_manifest
 from content_audit.openrouter import OpenRouterClient
+from content_audit.severity import SeverityCalibrator
 
 
 DEFAULT_FACT_MODEL = "perplexity/sonar"
@@ -70,7 +71,8 @@ class AuditRunner:
 
         step_started = datetime.now(timezone.utc)
         cache.save()
-        findings = self._filter_findings(all_findings)
+        calibrated_findings = SeverityCalibrator().calibrate(all_findings)
+        findings = self._filter_findings(calibrated_findings)
         _finish_step(steps, "Сборка отчёта", step_started, f"Случаев: {len(findings)}")
         summary = self._build_summary(started_at, units, findings, warnings, model_used, context, steps)
         return AuditReport(summary=summary, units=units, entities=all_entities, findings=findings)

@@ -1,17 +1,20 @@
 from pathlib import Path
 
+from content_audit import checks as checks_module
 from content_audit.cache import AuditCache
 from content_audit.checks import (
     CheckContext,
     ChecklistChecker,
     FactCheckerPerplexity,
+    ImageQualityChecker,
     LanguageCoverageChecker,
     LinkChecker,
     ReadabilityChecker,
+    RightsChecker,
     TechFreshnessChecker,
     TechnologyFreshnessChecker,
 )
-from content_audit.domain import AuditSettings, Criterion, Verdict
+from content_audit.domain import AuditSettings, Criterion, Severity, Verdict
 from content_audit.extraction import extract_entities
 from content_audit.ingestion import discover_content_units, load_unit_files
 
@@ -61,6 +64,23 @@ def test_language_checker_flags_single_language(workspace_tmp_path: Path) -> Non
 
     assert findings[0].verdict == Verdict.WARNING
     assert findings[0].extra["languages"] == ["RUS"]
+
+
+def test_language_checker_cross_checks_suffix_with_content(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README_RUS.md").write_text(
+        "This project explains how to build and test command line utilities. "
+        "Students should read the instructions carefully before starting the task.",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+
+    findings = LanguageCoverageChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
+
+    assert any(finding.evidence[0].title == "Несовпадение языка" for finding in findings)
+    assert findings[0].extra["mismatches"][0]["expected"] == "RUS"
+    assert findings[0].extra["mismatches"][0]["detected"] == "ENG"
 
 
 def test_readability_checker_does_not_flag_long_lines_without_model(workspace_tmp_path: Path) -> None:
@@ -116,6 +136,38 @@ def test_technology_checker_creates_actuality_candidate(workspace_tmp_path: Path
     findings = TechnologyFreshnessChecker().check(unit, entities, CheckContext(_settings(workspace_tmp_path, project)))
 
     assert any(finding.criterion == Criterion.ACTUALITY for finding in findings)
+
+
+def test_rights_checker_treats_missing_license_as_info(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text("# Проект\n", encoding="utf-8")
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+
+    findings = RightsChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
+
+    assert findings[0].criterion == Criterion.RIGHTS
+    assert findings[0].severity == Severity.INFO
+    assert findings[0].verdict == Verdict.UNKNOWN
+
+
+def test_image_quality_checker_ignores_decorative_small_icons(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text("![icon](icon.png)\n", encoding="utf-8")
+    (project / "icon.png").write_bytes(
+        b"\x89PNG\r\n\x1a\n"
+        + b"\x00\x00\x00\rIHDR"
+        + (32).to_bytes(4, "big")
+        + (32).to_bytes(4, "big")
+        + b"\x08\x06\x00\x00\x00"
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+    entities = extract_entities(unit)
+
+    findings = ImageQualityChecker().check(unit, entities, CheckContext(_settings(workspace_tmp_path, project)))
+
+    assert findings == []
 
 
 def test_tech_freshness_checker_uses_sources_and_cache(workspace_tmp_path: Path) -> None:
@@ -198,3 +250,34 @@ def test_link_checker_blocks_private_ip_before_network(workspace_tmp_path: Path)
 
     assert findings[0].verdict == Verdict.UNKNOWN
     assert "Локальные адреса" in findings[0].evidence[0].detail or "Внутренние IP" in findings[0].evidence[0].detail
+
+
+def test_link_checker_treats_transient_status_as_recheck(workspace_tmp_path: Path, monkeypatch) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text("[slow](https://example.com/slow)\n", encoding="utf-8")
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+    entities = extract_entities(unit)
+    settings = _settings(workspace_tmp_path, project).model_copy(update={"allow_network": True})
+    monkeypatch.setattr(checks_module, "_check_url", lambda *_args: (503, "https://example.com/slow", None))
+
+    findings = LinkChecker().check(unit, entities, CheckContext(settings))
+
+    assert findings[0].severity == Severity.INFO
+    assert findings[0].verdict == Verdict.UNKNOWN
+    assert "Повторить проверку позже" in findings[0].recommendation
+
+
+def test_link_checker_does_not_make_first_404_critical(workspace_tmp_path: Path, monkeypatch) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text("[missing](https://example.com/missing)\n", encoding="utf-8")
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+    entities = extract_entities(unit)
+    settings = _settings(workspace_tmp_path, project).model_copy(update={"allow_network": True})
+    monkeypatch.setattr(checks_module, "_check_url", lambda *_args: (404, "https://example.com/missing", None))
+
+    findings = LinkChecker().check(unit, entities, CheckContext(settings))
+
+    assert findings[0].severity == Severity.MAJOR
+    assert findings[0].verdict == Verdict.FAIL

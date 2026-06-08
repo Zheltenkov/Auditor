@@ -221,23 +221,41 @@ class LinkChecker(BaseChecker):
 
             status_code, final_url, error = _check_url(entity.value, context.settings.link_timeout_seconds, context.settings.link_allowlist)
             if error is not None:
+                severity = Severity.MINOR if _is_redirect_chain_error(error) else Severity.INFO
+                verdict = Verdict.WARNING if _is_redirect_chain_error(error) else Verdict.UNKNOWN
                 findings.append(
                     _finding(
                         unit,
                         self.name,
                         Criterion.ACTUALITY,
-                        Severity.MAJOR,
-                        Verdict.WARNING,
-                        0.75,
+                        severity,
+                        verdict,
+                        0.65,
                         entity.quote,
                         entity.location,
                         [Evidence(title="Ошибка запроса", detail=error, url=entity.value)],
-                        "Проверить ссылку вручную: возможно, ресурс недоступен, требует авторизации или блокирует автоматические запросы.",
+                        "Перепроверить ссылку: ошибка может быть временной, сетевой или связанной с перенаправлениями.",
+                        True,
+                    )
+                )
+            elif _is_transient_http_status(status_code):
+                findings.append(
+                    _finding(
+                        unit,
+                        self.name,
+                        Criterion.ACTUALITY,
+                        Severity.INFO,
+                        Verdict.UNKNOWN,
+                        0.65,
+                        entity.quote,
+                        entity.location,
+                        [Evidence(title="Временный HTTP-статус", detail=f"Получен статус {status_code}.", url=final_url or entity.value)],
+                        "Повторить проверку позже: статус похож на временную недоступность или ограничение запросов.",
                         True,
                     )
                 )
             elif status_code >= 400:
-                severity = Severity.CRITICAL if status_code in {404, 410} else Severity.MAJOR
+                severity = Severity.MAJOR
                 findings.append(
                     _finding(
                         unit,
@@ -250,6 +268,22 @@ class LinkChecker(BaseChecker):
                         entity.location,
                         [Evidence(title="HTTP-статус", detail=f"Получен статус {status_code}.", url=final_url or entity.value)],
                         "Заменить ссылку на актуальную или удалить зависимость от недоступного ресурса.",
+                        True,
+                    )
+                )
+            elif _redirect_smells_like_rot(entity.value, final_url):
+                findings.append(
+                    _finding(
+                        unit,
+                        self.name,
+                        Criterion.ACTUALITY,
+                        Severity.MINOR,
+                        Verdict.WARNING,
+                        0.7,
+                        entity.quote,
+                        entity.location,
+                        [Evidence(title="Подозрительный редирект", detail=f"Финальный адрес: {final_url}.", url=final_url or entity.value)],
+                        "Проверить, ведёт ли ссылка на нужный материал, а не на главную страницу или другой домен.",
                         True,
                     )
                 )
@@ -393,10 +427,10 @@ class LanguageCoverageChecker(BaseChecker):
 
     def check(self, unit: ContentUnit, entities: list[ExtractedEntity], context: CheckContext) -> list[Finding]:
         del entities, context
-        languages = _detect_languages(unit)
+        languages, mismatches = _detect_language_profile(unit)
         severity = Severity.INFO if len(languages) >= 2 else Severity.MINOR
         verdict = Verdict.PASS if len(languages) >= 2 else Verdict.WARNING
-        return [
+        findings = [
             _finding(
                 unit,
                 self.name,
@@ -409,9 +443,32 @@ class LanguageCoverageChecker(BaseChecker):
                 [Evidence(title="Языковые версии", detail=f"Обнаружены: {', '.join(sorted(languages)) or 'не определены'}.")],
                 "Если для ветки требуется многоязычность, добавить недостающие версии материалов.",
                 len(languages) < 2,
-                extra={"languages": sorted(languages)},
+                extra={"languages": sorted(languages), "mismatches": mismatches},
             )
         ]
+        for mismatch in mismatches:
+            findings.append(
+                _finding(
+                    unit,
+                    self.name,
+                    Criterion.LANGUAGE,
+                    Severity.MINOR,
+                    Verdict.WARNING,
+                    0.75,
+                    None,
+                    TextLocation(file_path=mismatch["file_path"]),
+                    [
+                        Evidence(
+                            title="Несовпадение языка",
+                            detail=f"В имени файла ожидается {mismatch['expected']}, по тексту похоже на {mismatch['detected']}.",
+                        )
+                    ],
+                    "Проверить имя файла или содержимое языковой версии.",
+                    True,
+                    extra=mismatch,
+                )
+            )
+        return findings
 
 
 class ExamPresenceChecker(BaseChecker):
@@ -492,6 +549,8 @@ class ImageQualityChecker(BaseChecker):
                 continue
             width, height = dimensions
             if width < context.settings.min_image_width or height < context.settings.min_image_height:
+                if _is_decorative_image(entity.value, entity.quote, width, height):
+                    continue
                 findings.append(
                     _finding(
                         unit,
@@ -668,7 +727,7 @@ class RightsChecker(BaseChecker):
                     unit,
                     self.name,
                     Criterion.RIGHTS,
-                    Severity.MINOR,
+                    Severity.INFO,
                     Verdict.UNKNOWN,
                     0.55,
                     None,
@@ -831,7 +890,9 @@ class ModelRubricChecker(BaseChecker):
 Критерии: market_fit, correctness, workload, rights, readability, checklist_alignment, actuality.
 Все текстовые поля ответа пиши на русском языке.
 Не используй английский язык в рекомендации, если только цитируешь исходный термин из материала.
-Не придумывай источники. Если доказательств мало, ставь verdict='unknown' и needs_human_review=true."""
+Не придумывай источники. Если доказательств мало, ставь verdict='unknown' и needs_human_review=true.
+Для market_fit и workload не ставь severity='critical': это консультационные критерии до калибровки на данных.
+Для workload ставь verdict='unknown', если нет данных о реальном времени прохождения или трудозатратах."""
 
     def check(self, unit: ContentUnit, entities: list[ExtractedEntity], context: CheckContext) -> list[Finding]:
         del entities
@@ -919,6 +980,34 @@ def _check_url(url: str, timeout_seconds: float, allowlist: list[str]) -> tuple[
         return 0, current_url, str(exc)
 
 
+def _is_transient_http_status(status_code: int) -> bool:
+    """Отделяем временную недоступность от устойчиво битой ссылки."""
+
+    return status_code in {408, 425, 429, 500, 502, 503, 504, 520, 521, 522, 523, 524}
+
+
+def _is_redirect_chain_error(error: str) -> bool:
+    """Цепочка редиректов чаще похожа на гниение ссылки, чем на сетевой сбой."""
+
+    return "перенаправ" in error.lower() or "redirect" in error.lower()
+
+
+def _redirect_smells_like_rot(original_url: str, final_url: str | None) -> bool:
+    """Ловим редирект на другой домен или главную страницу вместо исходного материала."""
+
+    if not final_url:
+        return False
+    original = urlparse(original_url)
+    final = urlparse(final_url)
+    original_host = (original.hostname or "").lower().removeprefix("www.")
+    final_host = (final.hostname or "").lower().removeprefix("www.")
+    if original_host and final_host and original_host != final_host:
+        return True
+    original_path = original.path or "/"
+    final_path = final.path or "/"
+    return original_path not in {"", "/"} and final_path in {"", "/"}
+
+
 def _url_policy_error(url: str, allowlist: list[str]) -> str | None:
     """Проверяем схему, локальные адреса и список разрешённых доменов."""
 
@@ -979,21 +1068,63 @@ def _checklist_name_matches_readme(name: str, normalized_readme: str) -> bool:
     return bool(part_match and f"part {part_match.group(1)}" in normalized_readme)
 
 
-def _detect_languages(unit: ContentUnit) -> set[str]:
-    """Определяем языковые версии по именам файлов и маркерам в тексте."""
+def _detect_language_profile(unit: ContentUnit) -> tuple[set[str], list[dict[str, str]]]:
+    """Определяем языковые версии и сверяем явные суффиксы с содержимым."""
 
     languages: set[str] = set()
+    mismatches: list[dict[str, str]] = []
     for file in unit.files:
         lower_path = file.relative_path.lower()
-        if "_rus" in lower_path or "рус" in lower_path:
-            languages.add("RUS")
-        if "_uzb" in lower_path or "_uz" in lower_path:
-            languages.add("UZ")
-        if "_tg" in lower_path or "taj" in lower_path:
-            languages.add("TG")
-        if file.kind == "readme" and not any(marker in lower_path for marker in ("_rus", "_uzb", "_uz", "_tg")):
+        expected = _language_from_path(lower_path)
+        detected = _language_from_content(file.text)
+        if expected:
+            languages.add(expected)
+        elif detected:
+            languages.add(detected)
+        elif file.kind == "readme":
             languages.add("ENG")
-    return languages
+
+        if expected and detected and expected != detected:
+            mismatches.append({"file_path": file.relative_path, "expected": expected, "detected": detected})
+    return languages, mismatches
+
+
+def _language_from_path(lower_path: str) -> str | None:
+    """Достаём явный язык из имени файла."""
+
+    if "_rus" in lower_path or "рус" in lower_path:
+        return "RUS"
+    if "_uzb" in lower_path or "_uz" in lower_path:
+        return "UZ"
+    if "_tg" in lower_path or "taj" in lower_path:
+        return "TG"
+    if "_eng" in lower_path:
+        return "ENG"
+    return None
+
+
+def _language_from_content(text: str) -> str | None:
+    """Дешёвый кросс-чек языка по содержимому без внешних зависимостей."""
+
+    sample = text[:6000].lower()
+    letters = [char for char in sample if char.isalpha()]
+    if len(letters) < 40:
+        return None
+
+    cyrillic = sum(1 for char in letters if "а" <= char <= "я" or char == "ё")
+    latin = sum(1 for char in letters if "a" <= char <= "z")
+    tajik_markers = set("қғӯҳҷӣ")
+    if any(char in tajik_markers for char in sample):
+        return "TG"
+
+    uzbek_markers = ("o‘", "g‘", "o'", "g'", "bo'lim", "uchun", "kerak", "loyiha", "tekshir")
+    if latin > cyrillic * 2 and any(marker in sample for marker in uzbek_markers):
+        return "UZ"
+    if cyrillic > latin * 2:
+        return "RUS"
+    if latin > cyrillic * 2:
+        return "ENG"
+    return None
 
 
 def _read_image_dimensions(path: Path) -> tuple[int, int] | None:
@@ -1010,6 +1141,16 @@ def _read_image_dimensions(path: Path) -> tuple[int, int] | None:
     except OSError:
         return None
     return None
+
+
+def _is_decorative_image(path: str, quote: str, width: int, height: int) -> bool:
+    """Не ругаем маленькие иконки, бейджи и логотипы как содержательные изображения."""
+
+    marker_text = f"{path} {quote}".lower()
+    decorative_markers = ("icon", "badge", "logo", "favicon", "avatar", "shield", "икон", "логотип")
+    if any(marker in marker_text for marker in decorative_markers):
+        return True
+    return width <= 128 and height <= 128
 
 
 def _read_jpeg_dimensions(data: bytes) -> tuple[int, int] | None:

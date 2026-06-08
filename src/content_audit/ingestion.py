@@ -15,11 +15,18 @@ SUPPORTED_SUFFIXES = {
     ".yaml",
     ".json",
     ".csv",
+    ".toml",
+    ".lock",
+    ".xml",
+    ".gradle",
 }
 
 SUPPORTED_EXTENSIONLESS_NAMES = {
     "changelog",
+    "dockerfile",
+    "go.mod",
     "license",
+    "pipfile",
 }
 
 IGNORED_DIRS = {
@@ -29,6 +36,9 @@ IGNORED_DIRS = {
     ".venv",
     "__pycache__",
     "node_modules",
+}
+
+IGNORED_TOP_LEVEL_DIRS = {
     "build",
     "dist",
 }
@@ -112,7 +122,9 @@ def _is_ignored(path: Path, root: Path) -> bool:
     """Отбрасываем служебные папки, чтобы не проверять артефакты сборки."""
 
     relative_parts = path.relative_to(root).parts
-    return any(part in IGNORED_DIRS for part in relative_parts)
+    if any(part in IGNORED_DIRS for part in relative_parts):
+        return True
+    return bool(relative_parts and relative_parts[0] in IGNORED_TOP_LEVEL_DIRS)
 
 
 def _read_text(path: Path) -> str:
@@ -140,11 +152,34 @@ def _classify_file(path: Path) -> str:
         return "readme"
     if lower_name.startswith("check-list"):
         return "checklist"
+    if _is_dependency_manifest(path):
+        return "dependency_manifest"
     if "material" in path.as_posix().lower():
         return "material"
     if "test" in path.as_posix().lower():
         return "test"
     return "text"
+
+
+def _is_dependency_manifest(path: Path) -> bool:
+    """Отмечаем файлы зависимостей и окружения для отдельной проверки актуальности."""
+
+    lower_name = path.name.lower()
+    return lower_name in {
+        "package.json",
+        "package-lock.json",
+        "requirements.txt",
+        "requirements-dev.txt",
+        "pyproject.toml",
+        "poetry.lock",
+        "pipfile",
+        "pipfile.lock",
+        "dockerfile",
+        "pom.xml",
+        "build.gradle",
+        "build.gradle.kts",
+        "go.mod",
+    }
 
 
 def _slugify(value: str) -> str:

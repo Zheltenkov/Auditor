@@ -1,0 +1,203 @@
+"""Доменные модели и строгие контракты аудита."""
+
+from __future__ import annotations
+
+from datetime import datetime
+from enum import StrEnum
+from pathlib import Path
+from typing import Any
+
+from pydantic import BaseModel, ConfigDict, Field, field_validator
+
+
+class Criterion(StrEnum):
+    """Критерии проверки из ТЗ и таблицы приоритетов."""
+
+    ACTUALITY = "actuality"
+    MARKET_FIT = "market_fit"
+    RIGHTS = "rights"
+    CORRECTNESS = "correctness"
+    READABILITY = "readability"
+    CHECKLIST_ALIGNMENT = "checklist_alignment"
+    WORKLOAD = "workload"
+    EXAM = "exam"
+    LANGUAGE = "language"
+    IMAGE_QUALITY = "image_quality"
+
+
+class Severity(StrEnum):
+    """Критичность найденного случая."""
+
+    CRITICAL = "critical"
+    MAJOR = "major"
+    MINOR = "minor"
+    INFO = "info"
+
+
+class Verdict(StrEnum):
+    """Результат проверки."""
+
+    FAIL = "fail"
+    WARNING = "warning"
+    UNKNOWN = "unknown"
+    PASS = "pass"
+
+
+class EntityType(StrEnum):
+    """Тип извлечённой сущности."""
+
+    LINK = "link"
+    IMAGE = "image"
+    DATE = "date"
+    VERSION = "version"
+    TECHNOLOGY = "technology"
+    FACT_CANDIDATE = "fact_candidate"
+
+
+CRITERION_LABELS: dict[Criterion, str] = {
+    Criterion.ACTUALITY: "Актуальность",
+    Criterion.MARKET_FIT: "Соответствие рынку",
+    Criterion.RIGHTS: "Оригинальность и права использования ресурсов",
+    Criterion.CORRECTNESS: "Точность и корректность",
+    Criterion.READABILITY: "Грамотность и читаемость текста",
+    Criterion.CHECKLIST_ALIGNMENT: "Соответствие заданий проекта чек-листу",
+    Criterion.WORKLOAD: "Трудоёмкость",
+    Criterion.EXAM: "Экзамен",
+    Criterion.LANGUAGE: "Язык",
+    Criterion.IMAGE_QUALITY: "Качество изображений",
+}
+
+SEVERITY_LABELS: dict[Severity, str] = {
+    Severity.CRITICAL: "Critical",
+    Severity.MAJOR: "Major",
+    Severity.MINOR: "Minor",
+    Severity.INFO: "Info",
+}
+
+VERDICT_LABELS: dict[Verdict, str] = {
+    Verdict.FAIL: "Проблема",
+    Verdict.WARNING: "Предупреждение",
+    Verdict.UNKNOWN: "Нужна проверка",
+    Verdict.PASS: "Проверено",
+}
+
+
+class AuditSettings(BaseModel):
+    """Настройки одного запуска аудита."""
+
+    input_path: Path
+    output_path: Path
+    allow_network: bool = False
+    use_model: bool = False
+    include_unknown: bool = True
+    include_pass: bool = False
+    max_file_bytes: int = 2_000_000
+    link_timeout_seconds: float = 8.0
+    min_image_width: int = 640
+    min_image_height: int = 360
+    openrouter_api_key: str | None = None
+    openrouter_model: str | None = None
+
+    @field_validator("input_path", "output_path")
+    @classmethod
+    def expand_path(cls, value: Path) -> Path:
+        """Приводим путь к абсолютному виду, чтобы отчёты были воспроизводимыми."""
+
+        return value.expanduser().resolve()
+
+
+class ContentFile(BaseModel):
+    """Один проверяемый файл внутри единицы контента."""
+
+    relative_path: str
+    absolute_path: Path
+    kind: str
+    text: str
+    size_bytes: int
+
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
+
+class ContentUnit(BaseModel):
+    """Минимальная единица аудита: обычно одна папка учебного проекта."""
+
+    unit_id: str
+    name: str
+    root_path: Path
+    relative_path: str
+    branch: str | None = None
+    admin_url: str | None = None
+    files: list[ContentFile] = Field(default_factory=list)
+
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
+
+class TextLocation(BaseModel):
+    """Положение фрагмента в исходном файле."""
+
+    file_path: str
+    line_start: int | None = None
+    line_end: int | None = None
+
+
+class ExtractedEntity(BaseModel):
+    """Сущность, которую можно отправить на проверку."""
+
+    entity_id: str
+    entity_type: EntityType
+    value: str
+    quote: str
+    location: TextLocation
+    context: str | None = None
+
+
+class Evidence(BaseModel):
+    """Доказательство или техническое основание вердикта."""
+
+    title: str
+    detail: str
+    url: str | None = None
+
+
+class Finding(BaseModel):
+    """Один найденный случай для таблицы результата."""
+
+    finding_id: str
+    unit_id: str
+    branch: str | None
+    criterion: Criterion
+    severity: Severity
+    verdict: Verdict
+    confidence: float = Field(ge=0.0, le=1.0)
+    quote: str | None = None
+    location: TextLocation | None = None
+    evidence: list[Evidence] = Field(default_factory=list)
+    recommendation: str
+    needs_human_review: bool = False
+    checker_name: str
+    extra: dict[str, Any] = Field(default_factory=dict)
+
+
+class RunSummary(BaseModel):
+    """Сводка по запуску аудита."""
+
+    started_at: datetime
+    finished_at: datetime | None = None
+    input_path: str
+    units_total: int = 0
+    files_total: int = 0
+    findings_total: int = 0
+    by_severity: dict[str, int] = Field(default_factory=dict)
+    by_criterion: dict[str, int] = Field(default_factory=dict)
+    model_used: bool = False
+    network_used: bool = False
+    warnings: list[str] = Field(default_factory=list)
+
+
+class AuditReport(BaseModel):
+    """Полный отчёт аудита."""
+
+    summary: RunSummary
+    units: list[ContentUnit]
+    entities: list[ExtractedEntity]
+    findings: list[Finding]

@@ -251,7 +251,7 @@ body {
   background: rgba(247, 244, 237, .86);
   border-bottom: 1px solid var(--border-soft);
 }
-.topbar-inner, .shell { max-width: 1180px; margin: 0 auto; padding-left: 32px; padding-right: 32px; }
+.topbar-inner, .shell { max-width: 1520px; margin: 0 auto; padding-left: 32px; padding-right: 32px; }
 .topbar-inner { min-height: 62px; display: flex; align-items: center; justify-content: space-between; gap: 18px; }
 .wordmark { display: flex; align-items: center; gap: 12px; min-width: 0; }
 .glyph {
@@ -348,12 +348,41 @@ input[type="text"]:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rg
 .bar-track { height: 10px; border-radius: 999px; background: var(--surface-muted); overflow: hidden; }
 .bar-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--accent), var(--accent-bright)); }
 .bar-count { color: var(--muted); text-align: right; font: 700 12px var(--font-mono); }
-.table-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--border-strong); border-radius: var(--radius); box-shadow: var(--shadow-sm); }
-table { width: 100%; border-collapse: collapse; min-width: 1060px; }
-th, td { padding: 12px 13px; border-bottom: 1px solid var(--border-soft); text-align: left; vertical-align: top; font-size: 13px; }
-th { position: sticky; top: 62px; background: var(--surface-muted); color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .04em; z-index: 2; }
+.table-wrap {
+  overflow-x: auto;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+table {
+  width: 100%;
+  min-width: 1860px;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+col.col-criterion { width: 150px; }
+col.col-verdict { width: 170px; }
+col.col-severity { width: 130px; }
+col.col-file { width: 260px; }
+col.col-line { width: 82px; }
+col.col-quote { width: 360px; }
+col.col-evidence { width: 380px; }
+col.col-recommendation { width: 420px; }
+col.col-confidence { width: 110px; }
+col.col-module { width: 190px; }
+th, td {
+  padding: 14px 13px;
+  border-bottom: 1px solid var(--border-soft);
+  text-align: left;
+  vertical-align: top;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+th { background: var(--surface-muted); color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .04em; }
 tr:last-child td { border-bottom: 0; }
-.mono { font-family: var(--font-mono); font-size: 12px; }
+.mono { font-family: var(--font-mono); font-size: 12px; overflow-wrap: anywhere; }
 .pill {
   display: inline-flex; align-items: center; white-space: nowrap;
   border-radius: 999px; padding: 4px 9px; font-size: 12px; font-weight: 900;
@@ -365,15 +394,17 @@ tr:last-child td { border-bottom: 0; }
 .pill-fail { color: var(--danger); background: var(--danger-soft); }
 .pill-warning, .pill-unknown { color: var(--warn); background: var(--warn-soft); }
 .pill-pass { color: var(--accent-deep); background: var(--accent-soft); }
-.quote { max-width: 280px; color: var(--text); }
-.recommendation { max-width: 420px; color: var(--text); }
+.quote, .evidence, .recommendation {
+  color: var(--text);
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
 .downloads { display: flex; gap: 8px; flex-wrap: wrap; }
 .loading { opacity: .72; pointer-events: none; }
 @media (max-width: 980px) {
   .form-grid, .summary, .grid-two { grid-template-columns: 1fr; }
   .panel-head { display: block; }
   .topbar-inner, .shell { padding-left: 16px; padding-right: 16px; }
-  th { top: 58px; }
 }
 </style>
 """
@@ -523,6 +554,18 @@ def _render_findings_table(findings: list[Finding]) -> str:
   </div>
   <div class="table-wrap">
     <table>
+      <colgroup>
+        <col class="col-criterion">
+        <col class="col-verdict">
+        <col class="col-severity">
+        <col class="col-file">
+        <col class="col-line">
+        <col class="col-quote">
+        <col class="col-evidence">
+        <col class="col-recommendation">
+        <col class="col-confidence">
+        <col class="col-module">
+      </colgroup>
       <thead>
         <tr>
           <th>Критерий</th>
@@ -558,7 +601,7 @@ def _render_finding_row(finding: Finding) -> str:
   <td class="mono">{_esc(file_path)}</td>
   <td class="mono">{_esc(line)}</td>
   <td class="quote">{_esc(finding.quote or "")}</td>
-  <td>{_esc(evidence)}</td>
+  <td class="evidence">{_esc(evidence)}</td>
   <td class="recommendation">{_esc(finding.recommendation)}</td>
   <td class="mono">{finding.confidence:.2f}</td>
   <td class="mono">{_esc(finding.checker_name)}</td>

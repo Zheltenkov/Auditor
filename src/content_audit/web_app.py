@@ -358,11 +358,13 @@ input[type="text"]:focus, select:focus { border-color: var(--accent); box-shadow
 }
 .stat-value { font-size: 28px; font-weight: 900; color: var(--accent); line-height: 1; }
 .stat-label { margin-top: 8px; color: var(--muted); font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; }
+.stat-detail { margin-top: 8px; color: var(--muted); font-size: 12px; font-weight: 700; }
 .section { margin-top: 26px; }
 .section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; border-bottom: 1px solid var(--border-soft); padding-bottom: 12px; margin-bottom: 14px; }
 .section h2 { margin: 0; font-size: 20px; }
 .grid-two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .grid-three { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+.metric-map { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
 .panel {
   background: var(--surface);
   border: 1px solid var(--border-strong);
@@ -370,12 +372,17 @@ input[type="text"]:focus, select:focus { border-color: var(--accent); box-shadow
   box-shadow: var(--shadow-sm);
   padding: 18px;
 }
-.bar-row { display: grid; grid-template-columns: 160px 1fr 44px; gap: 12px; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--border-soft); }
+.bar-row { display: grid; grid-template-columns: minmax(118px, 1fr) minmax(84px, 1.1fr) 44px; gap: 12px; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--border-soft); }
 .bar-row:last-child { border-bottom: 0; }
 .bar-label { font-size: 13px; font-weight: 800; overflow-wrap: anywhere; }
 .bar-track { height: 10px; border-radius: 999px; background: var(--surface-muted); overflow: hidden; }
 .bar-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--accent), var(--accent-bright)); }
 .bar-count { color: var(--muted); text-align: right; font: 700 12px var(--font-mono); }
+.metric-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--border-soft); }
+.metric-item:last-child { border-bottom: 0; }
+.metric-name { font-size: 13px; font-weight: 800; }
+.metric-value { color: var(--muted); font-size: 12px; font-weight: 900; text-align: right; }
+.metric-empty { color: var(--muted); font-size: 13px; font-weight: 700; padding: 10px 0; }
 .table-wrap {
   overflow-x: auto;
   background: var(--surface);
@@ -465,7 +472,7 @@ tr:last-child td { border-bottom: 0; }
 table.findings.hide-pass tr[data-verdict="pass"] { display: none; }
 table.findings.hide-unknown tr[data-verdict="unknown"] { display: none; }
 @media (max-width: 980px) {
-  .form-grid, .summary, .grid-two, .grid-three { grid-template-columns: 1fr; }
+  .form-grid, .summary, .grid-two, .grid-three, .metric-map { grid-template-columns: 1fr; }
   .panel-head { display: block; }
   .topbar-inner, .shell { padding-left: 16px; padding-right: 16px; }
 }
@@ -621,8 +628,7 @@ def _render_dashboard(report: AuditReport, report_dir: Path) -> str:
     return "\n".join(
         [
             _render_summary(report),
-            _render_breakdowns(report),
-            _render_scope_breakdowns(report),
+            _render_report_map(report),
             _render_observability(report),
             _render_filter_bar(),
             _render_findings_table(report.findings),
@@ -657,42 +663,17 @@ def _render_summary(report: AuditReport) -> str:
     cases = _case_findings(report)
     by_severity = Counter(finding.severity.value for finding in cases)
     affected_units = len({finding.unit_id for finding in cases})
+    unknown = sum(1 for finding in cases if finding.verdict == Verdict.UNKNOWN)
+    passed = sum(1 for finding in report.findings if finding.verdict == Verdict.PASS)
     critical = by_severity.get(Severity.CRITICAL.value, 0)
     major = by_severity.get(Severity.MAJOR.value, 0)
     return f"""
 <section id="summary" class="summary">
-  {_stat("Единицы", summary.units_total)}
-  {_stat("Затронуты", affected_units)}
-  {_stat("Файлы", summary.files_total)}
-  {_stat("Случаи", len(cases))}
-  {_stat("Крит. / высокие", f"{critical} / {major}")}
-</section>
-"""
-
-
-def _render_scope_breakdowns(report: AuditReport) -> str:
-    """Показывает срезы по веткам и единицам контента."""
-
-    unit_labels = {unit.unit_id: f"{unit.name} · {unit.unit_id}" for unit in report.units}
-    cases = _case_findings(report)
-    by_branch = Counter(finding.branch or "без ветки" for finding in cases)
-    by_unit = Counter(finding.unit_id for finding in cases)
-    return f"""
-<section class="section">
-  <div class="section-head">
-    <h2>Затронутые единицы</h2>
-    <span class="muted">единиц с найденными случаями: {len(by_unit)}</span>
-  </div>
-  <div class="grid-two">
-    <div class="panel">
-      <label>По веткам</label>
-      {_bars(dict(by_branch), {})}
-    </div>
-    <div class="panel">
-      <label>По единицам</label>
-      {_bars(dict(by_unit), unit_labels)}
-    </div>
-  </div>
+  {_stat("Единицы", summary.units_total, f"затронуто: {affected_units}")}
+  {_stat("Случаи", len(cases), f"успешных: {passed}")}
+  {_stat("Нужна проверка", unknown, "можно скрыть фильтром")}
+  {_stat("Critical / Major", f"{critical} / {major}", "приоритет ТЗ")}
+  {_stat("Файлы", summary.files_total, "прочитано")}
 </section>
 """
 
@@ -708,50 +689,89 @@ def _render_observability(report: AuditReport) -> str:
         "Стоимость, $": round(usage.cost_usd, 6),
     }
     step_rows = {step.name: step.duration_ms for step in report.summary.steps}
+    usage_markup = (
+        _bars(usage_rows, {})
+        if any(value for value in usage_rows.values())
+        else '<div class="metric-empty">Модельные проверки не выполнялись.</div>'
+    )
     return f"""
 <section class="section">
   <div class="section-head">
-    <h2>Выполнение</h2>
+    <h2>Контроль прогона</h2>
     <span class="muted">версии запросов: {_esc(', '.join(report.summary.prompt_versions.values()) or 'нет')}</span>
   </div>
-  <div class="grid-two">
+  <div class="grid-three">
     <div class="panel">
-      <label>Модельные вызовы</label>
-      {_bars(usage_rows, {})}
+      <label>Стоимость и кэш</label>
+      {usage_markup}
     </div>
     <div class="panel">
       <label>Шаги, мс</label>
       {_bars(step_rows, {})}
     </div>
+    <div class="panel">
+      <label>Покрытие ТЗ</label>
+      {_render_requirement_status(report)}
+    </div>
   </div>
 </section>
 """
 
 
-def _render_breakdowns(report: AuditReport) -> str:
-    """Показывает разрезы по критериям и критичности."""
+def _render_report_map(report: AuditReport) -> str:
+    """Показывает основные срезы отчёта в одном компактном блоке."""
 
     cases = _case_findings(report)
     by_criterion = Counter(finding.criterion.value for finding in cases)
     by_severity = Counter(finding.severity.value for finding in cases)
+    severity_values = {item.value: by_severity.get(item.value, 0) for item in Severity}
+    by_branch = Counter(finding.branch or "без ветки" for finding in cases)
+    by_unit = Counter(finding.unit_id for finding in cases)
+    unit_labels = {unit.unit_id: f"{unit.name} · {unit.unit_id}" for unit in report.units}
     return f"""
 <section class="section">
   <div class="section-head">
-    <h2>Разрезы отчёта</h2>
-    <span class="muted">модель: {'включена' if report.summary.model_used else 'выключена'} · сеть: {'использовалась' if report.summary.network_used else 'не использовалась'}</span>
+    <h2>Карта отчёта</h2>
+    <span class="muted">модель: {'включена' if report.summary.model_used else 'выключена'} · сеть: {'использовалась' if report.summary.network_used else 'не использовалась'} · единиц с случаями: {len(by_unit)}</span>
   </div>
-  <div class="grid-two">
+  <div class="metric-map">
     <div class="panel">
-      <label>По критериям</label>
+      <label>Критичность</label>
+      {_bars(severity_values, {item.value: SEVERITY_LABELS[item] for item in Severity}, sort_by_count=False)}
+    </div>
+    <div class="panel">
+      <label>Критерии</label>
       {_bars(dict(by_criterion), {item.value: CRITERION_LABELS[item] for item in Criterion})}
     </div>
     <div class="panel">
-      <label>По критичности</label>
-      {_bars(dict(by_severity), {item.value: SEVERITY_LABELS[item] for item in Severity})}
+      <label>Ветки</label>
+      {_bars(dict(by_branch), {})}
+    </div>
+    <div class="panel">
+      <label>Единицы</label>
+      {_bars(dict(by_unit), unit_labels)}
     </div>
   </div>
 </section>
 """
+
+
+def _render_requirement_status(report: AuditReport) -> str:
+    """Показывает, какие управленческие поля из ТЗ есть в текущем отчёте."""
+
+    summary = report.summary
+    usage = summary.model_usage
+    cases = _case_findings(report)
+    affected_units = len({finding.unit_id for finding in cases})
+    affected_branches = len({finding.branch or "без ветки" for finding in cases})
+    rows = [
+        ("Ветка и единица", f"{affected_branches} веток · {affected_units} ед."),
+        ("Критичность", "Critical / Major / Minor / Info"),
+        ("Экспорт", "CSV и JSON"),
+        ("Ссылки", "сеть использовалась" if summary.network_used else "сеть выключена"),
+        ("Стоимость", "учтена" if usage.calls_total or usage.cache_hits else "нет модельных вызовов"),
+    ]
+    return _metric_rows(rows)
 
 
 def _render_findings_table(findings: list[Finding]) -> str:
@@ -927,21 +947,39 @@ applyFilters();
 """
 
 
-def _stat(label: str, value: object) -> str:
+def _metric_rows(rows: list[tuple[str, object]]) -> str:
+    """Рисует компактные строки без шкалы, когда важнее статус, а не объём."""
+
+    if not rows:
+        return '<div class="metric-empty">Нет данных.</div>'
+    return "\n".join(
+        f"""
+<div class="metric-item">
+  <div class="metric-name">{_esc(name)}</div>
+  <div class="metric-value">{_esc(str(value))}</div>
+</div>
+"""
+        for name, value in rows
+    )
+
+
+def _stat(label: str, value: object, detail: str = "") -> str:
     """Рисует счётчик."""
 
-    return f'<div class="stat"><div class="stat-value">{_esc(str(value))}</div><div class="stat-label">{_esc(label)}</div></div>'
+    detail_markup = f'<div class="stat-detail">{_esc(detail)}</div>' if detail else ""
+    return f'<div class="stat"><div class="stat-value">{_esc(str(value))}</div><div class="stat-label">{_esc(label)}</div>{detail_markup}</div>'
 
 
-def _bars(values: dict[str, int], labels: dict[str, str]) -> str:
+def _bars(values: dict[str, int | float], labels: dict[str, str], sort_by_count: bool = True) -> str:
     """Рисует горизонтальные полосы распределения."""
 
     if not values:
         return '<div class="muted">Нет данных.</div>'
     max_value = max(values.values()) or 1
     rows = []
-    for key, count in sorted(values.items(), key=lambda item: item[1], reverse=True):
-        width = max(4, round(count / max_value * 100))
+    items = sorted(values.items(), key=lambda item: item[1], reverse=True) if sort_by_count else values.items()
+    for key, count in items:
+        width = 0 if count <= 0 else max(4, round(count / max_value * 100))
         rows.append(
             f"""
 <div class="bar-row">

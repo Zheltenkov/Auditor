@@ -48,6 +48,15 @@ def test_render_page_contains_extended_report_columns(workspace_tmp_path: Path) 
     assert "Источник" in html
     assert "Статус поддержки" in html
     assert "Info" in html
+    assert "Critical / Major" in html
+    assert "Карта отчёта" in html
+    assert "Контроль прогона" in html
+    assert "Покрытие ТЗ" in html
+    assert "Модельные проверки не выполнялись" in html
+    severity_block = html.split("<label>Критичность</label>", 1)[1]
+    assert severity_block.index("Critical") < severity_block.index("Major")
+    assert severity_block.index("Major") < severity_block.index("Minor")
+    assert severity_block.index("Minor") < severity_block.index("Info")
     assert 'id="flt-hide-unknown"' in html
     assert 'id="flt-show-pass"' in html
     assert 'name="hide_unknown"' not in html

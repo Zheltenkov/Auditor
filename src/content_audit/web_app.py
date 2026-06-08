@@ -194,8 +194,8 @@ def render_page(report: AuditReport | None, state: WebState, form_values: dict[s
     manifest_path = form.get("manifest_path") or ""
     admin_url_template = form.get("admin_url_template") or ""
     link_allowlist = form.get("link_allowlist") or ""
-    use_model_checked = form.get("use_model", "on" if report is None else "") == "on"
-    check_links_checked = form.get("check_links", "") == "on"
+    use_model_checked = form.get("use_model", "on" if form_values is None and report is None else "") == "on"
+    check_links_checked = form.get("check_links", "on" if form_values is None else "") == "on"
     body = "\n".join(
         [
             _render_topbar(),

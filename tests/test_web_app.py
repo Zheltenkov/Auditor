@@ -12,6 +12,7 @@ def test_render_page_contains_project_input(workspace_tmp_path: Path) -> None:
     assert "Проверка локального проекта" in html
     assert "Путь к проекту" in html
     assert str(workspace_tmp_path) in html
+    assert 'id="check_links" name="check_links" checked' in html
 
 
 def test_render_page_contains_extended_report_columns(workspace_tmp_path: Path) -> None:
@@ -46,6 +47,7 @@ def test_render_page_contains_extended_report_columns(workspace_tmp_path: Path) 
 
     assert "Источник" in html
     assert "Статус поддержки" in html
+    assert "Info" in html
     assert 'id="flt-hide-unknown"' in html
     assert 'id="flt-show-pass"' in html
     assert 'name="hide_unknown"' not in html

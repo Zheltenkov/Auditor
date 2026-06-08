@@ -68,10 +68,10 @@ CRITERION_LABELS: dict[Criterion, str] = {
 }
 
 SEVERITY_LABELS: dict[Severity, str] = {
-    Severity.CRITICAL: "Критическая",
-    Severity.MAJOR: "Высокая",
-    Severity.MINOR: "Средняя",
-    Severity.INFO: "Справочно",
+    Severity.CRITICAL: "Critical",
+    Severity.MAJOR: "Major",
+    Severity.MINOR: "Minor",
+    Severity.INFO: "Info",
 }
 
 VERDICT_LABELS: dict[Verdict, str] = {

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import ipaddress
 import json
 import re
 import struct
@@ -10,7 +11,7 @@ from abc import ABC, abstractmethod
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
-from urllib.parse import urldefrag, urlparse
+from urllib.parse import urldefrag, urljoin, urlparse
 
 import requests
 import yaml
@@ -79,6 +80,40 @@ class CheckContext:
         self.fact_model_client = fact_model_client
         self.tech_model_client = tech_model_client
         self.cache = cache
+        self.model_usage: dict[str, Any] = {
+            "calls_total": 0,
+            "cache_hits": 0,
+            "prompt_tokens": 0,
+            "completion_tokens": 0,
+            "total_tokens": 0,
+            "cost_usd": 0.0,
+            "by_model": {},
+        }
+        self.prompt_versions: dict[str, str] = {}
+
+    def record_model_result(self, client: OpenRouterClient, cache_hit: bool, prompt_version: str) -> None:
+        """Собираем учёт вызовов модели и используемых версий промптов."""
+
+        self.prompt_versions[prompt_version.split(":", 1)[0]] = prompt_version
+        if cache_hit:
+            self.model_usage["cache_hits"] += 1
+            return
+
+        usage = getattr(client, "last_call_usage", {}) or {}
+        self.model_usage["calls_total"] += 1
+        for key in ("prompt_tokens", "completion_tokens", "total_tokens"):
+            self.model_usage[key] += int(usage.get(key, 0) or 0)
+        self.model_usage["cost_usd"] += float(usage.get("cost_usd", 0.0) or 0.0)
+
+        by_model = self.model_usage["by_model"]
+        model_stats = by_model.setdefault(
+            client.model,
+            {"calls_total": 0, "prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0, "cost_usd": 0.0},
+        )
+        model_stats["calls_total"] += 1
+        for key in ("prompt_tokens", "completion_tokens", "total_tokens"):
+            model_stats[key] += int(usage.get(key, 0) or 0)
+        model_stats["cost_usd"] += float(usage.get("cost_usd", 0.0) or 0.0)
 
 
 class BaseChecker(ABC):
@@ -148,6 +183,24 @@ class LinkChecker(BaseChecker):
             parsed = urlparse(entity.value)
             if parsed.scheme not in {"http", "https"}:
                 continue
+            policy_error = _url_policy_error(entity.value, context.settings.link_allowlist)
+            if policy_error is not None:
+                findings.append(
+                    _finding(
+                        unit,
+                        self.name,
+                        Criterion.ACTUALITY,
+                        Severity.INFO,
+                        Verdict.UNKNOWN,
+                        0.65,
+                        entity.quote,
+                        entity.location,
+                        [Evidence(title="Политика проверки ссылок", detail=policy_error, url=entity.value)],
+                        "Проверить ссылку вручную или добавить домен в список разрешённых источников.",
+                        True,
+                    )
+                )
+                continue
             if not context.settings.allow_network:
                 findings.append(
                     _finding(
@@ -166,7 +219,7 @@ class LinkChecker(BaseChecker):
                 )
                 continue
 
-            status_code, final_url, error = _check_url(entity.value, context.settings.link_timeout_seconds)
+            status_code, final_url, error = _check_url(entity.value, context.settings.link_timeout_seconds, context.settings.link_allowlist)
             if error is not None:
                 findings.append(
                     _finding(
@@ -563,6 +616,7 @@ class FactCheckerPerplexity(BaseChecker):
     """Проверяет фактологические утверждения через поисковую модель Perplexity."""
 
     name = "fact_checker_perplexity"
+    prompt_version = "fact_checker_perplexity:v1"
     max_claims = 8
     SYSTEM_PROMPT = """Ты проверяешь фактологическое утверждение из учебного контента через внешние источники.
 Верни только JSON: {"verdict":"pass|warning|fail|unknown","confidence":0.0,"evidence":"","sources":[{"title":"","url":""}],"recommendation":""}.
@@ -591,6 +645,7 @@ verdict='unknown' ставь, если источников недостаточ
                     context.fact_model_client,
                     self.SYSTEM_PROMPT,
                     prompt,
+                    self.prompt_version,
                 )
             except OpenRouterError as exc:
                 findings.append(_external_check_error(unit, self.name, Criterion.CORRECTNESS, exc))
@@ -599,7 +654,7 @@ verdict='unknown' ставь, если источников недостаточ
             item = _first_result_item(record.get("response"))
             if item is None:
                 continue
-            findings.append(_finding_from_fact_item(unit, self.name, claim, item, record, cache_hit))
+            findings.append(_finding_from_fact_item(unit, self.name, claim, item, record, cache_hit, self.prompt_version))
         return findings
 
 
@@ -607,6 +662,7 @@ class TechFreshnessChecker(BaseChecker):
     """Проверяет актуальность технологий и версий с источниками."""
 
     name = "tech_freshness_checker"
+    prompt_version = "tech_freshness_checker:v1"
     max_candidates = 12
     SYSTEM_PROMPT = """Ты проверяешь актуальность технологии, версии или стандарта в учебном контенте.
 Верни только JSON: {"verdict":"pass|warning|fail|unknown","severity":"info|minor|major|critical","confidence":0.0,"support_status":"","latest_version":"","recommended_version":"","evidence":"","sources":[{"title":"","url":""}],"recommendation":""}.
@@ -640,6 +696,7 @@ verdict='unknown' ставь, если источников недостаточ
                     context.tech_model_client,
                     self.SYSTEM_PROMPT,
                     prompt,
+                    self.prompt_version,
                 )
             except OpenRouterError as exc:
                 findings.append(_external_check_error(unit, self.name, Criterion.ACTUALITY, exc))
@@ -648,7 +705,7 @@ verdict='unknown' ставь, если источников недостаточ
             item = _first_result_item(record.get("response"))
             if item is None:
                 continue
-            findings.append(_finding_from_technology_item(unit, self.name, entity, item, record, cache_hit))
+            findings.append(_finding_from_technology_item(unit, self.name, entity, item, record, cache_hit, self.prompt_version))
         return findings
 
     def _fallback_candidate_finding(self, unit: ContentUnit, selected: list[ExtractedEntity]) -> Finding:
@@ -681,6 +738,7 @@ class ModelRubricChecker(BaseChecker):
     """Модельная проверка критериев, которые трудно закрыть правилами."""
 
     name = "model_rubric_checker"
+    prompt_version = "model_rubric_checker:v1"
 
     SYSTEM_PROMPT = """Ты проверяешь учебный контент как инженер-методолог.
 Верни только JSON: {"findings": [ ... ]}.
@@ -715,8 +773,13 @@ class ModelRubricChecker(BaseChecker):
                     True,
                 )
             ]
+        context.record_model_result(context.model_client, cache_hit=False, prompt_version=self.prompt_version)
 
-        return [_finding_from_model_item(unit, self.name, item) for item in response.get("findings", []) if isinstance(item, dict)]
+        return [
+            _finding_from_model_item(unit, self.name, item, self.prompt_version)
+            for item in response.get("findings", [])
+            if isinstance(item, dict)
+        ]
 
 
 def default_checkers(use_model: bool) -> list[BaseChecker]:
@@ -746,16 +809,54 @@ def _entities_of_type(entities: Iterable[ExtractedEntity], entity_type: EntityTy
     return (entity for entity in entities if entity.entity_type == entity_type)
 
 
-def _check_url(url: str, timeout_seconds: float) -> tuple[int, str | None, str | None]:
-    """Проверяем внешнюю ссылку через HEAD с запасным GET."""
+def _check_url(url: str, timeout_seconds: float, allowlist: list[str]) -> tuple[int, str | None, str | None]:
+    """Проверяем внешнюю ссылку через HEAD с ручной проверкой перенаправлений."""
 
+    current_url = url
+    headers = {"User-Agent": "ContentAudit/0.1 (+https://github.com/Zheltenkov/Auditor)"}
     try:
-        response = requests.head(url, allow_redirects=True, timeout=timeout_seconds)
-        if response.status_code in {405, 403}:
-            response = requests.get(url, allow_redirects=True, timeout=timeout_seconds, stream=True)
-        return response.status_code, response.url, None
+        for _redirect_index in range(5):
+            policy_error = _url_policy_error(current_url, allowlist)
+            if policy_error is not None:
+                return 0, current_url, policy_error
+            response = requests.head(current_url, allow_redirects=False, timeout=timeout_seconds, headers=headers)
+            if response.status_code in {405, 403}:
+                response = requests.get(current_url, allow_redirects=False, timeout=timeout_seconds, stream=True, headers=headers)
+            if response.is_redirect or response.is_permanent_redirect:
+                location = response.headers.get("Location")
+                if not location:
+                    return response.status_code, current_url, None
+                current_url = urljoin(current_url, location)
+                continue
+            return response.status_code, current_url, None
+        return 0, current_url, "Слишком длинная цепочка перенаправлений."
     except requests.RequestException as exc:
-        return 0, None, str(exc)
+        return 0, current_url, str(exc)
+
+
+def _url_policy_error(url: str, allowlist: list[str]) -> str | None:
+    """Проверяем схему, локальные адреса и список разрешённых доменов."""
+
+    parsed = urlparse(url)
+    if parsed.scheme not in {"http", "https"}:
+        return f"Неподдерживаемая схема ссылки: {parsed.scheme or 'не указана'}."
+    if parsed.username or parsed.password:
+        return "Ссылки с учётными данными в адресе не проверяются автоматически."
+    hostname = (parsed.hostname or "").strip().lower()
+    if not hostname:
+        return "Не удалось определить домен ссылки."
+    if hostname == "localhost" or hostname.endswith(".localhost") or hostname.endswith(".local"):
+        return "Локальные адреса не проверяются автоматически."
+    try:
+        ip_address = ipaddress.ip_address(hostname)
+    except ValueError:
+        ip_address = None
+    if ip_address and (ip_address.is_private or ip_address.is_loopback or ip_address.is_link_local or ip_address.is_reserved):
+        return "Внутренние IP-адреса не проверяются автоматически."
+    normalized_allowlist = [item.lower().lstrip(".") for item in allowlist if item.strip()]
+    if normalized_allowlist and not any(hostname == item or hostname.endswith(f".{item}") for item in normalized_allowlist):
+        return f"Домен {hostname} не входит в список разрешённых источников."
+    return None
 
 
 def _is_inside(path: Path, root: Path) -> bool:
@@ -1021,22 +1122,28 @@ def _cached_model_json(
     client: OpenRouterClient,
     system_prompt: str,
     user_prompt: str,
+    prompt_version: str,
 ) -> tuple[dict[str, Any], bool]:
     """Берём модельный JSON из кэша или выполняем один внешний запрос."""
 
     if context.cache is not None:
         cached = context.cache.get(namespace, key)
         if cached is not None and isinstance(cached.get("response"), dict):
+            context.record_model_result(client, cache_hit=True, prompt_version=prompt_version)
             return cached, True
 
     response = client.complete_json(system_prompt, user_prompt)
+    context.record_model_result(client, cache_hit=False, prompt_version=prompt_version)
     record = {
         "checked_at": datetime.now(timezone.utc).isoformat(),
         "model": client.model,
+        "prompt_version": prompt_version,
+        "usage": getattr(client, "last_call_usage", {}) or {},
         "response": response,
     }
     if context.cache is not None:
         context.cache.set(namespace, key, record)
+        context.cache.save()
     return record, False
 
 
@@ -1064,6 +1171,7 @@ def _finding_from_fact_item(
     item: dict[str, Any],
     record: dict[str, Any],
     cache_hit: bool,
+    prompt_version: str,
 ) -> Finding:
     """Преобразуем результат фактологической проверки в строку отчёта."""
 
@@ -1086,6 +1194,7 @@ def _finding_from_fact_item(
         extra={"cache_hit": cache_hit, "model": record.get("model"), "claim": claim.get("claim")},
         source=_source_summary(sources),
         checked_at=_checked_at_from_record(record),
+        prompt_version=prompt_version,
     )
 
 
@@ -1096,6 +1205,7 @@ def _finding_from_technology_item(
     item: dict[str, Any],
     record: dict[str, Any],
     cache_hit: bool,
+    prompt_version: str,
 ) -> Finding:
     """Преобразуем результат проверки технологии в строку отчёта."""
 
@@ -1122,6 +1232,7 @@ def _finding_from_technology_item(
         support_status=support_status,
         latest_version=_optional_model_text(item.get("latest_version")),
         recommended_version=_optional_model_text(item.get("recommended_version")),
+        prompt_version=prompt_version,
     )
 
 
@@ -1271,7 +1382,12 @@ def _checked_at_from_record(record: dict[str, Any]) -> datetime | None:
         return None
 
 
-def _finding_from_model_item(unit: ContentUnit, checker_name: str, item: dict[str, object]) -> Finding:
+def _finding_from_model_item(
+    unit: ContentUnit,
+    checker_name: str,
+    item: dict[str, object],
+    prompt_version: str | None = None,
+) -> Finding:
     """Преобразуем ответ модели в строгий доменный объект."""
 
     criterion = _enum_or_default(Criterion, item.get("criterion"), Criterion.CORRECTNESS)
@@ -1295,6 +1411,7 @@ def _finding_from_model_item(unit: ContentUnit, checker_name: str, item: dict[st
         str(item.get("recommendation") or "Проверить случай вручную."),
         True,
         source=_source_summary(sources),
+        prompt_version=prompt_version,
     )
 
 
@@ -1363,6 +1480,7 @@ def _finding(
     support_status: str | None = None,
     latest_version: str | None = None,
     recommended_version: str | None = None,
+    prompt_version: str | None = None,
 ) -> Finding:
     """Создаём найденный случай со стабильным идентификатором."""
 
@@ -1394,6 +1512,7 @@ def _finding(
         support_status=support_status,
         latest_version=latest_version,
         recommended_version=recommended_version,
+        prompt_version=prompt_version,
         recommendation=recommendation,
         needs_human_review=needs_human_review,
         checker_name=checker_name,

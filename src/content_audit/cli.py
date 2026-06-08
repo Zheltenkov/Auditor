@@ -7,11 +7,13 @@ from pathlib import Path
 
 from content_audit.domain import AuditSettings
 from content_audit.env import get_env_value, load_env_file
+from content_audit.evaluation import write_evaluation
 from content_audit.exporters import write_report
 from content_audit.orchestrator import AuditRunner
 
 DEFAULT_OPENROUTER_MODEL = "openai/gpt-4o-mini"
 DEFAULT_OPENROUTER_FACT_MODEL = "perplexity/sonar"
+DEFAULT_OPENROUTER_TECH_MODEL = "qwen/qwen3-coder"
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -34,7 +36,7 @@ def main(argv: list[str] | None = None) -> int:
     openrouter_tech_model = (
         args.openrouter_tech_model
         or get_env_value(("OPENROUTER_TECH_MODEL", "OPEN_ROUTER_TECH_MODEL"), env_file_values)
-        or openrouter_model
+        or DEFAULT_OPENROUTER_TECH_MODEL
     )
     settings = AuditSettings(
         input_path=args.input,
@@ -51,10 +53,15 @@ def main(argv: list[str] | None = None) -> int:
         openrouter_model=openrouter_model,
         openrouter_fact_model=openrouter_fact_model,
         openrouter_tech_model=openrouter_tech_model,
+        manifest_path=args.manifest,
+        admin_url_template=args.admin_url_template,
+        link_allowlist=_parse_allowlist(args.link_allowlist),
     )
 
     report = AuditRunner(settings).run()
     write_report(report, settings.output_path, include_pass=args.include_pass)
+    if args.gold:
+        write_evaluation(report, args.gold.expanduser().resolve(), settings.output_path / "evaluation.json")
     _print_summary(report.summary, settings.output_path)
     return 0
 
@@ -80,7 +87,14 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--openrouter-tech-model",
         default=None,
-        help="Модель OpenRouter для проверки актуальности технологий. По умолчанию совпадает с общей моделью.",
+        help=f"Модель OpenRouter для проверки актуальности технологий. По умолчанию: {DEFAULT_OPENROUTER_TECH_MODEL}.",
+    )
+    parser.add_argument("--manifest", type=Path, default=None, help="JSON/CSV манифест: путь, id, ветка, ссылка в админке.")
+    parser.add_argument("--admin-url-template", default=None, help="Шаблон ссылки в админке, например https://admin.local/projects/{unit_id}.")
+    parser.add_argument(
+        "--link-allowlist",
+        default="",
+        help="Разрешённые домены для сетевой проверки ссылок через запятую. Пустое значение разрешает любые публичные домены.",
     )
     parser.add_argument("--hide-unknown", action="store_true", help="Не включать случаи с вердиктом 'нужна проверка'.")
     parser.add_argument("--include-pass", action="store_true", help="Включать положительные проверки в CSV.")
@@ -88,6 +102,7 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--link-timeout", type=float, default=8.0, help="Таймаут проверки ссылки в секундах.")
     parser.add_argument("--min-image-width", type=int, default=640, help="Минимальная ширина изображения.")
     parser.add_argument("--min-image-height", type=int, default=360, help="Минимальная высота изображения.")
+    parser.add_argument("--gold", type=Path, default=None, help="Эталонная JSON/CSV разметка для расчёта метрик качества.")
     return parser
 
 
@@ -102,3 +117,9 @@ def _print_summary(summary, output_path: Path) -> None:
         print("Предупреждения:")
         for warning in summary.warnings:
             print(f"- {warning}")
+
+
+def _parse_allowlist(value: str) -> list[str]:
+    """Разбираем список разрешённых доменов из параметра командной строки."""
+
+    return [item.strip().lower().lstrip(".") for item in value.split(",") if item.strip()]

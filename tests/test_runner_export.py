@@ -18,6 +18,15 @@ def test_runner_writes_reports(workspace_tmp_path: Path) -> None:
 
     assert report.summary.units_total == 1
     assert report.summary.files_total == 2
+    assert report.summary.affected_units_total >= 1
+    assert report.summary.by_unit
+    assert report.summary.by_branch
+    assert [step.name for step in report.summary.steps] == [
+        "Загрузка файлов",
+        "Подготовка проверок",
+        "Извлечение и проверки",
+        "Сборка отчёта",
+    ]
     assert (output / "report.json").exists()
     assert (output / "report.csv").exists()
     assert (output / "run_summary.json").exists()

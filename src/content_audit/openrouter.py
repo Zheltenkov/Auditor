@@ -20,6 +20,7 @@ class OpenRouterClient:
         self.api_key = api_key
         self.model = model
         self.timeout_seconds = timeout_seconds
+        self.last_call_usage: dict[str, int | float] = {}
 
     def complete_json(self, system_prompt: str, user_prompt: str, max_retries: int = 2) -> dict[str, Any]:
         """Запрашиваем у модели JSON и разбираем ответ в словарь."""
@@ -47,7 +48,9 @@ class OpenRouterClient:
                     timeout=self.timeout_seconds,
                 )
                 response.raise_for_status()
-                content = response.json()["choices"][0]["message"]["content"]
+                payload = response.json()
+                self.last_call_usage = _extract_usage(payload)
+                content = payload["choices"][0]["message"]["content"]
                 return json.loads(content)
             except Exception as exc:  # noqa: BLE001 - сохраняем любую ошибку провайдера.
                 last_error = exc
@@ -55,3 +58,29 @@ class OpenRouterClient:
                     time.sleep(1.5 * (attempt + 1))
 
         raise OpenRouterError(f"Не удалось получить JSON от OpenRouter: {last_error}")
+
+
+def _extract_usage(payload: dict[str, Any]) -> dict[str, int | float]:
+    """Достаём статистику токенов и стоимости из ответа провайдера, если она есть."""
+
+    usage = payload.get("usage")
+    if not isinstance(usage, dict):
+        return {}
+
+    result: dict[str, int | float] = {}
+    for source_key, target_key in (
+        ("prompt_tokens", "prompt_tokens"),
+        ("completion_tokens", "completion_tokens"),
+        ("total_tokens", "total_tokens"),
+        ("cost", "cost_usd"),
+        ("cost_usd", "cost_usd"),
+    ):
+        value = usage.get(source_key)
+        if isinstance(value, int | float):
+            result[target_key] = value
+        elif isinstance(value, str):
+            try:
+                result[target_key] = float(value)
+            except ValueError:
+                continue
+    return result

@@ -32,6 +32,7 @@ from content_audit.orchestrator import AuditRunner
 DEFAULT_REPORT_DIR = Path("reports") / "ui_latest"
 DEFAULT_MODEL = "openai/gpt-4o-mini"
 DEFAULT_FACT_MODEL = "perplexity/sonar"
+DEFAULT_TECH_MODEL = "qwen/qwen3-coder"
 
 
 class WebState:
@@ -103,7 +104,7 @@ class AuditWebHandler(BaseHTTPRequestHandler):
     def _send_report_file(self, file_name: str) -> None:
         """Отдаём CSV/JSON отчёт из текущей папки результатов."""
 
-        safe_names = {"report.csv", "report.json", "run_summary.json"}
+        safe_names = {"report.csv", "report.json", "run_summary.json", "evaluation.json"}
         if file_name not in safe_names:
             self.send_error(HTTPStatus.BAD_REQUEST, "Неверное имя файла")
             return
@@ -150,8 +151,9 @@ def run_from_form(form: dict[str, str], state: WebState) -> AuditReport:
     input_path = Path(form.get("input_path") or state.default_input).expanduser().resolve()
     model_name = form.get("model_name") or get_env_value(("OPENROUTER_MODEL", "OPEN_ROUTER_MODEL"), state.env_values) or DEFAULT_MODEL
     fact_model_name = get_env_value(("OPENROUTER_FACT_MODEL", "OPEN_ROUTER_FACT_MODEL"), state.env_values) or DEFAULT_FACT_MODEL
-    tech_model_name = get_env_value(("OPENROUTER_TECH_MODEL", "OPEN_ROUTER_TECH_MODEL"), state.env_values) or model_name
+    tech_model_name = get_env_value(("OPENROUTER_TECH_MODEL", "OPEN_ROUTER_TECH_MODEL"), state.env_values) or DEFAULT_TECH_MODEL
     api_key = get_env_value(("OPENROUTER_API_KEY", "OPEN_ROUTER_API_KEY"), state.env_values)
+    manifest_path = Path(form["manifest_path"]).expanduser().resolve() if form.get("manifest_path") else None
     settings = AuditSettings(
         input_path=input_path,
         output_path=state.report_dir,
@@ -163,6 +165,9 @@ def run_from_form(form: dict[str, str], state: WebState) -> AuditReport:
         openrouter_model=model_name,
         openrouter_fact_model=fact_model_name,
         openrouter_tech_model=tech_model_name,
+        manifest_path=manifest_path,
+        admin_url_template=form.get("admin_url_template") or None,
+        link_allowlist=_parse_allowlist(form.get("link_allowlist") or ""),
     )
     report = AuditRunner(settings).run()
     write_report(report, state.report_dir, include_pass=settings.include_pass)
@@ -185,11 +190,14 @@ def render_page(report: AuditReport | None, state: WebState, form_values: dict[s
     form = form_values or {}
     input_value = form.get("input_path") or str(state.default_input)
     model_name = form.get("model_name") or get_env_value(("OPENROUTER_MODEL", "OPEN_ROUTER_MODEL"), state.env_values) or DEFAULT_MODEL
+    manifest_path = form.get("manifest_path") or ""
+    admin_url_template = form.get("admin_url_template") or ""
+    link_allowlist = form.get("link_allowlist") or ""
     body = "\n".join(
         [
             _render_topbar(),
             '<main class="shell">',
-            _render_run_panel(input_value, model_name, state),
+            _render_run_panel(input_value, model_name, manifest_path, admin_url_template, link_allowlist, state),
             _render_error(state.last_error),
             _render_dashboard(report, state.report_dir) if report else _render_empty_state(),
             "</main>",
@@ -280,6 +288,7 @@ body {
 h1 { margin: 0; font-size: 24px; line-height: 1.15; letter-spacing: 0; }
 .muted { color: var(--muted); font-size: 13px; margin: 6px 0 0; }
 .form-grid { display: grid; grid-template-columns: minmax(0, 1fr) 210px 138px; gap: 12px; align-items: end; }
+.form-grid-extra { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 260px; margin-top: 12px; }
 label { display: block; font-size: 12px; color: var(--muted); font-weight: 800; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 7px; }
 input[type="text"] {
   width: 100%;
@@ -326,7 +335,7 @@ input[type="text"]:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rg
   margin-top: 20px; padding: 30px; border: 1px dashed var(--border);
   border-radius: var(--radius); color: var(--muted); background: rgba(255,253,250,.58);
 }
-.summary { margin-top: 20px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.summary { margin-top: 20px; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
 .stat {
   background: var(--surface);
   border: 1px solid var(--border-strong);
@@ -340,6 +349,7 @@ input[type="text"]:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rg
 .section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; border-bottom: 1px solid var(--border-soft); padding-bottom: 12px; margin-bottom: 14px; }
 .section h2 { margin: 0; font-size: 20px; }
 .grid-two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.grid-three { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
 .panel {
   background: var(--surface);
   border: 1px solid var(--border-strong);
@@ -412,7 +422,7 @@ tr:last-child td { border-bottom: 0; }
 .downloads { display: flex; gap: 8px; flex-wrap: wrap; }
 .loading { opacity: .72; pointer-events: none; }
 @media (max-width: 980px) {
-  .form-grid, .summary, .grid-two { grid-template-columns: 1fr; }
+  .form-grid, .summary, .grid-two, .grid-three { grid-template-columns: 1fr; }
   .panel-head { display: block; }
   .topbar-inner, .shell { padding-left: 16px; padding-right: 16px; }
 }
@@ -442,7 +452,14 @@ def _render_topbar() -> str:
 """
 
 
-def _render_run_panel(input_value: str, model_name: str, state: WebState) -> str:
+def _render_run_panel(
+    input_value: str,
+    model_name: str,
+    manifest_path: str,
+    admin_url_template: str,
+    link_allowlist: str,
+    state: WebState,
+) -> str:
     """Возвращает форму запуска аудита."""
 
     has_key = bool(get_env_value(("OPENROUTER_API_KEY", "OPEN_ROUTER_API_KEY"), state.env_values))
@@ -467,6 +484,20 @@ def _render_run_panel(input_value: str, model_name: str, state: WebState) -> str
         <input id="model_name" name="model_name" type="text" value="{_esc(model_name)}" spellcheck="false">
       </div>
       <button class="button" type="submit">Запустить</button>
+    </div>
+    <div class="form-grid form-grid-extra">
+      <div>
+        <label for="manifest_path">Манифест единиц</label>
+        <input id="manifest_path" name="manifest_path" type="text" value="{_esc(manifest_path)}" spellcheck="false">
+      </div>
+      <div>
+        <label for="admin_url_template">Шаблон ссылки админки</label>
+        <input id="admin_url_template" name="admin_url_template" type="text" value="{_esc(admin_url_template)}" spellcheck="false">
+      </div>
+      <div>
+        <label for="link_allowlist">Разрешённые домены</label>
+        <input id="link_allowlist" name="link_allowlist" type="text" value="{_esc(link_allowlist)}" spellcheck="false">
+      </div>
     </div>
     <div class="options">
       <label class="check"><input type="checkbox" name="use_model" checked> Модельные проверки</label>
@@ -505,6 +536,8 @@ def _render_dashboard(report: AuditReport, report_dir: Path) -> str:
         [
             _render_summary(report),
             _render_breakdowns(report),
+            _render_scope_breakdowns(report),
+            _render_observability(report),
             _render_findings_table(report.findings),
             _render_downloads(report_dir),
         ]
@@ -520,9 +553,65 @@ def _render_summary(report: AuditReport) -> str:
     return f"""
 <section id="summary" class="summary">
   {_stat("Единицы", summary.units_total)}
+  {_stat("Затронуты", summary.affected_units_total)}
   {_stat("Файлы", summary.files_total)}
   {_stat("Случаи", summary.findings_total)}
   {_stat("Крит. / высокие", f"{critical} / {major}")}
+</section>
+"""
+
+
+def _render_scope_breakdowns(report: AuditReport) -> str:
+    """Показывает срезы по веткам и единицам контента."""
+
+    unit_labels = {unit.unit_id: f"{unit.name} · {unit.unit_id}" for unit in report.units}
+    return f"""
+<section class="section">
+  <div class="section-head">
+    <h2>Затронутые единицы</h2>
+    <span class="muted">единиц с найденными случаями: {report.summary.affected_units_total}</span>
+  </div>
+  <div class="grid-two">
+    <div class="panel">
+      <label>По веткам</label>
+      {_bars(report.summary.by_branch, {})}
+    </div>
+    <div class="panel">
+      <label>По единицам</label>
+      {_bars(report.summary.by_unit, unit_labels)}
+    </div>
+  </div>
+</section>
+"""
+
+
+def _render_observability(report: AuditReport) -> str:
+    """Показывает техническую сводку выполнения."""
+
+    usage = report.summary.model_usage
+    usage_rows = {
+        "Свежие вызовы": usage.calls_total,
+        "Ответы из кэша": usage.cache_hits,
+        "Токены": usage.total_tokens,
+        "Стоимость, $": round(usage.cost_usd, 6),
+    }
+    step_rows = {step.name: step.duration_ms for step in report.summary.steps}
+    return f"""
+<section class="section">
+  <div class="section-head">
+    <h2>Выполнение</h2>
+    <span class="muted">версии запросов: {_esc(', '.join(report.summary.prompt_versions.values()) or 'нет')}</span>
+  </div>
+  <div class="grid-two">
+    <div class="panel">
+      <label>Модельные вызовы</label>
+      {_bars(usage_rows, {})}
+    </div>
+    <div class="panel">
+      <label>Шаги, мс</label>
+      {_bars(step_rows, {})}
+    </div>
+  </div>
 </section>
 """
 
@@ -638,12 +727,13 @@ def _render_finding_row(finding: Finding) -> str:
 def _render_downloads(report_dir: Path) -> str:
     """Показывает ссылки на файлы отчёта."""
 
-    del report_dir
     links = [
         ("CSV", "report.csv"),
         ("JSON", "report.json"),
         ("Сводка", "run_summary.json"),
     ]
+    if (report_dir / "evaluation.json").exists():
+        links.append(("Метрики", "evaluation.json"))
     items = "\n".join(f'<a class="link-button" href="/download?file={quote(name)}">{label}</a>' for label, name in links)
     return f"""
 <section class="section">
@@ -709,6 +799,12 @@ def _esc(value: str) -> str:
     """Экранирует текст для HTML."""
 
     return html.escape(unquote(value), quote=True)
+
+
+def _parse_allowlist(value: str) -> list[str]:
+    """Разбираем список разрешённых доменов из веб-формы."""
+
+    return [item.strip().lower().lstrip(".") for item in value.split(",") if item.strip()]
 
 
 if __name__ == "__main__":

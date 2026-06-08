@@ -6,6 +6,7 @@ from content_audit.checks import (
     ChecklistChecker,
     FactCheckerPerplexity,
     LanguageCoverageChecker,
+    LinkChecker,
     TechFreshnessChecker,
     TechnologyFreshnessChecker,
 )
@@ -23,6 +24,7 @@ class _FakeJsonClient:
         self.response = response
         self.model = "fake-model"
         self.calls = 0
+        self.last_call_usage = {"prompt_tokens": 10, "completion_tokens": 5, "total_tokens": 15, "cost_usd": 0.001}
 
     def complete_json(self, system_prompt: str, user_prompt: str, max_retries: int = 2):
         del system_prompt, user_prompt, max_retries
@@ -98,11 +100,16 @@ def test_tech_freshness_checker_uses_sources_and_cache(workspace_tmp_path: Path)
     second = TechFreshnessChecker().check(unit, entities, context)
 
     assert fake_client.calls == 1
+    assert (workspace_tmp_path / "cache.json").exists()
     assert first[0].support_status == "устарело"
     assert first[0].latest_version == "3.22"
     assert first[0].recommended_version == "3.22"
     assert first[0].source == "https://alpinelinux.org/releases/"
+    assert first[0].prompt_version == "tech_freshness_checker:v1"
     assert second[0].extra["cache_hit"] is True
+    assert context.model_usage["calls_total"] == 1
+    assert context.model_usage["cache_hits"] == 1
+    assert context.model_usage["total_tokens"] == 15
 
 
 def test_fact_checker_perplexity_uses_sources_and_cache(workspace_tmp_path: Path) -> None:
@@ -131,4 +138,19 @@ def test_fact_checker_perplexity_uses_sources_and_cache(workspace_tmp_path: Path
     assert fake_client.calls == 1
     assert first[0].verdict == Verdict.PASS
     assert first[0].source == "https://docs.python.org/3/whatsnew/3.10.html"
+    assert first[0].prompt_version == "fact_checker_perplexity:v1"
     assert second[0].extra["cache_hit"] is True
+
+
+def test_link_checker_blocks_private_ip_before_network(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text("[internal](http://127.0.0.1:9999/secret)\n", encoding="utf-8")
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+    entities = extract_entities(unit)
+    settings = _settings(workspace_tmp_path, project).model_copy(update={"allow_network": True})
+
+    findings = LinkChecker().check(unit, entities, CheckContext(settings))
+
+    assert findings[0].verdict == Verdict.UNKNOWN
+    assert "Локальные адреса" in findings[0].evidence[0].detail or "Внутренние IP" in findings[0].evidence[0].detail

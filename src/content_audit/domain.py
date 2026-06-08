@@ -100,12 +100,17 @@ class AuditSettings(BaseModel):
     openrouter_fact_model: str | None = None
     openrouter_tech_model: str | None = None
     cache_path: Path | None = None
+    manifest_path: Path | None = None
+    admin_url_template: str | None = None
+    link_allowlist: list[str] = Field(default_factory=list)
 
-    @field_validator("input_path", "output_path")
+    @field_validator("input_path", "output_path", "cache_path", "manifest_path")
     @classmethod
-    def expand_path(cls, value: Path) -> Path:
+    def expand_path(cls, value: Path | None) -> Path | None:
         """Приводим путь к абсолютному виду, чтобы отчёты были воспроизводимыми."""
 
+        if value is None:
+            return None
         return value.expanduser().resolve()
 
 
@@ -180,10 +185,34 @@ class Finding(BaseModel):
     support_status: str | None = None
     latest_version: str | None = None
     recommended_version: str | None = None
+    prompt_version: str | None = None
     recommendation: str
     needs_human_review: bool = False
     checker_name: str
     extra: dict[str, Any] = Field(default_factory=dict)
+
+
+class ModelUsageSummary(BaseModel):
+    """Сводная статистика платных и кэшированных модельных проверок."""
+
+    calls_total: int = 0
+    cache_hits: int = 0
+    prompt_tokens: int = 0
+    completion_tokens: int = 0
+    total_tokens: int = 0
+    cost_usd: float = 0.0
+    by_model: dict[str, dict[str, int | float]] = Field(default_factory=dict)
+
+
+class RunStep(BaseModel):
+    """Статус и длительность шага конвейера."""
+
+    name: str
+    status: str
+    started_at: datetime
+    finished_at: datetime
+    duration_ms: int
+    detail: str | None = None
 
 
 class RunSummary(BaseModel):
@@ -195,8 +224,14 @@ class RunSummary(BaseModel):
     units_total: int = 0
     files_total: int = 0
     findings_total: int = 0
+    affected_units_total: int = 0
     by_severity: dict[str, int] = Field(default_factory=dict)
     by_criterion: dict[str, int] = Field(default_factory=dict)
+    by_branch: dict[str, int] = Field(default_factory=dict)
+    by_unit: dict[str, int] = Field(default_factory=dict)
+    model_usage: ModelUsageSummary = Field(default_factory=ModelUsageSummary)
+    prompt_versions: dict[str, str] = Field(default_factory=dict)
+    steps: list[RunStep] = Field(default_factory=list)
     model_used: bool = False
     network_used: bool = False
     warnings: list[str] = Field(default_factory=list)

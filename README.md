@@ -27,6 +27,15 @@ python -m content_audit.web_app --host 127.0.0.1 --port 8021
 - `report.csv` — таблица для методологов;
 - `run_summary.json` — краткая сводка прогона.
 
+Если есть платформенные идентификаторы, передайте манифест:
+
+```powershell
+python -m content_audit --input .\proj_example --output .\reports\proj_example --manifest .\units.json --admin-url-template "https://admin.example/projects/{unit_id}"
+```
+
+Манифест может быть JSON или CSV. Поддерживаемые поля: `path`, `unit_id` или
+`id`, `branch`, `admin_url`, `name`.
+
 ## Что уже проверяется без модели
 
 - доступность локальных файлов и структура единицы контента;
@@ -48,7 +57,7 @@ python -m content_audit.web_app --host 127.0.0.1 --port 8021
 Дополнительно можно задать отдельные модели:
 
 - `OPENROUTER_FACT_MODEL` или `OPEN_ROUTER_FACT_MODEL` — фактологическая проверка через поисковую модель Perplexity, по умолчанию `perplexity/sonar`;
-- `OPENROUTER_TECH_MODEL` или `OPEN_ROUTER_TECH_MODEL` — проверка актуальности технологий, по умолчанию совпадает с общей моделью.
+- `OPENROUTER_TECH_MODEL` или `OPEN_ROUTER_TECH_MODEL` — проверка актуальности технологий, по умолчанию `qwen/qwen3-coder`.
 
 ```powershell
 $env:PYTHONPATH = "src"
@@ -63,3 +72,30 @@ python -m content_audit --input .\proj_example --output .\reports\proj_example -
 в папке отчёта. В CSV и JSON для внешних проверок есть отдельные поля:
 источник, дата проверки, статус поддержки, последняя версия и рекомендуемая
 версия.
+
+Сводка также хранит длительность шагов, версии модельных запросов и статистику
+модельных вызовов: число свежих запросов, попадания в кэш, токены и стоимость,
+если OpenRouter вернул эти поля.
+
+## Ссылки и безопасность
+
+Сетевые проверки включаются только без `--skip-network`. Для ограничения
+источников используйте:
+
+```powershell
+python -m content_audit --input .\proj_example --output .\reports\proj_example --link-allowlist "docs.python.org,github.com"
+```
+
+Локальные адреса, внутренние IP и ссылки с учётными данными не проверяются
+автоматически.
+
+## Метрики качества
+
+Когда появится размеченная выборка, можно записать `evaluation.json`:
+
+```powershell
+python -m content_audit --input .\proj_example --output .\reports\proj_example --gold .\gold.json
+```
+
+Метрики считают точность, полноту, полноту по критическим случаям и долю ложных
+срабатываний по ключу `unit_id + criterion + file_path + line_start`.

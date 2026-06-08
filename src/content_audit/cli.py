@@ -11,6 +11,7 @@ from content_audit.exporters import write_report
 from content_audit.orchestrator import AuditRunner
 
 DEFAULT_OPENROUTER_MODEL = "openai/gpt-4o-mini"
+DEFAULT_OPENROUTER_FACT_MODEL = "perplexity/sonar"
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -25,6 +26,16 @@ def main(argv: list[str] | None = None) -> int:
         or get_env_value(("OPENROUTER_MODEL", "OPEN_ROUTER_MODEL"), env_file_values)
         or DEFAULT_OPENROUTER_MODEL
     )
+    openrouter_fact_model = (
+        args.openrouter_fact_model
+        or get_env_value(("OPENROUTER_FACT_MODEL", "OPEN_ROUTER_FACT_MODEL"), env_file_values)
+        or DEFAULT_OPENROUTER_FACT_MODEL
+    )
+    openrouter_tech_model = (
+        args.openrouter_tech_model
+        or get_env_value(("OPENROUTER_TECH_MODEL", "OPEN_ROUTER_TECH_MODEL"), env_file_values)
+        or openrouter_model
+    )
     settings = AuditSettings(
         input_path=args.input,
         output_path=args.output,
@@ -38,6 +49,8 @@ def main(argv: list[str] | None = None) -> int:
         min_image_height=args.min_image_height,
         openrouter_api_key=openrouter_api_key,
         openrouter_model=openrouter_model,
+        openrouter_fact_model=openrouter_fact_model,
+        openrouter_tech_model=openrouter_tech_model,
     )
 
     report = AuditRunner(settings).run()
@@ -58,6 +71,16 @@ def _build_parser() -> argparse.ArgumentParser:
         "--openrouter-model",
         default=None,
         help=f"Модель OpenRouter для модельных проверок. По умолчанию: {DEFAULT_OPENROUTER_MODEL}.",
+    )
+    parser.add_argument(
+        "--openrouter-fact-model",
+        default=None,
+        help=f"Модель OpenRouter для фактологической проверки. По умолчанию: {DEFAULT_OPENROUTER_FACT_MODEL}.",
+    )
+    parser.add_argument(
+        "--openrouter-tech-model",
+        default=None,
+        help="Модель OpenRouter для проверки актуальности технологий. По умолчанию совпадает с общей моделью.",
     )
     parser.add_argument("--hide-unknown", action="store_true", help="Не включать случаи с вердиктом 'нужна проверка'.")
     parser.add_argument("--include-pass", action="store_true", help="Включать положительные проверки в CSV.")

@@ -25,3 +25,15 @@ def test_loads_supported_files_only(workspace_tmp_path: Path) -> None:
     unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
 
     assert [file.relative_path for file in unit.files] == ["README.md"]
+
+
+def test_loads_standard_extensionless_text_files(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text("# Readme\n", encoding="utf-8")
+    (project / "LICENSE").write_text("MIT\n", encoding="utf-8")
+
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+    relative_paths = {file.relative_path for file in unit.files}
+
+    assert "LICENSE" in relative_paths

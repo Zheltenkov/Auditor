@@ -48,6 +48,11 @@ def _write_csv(report: AuditReport, path: Path, include_pass: bool) -> None:
                 "Критичность": SEVERITY_LABELS[finding.severity],
                 "Уверенность": f"{finding.confidence:.2f}",
                 "Обоснование": evidence,
+                "Источник": finding.source or "",
+                "Дата проверки": _format_checked_at(finding),
+                "Статус поддержки": finding.support_status or "",
+                "Последняя версия": finding.latest_version or "",
+                "Рекомендуемая версия": finding.recommended_version or "",
                 "Рекомендация": finding.recommendation,
                 "Нужен человек": "да" if finding.needs_human_review else "нет",
                 "Проверяющий модуль": finding.checker_name,
@@ -76,7 +81,20 @@ def _empty_fieldnames() -> list[str]:
         "Критичность",
         "Уверенность",
         "Обоснование",
+        "Источник",
+        "Дата проверки",
+        "Статус поддержки",
+        "Последняя версия",
+        "Рекомендуемая версия",
         "Рекомендация",
         "Нужен человек",
         "Проверяющий модуль",
     ]
+
+
+def _format_checked_at(finding) -> str:
+    """Форматируем дату проверки для табличной выгрузки."""
+
+    if not finding.checked_at:
+        return ""
+    return finding.checked_at.isoformat()

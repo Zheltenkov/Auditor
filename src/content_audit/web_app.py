@@ -31,6 +31,7 @@ from content_audit.orchestrator import AuditRunner
 
 DEFAULT_REPORT_DIR = Path("reports") / "ui_latest"
 DEFAULT_MODEL = "openai/gpt-4o-mini"
+DEFAULT_FACT_MODEL = "perplexity/sonar"
 
 
 class WebState:
@@ -148,6 +149,8 @@ def run_from_form(form: dict[str, str], state: WebState) -> AuditReport:
 
     input_path = Path(form.get("input_path") or state.default_input).expanduser().resolve()
     model_name = form.get("model_name") or get_env_value(("OPENROUTER_MODEL", "OPEN_ROUTER_MODEL"), state.env_values) or DEFAULT_MODEL
+    fact_model_name = get_env_value(("OPENROUTER_FACT_MODEL", "OPEN_ROUTER_FACT_MODEL"), state.env_values) or DEFAULT_FACT_MODEL
+    tech_model_name = get_env_value(("OPENROUTER_TECH_MODEL", "OPEN_ROUTER_TECH_MODEL"), state.env_values) or model_name
     api_key = get_env_value(("OPENROUTER_API_KEY", "OPEN_ROUTER_API_KEY"), state.env_values)
     settings = AuditSettings(
         input_path=input_path,
@@ -158,6 +161,8 @@ def run_from_form(form: dict[str, str], state: WebState) -> AuditReport:
         include_pass=form.get("include_pass") == "on",
         openrouter_api_key=api_key,
         openrouter_model=model_name,
+        openrouter_fact_model=fact_model_name,
+        openrouter_tech_model=tech_model_name,
     )
     report = AuditRunner(settings).run()
     write_report(report, state.report_dir, include_pass=settings.include_pass)
@@ -251,7 +256,7 @@ body {
   background: rgba(247, 244, 237, .86);
   border-bottom: 1px solid var(--border-soft);
 }
-.topbar-inner, .shell { max-width: 1520px; margin: 0 auto; padding-left: 32px; padding-right: 32px; }
+.topbar-inner, .shell { max-width: 1720px; margin: 0 auto; padding-left: 32px; padding-right: 32px; }
 .topbar-inner { min-height: 62px; display: flex; align-items: center; justify-content: space-between; gap: 18px; }
 .wordmark { display: flex; align-items: center; gap: 12px; min-width: 0; }
 .glyph {
@@ -357,7 +362,7 @@ input[type="text"]:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rg
 }
 table {
   width: 100%;
-  min-width: 1860px;
+  min-width: 2720px;
   table-layout: fixed;
   border-collapse: collapse;
 }
@@ -368,7 +373,12 @@ col.col-file { width: 260px; }
 col.col-line { width: 82px; }
 col.col-quote { width: 360px; }
 col.col-evidence { width: 380px; }
-col.col-recommendation { width: 420px; }
+col.col-source { width: 320px; }
+col.col-checked { width: 190px; }
+col.col-support { width: 160px; }
+col.col-latest { width: 160px; }
+col.col-recommended { width: 190px; }
+col.col-recommendation { width: 380px; }
 col.col-confidence { width: 110px; }
 col.col-module { width: 190px; }
 th, td {
@@ -394,7 +404,7 @@ tr:last-child td { border-bottom: 0; }
 .pill-fail { color: var(--danger); background: var(--danger-soft); }
 .pill-warning, .pill-unknown { color: var(--warn); background: var(--warn-soft); }
 .pill-pass { color: var(--accent-deep); background: var(--accent-soft); }
-.quote, .evidence, .recommendation {
+.quote, .evidence, .source, .recommendation {
   color: var(--text);
   white-space: normal;
   overflow-wrap: anywhere;
@@ -512,7 +522,7 @@ def _render_summary(report: AuditReport) -> str:
   {_stat("Единицы", summary.units_total)}
   {_stat("Файлы", summary.files_total)}
   {_stat("Случаи", summary.findings_total)}
-  {_stat("Crit / Major", f"{critical} / {major}")}
+  {_stat("Крит. / высокие", f"{critical} / {major}")}
 </section>
 """
 
@@ -545,7 +555,7 @@ def _render_findings_table(findings: list[Finding]) -> str:
 
     rows = "\n".join(_render_finding_row(finding) for finding in findings)
     if not rows:
-        rows = '<tr><td colspan="10">По выбранным условиям случаев нет.</td></tr>'
+        rows = '<tr><td colspan="15">По выбранным условиям случаев нет.</td></tr>'
     return f"""
 <section id="findings" class="section">
   <div class="section-head">
@@ -562,6 +572,11 @@ def _render_findings_table(findings: list[Finding]) -> str:
         <col class="col-line">
         <col class="col-quote">
         <col class="col-evidence">
+        <col class="col-source">
+        <col class="col-checked">
+        <col class="col-support">
+        <col class="col-latest">
+        <col class="col-recommended">
         <col class="col-recommendation">
         <col class="col-confidence">
         <col class="col-module">
@@ -575,6 +590,11 @@ def _render_findings_table(findings: list[Finding]) -> str:
           <th>Строка</th>
           <th>Цитата</th>
           <th>Обоснование</th>
+          <th>Источник</th>
+          <th>Дата проверки</th>
+          <th>Статус поддержки</th>
+          <th>Последняя версия</th>
+          <th>Рекомендуемая версия</th>
           <th>Рекомендация</th>
           <th>Уверенность</th>
           <th>Модуль</th>
@@ -593,6 +613,7 @@ def _render_finding_row(finding: Finding) -> str:
     evidence = " | ".join(f"{item.title}: {item.detail}" for item in finding.evidence)
     file_path = finding.location.file_path if finding.location else ""
     line = str(finding.location.line_start or "") if finding.location else ""
+    checked_at = finding.checked_at.isoformat() if finding.checked_at else ""
     return f"""
 <tr>
   <td>{_esc(CRITERION_LABELS[finding.criterion])}</td>
@@ -602,6 +623,11 @@ def _render_finding_row(finding: Finding) -> str:
   <td class="mono">{_esc(line)}</td>
   <td class="quote">{_esc(finding.quote or "")}</td>
   <td class="evidence">{_esc(evidence)}</td>
+  <td class="source">{_esc(finding.source or "")}</td>
+  <td class="mono">{_esc(checked_at)}</td>
+  <td>{_esc(finding.support_status or "")}</td>
+  <td class="mono">{_esc(finding.latest_version or "")}</td>
+  <td class="mono">{_esc(finding.recommended_version or "")}</td>
   <td class="recommendation">{_esc(finding.recommendation)}</td>
   <td class="mono">{finding.confidence:.2f}</td>
   <td class="mono">{_esc(finding.checker_name)}</td>

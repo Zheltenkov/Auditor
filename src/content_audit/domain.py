@@ -68,10 +68,10 @@ CRITERION_LABELS: dict[Criterion, str] = {
 }
 
 SEVERITY_LABELS: dict[Severity, str] = {
-    Severity.CRITICAL: "Critical",
-    Severity.MAJOR: "Major",
-    Severity.MINOR: "Minor",
-    Severity.INFO: "Info",
+    Severity.CRITICAL: "Критическая",
+    Severity.MAJOR: "Высокая",
+    Severity.MINOR: "Средняя",
+    Severity.INFO: "Справочно",
 }
 
 VERDICT_LABELS: dict[Verdict, str] = {
@@ -97,6 +97,9 @@ class AuditSettings(BaseModel):
     min_image_height: int = 360
     openrouter_api_key: str | None = None
     openrouter_model: str | None = None
+    openrouter_fact_model: str | None = None
+    openrouter_tech_model: str | None = None
+    cache_path: Path | None = None
 
     @field_validator("input_path", "output_path")
     @classmethod
@@ -172,6 +175,11 @@ class Finding(BaseModel):
     quote: str | None = None
     location: TextLocation | None = None
     evidence: list[Evidence] = Field(default_factory=list)
+    source: str | None = None
+    checked_at: datetime | None = None
+    support_status: str | None = None
+    latest_version: str | None = None
+    recommended_version: str | None = None
     recommendation: str
     needs_human_review: bool = False
     checker_name: str

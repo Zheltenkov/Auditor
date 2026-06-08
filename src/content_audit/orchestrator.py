@@ -5,11 +5,16 @@ from __future__ import annotations
 from collections import Counter
 from datetime import datetime, timezone
 
+from content_audit.cache import AuditCache
 from content_audit.checks import CheckContext, default_checkers
 from content_audit.domain import AuditReport, AuditSettings, ExtractedEntity, Finding, RunSummary, Verdict
 from content_audit.extraction import extract_entities
 from content_audit.ingestion import discover_content_units, load_unit_files
 from content_audit.openrouter import OpenRouterClient
+
+
+DEFAULT_FACT_MODEL = "perplexity/sonar"
+DEFAULT_TECH_MODEL = "openai/gpt-4o-mini"
 
 
 class AuditRunner:
@@ -24,9 +29,17 @@ class AuditRunner:
         started_at = datetime.now(timezone.utc)
         warnings: list[str] = []
         units = [load_unit_files(unit, self.settings.max_file_bytes) for unit in discover_content_units(self.settings.input_path)]
-        model_client = self._build_model_client(warnings)
-        context = CheckContext(settings=self.settings, model_client=model_client)
-        checkers = default_checkers(use_model=self.settings.use_model and model_client is not None)
+        model_client, fact_model_client, tech_model_client = self._build_model_clients(warnings)
+        cache = AuditCache.load(self.settings.cache_path or self.settings.output_path / "audit_cache.json")
+        context = CheckContext(
+            settings=self.settings,
+            model_client=model_client,
+            fact_model_client=fact_model_client,
+            tech_model_client=tech_model_client,
+            cache=cache,
+        )
+        model_used = any(client is not None for client in (model_client, fact_model_client, tech_model_client))
+        checkers = default_checkers(use_model=self.settings.use_model and model_used)
 
         all_entities: list[ExtractedEntity] = []
         all_findings: list[Finding] = []
@@ -37,22 +50,32 @@ class AuditRunner:
             for checker in checkers:
                 all_findings.extend(checker.check(unit, entities, context))
 
+        cache.save()
         findings = self._filter_findings(all_findings)
-        summary = self._build_summary(started_at, units, findings, warnings, model_client is not None)
+        summary = self._build_summary(started_at, units, findings, warnings, model_used)
         return AuditReport(summary=summary, units=units, entities=all_entities, findings=findings)
 
-    def _build_model_client(self, warnings: list[str]) -> OpenRouterClient | None:
-        """Создаём модельный клиент только при наличии ключа и модели."""
+    def _build_model_clients(
+        self,
+        warnings: list[str],
+    ) -> tuple[OpenRouterClient | None, OpenRouterClient | None, OpenRouterClient | None]:
+        """Создаём независимые клиенты для общего, фактологического и технического контуров."""
 
         if not self.settings.use_model:
-            return None
+            return None, None, None
         if not self.settings.openrouter_api_key:
             warnings.append("Модельный контур запрошен, но OPENROUTER_API_KEY не задан.")
-            return None
-        if not self.settings.openrouter_model:
-            warnings.append("Модельный контур запрошен, но модель OpenRouter не указана.")
-            return None
-        return OpenRouterClient(api_key=self.settings.openrouter_api_key, model=self.settings.openrouter_model)
+            return None, None, None
+
+        model_client = self._build_named_client(self.settings.openrouter_model, DEFAULT_TECH_MODEL)
+        fact_model_client = self._build_named_client(self.settings.openrouter_fact_model, DEFAULT_FACT_MODEL)
+        tech_model_client = self._build_named_client(self.settings.openrouter_tech_model, self.settings.openrouter_model or DEFAULT_TECH_MODEL)
+        return model_client, fact_model_client, tech_model_client
+
+    def _build_named_client(self, model_name: str | None, fallback_model: str) -> OpenRouterClient:
+        """Подставляем безопасную модель по умолчанию, если настройка не задана."""
+
+        return OpenRouterClient(api_key=self.settings.openrouter_api_key or "", model=model_name or fallback_model)
 
     def _filter_findings(self, findings: list[Finding]) -> list[Finding]:
         """Убираем положительные и неизвестные случаи, если пользователь это запросил."""

@@ -45,6 +45,11 @@ python -m content_audit.web_app --host 127.0.0.1 --port 8021
 модельный контур. Модель можно задать через `OPENROUTER_MODEL`,
 `OPEN_ROUTER_MODEL` или параметр `--openrouter-model`.
 
+Дополнительно можно задать отдельные модели:
+
+- `OPENROUTER_FACT_MODEL` или `OPEN_ROUTER_FACT_MODEL` — фактологическая проверка через поисковую модель Perplexity, по умолчанию `perplexity/sonar`;
+- `OPENROUTER_TECH_MODEL` или `OPEN_ROUTER_TECH_MODEL` — проверка актуальности технологий, по умолчанию совпадает с общей моделью.
+
 ```powershell
 $env:PYTHONPATH = "src"
 $env:OPENROUTER_API_KEY = "<key>"
@@ -53,3 +58,8 @@ python -m content_audit --input .\proj_example --output .\reports\proj_example -
 
 Модельный контур отделён от обычной логики: извлечение, проверка, оценка
 критичности и рекомендации остаются отдельными шагами.
+
+Повторные проверки одинаковых фактов и технологий берутся из `audit_cache.json`
+в папке отчёта. В CSV и JSON для внешних проверок есть отдельные поля:
+источник, дата проверки, статус поддержки, последняя версия и рекомендуемая
+версия.

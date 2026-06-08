@@ -3,16 +3,19 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import re
 import struct
 from abc import ABC, abstractmethod
+from datetime import datetime, timezone
 from pathlib import Path
-from typing import Iterable
+from typing import Any, Iterable
 from urllib.parse import urldefrag, urlparse
 
 import requests
 import yaml
 
+from content_audit.cache import AuditCache
 from content_audit.domain import (
     CRITERION_LABELS,
     AuditSettings,
@@ -30,12 +33,52 @@ from content_audit.openrouter import OpenRouterClient, OpenRouterError
 from content_audit.text_utils import normalize_for_match
 
 
+TECH_KEYWORDS = {
+    "alpine",
+    "bash",
+    "busybox",
+    "c11",
+    "docker",
+    "gcc",
+    "github",
+    "gitlab",
+    "gnu",
+    "java",
+    "makefile",
+    "node",
+    "node.js",
+    "pcre2",
+    "posix",
+    "python",
+    "ubuntu",
+}
+
+FACT_MARKER_RE = re.compile(
+    r"\b("
+    r"deprecated|latest|lts|release|standard|style|support|supported|"
+    r"актуаль|устар|поддерж|стандарт|релиз|верси|используется|является|входит|доступ"
+    r")\b",
+    re.IGNORECASE,
+)
+FACT_DATE_RE = re.compile(r"\b(?:19|20)\d{2}(?:[-./](?:0?[1-9]|1[0-2])(?:[-./](?:0?[1-9]|[12]\d|3[01]))?)?\b")
+
+
 class CheckContext:
     """Контекст, общий для всех проверяющих модулей."""
 
-    def __init__(self, settings: AuditSettings, model_client: OpenRouterClient | None = None) -> None:
+    def __init__(
+        self,
+        settings: AuditSettings,
+        model_client: OpenRouterClient | None = None,
+        fact_model_client: OpenRouterClient | None = None,
+        tech_model_client: OpenRouterClient | None = None,
+        cache: AuditCache | None = None,
+    ) -> None:
         self.settings = settings
         self.model_client = model_client
+        self.fact_model_client = fact_model_client
+        self.tech_model_client = tech_model_client
+        self.cache = cache
 
 
 class BaseChecker(ABC):
@@ -516,47 +559,122 @@ class RightsChecker(BaseChecker):
         return findings
 
 
-class TechnologyFreshnessChecker(BaseChecker):
-    """Формирует кандидаты на проверку актуальности технологий и версий."""
+class FactCheckerPerplexity(BaseChecker):
+    """Проверяет фактологические утверждения через поисковую модель Perplexity."""
 
-    name = "technology_freshness_checker"
+    name = "fact_checker_perplexity"
+    max_claims = 8
+    SYSTEM_PROMPT = """Ты проверяешь фактологическое утверждение из учебного контента через внешние источники.
+Верни только JSON: {"verdict":"pass|warning|fail|unknown","confidence":0.0,"evidence":"","sources":[{"title":"","url":""}],"recommendation":""}.
+verdict='pass' ставь только если утверждение подтверждено надёжным источником.
+verdict='warning' ставь, если утверждение частично устарело, неполное или требует уточнения.
+verdict='fail' ставь, если утверждение противоречит актуальным источникам.
+verdict='unknown' ставь, если источников недостаточно.
+Не придумывай источники; если ссылки нет, оставь sources пустым списком.
+Все пояснения и рекомендации пиши на русском языке."""
 
     def check(self, unit: ContentUnit, entities: list[ExtractedEntity], context: CheckContext) -> list[Finding]:
-        del context
-        candidates = [entity for entity in entities if entity.entity_type in {EntityType.VERSION, EntityType.TECHNOLOGY, EntityType.DATE}]
-        seen_values: set[tuple[str, str]] = set()
-        selected: list[ExtractedEntity] = []
-        for entity in candidates:
-            key = (entity.location.file_path, entity.value.lower())
-            if key in seen_values:
-                continue
-            seen_values.add(key)
-            if not _looks_like_actuality_candidate(entity.value):
-                continue
-            selected.append(entity)
+        del entities
+        if context.fact_model_client is None:
+            return []
 
+        claims = _extract_fact_claims(unit, self.max_claims)
+        findings: list[Finding] = []
+        for claim in claims:
+            cache_key = _hash_cache_key("fact", str(claim["claim"]))
+            prompt = _fact_check_prompt(claim)
+            try:
+                record, cache_hit = _cached_model_json(
+                    context,
+                    "fact",
+                    cache_key,
+                    context.fact_model_client,
+                    self.SYSTEM_PROMPT,
+                    prompt,
+                )
+            except OpenRouterError as exc:
+                findings.append(_external_check_error(unit, self.name, Criterion.CORRECTNESS, exc))
+                break
+
+            item = _first_result_item(record.get("response"))
+            if item is None:
+                continue
+            findings.append(_finding_from_fact_item(unit, self.name, claim, item, record, cache_hit))
+        return findings
+
+
+class TechFreshnessChecker(BaseChecker):
+    """Проверяет актуальность технологий и версий с источниками."""
+
+    name = "tech_freshness_checker"
+    max_candidates = 12
+    SYSTEM_PROMPT = """Ты проверяешь актуальность технологии, версии или стандарта в учебном контенте.
+Верни только JSON: {"verdict":"pass|warning|fail|unknown","severity":"info|minor|major|critical","confidence":0.0,"support_status":"","latest_version":"","recommended_version":"","evidence":"","sources":[{"title":"","url":""}],"recommendation":""}.
+support_status пиши коротко на русском: поддерживается, устарело, не поддерживается, окончание поддержки, неизвестно.
+latest_version заполняй только когда источник позволяет назвать последнюю стабильную версию.
+recommended_version заполняй только когда можно дать практическую рекомендацию по обновлению.
+verdict='pass' ставь, если текущая версия поддерживается и подходит для учебного контента.
+verdict='warning' ставь, если версия устарела, но ещё допустима.
+verdict='fail' ставь, если версия не поддерживается или вводит студентов в заблуждение.
+verdict='unknown' ставь, если источников недостаточно.
+Не придумывай источники; если ссылки нет, оставь sources пустым списком.
+Все пояснения и рекомендации пиши на русском языке."""
+
+    def check(self, unit: ContentUnit, entities: list[ExtractedEntity], context: CheckContext) -> list[Finding]:
+        selected = _select_technology_candidates(entities, self.max_candidates)
         if not selected:
             return []
+
+        if context.tech_model_client is None:
+            return [self._fallback_candidate_finding(unit, selected)]
+
+        findings: list[Finding] = []
+        for entity in selected:
+            cache_key = _hash_cache_key("technology", _normalise_technology_value(entity.value))
+            prompt = _technology_check_prompt(entity)
+            try:
+                record, cache_hit = _cached_model_json(
+                    context,
+                    "technology",
+                    cache_key,
+                    context.tech_model_client,
+                    self.SYSTEM_PROMPT,
+                    prompt,
+                )
+            except OpenRouterError as exc:
+                findings.append(_external_check_error(unit, self.name, Criterion.ACTUALITY, exc))
+                break
+
+            item = _first_result_item(record.get("response"))
+            if item is None:
+                continue
+            findings.append(_finding_from_technology_item(unit, self.name, entity, item, record, cache_hit))
+        return findings
+
+    def _fallback_candidate_finding(self, unit: ContentUnit, selected: list[ExtractedEntity]) -> Finding:
+        """Сохраняем прежний режим: без модели показываем кандидатов на ручную проверку."""
 
         preview = ", ".join(entity.value for entity in selected[:20])
         if len(selected) > 20:
             preview = f"{preview}, ..."
-        return [
-            _finding(
-                unit,
-                self.name,
-                Criterion.ACTUALITY,
-                Severity.INFO,
-                Verdict.UNKNOWN,
-                0.55,
-                None,
-                None,
-                [Evidence(title="Кандидаты на проверку", detail=f"Найдено {len(selected)} сущностей: {preview}")],
-                "Запустить модельную проверку актуальности технологий, версий и дат; извлечённые сущности доступны в report.json.",
-                True,
-                extra={"candidate_count": len(selected), "sample_values": [entity.value for entity in selected[:20]]},
-            )
-        ]
+        return _finding(
+            unit,
+            self.name,
+            Criterion.ACTUALITY,
+            Severity.INFO,
+            Verdict.UNKNOWN,
+            0.55,
+            None,
+            None,
+            [Evidence(title="Кандидаты на проверку", detail=f"Найдено {len(selected)} сущностей: {preview}")],
+            "Включить модельный контур, чтобы получить источник, статус поддержки и рекомендуемую версию.",
+            True,
+            extra={"candidate_count": len(selected), "sample_values": [entity.value for entity in selected[:20]]},
+            support_status="не проверялось",
+        )
+
+
+TechnologyFreshnessChecker = TechFreshnessChecker
 
 
 class ModelRubricChecker(BaseChecker):
@@ -614,9 +732,10 @@ def default_checkers(use_model: bool) -> list[BaseChecker]:
         ImageQualityChecker(),
         ReadabilityChecker(),
         RightsChecker(),
-        TechnologyFreshnessChecker(),
+        TechFreshnessChecker(),
     ]
     if use_model:
+        checkers.append(FactCheckerPerplexity())
         checkers.append(ModelRubricChecker())
     return checkers
 
@@ -725,16 +844,68 @@ def _read_jpeg_dimensions(data: bytes) -> tuple[int, int] | None:
     return None
 
 
-def _looks_like_actuality_candidate(value: str) -> bool:
+def _select_technology_candidates(entities: list[ExtractedEntity], limit: int) -> list[ExtractedEntity]:
+    """Выбираем ограниченный набор сущностей, которые реально похожи на технологии."""
+
+    candidates = [entity for entity in entities if entity.entity_type in {EntityType.VERSION, EntityType.TECHNOLOGY, EntityType.DATE}]
+    seen_values: set[str] = set()
+    seen_roots: set[str] = set()
+    selected: list[ExtractedEntity] = []
+    for entity in candidates:
+        key = _normalise_technology_value(entity.value)
+        root = _technology_root(entity.value)
+        if key in seen_values:
+            continue
+        if entity.entity_type == EntityType.TECHNOLOGY and root and root in seen_roots:
+            continue
+        seen_values.add(key)
+        if not _looks_like_actuality_candidate(entity):
+            continue
+        if root:
+            seen_roots.add(root)
+        selected.append(entity)
+        if len(selected) >= limit:
+            break
+    return selected
+
+
+def _looks_like_actuality_candidate(entity: ExtractedEntity) -> bool:
     """Отсекаем слишком общие слова и оставляем проверяемые версии/даты/технологии."""
 
+    value = entity.value.strip()
     lowered = value.lower()
-    if len(lowered) < 3:
+    context = f"{value} {entity.context or ''}".lower()
+    if len(lowered) < 2:
         return False
     if re.fullmatch(r"(19|20)\d{2}", lowered):
-        year = int(lowered)
-        return year >= 2000
-    return bool(re.search(r"\d", lowered) or lowered in {"java", "python", "docker", "gitlab", "github", "gcc", "pcre2"})
+        return any(keyword in context for keyword in TECH_KEYWORDS)
+    if any(keyword in lowered for keyword in TECH_KEYWORDS):
+        return True
+    return entity.entity_type == EntityType.VERSION and any(keyword in context for keyword in TECH_KEYWORDS)
+
+
+def _normalise_technology_value(value: str) -> str:
+    """Нормализуем значение для дедупликации и кэша."""
+
+    return re.sub(r"\s+", " ", value.strip().lower())
+
+
+def _technology_root(value: str) -> str | None:
+    """Определяем базовое имя технологии для подавления дублей вида Java 21 и Java."""
+
+    lowered = value.lower()
+    for keyword in sorted(TECH_KEYWORDS, key=len, reverse=True):
+        if keyword in lowered:
+            return keyword
+    return None
+
+
+def _hash_cache_key(namespace: str, value: str) -> str:
+    """Создаём стабильный ключ кэша без хранения длинных утверждений в имени."""
+
+    normalized = normalize_for_match(value)
+    digest = hashlib.sha1(f"{namespace}|{normalized}".encode("utf-8")).hexdigest()
+    return digest
 
 
 def _compact_unit_context(unit: ContentUnit, limit: int = 12000) -> str:
@@ -759,6 +930,347 @@ def _model_context_priority(kind: str, relative_path: str) -> tuple[int, str]:
     return order.get(kind, 9), relative_path.lower()
 
 
+def _extract_fact_claims(unit: ContentUnit, limit: int) -> list[dict[str, Any]]:
+    """Достаём короткие фактологические утверждения, которые есть смысл проверять внешним поиском."""
+
+    claims: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    ordered_files = sorted(unit.files, key=lambda file: _model_context_priority(file.kind, file.relative_path))
+    for file in ordered_files:
+        if file.kind not in {"readme", "material", "text"}:
+            continue
+        for line_number, line in enumerate(file.text.splitlines(), start=1):
+            for candidate in _split_claim_line(line):
+                claim = _clean_claim_text(candidate)
+                key = normalize_for_match(claim)
+                if key in seen or not _looks_like_fact_claim(claim):
+                    continue
+                seen.add(key)
+                claims.append(
+                    {
+                        "claim": claim,
+                        "context": line.strip()[:700],
+                        "location": TextLocation(file_path=file.relative_path, line_start=line_number, line_end=line_number),
+                    }
+                )
+                if len(claims) >= limit:
+                    return claims
+    return claims
+
+
+def _split_claim_line(line: str) -> list[str]:
+    """Разделяем строку на короткие утверждения без тяжёлого лингвистического разбора."""
+
+    return [part.strip() for part in re.split(r"(?<=[.!?])\s+", line) if part.strip()]
+
+
+def _clean_claim_text(value: str) -> str:
+    """Убираем Markdown-маркеры, которые не относятся к смыслу утверждения."""
+
+    cleaned = re.sub(r"^\s*(?:#{1,6}|[-*]|\d+[.)])\s*", "", value.strip())
+    cleaned = re.sub(r"\s+", " ", cleaned)
+    return cleaned.strip()
+
+
+def _looks_like_fact_claim(value: str) -> bool:
+    """Отбираем только утверждения с датами, версиями, стандартами или признаками внешней проверяемости."""
+
+    lowered = value.lower()
+    if len(value) < 35 or len(value) > 520:
+        return False
+    if lowered.startswith(("http://", "https://", "![", "[")):
+        return False
+    if len(re.findall(r"\w+", value, flags=re.UNICODE)) < 5:
+        return False
+    return bool(FACT_DATE_RE.search(value) or FACT_MARKER_RE.search(value) or any(keyword in lowered for keyword in TECH_KEYWORDS))
+
+
+def _fact_check_prompt(claim: dict[str, Any]) -> str:
+    """Формируем входной контракт фактологической проверки."""
+
+    location = claim.get("location")
+    payload = {
+        "check_date": datetime.now(timezone.utc).date().isoformat(),
+        "claim": claim.get("claim"),
+        "context": claim.get("context"),
+        "file_path": location.file_path if isinstance(location, TextLocation) else None,
+        "line_start": location.line_start if isinstance(location, TextLocation) else None,
+    }
+    return json.dumps(payload, ensure_ascii=False, indent=2)
+
+
+def _technology_check_prompt(entity: ExtractedEntity) -> str:
+    """Формируем входной контракт проверки актуальности технологии."""
+
+    payload = {
+        "check_date": datetime.now(timezone.utc).date().isoformat(),
+        "candidate": entity.value,
+        "entity_type": entity.entity_type.value,
+        "quote": entity.quote,
+        "context": entity.context,
+        "file_path": entity.location.file_path,
+        "line_start": entity.location.line_start,
+    }
+    return json.dumps(payload, ensure_ascii=False, indent=2)
+
+
+def _cached_model_json(
+    context: CheckContext,
+    namespace: str,
+    key: str,
+    client: OpenRouterClient,
+    system_prompt: str,
+    user_prompt: str,
+) -> tuple[dict[str, Any], bool]:
+    """Берём модельный JSON из кэша или выполняем один внешний запрос."""
+
+    if context.cache is not None:
+        cached = context.cache.get(namespace, key)
+        if cached is not None and isinstance(cached.get("response"), dict):
+            return cached, True
+
+    response = client.complete_json(system_prompt, user_prompt)
+    record = {
+        "checked_at": datetime.now(timezone.utc).isoformat(),
+        "model": client.model,
+        "response": response,
+    }
+    if context.cache is not None:
+        context.cache.set(namespace, key, record)
+    return record, False
+
+
+def _first_result_item(payload: object) -> dict[str, Any] | None:
+    """Разбираем разные допустимые формы JSON-ответа модели."""
+
+    if isinstance(payload, list):
+        return next((item for item in payload if isinstance(item, dict)), None)
+    if not isinstance(payload, dict):
+        return None
+    for key in ("result", "finding", "check"):
+        item = payload.get(key)
+        if isinstance(item, dict):
+            return item
+    findings = payload.get("findings")
+    if isinstance(findings, list):
+        return next((item for item in findings if isinstance(item, dict)), None)
+    return payload
+
+
+def _finding_from_fact_item(
+    unit: ContentUnit,
+    checker_name: str,
+    claim: dict[str, Any],
+    item: dict[str, Any],
+    record: dict[str, Any],
+    cache_hit: bool,
+) -> Finding:
+    """Преобразуем результат фактологической проверки в строку отчёта."""
+
+    verdict = _verdict_from_model_value(item.get("verdict"), Verdict.UNKNOWN)
+    evidence_text = _model_text(item, ("evidence", "reason", "explanation"), "Фактологическая проверка без отдельного пояснения.")
+    sources = _sources_from_item(item)
+    location = claim.get("location")
+    return _finding(
+        unit,
+        checker_name,
+        Criterion.CORRECTNESS,
+        _severity_from_verdict(verdict),
+        verdict,
+        _parse_confidence(item.get("confidence")),
+        str(claim.get("claim") or "") or None,
+        location if isinstance(location, TextLocation) else None,
+        [Evidence(title="Фактологическая проверка", detail=evidence_text, url=_first_source_url(sources))],
+        _model_text(item, ("recommendation",), "Проверить утверждение вручную и обновить материал при расхождении с источниками."),
+        verdict != Verdict.PASS,
+        extra={"cache_hit": cache_hit, "model": record.get("model"), "claim": claim.get("claim")},
+        source=_source_summary(sources),
+        checked_at=_checked_at_from_record(record),
+    )
+
+
+def _finding_from_technology_item(
+    unit: ContentUnit,
+    checker_name: str,
+    entity: ExtractedEntity,
+    item: dict[str, Any],
+    record: dict[str, Any],
+    cache_hit: bool,
+) -> Finding:
+    """Преобразуем результат проверки технологии в строку отчёта."""
+
+    verdict = _verdict_from_model_value(item.get("verdict"), Verdict.UNKNOWN)
+    severity = _enum_or_default(Severity, item.get("severity"), _severity_from_verdict(verdict))
+    evidence_text = _model_text(item, ("evidence", "reason", "explanation"), "Проверка актуальности без отдельного пояснения.")
+    sources = _sources_from_item(item)
+    support_status = _model_text(item, ("support_status", "status"), _support_status_from_verdict(verdict))
+    return _finding(
+        unit,
+        checker_name,
+        Criterion.ACTUALITY,
+        severity,
+        verdict,
+        _parse_confidence(item.get("confidence")),
+        entity.quote,
+        entity.location,
+        [Evidence(title="Актуальность технологии", detail=evidence_text, url=_first_source_url(sources))],
+        _model_text(item, ("recommendation",), "Проверить версию технологии вручную и обновить материал при необходимости."),
+        verdict != Verdict.PASS,
+        extra={"cache_hit": cache_hit, "model": record.get("model"), "candidate": entity.value},
+        source=_source_summary(sources),
+        checked_at=_checked_at_from_record(record),
+        support_status=support_status,
+        latest_version=_optional_model_text(item.get("latest_version")),
+        recommended_version=_optional_model_text(item.get("recommended_version")),
+    )
+
+
+def _external_check_error(unit: ContentUnit, checker_name: str, criterion: Criterion, exc: OpenRouterError) -> Finding:
+    """Фиксируем сбой внешней проверки одной строкой вместо падения всего аудита."""
+
+    return _finding(
+        unit,
+        checker_name,
+        criterion,
+        Severity.INFO,
+        Verdict.UNKNOWN,
+        0.3,
+        None,
+        None,
+        [Evidence(title="Внешняя проверка", detail=str(exc))],
+        "Повторить проверку после устранения ошибки провайдера или временно отключить модельный контур.",
+        True,
+        checked_at=datetime.now(timezone.utc),
+        support_status="ошибка проверки" if criterion == Criterion.ACTUALITY else None,
+    )
+
+
+def _model_text(item: dict[str, Any], keys: tuple[str, ...], default: str) -> str:
+    """Берём первое непустое текстовое поле из ответа модели."""
+
+    for key in keys:
+        value = item.get(key)
+        text = _optional_model_text(value)
+        if text:
+            return text
+    return default
+
+
+def _optional_model_text(value: object) -> str | None:
+    """Нормализуем пустые значения модели."""
+
+    if value is None:
+        return None
+    text = str(value).strip()
+    return text or None
+
+
+def _verdict_from_model_value(value: object, default: Verdict) -> Verdict:
+    """Поддерживаем русские и английские синонимы вердиктов."""
+
+    if value is None:
+        return default
+    normalized = str(value).strip().lower()
+    aliases = {
+        "ok": Verdict.PASS,
+        "true": Verdict.PASS,
+        "correct": Verdict.PASS,
+        "подтверждено": Verdict.PASS,
+        "частично": Verdict.WARNING,
+        "partial": Verdict.WARNING,
+        "outdated": Verdict.WARNING,
+        "устарело": Verdict.WARNING,
+        "false": Verdict.FAIL,
+        "incorrect": Verdict.FAIL,
+        "ошибка": Verdict.FAIL,
+        "unknown": Verdict.UNKNOWN,
+        "неизвестно": Verdict.UNKNOWN,
+    }
+    if normalized in aliases:
+        return aliases[normalized]
+    return _enum_or_default(Verdict, normalized, default)
+
+
+def _severity_from_verdict(verdict: Verdict) -> Severity:
+    """Выбираем критичность по умолчанию, если модель её не вернула."""
+
+    if verdict == Verdict.FAIL:
+        return Severity.MAJOR
+    if verdict == Verdict.WARNING:
+        return Severity.MINOR
+    return Severity.INFO
+
+
+def _support_status_from_verdict(verdict: Verdict) -> str:
+    """Заполняем статус поддержки даже при неполном ответе модели."""
+
+    if verdict == Verdict.PASS:
+        return "поддерживается"
+    if verdict == Verdict.WARNING:
+        return "требует уточнения"
+    if verdict == Verdict.FAIL:
+        return "не поддерживается"
+    return "неизвестно"
+
+
+def _sources_from_item(item: dict[str, Any]) -> list[dict[str, str]]:
+    """Нормализуем список источников из ответа модели."""
+
+    raw_sources = item.get("sources") or item.get("source") or []
+    if isinstance(raw_sources, str):
+        raw_sources = [raw_sources]
+    if not isinstance(raw_sources, list):
+        return []
+
+    sources: list[dict[str, str]] = []
+    for raw_source in raw_sources:
+        if isinstance(raw_source, dict):
+            title = str(raw_source.get("title") or raw_source.get("name") or "").strip()
+            url = str(raw_source.get("url") or raw_source.get("link") or "").strip()
+        else:
+            title = ""
+            url = str(raw_source).strip()
+        if not title and not url:
+            continue
+        sources.append({"title": title, "url": url})
+    return sources
+
+
+def _source_summary(sources: list[dict[str, str]]) -> str | None:
+    """Собираем компактное текстовое представление источников для таблицы."""
+
+    parts: list[str] = []
+    for source in sources:
+        value = source.get("url") or source.get("title")
+        if value and value not in parts:
+            parts.append(value)
+    return " | ".join(parts)[:1200] or None
+
+
+def _first_source_url(sources: list[dict[str, str]]) -> str | None:
+    """Выбираем первую ссылку для поля evidence.url."""
+
+    for source in sources:
+        url = source.get("url")
+        if url:
+            return url
+    return None
+
+
+def _checked_at_from_record(record: dict[str, Any]) -> datetime | None:
+    """Разбираем дату проверки из кэша или свежего ответа."""
+
+    value = record.get("checked_at")
+    if isinstance(value, datetime):
+        return value
+    if not isinstance(value, str) or not value.strip():
+        return None
+    try:
+        return datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+
+
 def _finding_from_model_item(unit: ContentUnit, checker_name: str, item: dict[str, object]) -> Finding:
     """Преобразуем ответ модели в строгий доменный объект."""
 
@@ -769,6 +1281,7 @@ def _finding_from_model_item(unit: ContentUnit, checker_name: str, item: dict[st
     line_start = _parse_optional_int(item.get("line_start"))
     location = TextLocation(file_path=file_path or "", line_start=line_start, line_end=line_start) if file_path and line_start else None
     evidence_text = str(item.get("evidence") or "Модельная проверка без отдельного источника.")
+    sources = _sources_from_item(item)
     return _finding(
         unit,
         checker_name,
@@ -781,6 +1294,7 @@ def _finding_from_model_item(unit: ContentUnit, checker_name: str, item: dict[st
         [Evidence(title="Модельная проверка", detail=evidence_text)],
         str(item.get("recommendation") or "Проверить случай вручную."),
         True,
+        source=_source_summary(sources),
     )
 
 
@@ -844,6 +1358,11 @@ def _finding(
     recommendation: str,
     needs_human_review: bool,
     extra: dict[str, object] | None = None,
+    source: str | None = None,
+    checked_at: datetime | None = None,
+    support_status: str | None = None,
+    latest_version: str | None = None,
+    recommended_version: str | None = None,
 ) -> Finding:
     """Создаём найденный случай со стабильным идентификатором."""
 
@@ -870,6 +1389,11 @@ def _finding(
         quote=quote,
         location=location,
         evidence=evidence,
+        source=source,
+        checked_at=checked_at,
+        support_status=support_status,
+        latest_version=latest_version,
+        recommended_version=recommended_version,
         recommendation=recommendation,
         needs_human_review=needs_human_review,
         checker_name=checker_name,

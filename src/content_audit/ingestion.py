@@ -17,6 +17,11 @@ SUPPORTED_SUFFIXES = {
     ".csv",
 }
 
+SUPPORTED_EXTENSIONLESS_NAMES = {
+    "changelog",
+    "license",
+}
+
 IGNORED_DIRS = {
     ".git",
     ".idea",
@@ -63,7 +68,7 @@ def load_unit_files(unit: ContentUnit, max_file_bytes: int) -> ContentUnit:
     for path in sorted(unit.root_path.rglob("*")):
         if not path.is_file() or _is_ignored(path, unit.root_path):
             continue
-        if path.suffix.lower() not in SUPPORTED_SUFFIXES:
+        if not _is_supported_text_file(path):
             continue
         size_bytes = path.stat().st_size
         if size_bytes > max_file_bytes:
@@ -119,6 +124,12 @@ def _read_text(path: Path) -> str:
         except UnicodeDecodeError:
             continue
     return path.read_text(encoding="utf-8", errors="replace")
+
+
+def _is_supported_text_file(path: Path) -> bool:
+    """Принимаем текстовые файлы с расширением и стандартные файлы без расширения."""
+
+    return path.suffix.lower() in SUPPORTED_SUFFIXES or path.name.lower() in SUPPORTED_EXTENSIONLESS_NAMES
 
 
 def _classify_file(path: Path) -> str:

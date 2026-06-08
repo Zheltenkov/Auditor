@@ -7,6 +7,7 @@ from content_audit.checks import (
     FactCheckerPerplexity,
     LanguageCoverageChecker,
     LinkChecker,
+    ReadabilityChecker,
     TechFreshnessChecker,
     TechnologyFreshnessChecker,
 )
@@ -60,6 +61,49 @@ def test_language_checker_flags_single_language(workspace_tmp_path: Path) -> Non
 
     assert findings[0].verdict == Verdict.WARNING
     assert findings[0].extra["languages"] == ["RUS"]
+
+
+def test_readability_checker_does_not_flag_long_lines_without_model(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text(f"{'Очень длинный учебный абзац. ' * 20}\n", encoding="utf-8")
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=2000)
+
+    findings = ReadabilityChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
+
+    assert findings == []
+
+
+def test_readability_checker_lets_model_decide_long_line_warning(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text(f"{'Очень длинный учебный абзац с несколькими мыслями. ' * 16}\n", encoding="utf-8")
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=2000)
+    fake_client = _FakeJsonClient(
+        {
+            "verdict": "warning",
+            "severity": "minor",
+            "confidence": 0.82,
+            "problem_lines": [1],
+            "evidence": "Абзац перегружен несколькими действиями и плохо сканируется.",
+            "recommendation": "Разбить абзац на короткие пункты.",
+        }
+    )
+    cache = AuditCache.load(workspace_tmp_path / "readability_cache.json")
+    context = CheckContext(_settings(workspace_tmp_path, project), model_client=fake_client, cache=cache)
+
+    first = ReadabilityChecker().check(unit, [], context)
+    second = ReadabilityChecker().check(unit, [], context)
+
+    assert fake_client.calls == 1
+    assert first[0].criterion == Criterion.READABILITY
+    assert first[0].verdict == Verdict.WARNING
+    assert first[0].location is not None
+    assert first[0].location.line_start == 1
+    assert first[0].prompt_version == "readability_checker:v2"
+    assert second[0].extra["cache_hit"] is True
+    assert context.model_usage["calls_total"] == 1
+    assert context.model_usage["cache_hits"] == 1
 
 
 def test_technology_checker_creates_actuality_candidate(workspace_tmp_path: Path) -> None:

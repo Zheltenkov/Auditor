@@ -514,11 +514,25 @@ class ReadabilityChecker(BaseChecker):
     """Ищет незавершённые фрагменты и грубые проблемы читаемости."""
 
     name = "readability_checker"
+    prompt_version = "readability_checker:v2"
+    long_line_candidate_threshold = 260
+    max_long_line_candidates = 8
+    SYSTEM_PROMPT = """Ты проверяешь читаемость учебного материала.
+Тебе дадут строки-кандидаты, которые технически длинные. Не считай длину строки самостоятельной ошибкой.
+Оцени, мешает ли фрагмент методической читаемости: перегружен ли он несколькими мыслями,
+списками без структуры, длинной инструкцией без разбивки.
+Если длинная строка является таблицей, кодом, ссылкой, командой, цитатой, YAML/JSON или нормально читаемым абзацем, верни verdict='pass'.
+Верни только JSON: {"verdict":"pass|warning|fail|unknown","severity":"info|minor|major","confidence":0.0,
+"problem_lines":[1],"evidence":"","recommendation":""}.
+verdict='warning' ставь только когда текст реально стоит разбить или переписать для учебной читаемости.
+verdict='fail' используй только для грубой проблемы, которая серьёзно мешает понять задание.
+verdict='unknown' используй, если контекста недостаточно.
+Все пояснения и рекомендации пиши на русском языке."""
 
     PLACEHOLDER_RE = re.compile(r"\b(TODO|TBD|FIXME|lorem ipsum)\b|здесь будет|дописать|заглушка", re.IGNORECASE)
 
     def check(self, unit: ContentUnit, entities: list[ExtractedEntity], context: CheckContext) -> list[Finding]:
-        del entities, context
+        del entities
         findings: list[Finding] = []
         for file in unit.files:
             check_long_lines = file.kind in {"readme", "material"}
@@ -544,27 +558,98 @@ class ReadabilityChecker(BaseChecker):
                             True,
                         )
                     )
-                if check_long_lines and len(stripped) > 260:
-                    long_lines.append((index, len(stripped), stripped[:180]))
+                if check_long_lines and len(stripped) > self.long_line_candidate_threshold:
+                    long_lines.append((index, len(stripped), stripped[:700]))
             if long_lines:
-                preview = "; ".join(f"строка {line}: {length} симв." for line, length, _text in long_lines[:8])
-                findings.append(
-                    _finding(
-                        unit,
-                        self.name,
-                        Criterion.READABILITY,
-                        Severity.MINOR,
-                        Verdict.WARNING,
-                        0.7,
-                        None,
-                        TextLocation(file_path=file.relative_path),
-                        [Evidence(title="Длинные строки", detail=f"Найдено {len(long_lines)} длинных строк: {preview}")],
-                        "Проверить читаемость файла: при необходимости разбить длинные абзацы на более короткие блоки.",
-                        True,
-                        extra={"long_line_count": len(long_lines), "examples": [text for _line, _length, text in long_lines[:5]]},
-                    )
-                )
+                finding = self._model_long_line_finding(unit, file.relative_path, long_lines, context)
+                if finding is not None:
+                    findings.append(finding)
         return findings
+
+    def _model_long_line_finding(
+        self,
+        unit: ContentUnit,
+        file_path: str,
+        long_lines: list[tuple[int, int, str]],
+        context: CheckContext,
+    ) -> Finding | None:
+        """Передаём длинные строки модели: сама длина строки не является вердиктом."""
+
+        if context.model_client is None:
+            return None
+
+        candidates = [
+            {"line": line, "length": length, "text": text}
+            for line, length, text in long_lines[: self.max_long_line_candidates]
+        ]
+        prompt_payload = {
+            "file_path": file_path,
+            "candidate_rule": (
+                f"Строки длиннее {self.long_line_candidate_threshold} символов "
+                "отправлены только как кандидаты."
+            ),
+            "candidates": candidates,
+        }
+        prompt = json.dumps(prompt_payload, ensure_ascii=False, indent=2)
+        cache_key = _hash_cache_key("readability", f"{file_path}|{prompt}")
+        try:
+            record, cache_hit = _cached_model_json(
+                context,
+                "readability",
+                cache_key,
+                context.model_client,
+                self.SYSTEM_PROMPT,
+                prompt,
+                self.prompt_version,
+            )
+        except OpenRouterError as exc:
+            return _external_check_error(unit, self.name, Criterion.READABILITY, exc)
+
+        item = _first_result_item(record.get("response"))
+        if item is None:
+            return None
+        verdict = _enum_or_default(Verdict, item.get("verdict"), Verdict.UNKNOWN)
+        if verdict not in {Verdict.WARNING, Verdict.FAIL}:
+            return None
+
+        severity = _enum_or_default(Severity, item.get("severity"), Severity.MINOR)
+        problem_lines = _readability_problem_lines(item.get("problem_lines"))
+        location = (
+            TextLocation(file_path=file_path, line_start=problem_lines[0], line_end=problem_lines[-1])
+            if problem_lines
+            else TextLocation(file_path=file_path)
+        )
+        evidence_text = _model_text(
+            item,
+            ("evidence", "reason", "explanation"),
+            "Модель оценила длинные строки как проблему читаемости.",
+        )
+        recommendation = _model_text(
+            item,
+            ("recommendation", "fix", "action"),
+            "Разбить перегруженный фрагмент на короткие абзацы или пункты.",
+        )
+        return _finding(
+            unit,
+            self.name,
+            Criterion.READABILITY,
+            severity,
+            verdict,
+            _parse_confidence(item.get("confidence")),
+            None,
+            location,
+            [Evidence(title="Оценка читаемости LLM", detail=evidence_text)],
+            recommendation,
+            True,
+            extra={
+                "candidate_count": len(long_lines),
+                "problem_lines": problem_lines,
+                "cache_hit": cache_hit,
+                "examples": [candidate["text"] for candidate in candidates[:5]],
+            },
+            checked_at=_checked_at_from_record(record),
+            prompt_version=self.prompt_version,
+        )
 
 
 class RightsChecker(BaseChecker):
@@ -1460,6 +1545,20 @@ def _parse_optional_int(value: object) -> int | None:
     if isinstance(value, str) and value.strip().isdigit():
         return int(value.strip())
     return None
+
+
+def _readability_problem_lines(value: object) -> list[int]:
+    """Нормализуем список строк, которые модель сочла проблемными для чтения."""
+
+    if value is None:
+        return []
+    raw_values = value if isinstance(value, list) else [value]
+    lines: list[int] = []
+    for raw_value in raw_values:
+        line = _parse_optional_int(raw_value)
+        if line is not None and line > 0 and line not in lines:
+            lines.append(line)
+    return sorted(lines)
 
 
 def _finding(

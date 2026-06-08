@@ -7,6 +7,7 @@ import html
 import json
 import mimetypes
 import os
+from collections import Counter
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -159,8 +160,8 @@ def run_from_form(form: dict[str, str], state: WebState) -> AuditReport:
         output_path=state.report_dir,
         allow_network=form.get("check_links") == "on",
         use_model=form.get("use_model") == "on",
-        include_unknown=form.get("hide_unknown") != "on",
-        include_pass=form.get("include_pass") == "on",
+        include_unknown=True,
+        include_pass=True,
         openrouter_api_key=api_key,
         openrouter_model=model_name,
         openrouter_fact_model=fact_model_name,
@@ -170,7 +171,7 @@ def run_from_form(form: dict[str, str], state: WebState) -> AuditReport:
         link_allowlist=_parse_allowlist(form.get("link_allowlist") or ""),
     )
     report = AuditRunner(settings).run()
-    write_report(report, state.report_dir, include_pass=settings.include_pass)
+    write_report(report, state.report_dir, include_pass=False)
     return report
 
 
@@ -188,16 +189,28 @@ def render_page(report: AuditReport | None, state: WebState, form_values: dict[s
     """Собирает полную страницу веб-интерфейса."""
 
     form = form_values or {}
-    input_value = form.get("input_path") or str(state.default_input)
+    input_value = form.get("input_path") or (report.summary.input_path if report else str(state.default_input))
     model_name = form.get("model_name") or get_env_value(("OPENROUTER_MODEL", "OPEN_ROUTER_MODEL"), state.env_values) or DEFAULT_MODEL
     manifest_path = form.get("manifest_path") or ""
     admin_url_template = form.get("admin_url_template") or ""
     link_allowlist = form.get("link_allowlist") or ""
+    use_model_checked = form.get("use_model", "on" if report is None else "") == "on"
+    check_links_checked = form.get("check_links", "") == "on"
     body = "\n".join(
         [
             _render_topbar(),
             '<main class="shell">',
-            _render_run_panel(input_value, model_name, manifest_path, admin_url_template, link_allowlist, state),
+            _render_run_panel(
+                report,
+                input_value,
+                model_name,
+                manifest_path,
+                admin_url_template,
+                link_allowlist,
+                use_model_checked,
+                check_links_checked,
+                state,
+            ),
             _render_error(state.last_error),
             _render_dashboard(report, state.report_dir) if report else _render_empty_state(),
             "</main>",
@@ -290,7 +303,7 @@ h1 { margin: 0; font-size: 24px; line-height: 1.15; letter-spacing: 0; }
 .form-grid { display: grid; grid-template-columns: minmax(0, 1fr) 210px 138px; gap: 12px; align-items: end; }
 .form-grid-extra { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 260px; margin-top: 12px; }
 label { display: block; font-size: 12px; color: var(--muted); font-weight: 800; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 7px; }
-input[type="text"] {
+input[type="text"], select {
   width: 100%;
   height: 44px;
   border: 1px solid var(--border-strong);
@@ -301,7 +314,7 @@ input[type="text"] {
   font: 14px var(--font-mono);
   outline: none;
 }
-input[type="text"]:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(14,143,111,.14); }
+input[type="text"]:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(14,143,111,.14); }
 .button {
   border: 0;
   border-radius: 999px;
@@ -421,6 +434,36 @@ tr:last-child td { border-bottom: 0; }
 }
 .downloads { display: flex; gap: 8px; flex-wrap: wrap; }
 .loading { opacity: .72; pointer-events: none; }
+.run-details > summary { list-style: none; cursor: pointer; outline: none; }
+.run-details > summary::-webkit-details-marker { display: none; }
+.run-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.run-details[open] .run-bar { margin-bottom: 18px; padding-bottom: 16px; border-bottom: 1px solid var(--border-soft); }
+.run-bar-text { font-weight: 900; font-size: 16px; overflow-wrap: anywhere; }
+.run-bar-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.run-bar-edit { color: var(--info); font-size: 13px; font-weight: 900; white-space: nowrap; }
+.run-details:not([open]) .run-bar-edit::after { content: "Изменить"; }
+.run-details[open] .run-bar-edit::after { content: "Свернуть"; }
+.run-restart { cursor: pointer; }
+.run-zone { margin-top: 16px; }
+.advanced-run { margin-top: 14px; }
+.advanced-run > summary { color: var(--info); cursor: pointer; font-size: 13px; font-weight: 900; }
+.advanced-run[open] > summary { margin-bottom: 12px; }
+.cost-note, .filter-note {
+  display: inline-flex; align-items: center; border-radius: 999px;
+  padding: 5px 10px; font-size: 12px; font-weight: 800;
+}
+.cost-note { color: #8a5a10; background: #f5e6bd; }
+.filter-note { color: var(--info); background: #e7eefb; }
+.link-allowlist-field.is-hidden { display: none; }
+.filter-bar {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  margin: 20px 0 12px; padding: 12px 14px;
+  background: var(--surface); border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm); box-shadow: var(--shadow-sm);
+}
+.filter-bar-label { color: var(--muted); font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: .04em; }
+table.findings.hide-pass tr[data-verdict="pass"] { display: none; }
+table.findings.hide-unknown tr[data-verdict="unknown"] { display: none; }
 @media (max-width: 980px) {
   .form-grid, .summary, .grid-two, .grid-three { grid-template-columns: 1fr; }
   .panel-head { display: block; }
@@ -453,61 +496,104 @@ def _render_topbar() -> str:
 
 
 def _render_run_panel(
+    report: AuditReport | None,
     input_value: str,
     model_name: str,
     manifest_path: str,
     admin_url_template: str,
     link_allowlist: str,
+    use_model_checked: bool,
+    check_links_checked: bool,
     state: WebState,
 ) -> str:
-    """Возвращает форму запуска аудита."""
+    """Возвращает форму запуска, свёрнутую после построения отчёта."""
 
     has_key = bool(get_env_value(("OPENROUTER_API_KEY", "OPEN_ROUTER_API_KEY"), state.env_values))
     key_note = "ключ OpenRouter найден" if has_key else "ключ OpenRouter не найден"
+    open_attr = "" if report is not None else " open"
+    use_model_attr = " checked" if use_model_checked else ""
+    check_links_attr = " checked" if check_links_checked else ""
+    allowlist_class = "" if check_links_checked else " is-hidden"
+    restart_button = '<span class="link-button run-restart" role="button" tabindex="0">Перезапустить</span>' if report is not None else ""
     return f"""
 <section class="run-panel">
-  <div class="panel-head">
-    <div>
-      <h1>Проверка локального проекта</h1>
-      <p class="muted">Укажите путь к папке учебного проекта. После запуска появится сводка, разрезы по критериям и таблица найденных случаев.</p>
-    </div>
-    <span class="link-button">{_esc(key_note)}</span>
-  </div>
-  <form id="run-form" method="post" action="/run">
-    <div class="form-grid">
+  <details class="run-details"{open_attr}>
+    <summary class="run-bar">
+      <span class="run-bar-text">{_esc(_run_bar_text(report, input_value, model_name))}</span>
+      <span class="run-bar-actions">
+        {restart_button}
+        <span class="link-button">{_esc(key_note)}</span>
+        <span class="run-bar-edit"></span>
+      </span>
+    </summary>
+    <div class="panel-head">
       <div>
-        <label for="input_path">Путь к проекту</label>
-        <input id="input_path" name="input_path" type="text" value="{_esc(input_value)}" spellcheck="false">
-      </div>
-      <div>
-        <label for="model_name">Модель</label>
-        <input id="model_name" name="model_name" type="text" value="{_esc(model_name)}" spellcheck="false">
-      </div>
-      <button class="button" type="submit">Запустить</button>
-    </div>
-    <div class="form-grid form-grid-extra">
-      <div>
-        <label for="manifest_path">Манифест единиц</label>
-        <input id="manifest_path" name="manifest_path" type="text" value="{_esc(manifest_path)}" spellcheck="false">
-      </div>
-      <div>
-        <label for="admin_url_template">Шаблон ссылки админки</label>
-        <input id="admin_url_template" name="admin_url_template" type="text" value="{_esc(admin_url_template)}" spellcheck="false">
-      </div>
-      <div>
-        <label for="link_allowlist">Разрешённые домены</label>
-        <input id="link_allowlist" name="link_allowlist" type="text" value="{_esc(link_allowlist)}" spellcheck="false">
+        <h1>Проверка локального проекта</h1>
+        <p class="muted">Путь и модель задают новый прогон. Фильтры таблицы находятся рядом с результатами и не пересчитывают отчёт.</p>
       </div>
     </div>
-    <div class="options">
-      <label class="check"><input type="checkbox" name="use_model" checked> Модельные проверки</label>
-      <label class="check"><input type="checkbox" name="check_links"> Проверять внешние ссылки</label>
-      <label class="check"><input type="checkbox" name="hide_unknown"> Скрыть “нужна проверка”</label>
-      <label class="check"><input type="checkbox" name="include_pass"> Показывать успешные проверки</label>
-    </div>
-  </form>
+    <form id="run-form" method="post" action="/run">
+      <div class="form-grid">
+        <div>
+          <label for="input_path">Путь к проекту</label>
+          <input id="input_path" name="input_path" type="text" value="{_esc(input_value)}" spellcheck="false">
+        </div>
+        <div>
+          <label for="model_name">Модель</label>
+          <select id="model_name" name="model_name">{_model_options(model_name)}</select>
+        </div>
+        <button class="button" type="submit">Запустить</button>
+      </div>
+      <div class="run-zone">
+        <div class="options">
+          <label class="check"><input type="checkbox" name="use_model"{use_model_attr}> Модельные проверки</label>
+          <label class="check"><input type="checkbox" id="check_links" name="check_links"{check_links_attr}> Проверять внешние ссылки</label>
+          <span class="cost-note">влияют на время и стоимость</span>
+        </div>
+      </div>
+      <details class="advanced-run">
+        <summary>Дополнительно</summary>
+        <div class="form-grid form-grid-extra">
+          <div>
+            <label for="manifest_path">Манифест единиц</label>
+            <input id="manifest_path" name="manifest_path" type="text" value="{_esc(manifest_path)}" spellcheck="false">
+          </div>
+          <div>
+            <label for="admin_url_template">Шаблон ссылки админки</label>
+            <input id="admin_url_template" name="admin_url_template" type="text" value="{_esc(admin_url_template)}" spellcheck="false">
+          </div>
+          <div class="link-allowlist-field{allowlist_class}">
+            <label for="link_allowlist">Разрешённые домены</label>
+            <input id="link_allowlist" name="link_allowlist" type="text" value="{_esc(link_allowlist)}" spellcheck="false">
+          </div>
+        </div>
+      </details>
+    </form>
+  </details>
 </section>
 """
+
+
+def _run_bar_text(report: AuditReport | None, input_value: str, model_name: str) -> str:
+    """Короткая строка-шапка для свёрнутого блока запуска."""
+
+    if report is None:
+        return "Проверка локального проекта"
+    project = Path(report.summary.input_path).name or Path(input_value).name or input_value
+    cases = sum(1 for finding in report.findings if finding.verdict != Verdict.PASS)
+    return f"{project} · {model_name} · {cases} случаев"
+
+
+def _model_options(selected_model: str) -> str:
+    """Рисует варианты модели без риска опечатки в частых сценариях."""
+
+    options = [DEFAULT_MODEL, DEFAULT_TECH_MODEL, DEFAULT_FACT_MODEL]
+    if selected_model and selected_model not in options:
+        options.insert(0, selected_model)
+    return "\n".join(
+        f'<option value="{_esc(model)}"{" selected" if model == selected_model else ""}>{_esc(model)}</option>'
+        for model in options
+    )
 
 
 def _render_error(error: str | None) -> str:
@@ -538,24 +624,47 @@ def _render_dashboard(report: AuditReport, report_dir: Path) -> str:
             _render_breakdowns(report),
             _render_scope_breakdowns(report),
             _render_observability(report),
+            _render_filter_bar(),
             _render_findings_table(report.findings),
             _render_downloads(report_dir),
         ]
     )
 
 
+def _render_filter_bar() -> str:
+    """Фильтры таблицы: работают на клиенте, без повторного прогона."""
+
+    return """
+<section class="filter-bar" id="filter-bar">
+  <span class="filter-bar-label">Фильтры таблицы</span>
+  <label class="check"><input type="checkbox" id="flt-hide-unknown"> Скрыть «нужна проверка»</label>
+  <label class="check"><input type="checkbox" id="flt-show-pass"> Показывать успешные</label>
+  <span class="filter-note">мгновенно, без перезапуска</span>
+</section>
+"""
+
+
+def _case_findings(report: AuditReport) -> list[Finding]:
+    """Для экранных счётчиков случаем считаем всё, кроме успешных проверок."""
+
+    return [finding for finding in report.findings if finding.verdict != Verdict.PASS]
+
+
 def _render_summary(report: AuditReport) -> str:
     """Показывает главные счётчики."""
 
     summary = report.summary
-    critical = summary.by_severity.get(Severity.CRITICAL.value, 0)
-    major = summary.by_severity.get(Severity.MAJOR.value, 0)
+    cases = _case_findings(report)
+    by_severity = Counter(finding.severity.value for finding in cases)
+    affected_units = len({finding.unit_id for finding in cases})
+    critical = by_severity.get(Severity.CRITICAL.value, 0)
+    major = by_severity.get(Severity.MAJOR.value, 0)
     return f"""
 <section id="summary" class="summary">
   {_stat("Единицы", summary.units_total)}
-  {_stat("Затронуты", summary.affected_units_total)}
+  {_stat("Затронуты", affected_units)}
   {_stat("Файлы", summary.files_total)}
-  {_stat("Случаи", summary.findings_total)}
+  {_stat("Случаи", len(cases))}
   {_stat("Крит. / высокие", f"{critical} / {major}")}
 </section>
 """
@@ -565,20 +674,23 @@ def _render_scope_breakdowns(report: AuditReport) -> str:
     """Показывает срезы по веткам и единицам контента."""
 
     unit_labels = {unit.unit_id: f"{unit.name} · {unit.unit_id}" for unit in report.units}
+    cases = _case_findings(report)
+    by_branch = Counter(finding.branch or "без ветки" for finding in cases)
+    by_unit = Counter(finding.unit_id for finding in cases)
     return f"""
 <section class="section">
   <div class="section-head">
     <h2>Затронутые единицы</h2>
-    <span class="muted">единиц с найденными случаями: {report.summary.affected_units_total}</span>
+    <span class="muted">единиц с найденными случаями: {len(by_unit)}</span>
   </div>
   <div class="grid-two">
     <div class="panel">
       <label>По веткам</label>
-      {_bars(report.summary.by_branch, {})}
+      {_bars(dict(by_branch), {})}
     </div>
     <div class="panel">
       <label>По единицам</label>
-      {_bars(report.summary.by_unit, unit_labels)}
+      {_bars(dict(by_unit), unit_labels)}
     </div>
   </div>
 </section>
@@ -619,6 +731,9 @@ def _render_observability(report: AuditReport) -> str:
 def _render_breakdowns(report: AuditReport) -> str:
     """Показывает разрезы по критериям и критичности."""
 
+    cases = _case_findings(report)
+    by_criterion = Counter(finding.criterion.value for finding in cases)
+    by_severity = Counter(finding.severity.value for finding in cases)
     return f"""
 <section class="section">
   <div class="section-head">
@@ -628,11 +743,11 @@ def _render_breakdowns(report: AuditReport) -> str:
   <div class="grid-two">
     <div class="panel">
       <label>По критериям</label>
-      {_bars(report.summary.by_criterion, {item.value: CRITERION_LABELS[item] for item in Criterion})}
+      {_bars(dict(by_criterion), {item.value: CRITERION_LABELS[item] for item in Criterion})}
     </div>
     <div class="panel">
       <label>По критичности</label>
-      {_bars(report.summary.by_severity, {item.value: SEVERITY_LABELS[item] for item in Severity})}
+      {_bars(dict(by_severity), {item.value: SEVERITY_LABELS[item] for item in Severity})}
     </div>
   </div>
 </section>
@@ -645,6 +760,7 @@ def _render_findings_table(findings: list[Finding]) -> str:
     rows = "\n".join(_render_finding_row(finding) for finding in findings)
     if not rows:
         rows = '<tr><td colspan="15">По выбранным условиям случаев нет.</td></tr>'
+    rows += '\n<tr id="no-match" class="no-match" style="display:none"><td colspan="15">Под выбранные фильтры ничего не попадает.</td></tr>'
     return f"""
 <section id="findings" class="section">
   <div class="section-head">
@@ -652,7 +768,7 @@ def _render_findings_table(findings: list[Finding]) -> str:
     <span class="muted">одна строка — один найденный случай</span>
   </div>
   <div class="table-wrap">
-    <table>
+    <table id="findings-table" class="findings hide-pass">
       <colgroup>
         <col class="col-criterion">
         <col class="col-verdict">
@@ -704,7 +820,7 @@ def _render_finding_row(finding: Finding) -> str:
     line = str(finding.location.line_start or "") if finding.location else ""
     checked_at = finding.checked_at.isoformat() if finding.checked_at else ""
     return f"""
-<tr>
+<tr class="frow" data-verdict="{finding.verdict.value}" data-severity="{finding.severity.value}">
   <td>{_esc(CRITERION_LABELS[finding.criterion])}</td>
   <td>{_pill(VERDICT_LABELS[finding.verdict], f"pill-{finding.verdict.value}")}</td>
   <td>{_pill(SEVERITY_LABELS[finding.severity], f"pill-{finding.severity.value}")}</td>
@@ -758,6 +874,55 @@ if (form) {
     if (button) button.textContent = "Проверяю...";
   });
 }
+
+const restart = document.querySelector(".run-restart");
+if (restart && form) {
+  const submitCurrentForm = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    if (form.requestSubmit) form.requestSubmit();
+    else form.submit();
+  };
+  restart.addEventListener("click", submitCurrentForm);
+  restart.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" || event.key === " ") submitCurrentForm(event);
+  });
+}
+
+const checkLinks = document.getElementById("check_links");
+const allowlistField = document.querySelector(".link-allowlist-field");
+function updateAllowlistVisibility() {
+  if (!allowlistField) return;
+  allowlistField.classList.toggle("is-hidden", !(checkLinks && checkLinks.checked));
+}
+if (checkLinks) checkLinks.addEventListener("change", updateAllowlistVisibility);
+updateAllowlistVisibility();
+
+const table = document.getElementById("findings-table");
+const hideUnknown = document.getElementById("flt-hide-unknown");
+const showPass = document.getElementById("flt-show-pass");
+
+function updateEmptyState() {
+  if (!table) return;
+  const rows = table.querySelectorAll("tbody tr.frow");
+  let visible = 0;
+  rows.forEach((row) => {
+    if (getComputedStyle(row).display !== "none") visible += 1;
+  });
+  const note = document.getElementById("no-match");
+  if (note) note.style.display = rows.length > 0 && visible === 0 ? "" : "none";
+}
+
+function applyFilters() {
+  if (!table) return;
+  table.classList.toggle("hide-unknown", !!(hideUnknown && hideUnknown.checked));
+  table.classList.toggle("hide-pass", !(showPass && showPass.checked));
+  updateEmptyState();
+}
+
+if (hideUnknown) hideUnknown.addEventListener("change", applyFilters);
+if (showPass) showPass.addEventListener("change", applyFilters);
+applyFilters();
 </script>
 """
 

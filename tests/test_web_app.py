@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from content_audit.domain import AuditReport, Finding, RunSummary, Severity, Verdict, Criterion
-from content_audit.web_app import WebState, render_page
+from content_audit.web_app import WebState, load_latest_report, render_page, run_from_form
 
 
 def test_render_page_contains_project_input(workspace_tmp_path: Path) -> None:
@@ -46,3 +46,34 @@ def test_render_page_contains_extended_report_columns(workspace_tmp_path: Path) 
 
     assert "Источник" in html
     assert "Статус поддержки" in html
+    assert 'id="flt-hide-unknown"' in html
+    assert 'id="flt-show-pass"' in html
+    assert 'name="hide_unknown"' not in html
+    assert 'name="include_pass"' not in html
+    assert 'data-verdict="unknown"' in html
+    assert 'class="findings hide-pass"' in html
+    assert "Перезапустить" in html
+
+
+def test_run_from_form_stores_pass_findings_but_csv_hides_them(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text("## Part 1. Работа с cat\n", encoding="utf-8")
+    (project / "README_RUS.md").write_text("# Проект\n", encoding="utf-8")
+    (project / "check-list.yml").write_text(
+        "sections:\n"
+        "  - questions:\n"
+        "      - name: Part_1.CAT\n",
+        encoding="utf-8",
+    )
+    report_dir = workspace_tmp_path / "reports"
+    state = WebState(default_input=project, report_dir=report_dir, env_values={})
+
+    report = run_from_form({"input_path": str(project)}, state)
+    persisted = load_latest_report(report_dir)
+    csv_text = (report_dir / "report.csv").read_text(encoding="utf-8-sig")
+
+    assert any(finding.verdict == Verdict.PASS for finding in report.findings)
+    assert persisted is not None
+    assert any(finding.verdict == Verdict.PASS for finding in persisted.findings)
+    assert "Проверено" not in csv_text

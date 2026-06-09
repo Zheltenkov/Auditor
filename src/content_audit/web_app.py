@@ -62,6 +62,10 @@ class AuditWebHandler(BaseHTTPRequestHandler):
             params = parse_qs(route.query)
             self._send_report_file(params.get("file", [""])[0])
             return
+        if route.path == "/favicon.ico":
+            self.send_response(HTTPStatus.NO_CONTENT)
+            self.end_headers()
+            return
         self.send_error(HTTPStatus.NOT_FOUND, "Страница не найдена")
 
     def do_POST(self) -> None:  # noqa: N802 - интерфейс стандартной библиотеки.
@@ -365,6 +369,31 @@ input[type="text"]:focus, select:focus { border-color: var(--accent); box-shadow
 .grid-two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .grid-three { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
 .metric-map { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.criteria-panel { grid-column: 1 / -1; }
+.criteria-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px; }
+.criterion-filter {
+  width: 100%;
+  min-height: 116px;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  background: var(--surface-strong);
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+.criterion-filter:hover,
+.criterion-filter.is-active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(14,143,111,.12);
+}
+.criterion-filter.is-active { background: var(--accent-soft); }
+.criterion-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.criterion-name { font-weight: 900; font-size: 13px; line-height: 1.25; }
+.criterion-count { font: 900 18px var(--font-mono); color: var(--accent); white-space: nowrap; }
+.criterion-meta { margin-top: 8px; color: var(--muted); font-size: 12px; font-weight: 800; }
+.criterion-message { margin-top: 8px; color: var(--text); font-size: 12px; line-height: 1.35; overflow-wrap: anywhere; }
 .panel {
   background: var(--surface);
   border: 1px solid var(--border-strong);
@@ -469,6 +498,12 @@ tr:last-child td { border-bottom: 0; }
   border-radius: var(--radius-sm); box-shadow: var(--shadow-sm);
 }
 .filter-bar-label { color: var(--muted); font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: .04em; }
+.filter-chip {
+  display: inline-flex; align-items: center; min-height: 30px;
+  border-radius: 999px; padding: 5px 10px;
+  color: var(--accent-deep); background: var(--accent-soft);
+  font-size: 12px; font-weight: 900;
+}
 table.findings.hide-pass tr[data-verdict="pass"] { display: none; }
 table.findings.hide-unknown tr[data-verdict="unknown"] { display: none; }
 @media (max-width: 980px) {
@@ -643,8 +678,10 @@ def _render_filter_bar() -> str:
     return """
 <section class="filter-bar" id="filter-bar">
   <span class="filter-bar-label">Фильтры таблицы</span>
+  <span class="filter-chip" id="active-criterion-label">Критерий: все</span>
   <label class="check"><input type="checkbox" id="flt-hide-unknown"> Скрыть «нужна проверка»</label>
   <label class="check"><input type="checkbox" id="flt-show-pass"> Показывать успешные</label>
+  <span class="filter-note" id="filter-result-count">видно: 0</span>
   <span class="filter-note">мгновенно, без перезапуска</span>
 </section>
 """
@@ -722,7 +759,6 @@ def _render_report_map(report: AuditReport) -> str:
     """Показывает основные срезы отчёта в одном компактном блоке."""
 
     cases = _case_findings(report)
-    by_criterion = Counter(finding.criterion.value for finding in cases)
     by_severity = Counter(finding.severity.value for finding in cases)
     severity_values = {item.value: by_severity.get(item.value, 0) for item in Severity}
     by_branch = Counter(finding.branch or "без ветки" for finding in cases)
@@ -735,13 +771,13 @@ def _render_report_map(report: AuditReport) -> str:
     <span class="muted">модель: {'включена' if report.summary.model_used else 'выключена'} · сеть: {'использовалась' if report.summary.network_used else 'не использовалась'} · единиц с случаями: {len(by_unit)}</span>
   </div>
   <div class="metric-map">
+    <div class="panel criteria-panel">
+      <label>Критерии и сообщения</label>
+      {_render_criterion_filters(report)}
+    </div>
     <div class="panel">
       <label>Критичность</label>
       {_bars(severity_values, {item.value: SEVERITY_LABELS[item] for item in Severity}, sort_by_count=False)}
-    </div>
-    <div class="panel">
-      <label>Критерии</label>
-      {_bars(dict(by_criterion), {item.value: CRITERION_LABELS[item] for item in Criterion})}
     </div>
     <div class="panel">
       <label>Ветки</label>
@@ -754,6 +790,41 @@ def _render_report_map(report: AuditReport) -> str:
   </div>
 </section>
 """
+
+
+def _render_criterion_filters(report: AuditReport) -> str:
+    """Рисует кликабельные критерии, которые фильтруют таблицу."""
+
+    cases = _case_findings(report)
+    by_criterion = Counter(finding.criterion.value for finding in cases)
+    buttons = [
+        f"""
+<button type="button" class="criterion-filter is-active" data-criterion-filter="all" data-criterion-label="все">
+  <span class="criterion-top">
+    <span class="criterion-name">Все критерии</span>
+    <span class="criterion-count">{len(cases)}</span>
+  </span>
+  <span class="criterion-meta">показывает все строки таблицы с учётом галочек ниже</span>
+  <span class="criterion-message">Выберите конкретный критерий, чтобы оставить в таблице только его сообщения.</span>
+</button>
+"""
+    ]
+    for criterion in Criterion:
+        criterion_cases = [finding for finding in cases if finding.criterion == criterion]
+        count = by_criterion.get(criterion.value, 0)
+        buttons.append(
+            f"""
+<button type="button" class="criterion-filter" data-criterion-filter="{criterion.value}" data-criterion-label="{_esc(CRITERION_LABELS[criterion])}">
+  <span class="criterion-top">
+    <span class="criterion-name">{_esc(CRITERION_LABELS[criterion])}</span>
+    <span class="criterion-count">{count}</span>
+  </span>
+  <span class="criterion-meta">{_esc(_criterion_severity_summary(criterion_cases))}</span>
+  <span class="criterion-message">{_esc(_criterion_message_preview(criterion_cases))}</span>
+</button>
+"""
+        )
+    return f'<div class="criteria-grid">{"".join(buttons)}</div>'
 
 
 def _render_requirement_status(report: AuditReport) -> str:
@@ -772,6 +843,41 @@ def _render_requirement_status(report: AuditReport) -> str:
         ("Стоимость", "учтена" if usage.calls_total or usage.cache_hits else "нет модельных вызовов"),
     ]
     return _metric_rows(rows)
+
+
+def _criterion_severity_summary(findings: list[Finding]) -> str:
+    """Кратко показывает критичность внутри одного критерия."""
+
+    if not findings:
+        return "нет найденных случаев"
+    counts = Counter(finding.severity for finding in findings)
+    parts = [f"{SEVERITY_LABELS[severity]}: {counts[severity]}" for severity in Severity if counts.get(severity)]
+    return " · ".join(parts)
+
+
+def _criterion_message_preview(findings: list[Finding]) -> str:
+    """Берёт первое понятное сообщение, чтобы связать критерий со строками таблицы."""
+
+    if not findings:
+        return "По этому критерию нет строк с замечаниями."
+    finding = sorted(findings, key=lambda item: _severity_rank(item.severity), reverse=True)[0]
+    if finding.evidence:
+        message = f"{finding.evidence[0].title}: {finding.evidence[0].detail}"
+    else:
+        message = finding.recommendation
+    return _truncate(message, 150)
+
+
+def _severity_rank(severity: Severity) -> int:
+    """Сортирует критичность от высокой к низкой."""
+
+    order = {
+        Severity.INFO: 0,
+        Severity.MINOR: 1,
+        Severity.MAJOR: 2,
+        Severity.CRITICAL: 3,
+    }
+    return order[severity]
 
 
 def _render_findings_table(findings: list[Finding]) -> str:
@@ -840,7 +946,7 @@ def _render_finding_row(finding: Finding) -> str:
     line = str(finding.location.line_start or "") if finding.location else ""
     checked_at = finding.checked_at.isoformat() if finding.checked_at else ""
     return f"""
-<tr class="frow" data-verdict="{finding.verdict.value}" data-severity="{finding.severity.value}">
+<tr class="frow" data-criterion="{finding.criterion.value}" data-verdict="{finding.verdict.value}" data-severity="{finding.severity.value}">
   <td>{_esc(CRITERION_LABELS[finding.criterion])}</td>
   <td>{_pill(VERDICT_LABELS[finding.verdict], f"pill-{finding.verdict.value}")}</td>
   <td>{_pill(SEVERITY_LABELS[finding.severity], f"pill-{finding.severity.value}")}</td>
@@ -921,6 +1027,10 @@ updateAllowlistVisibility();
 const table = document.getElementById("findings-table");
 const hideUnknown = document.getElementById("flt-hide-unknown");
 const showPass = document.getElementById("flt-show-pass");
+const criterionButtons = document.querySelectorAll("[data-criterion-filter]");
+const activeCriterionLabel = document.getElementById("active-criterion-label");
+const resultCount = document.getElementById("filter-result-count");
+let activeCriterion = "all";
 
 function updateEmptyState() {
   if (!table) return;
@@ -931,14 +1041,34 @@ function updateEmptyState() {
   });
   const note = document.getElementById("no-match");
   if (note) note.style.display = rows.length > 0 && visible === 0 ? "" : "none";
+  if (resultCount) resultCount.textContent = `видно: ${visible} из ${rows.length}`;
 }
 
 function applyFilters() {
   if (!table) return;
   table.classList.toggle("hide-unknown", !!(hideUnknown && hideUnknown.checked));
   table.classList.toggle("hide-pass", !(showPass && showPass.checked));
+  const rows = table.querySelectorAll("tbody tr.frow");
+  rows.forEach((row) => {
+    const byCriterion = activeCriterion === "all" || row.dataset.criterion === activeCriterion;
+    row.style.display = byCriterion ? "" : "none";
+  });
   updateEmptyState();
 }
+
+criterionButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    activeCriterion = button.dataset.criterionFilter || "all";
+    criterionButtons.forEach((item) => item.classList.toggle("is-active", item === button));
+    if (activeCriterionLabel) {
+      const label = button.dataset.criterionLabel || "все";
+      activeCriterionLabel.textContent = `Критерий: ${label}`;
+    }
+    applyFilters();
+    const findings = document.getElementById("findings");
+    if (findings) findings.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+});
 
 if (hideUnknown) hideUnknown.addEventListener("change", applyFilters);
 if (showPass) showPass.addEventListener("change", applyFilters);
@@ -1002,6 +1132,15 @@ def _esc(value: str) -> str:
     """Экранирует текст для HTML."""
 
     return html.escape(unquote(value), quote=True)
+
+
+def _truncate(value: str, limit: int) -> str:
+    """Обрезает длинные подписи без разрыва разметки."""
+
+    compact = " ".join(str(value).split())
+    if len(compact) <= limit:
+        return compact
+    return compact[: max(0, limit - 1)].rstrip() + "…"
 
 
 def _parse_allowlist(value: str) -> list[str]:

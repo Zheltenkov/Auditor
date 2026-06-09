@@ -53,6 +53,12 @@ def test_render_page_contains_extended_report_columns(workspace_tmp_path: Path) 
     assert "Контроль прогона" in html
     assert "Покрытие ТЗ" in html
     assert "Модельные проверки не выполнялись" in html
+    assert "Критерии и сообщения" in html
+    assert 'data-criterion-filter="all"' in html
+    assert 'data-criterion-filter="actuality"' in html
+    assert 'data-criterion="actuality"' in html
+    assert 'id="active-criterion-label"' in html
+    assert 'id="filter-result-count"' in html
     severity_block = html.split("<label>Критичность</label>", 1)[1]
     assert severity_block.index("Critical") < severity_block.index("Major")
     assert severity_block.index("Major") < severity_block.index("Minor")

@@ -15,6 +15,9 @@ def test_render_page_contains_project_input(workspace_tmp_path: Path) -> None:
     assert html.count("<input") == 1
     assert 'name="input_path"' in html
     assert "<select" not in html
+    assert 'id="run-progress"' in html
+    assert "Готовность отчёта" in html
+    assert "Подготовка запуска" in html
     assert "ключ OpenRouter" not in html
     assert "Укажите папку проекта" not in html
 
@@ -83,6 +86,8 @@ def test_render_page_contains_extended_report_columns(workspace_tmp_path: Path) 
     assert "Показывать успешные" not in html
     assert "успешных" not in html
     assert "Перезапустить" in html
+    assert "fetch(form.action" in html
+    assert "Отчёт готов" in html
 
 
 def test_run_from_form_excludes_pass_findings_from_report(workspace_tmp_path: Path) -> None:

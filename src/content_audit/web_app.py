@@ -479,6 +479,33 @@ tr:last-child td { border-bottom: 0; }
 .run-details:not([open]) .run-bar-edit::after { content: "Изменить"; }
 .run-details[open] .run-bar-edit::after { content: "Свернуть"; }
 .run-restart { cursor: pointer; }
+.run-progress[hidden] { display: none; }
+.run-progress {
+  margin-top: 14px;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  background: var(--surface-strong);
+}
+.run-progress-head {
+  display: flex; justify-content: space-between; gap: 12px; align-items: baseline;
+  color: var(--muted); font-size: 12px; font-weight: 900;
+}
+.run-progress-stage { color: var(--text); overflow-wrap: anywhere; }
+.run-progress-track {
+  height: 10px; margin-top: 10px; overflow: hidden;
+  border-radius: 999px; background: var(--surface-muted);
+}
+.run-progress-fill {
+  width: 0%; height: 100%; border-radius: inherit;
+  background: linear-gradient(90deg, var(--accent), var(--accent-bright));
+  transition: width .45s ease;
+}
+.run-progress-meta {
+  display: flex; justify-content: space-between; gap: 12px; margin-top: 8px;
+  color: var(--muted); font-size: 12px; font-weight: 800;
+}
+.run-progress.is-error { border-color: rgba(196, 54, 54, .35); background: var(--danger-soft); }
 .filter-note {
   display: inline-flex; align-items: center; border-radius: 999px;
   padding: 5px 10px; font-size: 12px; font-weight: 800;
@@ -577,6 +604,19 @@ def _render_run_panel(
           <input id="input_path" name="input_path" type="text" value="{_esc(input_value)}" spellcheck="false">
         </div>
         <button class="button" type="submit">Запустить</button>
+      </div>
+      <div class="run-progress" id="run-progress" role="status" aria-live="polite" aria-busy="false" hidden>
+        <div class="run-progress-head">
+          <span>Готовность отчёта</span>
+          <span class="run-progress-stage" id="run-progress-stage">Подготовка запуска</span>
+        </div>
+        <div class="run-progress-track" aria-hidden="true">
+          <div class="run-progress-fill" id="run-progress-fill"></div>
+        </div>
+        <div class="run-progress-meta">
+          <span id="run-progress-percent">0%</span>
+          <span id="run-progress-elapsed">0 с</span>
+        </div>
       </div>
     </form>
   </details>
@@ -898,12 +938,104 @@ def _render_script() -> str:
 
     return """
 <script>
+(() => {
 const form = document.getElementById("run-form");
+const progressPanel = document.getElementById("run-progress");
+const progressFill = document.getElementById("run-progress-fill");
+const progressPercent = document.getElementById("run-progress-percent");
+const progressStage = document.getElementById("run-progress-stage");
+const progressElapsed = document.getElementById("run-progress-elapsed");
+const progressStages = [
+  [8, "Подготовка запуска"],
+  [22, "Загрузка файлов"],
+  [42, "Извлечение сущностей"],
+  [62, "Проверка ссылок и файлов"],
+  [82, "Проверка фактов и версий"],
+  [96, "Сборка отчёта"],
+  [100, "Отчёт готов"]
+];
+let progressTimer = null;
+let progressStartedAt = 0;
+let progressValue = 0;
+
+function progressLabel(value) {
+  for (const item of progressStages) {
+    if (value <= item[0]) return item[1];
+  }
+  return "Сборка отчёта";
+}
+
+function setProgress(value, label) {
+  progressValue = Math.max(0, Math.min(100, Math.round(value)));
+  if (progressFill) progressFill.style.width = `${progressValue}%`;
+  if (progressPercent) progressPercent.textContent = `${progressValue}%`;
+  if (progressStage) progressStage.textContent = label || progressLabel(progressValue);
+}
+
+function startProgress() {
+  if (!progressPanel) return;
+  progressPanel.hidden = false;
+  progressPanel.classList.remove("is-error");
+  progressPanel.setAttribute("aria-busy", "true");
+  progressStartedAt = Date.now();
+  setProgress(3, "Подготовка запуска");
+  if (progressTimer) window.clearInterval(progressTimer);
+  progressTimer = window.setInterval(() => {
+    const elapsedSeconds = Math.max(0, Math.floor((Date.now() - progressStartedAt) / 1000));
+    const nextValue = Math.min(94, 3 + Math.log2(elapsedSeconds + 1) * 18);
+    setProgress(nextValue);
+    if (progressElapsed) progressElapsed.textContent = `${elapsedSeconds} с`;
+  }, 700);
+}
+
+function stopProgress(value, label) {
+  if (progressTimer) window.clearInterval(progressTimer);
+  progressTimer = null;
+  if (progressPanel) progressPanel.setAttribute("aria-busy", "false");
+  setProgress(value, label);
+}
+
 if (form) {
-  form.addEventListener("submit", () => {
+  form.addEventListener("submit", async (event) => {
+    if (form.dataset.submitting === "1") {
+      event.preventDefault();
+      return;
+    }
+    if (!window.fetch) return;
+    event.preventDefault();
+    form.dataset.submitting = "1";
     form.classList.add("loading");
     const button = form.querySelector("button[type='submit']");
-    if (button) button.textContent = "Проверяю...";
+    if (button) {
+      button.disabled = true;
+      button.textContent = "Проверяю...";
+    }
+    startProgress();
+
+    try {
+      const payload = new URLSearchParams(new FormData(form));
+      const response = await fetch(form.action, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
+        body: payload
+      });
+      const html = await response.text();
+      stopProgress(100, response.ok ? "Отчёт готов" : "Проверка завершилась с ошибкой");
+      window.setTimeout(() => {
+        document.open();
+        document.write(html);
+        document.close();
+      }, 250);
+    } catch (error) {
+      stopProgress(progressValue, "Не удалось получить ответ");
+      if (progressPanel) progressPanel.classList.add("is-error");
+      form.classList.remove("loading");
+      delete form.dataset.submitting;
+      if (button) {
+        button.disabled = false;
+        button.textContent = "Запустить";
+      }
+    }
   });
 }
 
@@ -970,6 +1102,7 @@ criterionButtons.forEach((button) => {
 
 if (hideUnknown) hideUnknown.addEventListener("change", applyFilters);
 applyFilters();
+})();
 </script>
 """
 

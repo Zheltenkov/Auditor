@@ -1546,12 +1546,13 @@ class ModelRubricChecker(BaseChecker):
     SYSTEM_PROMPT = """Ты проверяешь учебный контент как инженер-методолог.
 Верни только JSON: {"findings": [ ... ]}.
 Каждый элемент: criterion, severity, verdict, confidence, quote, file_path, line_start, evidence, recommendation.
-Критерии: market_fit, correctness, workload, rights, readability, checklist_alignment, actuality.
+Критерии: market_fit, correctness, workload, readability, checklist_alignment, actuality.
 Все текстовые поля ответа пиши на русском языке.
 Не используй английский язык в рекомендации, если только цитируешь исходный термин из материала.
 Не придумывай источники. Если доказательств мало, ставь verdict='unknown' и needs_human_review=true.
 Для market_fit и workload не ставь severity='critical': это консультационные критерии до калибровки на данных.
-Для workload ставь verdict='unknown', если нет данных о реальном времени прохождения или трудозатратах."""
+Для workload ставь verdict='unknown', если нет данных о реальном времени прохождения или трудозатратах.
+Не возвращай criterion='rights': оригинальность и права проверяет отдельный специализированный модуль."""
 
     def check(self, unit: ContentUnit, entities: list[ExtractedEntity], context: CheckContext) -> list[Finding]:
         del entities

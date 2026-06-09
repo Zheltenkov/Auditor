@@ -164,7 +164,6 @@ def run_from_form(form: dict[str, str], state: WebState) -> AuditReport:
     fact_model_name = get_env_value(("OPENROUTER_FACT_MODEL", "OPEN_ROUTER_FACT_MODEL"), state.env_values) or DEFAULT_FACT_MODEL
     tech_model_name = get_env_value(("OPENROUTER_TECH_MODEL", "OPEN_ROUTER_TECH_MODEL"), state.env_values) or DEFAULT_TECH_MODEL
     api_key = get_env_value(("OPENROUTER_API_KEY", "OPEN_ROUTER_API_KEY"), state.env_values)
-    manifest_path = Path(form["manifest_path"]).expanduser().resolve() if form.get("manifest_path") else None
     settings = AuditSettings(
         input_path=input_path,
         output_path=state.report_dir,
@@ -176,9 +175,9 @@ def run_from_form(form: dict[str, str], state: WebState) -> AuditReport:
         openrouter_model=model_name,
         openrouter_fact_model=fact_model_name,
         openrouter_tech_model=tech_model_name,
-        manifest_path=manifest_path,
-        admin_url_template=form.get("admin_url_template") or None,
-        link_allowlist=_parse_allowlist(form.get("link_allowlist") or ""),
+        manifest_path=None,
+        admin_url_template=None,
+        link_allowlist=[],
     )
     report = AuditRunner(settings).run()
     write_report(report, state.report_dir, include_pass=False)
@@ -200,10 +199,6 @@ def render_page(report: AuditReport | None, state: WebState, form_values: dict[s
 
     form = form_values or {}
     input_value = form.get("input_path") or (report.summary.input_path if report else str(state.default_input or ""))
-    manifest_path = form.get("manifest_path") or ""
-    admin_url_template = form.get("admin_url_template") or ""
-    link_allowlist = form.get("link_allowlist") or ""
-    model_routes = _model_routes(state)
     body = "\n".join(
         [
             _render_topbar(),
@@ -211,10 +206,6 @@ def render_page(report: AuditReport | None, state: WebState, form_values: dict[s
             _render_run_panel(
                 report,
                 input_value,
-                manifest_path,
-                admin_url_template,
-                link_allowlist,
-                model_routes,
                 state,
             ),
             _render_error(state.last_error),
@@ -307,7 +298,6 @@ body {
 h1 { margin: 0; font-size: 24px; line-height: 1.15; letter-spacing: 0; }
 .muted { color: var(--muted); font-size: 13px; margin: 6px 0 0; }
 .form-grid { display: grid; grid-template-columns: minmax(0, 1fr) 138px; gap: 12px; align-items: end; }
-.form-grid-extra { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 260px; margin-top: 12px; }
 label { display: block; font-size: 12px; color: var(--muted); font-weight: 800; letter-spacing: 0; margin-bottom: 7px; }
 input[type="text"], select {
   width: 100%;
@@ -495,26 +485,6 @@ tr:last-child td { border-bottom: 0; }
 .run-details:not([open]) .run-bar-edit::after { content: "Изменить"; }
 .run-details[open] .run-bar-edit::after { content: "Свернуть"; }
 .run-restart { cursor: pointer; }
-.run-zone { margin-top: 16px; }
-.advanced-run { margin-top: 14px; }
-.advanced-run > summary { color: var(--info); cursor: pointer; font-size: 13px; font-weight: 900; }
-.advanced-run[open] > summary { margin-bottom: 12px; }
-.field-help { margin-top: 6px; color: var(--muted); font-size: 12px; line-height: 1.35; }
-.model-routes {
-  margin-top: 12px;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
-}
-.model-route {
-  border: 1px solid var(--border-soft);
-  border-radius: var(--radius-sm);
-  padding: 10px 12px;
-  background: var(--surface-strong);
-}
-.model-route-name { color: var(--muted); font-size: 12px; font-weight: 900; }
-.model-route-value { margin-top: 4px; font: 700 12px var(--font-mono); overflow-wrap: anywhere; }
-.model-routes-title { margin-top: 14px; color: var(--muted); font-size: 12px; font-weight: 900; }
 .filter-note {
   display: inline-flex; align-items: center; border-radius: 999px;
   padding: 5px 10px; font-size: 12px; font-weight: 800;
@@ -552,7 +522,7 @@ table.findings.hide-unknown tr[data-verdict="unknown"] { display: none; }
 .diagnostics > summary::-webkit-details-marker { display: none; }
 .diagnostics-body { padding: 0 18px 18px; }
 @media (max-width: 980px) {
-  .form-grid, .form-grid-extra, .grid-three, .model-routes { grid-template-columns: 1fr; }
+  .form-grid, .grid-three { grid-template-columns: 1fr; }
   .summary-strip { align-items: flex-start; flex-direction: column; }
   .severity-inline { justify-content: flex-start; }
   .panel-head { display: block; }
@@ -587,10 +557,6 @@ def _render_topbar() -> str:
 def _render_run_panel(
     report: AuditReport | None,
     input_value: str,
-    manifest_path: str,
-    admin_url_template: str,
-    link_allowlist: str,
-    model_routes: dict[str, str],
     state: WebState,
 ) -> str:
     """Возвращает форму запуска, свёрнутую после построения отчёта."""
@@ -613,7 +579,7 @@ def _render_run_panel(
     <div class="panel-head">
       <div>
         <h1>Проверка локального проекта</h1>
-        <p class="muted">Путь и модель задают новый прогон. Фильтры таблицы находятся рядом с результатами и не пересчитывают отчёт.</p>
+        <p class="muted">Укажите папку проекта и запустите полный аудит.</p>
       </div>
     </div>
     <form id="run-form" method="post" action="/run">
@@ -624,27 +590,6 @@ def _render_run_panel(
         </div>
         <button class="button" type="submit">Запустить</button>
       </div>
-      <details class="advanced-run">
-        <summary>Интеграция с платформой</summary>
-        <div class="form-grid form-grid-extra">
-          <div>
-            <label for="manifest_path">Манифест единиц</label>
-            <input id="manifest_path" name="manifest_path" type="text" value="{_esc(manifest_path)}" spellcheck="false">
-            <div class="field-help">CSV/JSON с platform id, веткой и ссылкой админки. Для обычной проверки папки не нужен.</div>
-          </div>
-          <div>
-            <label for="admin_url_template">Шаблон ссылки админки</label>
-            <input id="admin_url_template" name="admin_url_template" type="text" value="{_esc(admin_url_template)}" spellcheck="false">
-            <div class="field-help">Нужен, если в отчёте требуется ссылка на карточку единицы в админке.</div>
-          </div>
-          <div>
-            <label for="link_allowlist">Разрешённые домены</label>
-            <input id="link_allowlist" name="link_allowlist" type="text" value="{_esc(link_allowlist)}" spellcheck="false">
-            <div class="field-help">Ограничивает внешние проверки доверенными доменами; пусто означает без ограничения.</div>
-          </div>
-        </div>
-        {_render_model_routes(model_routes)}
-      </details>
     </form>
   </details>
 </section>
@@ -659,31 +604,6 @@ def _run_bar_text(report: AuditReport | None, input_value: str) -> str:
     project = Path(report.summary.input_path).name or Path(input_value).name or input_value
     cases = sum(1 for finding in report.findings if finding.verdict != Verdict.PASS)
     return f"{project} · {cases} случаев"
-
-
-def _model_routes(state: WebState) -> dict[str, str]:
-    """Возвращает модели по ролям проверки."""
-
-    return {
-        "Общая оценка": get_env_value(("OPENROUTER_MODEL", "OPEN_ROUTER_MODEL"), state.env_values) or DEFAULT_MODEL,
-        "Техническая актуальность": get_env_value(("OPENROUTER_TECH_MODEL", "OPEN_ROUTER_TECH_MODEL"), state.env_values) or DEFAULT_TECH_MODEL,
-        "Факты и источники": get_env_value(("OPENROUTER_FACT_MODEL", "OPEN_ROUTER_FACT_MODEL"), state.env_values) or DEFAULT_FACT_MODEL,
-    }
-
-
-def _render_model_routes(routes: dict[str, str]) -> str:
-    """Показывает роли моделей без выбора между разными задачами."""
-
-    items = "\n".join(
-        f"""
-<div class="model-route">
-  <div class="model-route-name">{_esc(name)}</div>
-  <div class="model-route-value">{_esc(model)}</div>
-</div>
-"""
-        for name, model in routes.items()
-    )
-    return f'<div class="model-routes-title">Модели по ролям из .env</div><div class="model-routes">{items}</div>'
 
 
 def _render_error(error: str | None) -> str:
@@ -1119,12 +1039,6 @@ def _esc(value: str) -> str:
     """Экранирует текст для HTML."""
 
     return html.escape(unquote(value), quote=True)
-
-
-def _parse_allowlist(value: str) -> list[str]:
-    """Разбираем список разрешённых доменов из веб-формы."""
-
-    return [item.strip().lower().lstrip(".") for item in value.split(",") if item.strip()]
 
 
 if __name__ == "__main__":

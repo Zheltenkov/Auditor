@@ -17,13 +17,14 @@ def test_render_page_contains_project_input(workspace_tmp_path: Path) -> None:
     assert 'name="use_model"' not in html
     assert 'name="check_links"' not in html
     assert 'name="model_name"' not in html
-    assert "Интеграция с платформой" in html
-    assert "Для обычной проверки папки не нужен" in html
-    assert "пусто означает без ограничения" in html
-    assert "Модели по ролям из .env" in html
-    assert "Общая оценка" in html
-    assert "Техническая актуальность" in html
-    assert "Факты и источники" in html
+    assert "Интеграция с платформой" not in html
+    assert "Манифест единиц" not in html
+    assert "Шаблон ссылки админки" not in html
+    assert "Разрешённые домены" not in html
+    assert "Модели по ролям" not in html
+    assert 'name="manifest_path"' not in html
+    assert 'name="admin_url_template"' not in html
+    assert 'name="link_allowlist"' not in html
 
 
 def test_render_page_has_no_demo_project_by_default(workspace_tmp_path: Path) -> None:
@@ -145,10 +146,22 @@ def test_run_from_form_always_enables_models_and_network(workspace_tmp_path: Pat
         },
     )
 
-    run_from_form({"input_path": str(project), "model_name": "perplexity/sonar"}, state)
+    run_from_form(
+        {
+            "input_path": str(project),
+            "model_name": "perplexity/sonar",
+            "manifest_path": "manifest.json",
+            "admin_url_template": "/admin/{id}",
+            "link_allowlist": "example.com",
+        },
+        state,
+    )
 
     assert captured["settings"].use_model is True
     assert captured["settings"].allow_network is True
     assert captured["settings"].openrouter_model == "openai/general"
     assert captured["settings"].openrouter_tech_model == "qwen/tech"
     assert captured["settings"].openrouter_fact_model == "perplexity/facts"
+    assert captured["settings"].manifest_path is None
+    assert captured["settings"].admin_url_template is None
+    assert captured["settings"].link_allowlist == []

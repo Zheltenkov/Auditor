@@ -499,6 +499,7 @@ tr:last-child td { border-bottom: 0; }
 .advanced-run { margin-top: 14px; }
 .advanced-run > summary { color: var(--info); cursor: pointer; font-size: 13px; font-weight: 900; }
 .advanced-run[open] > summary { margin-bottom: 12px; }
+.field-help { margin-top: 6px; color: var(--muted); font-size: 12px; line-height: 1.35; }
 .model-routes {
   margin-top: 12px;
   display: grid;
@@ -513,6 +514,7 @@ tr:last-child td { border-bottom: 0; }
 }
 .model-route-name { color: var(--muted); font-size: 12px; font-weight: 900; }
 .model-route-value { margin-top: 4px; font: 700 12px var(--font-mono); overflow-wrap: anywhere; }
+.model-routes-title { margin-top: 14px; color: var(--muted); font-size: 12px; font-weight: 900; }
 .filter-note {
   display: inline-flex; align-items: center; border-radius: 999px;
   padding: 5px 10px; font-size: 12px; font-weight: 800;
@@ -623,19 +625,22 @@ def _render_run_panel(
         <button class="button" type="submit">Запустить</button>
       </div>
       <details class="advanced-run">
-        <summary>Дополнительно</summary>
+        <summary>Интеграция с платформой</summary>
         <div class="form-grid form-grid-extra">
           <div>
             <label for="manifest_path">Манифест единиц</label>
             <input id="manifest_path" name="manifest_path" type="text" value="{_esc(manifest_path)}" spellcheck="false">
+            <div class="field-help">CSV/JSON с platform id, веткой и ссылкой админки. Для обычной проверки папки не нужен.</div>
           </div>
           <div>
             <label for="admin_url_template">Шаблон ссылки админки</label>
             <input id="admin_url_template" name="admin_url_template" type="text" value="{_esc(admin_url_template)}" spellcheck="false">
+            <div class="field-help">Нужен, если в отчёте требуется ссылка на карточку единицы в админке.</div>
           </div>
           <div>
             <label for="link_allowlist">Разрешённые домены</label>
             <input id="link_allowlist" name="link_allowlist" type="text" value="{_esc(link_allowlist)}" spellcheck="false">
+            <div class="field-help">Ограничивает внешние проверки доверенными доменами; пусто означает без ограничения.</div>
           </div>
         </div>
         {_render_model_routes(model_routes)}
@@ -678,7 +683,7 @@ def _render_model_routes(routes: dict[str, str]) -> str:
 """
         for name, model in routes.items()
     )
-    return f'<div class="model-routes">{items}</div>'
+    return f'<div class="model-routes-title">Модели по ролям из .env</div><div class="model-routes">{items}</div>'
 
 
 def _render_error(error: str | None) -> str:

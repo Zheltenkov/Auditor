@@ -17,6 +17,10 @@ def test_render_page_contains_project_input(workspace_tmp_path: Path) -> None:
     assert 'name="use_model"' not in html
     assert 'name="check_links"' not in html
     assert 'name="model_name"' not in html
+    assert "Интеграция с платформой" in html
+    assert "Для обычной проверки папки не нужен" in html
+    assert "пусто означает без ограничения" in html
+    assert "Модели по ролям из .env" in html
     assert "Общая оценка" in html
     assert "Техническая актуальность" in html
     assert "Факты и источники" in html

@@ -39,7 +39,7 @@ DEFAULT_TECH_MODEL = "qwen/qwen3-coder"
 class WebState:
     """Состояние локального веб-сервера."""
 
-    def __init__(self, default_input: Path, report_dir: Path, env_values: dict[str, str]) -> None:
+    def __init__(self, default_input: Path | None, report_dir: Path, env_values: dict[str, str]) -> None:
         self.default_input = default_input
         self.report_dir = report_dir
         self.env_values = env_values
@@ -56,7 +56,7 @@ class AuditWebHandler(BaseHTTPRequestHandler):
 
         route = urlparse(self.path)
         if route.path == "/":
-            self._send_html(render_page(load_latest_report(self.state.report_dir), self.state))
+            self._send_html(render_page(None, self.state))
             return
         if route.path == "/download":
             params = parse_qs(route.query)
@@ -76,6 +76,7 @@ class AuditWebHandler(BaseHTTPRequestHandler):
             self.send_error(HTTPStatus.NOT_FOUND, "Страница не найдена")
             return
 
+        form: dict[str, str] = {}
         try:
             form = self._read_form()
             report = run_from_form(form, self.state)
@@ -83,7 +84,7 @@ class AuditWebHandler(BaseHTTPRequestHandler):
             self._send_html(render_page(report, self.state, form_values=form))
         except Exception as exc:  # noqa: BLE001 - ошибка должна быть показана пользователю.
             self.state.last_error = str(exc)
-            self._send_html(render_page(load_latest_report(self.state.report_dir), self.state), status=HTTPStatus.BAD_REQUEST)
+            self._send_html(render_page(None, self.state, form_values=form), status=HTTPStatus.BAD_REQUEST)
 
     def log_message(self, format: str, *args: Any) -> None:
         """Убираем шумный стандартный журнал запросов."""
@@ -133,13 +134,13 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Веб-интерфейс аудита учебного контента.")
     parser.add_argument("--host", default="127.0.0.1", help="Адрес сервера.")
     parser.add_argument("--port", type=int, default=8021, help="Порт сервера.")
-    parser.add_argument("--default-input", type=Path, default=Path("proj_example"), help="Путь по умолчанию в форме.")
+    parser.add_argument("--default-input", type=Path, default=None, help="Путь по умолчанию в форме.")
     parser.add_argument("--report-dir", type=Path, default=DEFAULT_REPORT_DIR, help="Папка для последних отчётов.")
     args = parser.parse_args(argv)
 
     env_values = load_env_file(Path(".env"))
     state = WebState(
-        default_input=args.default_input.expanduser().resolve(),
+        default_input=args.default_input.expanduser().resolve() if args.default_input else None,
         report_dir=args.report_dir.expanduser().resolve(),
         env_values=env_values,
     )
@@ -153,7 +154,12 @@ def main(argv: list[str] | None = None) -> int:
 def run_from_form(form: dict[str, str], state: WebState) -> AuditReport:
     """Создаёт настройки из формы, запускает аудит и сохраняет отчёт."""
 
-    input_path = Path(form.get("input_path") or state.default_input).expanduser().resolve()
+    raw_input = (form.get("input_path") or "").strip()
+    if not raw_input and state.default_input is not None:
+        raw_input = str(state.default_input)
+    if not raw_input:
+        raise ValueError("Укажите путь к проекту.")
+    input_path = Path(raw_input).expanduser().resolve()
     model_name = form.get("model_name") or get_env_value(("OPENROUTER_MODEL", "OPEN_ROUTER_MODEL"), state.env_values) or DEFAULT_MODEL
     fact_model_name = get_env_value(("OPENROUTER_FACT_MODEL", "OPEN_ROUTER_FACT_MODEL"), state.env_values) or DEFAULT_FACT_MODEL
     tech_model_name = get_env_value(("OPENROUTER_TECH_MODEL", "OPEN_ROUTER_TECH_MODEL"), state.env_values) or DEFAULT_TECH_MODEL
@@ -193,7 +199,7 @@ def render_page(report: AuditReport | None, state: WebState, form_values: dict[s
     """Собирает полную страницу веб-интерфейса."""
 
     form = form_values or {}
-    input_value = form.get("input_path") or (report.summary.input_path if report else str(state.default_input))
+    input_value = form.get("input_path") or (report.summary.input_path if report else str(state.default_input or ""))
     model_name = form.get("model_name") or get_env_value(("OPENROUTER_MODEL", "OPEN_ROUTER_MODEL"), state.env_values) or DEFAULT_MODEL
     manifest_path = form.get("manifest_path") or ""
     admin_url_template = form.get("admin_url_template") or ""

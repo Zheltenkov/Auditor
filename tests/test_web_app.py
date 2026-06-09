@@ -15,6 +15,15 @@ def test_render_page_contains_project_input(workspace_tmp_path: Path) -> None:
     assert 'id="check_links" name="check_links" checked' in html
 
 
+def test_render_page_has_no_demo_project_by_default(workspace_tmp_path: Path) -> None:
+    state = WebState(default_input=None, report_dir=workspace_tmp_path / "reports", env_values={})
+
+    html = render_page(None, state)
+
+    assert "proj_example" not in html
+    assert 'id="input_path" name="input_path" type="text" value=""' in html
+
+
 def test_render_page_contains_extended_report_columns(workspace_tmp_path: Path) -> None:
     state = WebState(default_input=workspace_tmp_path, report_dir=workspace_tmp_path / "reports", env_values={})
     report = AuditReport(

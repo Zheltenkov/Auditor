@@ -46,6 +46,20 @@ from content_audit.domain import (
     Verdict,
 )
 from content_audit.openrouter import OpenRouterClient, OpenRouterError
+from content_audit.rights import (
+    DATASET_RE,
+    DECORATIVE_HINTS,
+    DECORATIVE_MAX_SIDE,
+    MANIFEST_NAMES,
+    CodeMatch,
+    RightsSignal,
+    grade_rights_signal,
+    has_attribution_near,
+    license_policy,
+    read_image_provenance,
+    resolve_dependency_licenses,
+    scan_project_licenses,
+)
 from content_audit.text_utils import normalize_for_match
 
 
@@ -726,49 +740,438 @@ verdict='unknown' используй, если контекста недоста
         )
 
 
-class RightsChecker(BaseChecker):
-    """Проверяет минимальные признаки правовой чистоты материалов."""
+class RightsAndOriginalityChecker(BaseChecker):
+    """Проверяет права на материалы и признаки заимствований."""
 
-    name = "rights_checker"
+    name = "rights_originality_checker"
+    prompt_version = "rights_originality_checker:v1"
+    max_external_lookups = 6
+    PROVENANCE_SYSTEM_PROMPT = """Ты собираешь доказательства о происхождении и правах на ресурс из учебного контента.
+Верни только JSON: {"likely_source":"","license":"","confidence":0.0,"sources":[{"title":"","url":""}],"note":""}.
+Не делай вывод о нарушении: укажи вероятный источник и лицензию, если нашёл.
+Если источников нет, оставь sources пустым и confidence низким. Пиши пояснения на русском."""
+
+    def __init__(self, code_similarity_index: dict[str, list[CodeMatch]] | None = None) -> None:
+        self.code_similarity_index = code_similarity_index or {}
 
     def check(self, unit: ContentUnit, entities: list[ExtractedEntity], context: CheckContext) -> list[Finding]:
-        del context
+        signals: list[RightsSignal] = []
+        signals.extend(self._project_license_signals(unit))
+        signals.extend(self._dependency_license_signals(unit))
+        signals.extend(self._image_rights_signals(unit, entities))
+        signals.extend(self._dataset_rights_signals(unit))
+        signals.extend(self._code_similarity_signals(unit))
+        signals.extend(self._external_evidence_signals(unit, entities, context))
+
         findings: list[Finding] = []
-        has_license = any(Path(file.relative_path).name.lower().startswith("license") for file in unit.files)
-        image_count = sum(1 for _ in _entities_of_type(entities, EntityType.IMAGE))
-        if not has_license:
+        for signal in signals:
+            severity, verdict, needs_review = grade_rights_signal(signal)
             findings.append(
                 _finding(
                     unit,
                     self.name,
                     Criterion.RIGHTS,
-                    Severity.INFO,
-                    Verdict.UNKNOWN,
-                    0.55,
-                    None,
-                    None,
-                    [Evidence(title="Лицензия", detail="В единице контента не найден файл LICENSE.")],
-                    "Проверить, требуется ли лицензия для материалов, кода и изображений в этой единице.",
-                    True,
-                )
-            )
-        if image_count > 0:
-            findings.append(
-                _finding(
-                    unit,
-                    self.name,
-                    Criterion.RIGHTS,
-                    Severity.INFO,
-                    Verdict.UNKNOWN,
-                    0.45,
-                    None,
-                    None,
-                    [Evidence(title="Изображения", detail=f"Найдено изображений: {image_count}. Права не могут быть подтверждены локально.")],
-                    "Для изображений добавить источник/лицензию или подтвердить права вручную.",
-                    True,
+                    severity,
+                    verdict,
+                    signal.confidence,
+                    signal.quote,
+                    signal.location,
+                    [Evidence(title=signal.title, detail=signal.detail, url=signal.url)],
+                    signal.recommendation,
+                    needs_review,
+                    extra={
+                        "kind": signal.kind,
+                        "risk": signal.risk,
+                        "deterministic": signal.deterministic,
+                    },
+                    source=signal.source,
                 )
             )
         return findings
+
+    def _project_license_signals(self, unit: ContentUnit) -> list[RightsSignal]:
+        has_license_file = any(
+            Path(file.relative_path).name.lower().startswith(("license", "notice"))
+            for file in unit.files
+        )
+        readme_mentions_license = any(
+            ("license" in file.text.lower() or "лицензи" in file.text.lower())
+            for file in unit.files
+            if file.kind == "readme"
+        )
+        scan = scan_project_licenses(unit.root_path)
+        if has_license_file or readme_mentions_license or (scan is not None and scan.spdx):
+            return []
+        return [
+            RightsSignal(
+                kind="project_license",
+                risk="no_license_only",
+                deterministic=True,
+                title="Лицензия проекта",
+                detail="Не найден LICENSE/NOTICE и нет упоминания лицензии в README.",
+                recommendation="Проверить, нужна ли лицензия для материалов и кода этой единицы.",
+                confidence=0.6,
+            )
+        ]
+
+    def _dependency_license_signals(self, unit: ContentUnit) -> list[RightsSignal]:
+        manifests = [file for file in unit.files if Path(file.relative_path).name.lower() in MANIFEST_NAMES]
+        signals: list[RightsSignal] = []
+        for package, spdx in resolve_dependency_licenses(manifests):
+            policy = license_policy(spdx)
+            if policy == "deny":
+                signals.append(
+                    RightsSignal(
+                        kind="dependency_license",
+                        risk="violation",
+                        deterministic=True,
+                        title="Несовместимая лицензия зависимости",
+                        detail=f"Зависимость {package} указана с лицензией {spdx}, которая требует отдельного согласования.",
+                        recommendation=f"Заменить {package} на пермиссивный аналог или согласовать использование.",
+                        source=spdx,
+                        confidence=0.9,
+                    )
+                )
+            elif policy == "review" and spdx is not None:
+                signals.append(
+                    RightsSignal(
+                        kind="dependency_license",
+                        risk="unverifiable",
+                        deterministic=True,
+                        title="Лицензия зависимости требует разбора",
+                        detail=f"{package}: {spdx}. Условия лицензии нужно проверить вручную.",
+                        recommendation=f"Проверить условия лицензии {package} и допустимость использования в учебном проекте.",
+                        source=spdx,
+                        confidence=0.55,
+                    )
+                )
+        return signals
+
+    def _image_rights_signals(self, unit: ContentUnit, entities: list[ExtractedEntity]) -> list[RightsSignal]:
+        signals: list[RightsSignal] = []
+        seen_resources: set[str] = set()
+        for entity in _entities_of_type(entities, EntityType.IMAGE):
+            if self._is_decorative_reference(entity.value, entity.quote):
+                continue
+            resource_key = normalize_for_match(entity.value)
+            if resource_key in seen_resources:
+                continue
+            source_text = self._source_file_text(unit, entity.location)
+            if has_attribution_near(source_text, entity.value):
+                continue
+
+            target_path = self._resolve_local_image(unit, entity)
+            if target_path is not None:
+                if not self._is_significant_image(entity, target_path):
+                    continue
+                provenance = read_image_provenance(target_path)
+                if provenance.author or provenance.copyright or provenance.license or provenance.has_c2pa:
+                    continue
+                detail = f"У значимого изображения нет локальных метаданных об авторе/лицензии: {entity.value}"
+            else:
+                target, _fragment = urldefrag(entity.value)
+                if urlparse(target).scheme not in {"http", "https"}:
+                    continue
+                detail = f"Внешнее изображение указано без явного источника/лицензии рядом со ссылкой: {entity.value}"
+
+            signals.append(
+                RightsSignal(
+                    kind="image_provenance",
+                    risk="no_source",
+                    deterministic=True,
+                    title="Изображение без подтверждённых прав",
+                    detail=detail,
+                    recommendation="Добавить источник, автора и лицензию изображения или подтвердить права вручную.",
+                    quote=entity.quote,
+                    location=entity.location,
+                    confidence=0.65,
+                )
+            )
+            seen_resources.add(resource_key)
+        return signals
+
+    def _dataset_rights_signals(self, unit: ContentUnit) -> list[RightsSignal]:
+        signals: list[RightsSignal] = []
+        for file in unit.files:
+            if file.kind not in {"readme", "material", "text"}:
+                continue
+            for line_number, line in enumerate(file.text.splitlines(), start=1):
+                if not DATASET_RE.search(line):
+                    continue
+                if self._has_license_terms_near(file.text, line.strip()):
+                    continue
+                signals.append(
+                    RightsSignal(
+                        kind="dataset_rights",
+                        risk="no_source",
+                        deterministic=True,
+                        title="Датасет без условий использования",
+                        detail=f"Упоминание датасета без источника или лицензии: {line.strip()[:240]}",
+                        recommendation="Добавить ссылку на датасет, его лицензию и условия использования.",
+                        quote=line.strip()[:500],
+                        location=TextLocation(file_path=file.relative_path, line_start=line_number, line_end=line_number),
+                        confidence=0.7,
+                    )
+                )
+        return signals[:5]
+
+    def _code_similarity_signals(self, unit: ContentUnit) -> list[RightsSignal]:
+        signals: list[RightsSignal] = []
+        for match in self.code_similarity_index.get(unit.unit_id, []):
+            if match.similarity < 0.8 or match.attributed:
+                continue
+            signals.append(
+                RightsSignal(
+                    kind="code_similarity",
+                    risk="no_source",
+                    deterministic=True,
+                    title="Похожий код без атрибуции",
+                    detail=f"Совпадение {match.similarity:.0%} с единицей {match.other_unit_id} без ссылки на источник.",
+                    recommendation="Проверить заимствование между сдачами и добавить атрибуцию либо переработать код.",
+                    source=match.other_unit_id,
+                    confidence=min(1.0, max(0.0, match.similarity)),
+                )
+            )
+        return signals
+
+    def _external_evidence_signals(
+        self,
+        unit: ContentUnit,
+        entities: list[ExtractedEntity],
+        context: CheckContext,
+    ) -> list[RightsSignal]:
+        if not context.settings.allow_network or context.fact_model_client is None:
+            return []
+
+        signals: list[RightsSignal] = []
+        for query in self._evidence_queries(unit, entities)[: self.max_external_lookups]:
+            prompt = json.dumps(query, ensure_ascii=False, indent=2)
+            try:
+                record, _cache_hit = _cached_model_json(
+                    context,
+                    "rights",
+                    _hash_cache_key("rights", prompt),
+                    context.fact_model_client,
+                    self.PROVENANCE_SYSTEM_PROMPT,
+                    prompt,
+                    self.prompt_version,
+                )
+            except OpenRouterError:
+                continue
+            item = _first_result_item(record.get("response")) or {}
+            sources = _sources_from_item(item)
+            if not sources:
+                continue
+            note = _model_text(item, ("note", "likely_source", "license"), "Поиск нашёл возможный источник ресурса.")
+            signals.append(
+                RightsSignal(
+                    kind=str(query["kind"]),
+                    risk="no_source",
+                    deterministic=False,
+                    title=str(query["title"]),
+                    detail=note,
+                    recommendation="Передать методологу: подтвердить источник и права по найденным ссылкам.",
+                    quote=query.get("quote"),
+                    location=query.get("location"),
+                    source=_source_summary(sources),
+                    url=_first_source_url(sources),
+                    confidence=_parse_confidence(item.get("confidence")),
+                )
+            )
+        return signals
+
+    def _evidence_queries(self, unit: ContentUnit, entities: list[ExtractedEntity]) -> list[dict[str, object]]:
+        queries: list[dict[str, object]] = []
+        for file in unit.files:
+            if file.kind not in {"readme", "material", "text"}:
+                continue
+            for line_number, line in enumerate(file.text.splitlines(), start=1):
+                if DATASET_RE.search(line) and not self._has_license_terms_near(file.text, line.strip()):
+                    queries.append(
+                        {
+                            "kind": "dataset_rights",
+                            "title": "Возможный источник датасета",
+                            "text": f"Найди источник, лицензию и условия использования датасета из фрагмента: {line.strip()}",
+                            "quote": line.strip()[:500],
+                            "location": TextLocation(file_path=file.relative_path, line_start=line_number, line_end=line_number),
+                        }
+                    )
+        for entity in _entities_of_type(entities, EntityType.IMAGE):
+            target, _fragment = urldefrag(entity.value)
+            if urlparse(target).scheme in {"http", "https"} and not self._is_decorative_reference(entity.value, entity.quote):
+                queries.append(
+                    {
+                        "kind": "image_provenance",
+                        "title": "Возможный источник изображения",
+                        "text": f"Найди источник и лицензию изображения по ссылке или имени: {entity.value}",
+                        "quote": entity.quote,
+                        "location": entity.location,
+                    }
+                )
+        return queries
+
+    def _resolve_local_image(self, unit: ContentUnit, entity: ExtractedEntity) -> Path | None:
+        target, _fragment = urldefrag(entity.value)
+        if not target or urlparse(target).scheme in {"http", "https"}:
+            return None
+        source_file = unit.root_path / entity.location.file_path
+        target_path = (source_file.parent / target).resolve()
+        if target_path.exists() and _is_inside(target_path, unit.root_path):
+            return target_path
+        return None
+
+    def _is_significant_image(self, entity: ExtractedEntity, path: Path) -> bool:
+        dimensions = _read_image_dimensions(path)
+        if dimensions is None:
+            return True
+        width, height = dimensions
+        if width < DECORATIVE_MAX_SIDE and height < DECORATIVE_MAX_SIDE:
+            return False
+        return not _is_decorative_image(entity.value, entity.quote, width, height)
+
+    def _is_decorative_reference(self, value: str, quote: str) -> bool:
+        marker_text = f"{value} {quote}".lower()
+        return any(hint in marker_text for hint in DECORATIVE_HINTS)
+
+    def _source_file_text(self, unit: ContentUnit, location: TextLocation) -> str:
+        for file in unit.files:
+            if file.relative_path == location.file_path:
+                return file.text
+        return ""
+
+    def _has_license_terms_near(self, text: str, needle: str) -> bool:
+        position = text.lower().find(needle.lower())
+        if position < 0:
+            return False
+        fragment = text[max(0, position - 300) : position + len(needle) + 300]
+        return bool(re.search(r"license|licence|terms|rights|лицензи|услови|права|cc-by|mit|apache", fragment, flags=re.IGNORECASE))
+
+
+RightsChecker = RightsAndOriginalityChecker
+
+
+class MarketFitChecker(BaseChecker):
+    """Проверяет наличие прикладного бизнес-контекста в учебном проекте."""
+
+    name = "market_fit_checker"
+    prompt_version = "market_fit_checker:v1"
+    signal_labels = {
+        "real_data": "Работа с реальными данными",
+        "business_context": "Бизнес-контекст",
+        "success_metrics": "Бизнес-метрики или требования",
+    }
+    signal_patterns = {
+        "real_data": (
+            r"\b(dataset|datasets|real data|data files?|kaggle|open data|huggingface datasets)\b",
+            r"(датасет\w*|выборк\w*|файл\w*\s+данн\w*|таблиц\w*\s+данн\w*|реальн\w*\s+данн\w*|набор\s+данн\w*)",
+        ),
+        "business_context": (
+            r"\b(business problem|customer|stakeholder|user persona|target audience|use case|client)\b",
+            r"(бизнес[-\s]?задач\w*|бизнес[-\s]?контекст\w*|проблем\w*\s+бизнес\w*|заказчик\w*|клиент\w*|целев\w*\s+аудитори\w*)",
+        ),
+        "success_metrics": (
+            r"\b(kpi|conversion|revenue|retention|churn|sla|latency|business metric|business requirement|quality target)\b",
+            r"(бизнес[-\s]?метрик\w*|метрик\w*\s+успех\w*|kpi|конверси\w*|выручк\w*|удержан\w*|отток\w*|\bsla\b|бизнес[-\s]?требован\w*|требован\w*\s+бизнес\w*)",
+        ),
+    }
+    SYSTEM_PROMPT = """Ты проверяешь соответствие учебного проекта прикладной рыночной задаче.
+На входе есть результаты правил: наличие реальных данных, бизнес-контекста, бизнес-метрик или требований.
+Проверь, не пропустили ли правила перефразированный бизнес-контекст.
+Верни только JSON: {"verdict":"pass|warning|unknown","severity":"info|minor|major","confidence":0.0,
+"evidence":"","recommendation":"","real_data":true,"business_context":true,"success_metrics":true}.
+Не ставь severity='critical'. Если данных мало, ставь verdict='unknown'.
+Все пояснения и рекомендации пиши на русском языке."""
+
+    def check(self, unit: ContentUnit, entities: list[ExtractedEntity], context: CheckContext) -> list[Finding]:
+        del entities
+        signals = _market_fit_signals(unit, self.signal_patterns)
+        finding = self._finding_from_signals(unit, signals, model_item=None, record=None, cache_hit=False)
+        if context.model_client is None or finding.verdict == Verdict.PASS:
+            return [finding]
+
+        model_result = self._model_refinement(unit, signals, context)
+        if model_result is None:
+            return [finding]
+        item, record, cache_hit = model_result
+        return [self._finding_from_signals(unit, signals, model_item=item, record=record, cache_hit=cache_hit)]
+
+    def _model_refinement(
+        self,
+        unit: ContentUnit,
+        signals: dict[str, dict[str, object]],
+        context: CheckContext,
+    ) -> tuple[dict[str, Any], dict[str, Any], bool] | None:
+        """Уточняет слабые эвристические сигналы моделью."""
+
+        payload = {
+            "unit": unit.name,
+            "signals": signals,
+            "context": _compact_unit_context(unit, limit=8000),
+        }
+        prompt = json.dumps(payload, ensure_ascii=False, indent=2)
+        try:
+            record, cache_hit = _cached_model_json(
+                context,
+                "market_fit",
+                _hash_cache_key("market_fit", prompt),
+                context.model_client,
+                self.SYSTEM_PROMPT,
+                prompt,
+                self.prompt_version,
+            )
+        except OpenRouterError:
+            return None
+        item = _first_result_item(record.get("response"))
+        return (item, record, cache_hit) if item is not None else None
+
+    def _finding_from_signals(
+        self,
+        unit: ContentUnit,
+        signals: dict[str, dict[str, object]],
+        model_item: dict[str, Any] | None,
+        record: dict[str, Any] | None,
+        cache_hit: bool,
+    ) -> Finding:
+        """Собирает одну строку отчёта по трём под-оценкам."""
+
+        merged = _merge_market_signals(signals, model_item)
+        score = sum(1 for item in merged.values() if item["present"])
+        verdict, severity = _market_fit_verdict(score)
+        confidence = 0.65 + 0.1 * score
+        if model_item is not None:
+            verdict = _verdict_from_model_value(model_item.get("verdict"), verdict)
+            severity = _enum_or_default(Severity, model_item.get("severity"), severity)
+            if severity == Severity.CRITICAL:
+                severity = Severity.MAJOR
+            confidence = _parse_confidence(model_item.get("confidence"))
+
+        evidence_text = _market_fit_evidence(merged, self.signal_labels)
+        if model_item is not None:
+            model_evidence = _optional_model_text(model_item.get("evidence"))
+            if model_evidence:
+                evidence_text = f"{evidence_text} Модель: {model_evidence}"
+        recommendation = _market_fit_recommendation(merged, model_item)
+        return _finding(
+            unit,
+            self.name,
+            Criterion.MARKET_FIT,
+            severity,
+            verdict,
+            confidence,
+            None,
+            _first_market_location(merged),
+            [Evidence(title="Проверка соответствия рынку", detail=evidence_text)],
+            recommendation,
+            verdict != Verdict.PASS,
+            extra={
+                "market_fit_score": score,
+                "sub_checks": merged,
+                "model_refined": model_item is not None,
+                "cache_hit": cache_hit,
+            },
+            checked_at=_checked_at_from_record(record) if record is not None else None,
+            prompt_version=self.prompt_version if model_item is not None else None,
+        )
 
 
 class FactCheckerPerplexity(BaseChecker):
@@ -1191,7 +1594,8 @@ def default_checkers(use_model: bool) -> list[BaseChecker]:
         ExamPresenceChecker(),
         ImageQualityChecker(),
         ReadabilityChecker(),
-        RightsChecker(),
+        RightsAndOriginalityChecker(),
+        MarketFitChecker(),
         DependencyFreshnessChecker(),
         TechFreshnessChecker(),
     ]
@@ -1403,6 +1807,139 @@ def _is_decorative_image(path: str, quote: str, width: int, height: int) -> bool
     if any(marker in marker_text for marker in decorative_markers):
         return True
     return width <= 128 and height <= 128
+
+
+def _market_fit_signals(unit: ContentUnit, patterns: dict[str, tuple[str, ...]]) -> dict[str, dict[str, object]]:
+    """Ищет признаки данных, бизнес-контекста и метрик успеха."""
+
+    signals: dict[str, dict[str, object]] = {
+        name: {"present": False, "matches": [], "source": "rules"} for name in patterns
+    }
+    for file in unit.files:
+        if file.kind not in {"readme", "material", "text"}:
+            continue
+        for line_number, line in enumerate(file.text.splitlines(), start=1):
+            stripped = line.strip()
+            if not stripped:
+                continue
+            lowered = stripped.lower()
+            for signal_name, signal_patterns in patterns.items():
+                if signals[signal_name]["present"]:
+                    continue
+                if any(re.search(pattern, lowered, flags=re.IGNORECASE) for pattern in signal_patterns):
+                    signals[signal_name]["present"] = True
+                    signals[signal_name]["matches"] = [
+                        {
+                            "file_path": file.relative_path,
+                            "line_start": line_number,
+                            "text": stripped[:220],
+                        }
+                    ]
+    if not signals["real_data"]["present"]:
+        _mark_dataset_files(unit, signals)
+    return signals
+
+
+def _mark_dataset_files(unit: ContentUnit, signals: dict[str, dict[str, object]]) -> None:
+    """Файлы данных тоже считаются признаком работы с реальными данными."""
+
+    data_suffixes = (".csv", ".xlsx", ".parquet", ".jsonl")
+    for file in unit.files:
+        lower_path = file.relative_path.lower()
+        if (
+            lower_path.endswith(data_suffixes)
+            or lower_path.startswith(("data/", "dataset/"))
+            or "/data/" in lower_path
+            or "/dataset" in lower_path
+        ):
+            signals["real_data"]["present"] = True
+            signals["real_data"]["matches"] = [
+                {"file_path": file.relative_path, "line_start": None, "text": "Найден файл или папка данных."}
+            ]
+            return
+
+
+def _merge_market_signals(
+    signals: dict[str, dict[str, object]],
+    model_item: dict[str, Any] | None,
+) -> dict[str, dict[str, object]]:
+    """Объединяет правила и уточнение модели без потери найденных доказательств."""
+
+    merged = {
+        key: {"present": bool(value["present"]), "matches": list(value["matches"]), "source": value["source"]}
+        for key, value in signals.items()
+    }
+    if model_item is None:
+        return merged
+    for key in ("real_data", "business_context", "success_metrics"):
+        value = model_item.get(key)
+        if isinstance(value, bool) and value:
+            merged[key]["present"] = True
+            merged[key]["source"] = "model" if not merged[key]["matches"] else "rules+model"
+    return merged
+
+
+def _market_fit_verdict(score: int) -> tuple[Verdict, Severity]:
+    """Назначает базовый вердикт по трём под-оценкам."""
+
+    if score >= 3:
+        return Verdict.PASS, Severity.INFO
+    if score == 2:
+        return Verdict.WARNING, Severity.MINOR
+    return Verdict.WARNING, Severity.MAJOR
+
+
+def _market_fit_evidence(signals: dict[str, dict[str, object]], labels: dict[str, str]) -> str:
+    """Собирает человекочитаемое объяснение по под-оценкам."""
+
+    parts: list[str] = []
+    for key, label in labels.items():
+        signal = signals[key]
+        status = "есть" if signal["present"] else "нет"
+        detail = ""
+        matches = signal.get("matches")
+        if isinstance(matches, list) and matches:
+            first = matches[0]
+            if isinstance(first, dict):
+                location = first.get("file_path") or ""
+                line = first.get("line_start")
+                text = first.get("text") or ""
+                detail = f" ({location}{':' + str(line) if line else ''}: {text})"
+        parts.append(f"{label}: {status}{detail}")
+    return "; ".join(parts)
+
+
+def _market_fit_recommendation(signals: dict[str, dict[str, object]], model_item: dict[str, Any] | None) -> str:
+    """Формирует рекомендацию по недостающим признакам."""
+
+    if model_item is not None:
+        recommendation = _optional_model_text(model_item.get("recommendation"))
+        if recommendation:
+            return recommendation
+    missing = [key for key, value in signals.items() if not value["present"]]
+    if not missing:
+        return "Действий не требуется: данные, бизнес-контекст и метрики/требования найдены."
+    mapping = {
+        "real_data": "добавить датасет или ссылку на реальные данные",
+        "business_context": "описать бизнес-проблему, заказчика или целевую аудиторию",
+        "success_metrics": "зафиксировать бизнес-метрики, ограничения или требования к результату",
+    }
+    return "Усилить прикладной контекст: " + "; ".join(mapping[key] for key in missing) + "."
+
+
+def _first_market_location(signals: dict[str, dict[str, object]]) -> TextLocation | None:
+    """Берёт первую строку, где найден признак соответствия рынку."""
+
+    for signal in signals.values():
+        matches = signal.get("matches")
+        if not isinstance(matches, list) or not matches:
+            continue
+        first = matches[0]
+        if not isinstance(first, dict) or not first.get("file_path"):
+            continue
+        line = first.get("line_start") if isinstance(first.get("line_start"), int) else None
+        return TextLocation(file_path=str(first["file_path"]), line_start=line, line_end=line)
+    return None
 
 
 def _read_jpeg_dimensions(data: bytes) -> tuple[int, int] | None:

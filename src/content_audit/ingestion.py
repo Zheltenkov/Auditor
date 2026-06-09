@@ -156,7 +156,7 @@ def _classify_file(path: Path) -> str:
         return "dependency_manifest"
     if "material" in path.as_posix().lower():
         return "material"
-    if "test" in path.as_posix().lower():
+    if "/tests/" in path.as_posix().lower():
         return "test"
     return "text"
 

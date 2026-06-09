@@ -9,7 +9,9 @@ from content_audit.checks import (
     ImageQualityChecker,
     LanguageCoverageChecker,
     LinkChecker,
+    MarketFitChecker,
     ReadabilityChecker,
+    RightsAndOriginalityChecker,
     RightsChecker,
     TechFreshnessChecker,
     TechnologyFreshnessChecker,
@@ -138,7 +140,95 @@ def test_technology_checker_creates_actuality_candidate(workspace_tmp_path: Path
     assert any(finding.criterion == Criterion.ACTUALITY for finding in findings)
 
 
-def test_rights_checker_treats_missing_license_as_info(workspace_tmp_path: Path) -> None:
+def test_market_fit_checker_passes_when_all_business_signals_exist(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    data_dir = project / "data"
+    data_dir.mkdir()
+    (data_dir / "customers.csv").write_text("id,churn\n1,0\n", encoding="utf-8")
+    (project / "README.md").write_text(
+        "Проект работает с реальными данными клиентов.\n"
+        "Бизнес-задача: снизить отток клиентов банка.\n"
+        "Метрика успеха: уменьшить churn и повысить retention.\n",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=2000)
+
+    findings = MarketFitChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
+
+    assert findings[0].criterion == Criterion.MARKET_FIT
+    assert findings[0].verdict == Verdict.PASS
+    assert findings[0].extra["market_fit_score"] == 3
+    assert findings[0].needs_human_review is False
+
+
+def test_market_fit_checker_flags_missing_success_metrics(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text(
+        "Используется датасет продаж.\n"
+        "Бизнес-проблема: заказчик хочет лучше понимать спрос.\n",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=2000)
+
+    findings = MarketFitChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
+
+    assert findings[0].verdict == Verdict.WARNING
+    assert findings[0].severity == Severity.MINOR
+    assert findings[0].extra["sub_checks"]["success_metrics"]["present"] is False
+
+
+def test_market_fit_checker_does_not_count_generic_technical_data_as_market_fit(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text(
+        "Autotests compare correct output data with expected results.\n"
+        "The service exports CSV reports for manual review.\n"
+        "Наша игра — многопользовательская.\n"
+        "Интеграционные тесты сравнивают результат со стандартным выводом.\n",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=2000)
+
+    findings = MarketFitChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
+
+    assert findings[0].extra["market_fit_score"] == 0
+    assert findings[0].severity == Severity.MAJOR
+    assert findings[0].verdict == Verdict.WARNING
+
+
+def test_market_fit_checker_uses_model_to_refine_weak_signals(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text("Проект помогает аналитикам принимать решения по заявкам.\n", encoding="utf-8")
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=2000)
+    fake_client = _FakeJsonClient(
+        {
+            "verdict": "pass",
+            "severity": "info",
+            "confidence": 0.8,
+            "real_data": True,
+            "business_context": True,
+            "success_metrics": True,
+            "evidence": "В тексте есть прикладной сценарий, а данные и критерии успеха заданы другими словами.",
+            "recommendation": "Действий не требуется.",
+        }
+    )
+    cache = AuditCache.load(workspace_tmp_path / "market_cache.json")
+    context = CheckContext(_settings(workspace_tmp_path, project), model_client=fake_client, cache=cache)
+
+    first = MarketFitChecker().check(unit, [], context)
+    second = MarketFitChecker().check(unit, [], context)
+
+    assert fake_client.calls == 1
+    assert first[0].verdict == Verdict.PASS
+    assert first[0].extra["market_fit_score"] == 3
+    assert first[0].prompt_version == "market_fit_checker:v1"
+    assert second[0].extra["cache_hit"] is True
+
+
+def test_rights_checker_treats_missing_license_as_advisory(workspace_tmp_path: Path) -> None:
     project = workspace_tmp_path / "unit"
     project.mkdir()
     (project / "README.md").write_text("# Проект\n", encoding="utf-8")
@@ -148,7 +238,70 @@ def test_rights_checker_treats_missing_license_as_info(workspace_tmp_path: Path)
 
     assert findings[0].criterion == Criterion.RIGHTS
     assert findings[0].severity == Severity.INFO
-    assert findings[0].verdict == Verdict.UNKNOWN
+    assert findings[0].verdict == Verdict.WARNING
+    assert findings[0].needs_human_review is False
+
+
+def test_rights_checker_flags_significant_image_without_source(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text("![architecture](diagram.png)\n", encoding="utf-8")
+    (project / "LICENSE").write_text("MIT\n", encoding="utf-8")
+    (project / "diagram.png").write_bytes(
+        b"\x89PNG\r\n\x1a\n"
+        + b"\x00\x00\x00\rIHDR"
+        + (480).to_bytes(4, "big")
+        + (320).to_bytes(4, "big")
+        + b"\x08\x06\x00\x00\x00"
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+    entities = extract_entities(unit)
+
+    findings = RightsAndOriginalityChecker().check(unit, entities, CheckContext(_settings(workspace_tmp_path, project)))
+
+    assert len(findings) == 1
+    assert findings[0].severity == Severity.MINOR
+    assert findings[0].verdict == Verdict.WARNING
+    assert findings[0].needs_human_review is True
+    assert findings[0].extra["kind"] == "image_provenance"
+
+
+def test_rights_checker_ignores_decorative_image(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text("![logo](logo.png)\n", encoding="utf-8")
+    (project / "LICENSE").write_text("MIT\n", encoding="utf-8")
+    (project / "logo.png").write_bytes(
+        b"\x89PNG\r\n\x1a\n"
+        + b"\x00\x00\x00\rIHDR"
+        + (48).to_bytes(4, "big")
+        + (48).to_bytes(4, "big")
+        + b"\x08\x06\x00\x00\x00"
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+    entities = extract_entities(unit)
+
+    findings = RightsAndOriginalityChecker().check(unit, entities, CheckContext(_settings(workspace_tmp_path, project)))
+
+    assert findings == []
+
+
+def test_rights_checker_flags_dataset_without_license_terms(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "LICENSE").write_text("MIT\n", encoding="utf-8")
+    (project / "README.md").write_text(
+        "Используется датасет продаж с Kaggle: https://kaggle.com/datasets/example/sales.\n",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+
+    findings = RightsAndOriginalityChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
+
+    assert len(findings) == 1
+    assert findings[0].extra["kind"] == "dataset_rights"
+    assert findings[0].severity == Severity.MINOR
+    assert findings[0].needs_human_review is True
 
 
 def test_image_quality_checker_ignores_decorative_small_icons(workspace_tmp_path: Path) -> None:

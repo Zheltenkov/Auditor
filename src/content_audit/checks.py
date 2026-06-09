@@ -212,7 +212,7 @@ class LinkChecker(BaseChecker):
             parsed = urlparse(entity.value)
             if parsed.scheme not in {"http", "https"}:
                 continue
-            policy_error = _url_policy_error(entity.value, context.settings.link_allowlist)
+            policy_error = _url_policy_error(entity.value)
             if policy_error is not None:
                 findings.append(
                     _finding(
@@ -225,7 +225,7 @@ class LinkChecker(BaseChecker):
                         entity.quote,
                         entity.location,
                         [Evidence(title="Политика проверки ссылок", detail=policy_error, url=entity.value)],
-                        "Проверить ссылку вручную или добавить домен в список разрешённых источников.",
+                        "Проверить ссылку вручную.",
                         True,
                     )
                 )
@@ -248,7 +248,7 @@ class LinkChecker(BaseChecker):
                 )
                 continue
 
-            status_code, final_url, error = _check_url(entity.value, context.settings.link_timeout_seconds, context.settings.link_allowlist)
+            status_code, final_url, error = _check_url(entity.value, context.settings.link_timeout_seconds)
             if error is not None:
                 severity = Severity.MINOR if _is_redirect_chain_error(error) else Severity.INFO
                 verdict = Verdict.WARNING if _is_redirect_chain_error(error) else Verdict.UNKNOWN
@@ -1611,14 +1611,14 @@ def _entities_of_type(entities: Iterable[ExtractedEntity], entity_type: EntityTy
     return (entity for entity in entities if entity.entity_type == entity_type)
 
 
-def _check_url(url: str, timeout_seconds: float, allowlist: list[str]) -> tuple[int, str | None, str | None]:
+def _check_url(url: str, timeout_seconds: float) -> tuple[int, str | None, str | None]:
     """Проверяем внешнюю ссылку через HEAD с ручной проверкой перенаправлений."""
 
     current_url = url
     headers = {"User-Agent": "ContentAudit/0.1 (+https://github.com/Zheltenkov/Auditor)"}
     try:
         for _redirect_index in range(5):
-            policy_error = _url_policy_error(current_url, allowlist)
+            policy_error = _url_policy_error(current_url)
             if policy_error is not None:
                 return 0, current_url, policy_error
             response = requests.head(current_url, allow_redirects=False, timeout=timeout_seconds, headers=headers)
@@ -1664,8 +1664,8 @@ def _redirect_smells_like_rot(original_url: str, final_url: str | None) -> bool:
     return original_path not in {"", "/"} and final_path in {"", "/"}
 
 
-def _url_policy_error(url: str, allowlist: list[str]) -> str | None:
-    """Проверяем схему, локальные адреса и список разрешённых доменов."""
+def _url_policy_error(url: str) -> str | None:
+    """Проверяем схему, локальные адреса и служебные IP."""
 
     parsed = urlparse(url)
     if parsed.scheme not in {"http", "https"}:
@@ -1683,9 +1683,6 @@ def _url_policy_error(url: str, allowlist: list[str]) -> str | None:
         ip_address = None
     if ip_address and (ip_address.is_private or ip_address.is_loopback or ip_address.is_link_local or ip_address.is_reserved):
         return "Внутренние IP-адреса не проверяются автоматически."
-    normalized_allowlist = [item.lower().lstrip(".") for item in allowlist if item.strip()]
-    if normalized_allowlist and not any(hostname == item or hostname.endswith(f".{item}") for item in normalized_allowlist):
-        return f"Домен {hostname} не входит в список разрешённых источников."
     return None
 
 

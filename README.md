@@ -27,15 +27,6 @@ python -m content_audit.web_app --host 127.0.0.1 --port 8021
 - `report.csv` — таблица для методологов;
 - `run_summary.json` — краткая сводка прогона.
 
-Если есть платформенные идентификаторы, передайте манифест:
-
-```powershell
-python -m content_audit --input .\proj_example --output .\reports\proj_example --manifest .\units.json --admin-url-template "https://admin.example/projects/{unit_id}"
-```
-
-Манифест может быть JSON или CSV. Поддерживаемые поля: `path`, `unit_id` или
-`id`, `branch`, `admin_url`, `name`.
-
 ## Что уже проверяется без модели
 
 - доступность локальных файлов и структура единицы контента;
@@ -79,15 +70,8 @@ python -m content_audit --input .\proj_example --output .\reports\proj_example -
 
 ## Ссылки и безопасность
 
-Сетевые проверки включаются только без `--skip-network`. Для ограничения
-источников используйте:
-
-```powershell
-python -m content_audit --input .\proj_example --output .\reports\proj_example --link-allowlist "docs.python.org,github.com"
-```
-
-Локальные адреса, внутренние IP и ссылки с учётными данными не проверяются
-автоматически.
+Сетевые проверки включаются только без `--skip-network`. Локальные адреса,
+внутренние IP и ссылки с учётными данными не проверяются автоматически.
 
 ## Метрики качества
 

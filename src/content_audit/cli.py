@@ -53,9 +53,6 @@ def main(argv: list[str] | None = None) -> int:
         openrouter_model=openrouter_model,
         openrouter_fact_model=openrouter_fact_model,
         openrouter_tech_model=openrouter_tech_model,
-        manifest_path=args.manifest,
-        admin_url_template=args.admin_url_template,
-        link_allowlist=_parse_allowlist(args.link_allowlist),
     )
 
     report = AuditRunner(settings).run()
@@ -89,13 +86,6 @@ def _build_parser() -> argparse.ArgumentParser:
         default=None,
         help=f"Модель OpenRouter для проверки актуальности технологий. По умолчанию: {DEFAULT_OPENROUTER_TECH_MODEL}.",
     )
-    parser.add_argument("--manifest", type=Path, default=None, help="JSON/CSV манифест: путь, id, ветка, ссылка в админке.")
-    parser.add_argument("--admin-url-template", default=None, help="Шаблон ссылки в админке, например https://admin.local/projects/{unit_id}.")
-    parser.add_argument(
-        "--link-allowlist",
-        default="",
-        help="Разрешённые домены для сетевой проверки ссылок через запятую. Пустое значение разрешает любые публичные домены.",
-    )
     parser.add_argument("--hide-unknown", action="store_true", help="Не включать случаи с вердиктом 'нужна проверка'.")
     parser.add_argument("--include-pass", action="store_true", help="Включать положительные проверки в CSV.")
     parser.add_argument("--max-file-bytes", type=int, default=2_000_000, help="Максимальный размер текстового файла.")
@@ -117,9 +107,3 @@ def _print_summary(summary, output_path: Path) -> None:
         print("Предупреждения:")
         for warning in summary.warnings:
             print(f"- {warning}")
-
-
-def _parse_allowlist(value: str) -> list[str]:
-    """Разбираем список разрешённых доменов из параметра командной строки."""
-
-    return [item.strip().lower().lstrip(".") for item in value.split(",") if item.strip()]

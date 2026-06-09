@@ -10,7 +10,6 @@ from content_audit.checks import CheckContext, default_checkers
 from content_audit.domain import AuditReport, AuditSettings, ExtractedEntity, Finding, ModelUsageSummary, RunStep, RunSummary, Verdict
 from content_audit.extraction import extract_entities
 from content_audit.ingestion import discover_content_units, load_unit_files
-from content_audit.manifest import apply_unit_manifest
 from content_audit.openrouter import OpenRouterClient
 from content_audit.severity import SeverityCalibrator
 
@@ -34,13 +33,6 @@ class AuditRunner:
 
         step_started = datetime.now(timezone.utc)
         units = discover_content_units(self.settings.input_path)
-        units, manifest_warnings = apply_unit_manifest(
-            units,
-            self.settings.input_path,
-            self.settings.manifest_path,
-            self.settings.admin_url_template,
-        )
-        warnings.extend(manifest_warnings)
         units = [load_unit_files(unit, self.settings.max_file_bytes) for unit in units]
         _finish_step(steps, "Загрузка файлов", step_started, f"Единиц: {len(units)}")
 

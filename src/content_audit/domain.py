@@ -100,11 +100,8 @@ class AuditSettings(BaseModel):
     openrouter_fact_model: str | None = None
     openrouter_tech_model: str | None = None
     cache_path: Path | None = None
-    manifest_path: Path | None = None
-    admin_url_template: str | None = None
-    link_allowlist: list[str] = Field(default_factory=list)
 
-    @field_validator("input_path", "output_path", "cache_path", "manifest_path")
+    @field_validator("input_path", "output_path", "cache_path")
     @classmethod
     def expand_path(cls, value: Path | None) -> Path | None:
         """Приводим путь к абсолютному виду, чтобы отчёты были воспроизводимыми."""
@@ -134,7 +131,6 @@ class ContentUnit(BaseModel):
     root_path: Path
     relative_path: str
     branch: str | None = None
-    admin_url: str | None = None
     files: list[ContentFile] = Field(default_factory=list)
 
     model_config = ConfigDict(arbitrary_types_allowed=True)

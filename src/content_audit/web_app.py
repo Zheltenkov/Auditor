@@ -175,9 +175,6 @@ def run_from_form(form: dict[str, str], state: WebState) -> AuditReport:
         openrouter_model=model_name,
         openrouter_fact_model=fact_model_name,
         openrouter_tech_model=tech_model_name,
-        manifest_path=None,
-        admin_url_template=None,
-        link_allowlist=[],
     )
     report = AuditRunner(settings).run()
     write_report(report, state.report_dir, include_pass=False)

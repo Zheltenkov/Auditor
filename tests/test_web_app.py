@@ -15,6 +15,7 @@ def test_render_page_contains_project_input(workspace_tmp_path: Path) -> None:
     assert html.count("<input") == 1
     assert 'name="input_path"' in html
     assert "<select" not in html
+    assert "ключ OpenRouter" not in html
 
 
 def test_render_page_has_no_demo_project_by_default(workspace_tmp_path: Path) -> None:

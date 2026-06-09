@@ -203,7 +203,6 @@ def render_page(report: AuditReport | None, state: WebState, form_values: dict[s
             _render_run_panel(
                 report,
                 input_value,
-                state,
             ),
             _render_error(state.last_error),
             _render_dashboard(report, state.report_dir) if report else _render_empty_state(),
@@ -554,12 +553,9 @@ def _render_topbar() -> str:
 def _render_run_panel(
     report: AuditReport | None,
     input_value: str,
-    state: WebState,
 ) -> str:
     """Возвращает форму запуска, свёрнутую после построения отчёта."""
 
-    has_key = bool(get_env_value(("OPENROUTER_API_KEY", "OPEN_ROUTER_API_KEY"), state.env_values))
-    key_note = "ключ OpenRouter найден" if has_key else "ключ OpenRouter не найден"
     open_attr = "" if report is not None else " open"
     restart_button = '<span class="link-button run-restart" role="button" tabindex="0">Перезапустить</span>' if report is not None else ""
     return f"""
@@ -569,7 +565,6 @@ def _render_run_panel(
       <span class="run-bar-text">{_esc(_run_bar_text(report, input_value))}</span>
       <span class="run-bar-actions">
         {restart_button}
-        <span class="link-button">{_esc(key_note)}</span>
         <span class="run-bar-edit"></span>
       </span>
     </summary>

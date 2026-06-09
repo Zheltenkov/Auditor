@@ -74,7 +74,11 @@ def test_render_page_contains_extended_report_columns(workspace_tmp_path: Path) 
     assert 'data-criterion-filter="actuality"' in html
     assert 'data-criterion="actuality"' in html
     assert 'id="active-criterion-label"' in html
+    assert 'id="active-column-filter-label"' in html
     assert 'id="filter-result-count"' in html
+    assert 'data-column-filter="criterion"' in html
+    assert 'data-column-filter="severity"' in html
+    assert "columnFilterState" in html
     summary_block = html.split('class="summary-strip"', 1)[1]
     assert summary_block.index("critical") < summary_block.index("major")
     assert summary_block.index("major") < summary_block.index("minor")

@@ -448,7 +448,100 @@ th, td {
   overflow-wrap: anywhere;
   word-break: normal;
 }
-th { background: var(--surface-muted); color: var(--muted); font-size: 11px; letter-spacing: 0; }
+th {
+  position: relative;
+  background: var(--surface-muted);
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: 0;
+}
+.column-filter-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: 900 11px var(--font-sans);
+  text-align: left;
+}
+.column-filter-trigger:hover,
+.column-filter-trigger.is-active { color: var(--accent-deep); }
+.column-filter-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 17px;
+  height: 17px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.66);
+  color: var(--muted);
+  font-size: 11px;
+  flex-shrink: 0;
+}
+.column-filter-trigger.is-active .column-filter-mark {
+  color: var(--accent-deep);
+  background: var(--accent-soft);
+}
+.column-filter-menu {
+  position: fixed;
+  z-index: 50;
+  width: min(320px, calc(100vw - 24px));
+  max-height: 360px;
+  overflow: hidden;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow);
+  background: var(--surface);
+}
+.column-filter-menu[hidden] { display: none; }
+.column-filter-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 11px 12px;
+  border-bottom: 1px solid var(--border-soft);
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 900;
+}
+.column-filter-clear {
+  border: 0;
+  background: transparent;
+  color: var(--info);
+  cursor: pointer;
+  font: 900 12px var(--font-sans);
+}
+.column-filter-options {
+  max-height: 292px;
+  overflow-y: auto;
+  padding: 7px;
+}
+.column-filter-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 7px 6px;
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.3;
+  cursor: pointer;
+}
+.column-filter-option:hover { background: var(--surface-muted); }
+.column-filter-option input { margin-top: 1px; accent-color: var(--accent); flex-shrink: 0; }
+.column-filter-value { overflow-wrap: anywhere; }
+.column-filter-empty {
+  padding: 12px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
 tr:last-child td { border-bottom: 0; }
 .mono { font-family: var(--font-mono); font-size: 12px; overflow-wrap: anywhere; }
 .pill {
@@ -675,6 +768,7 @@ def _render_filter_bar() -> str:
 <section class="filter-bar" id="filter-bar">
   <span class="filter-bar-label">Фильтры таблицы</span>
   <span class="filter-chip" id="active-criterion-label">Критерий: все</span>
+  <span class="filter-chip" id="active-column-filter-label">Колонки: нет</span>
   <label class="check"><input type="checkbox" id="flt-hide-unknown"> Скрыть «нужна проверка»</label>
   <span class="filter-note" id="filter-result-count">видно: 0</span>
   <span class="filter-note">мгновенно, без перезапуска</span>
@@ -826,9 +920,41 @@ def _criterion_short_label(criterion: Criterion) -> str:
     return labels[criterion]
 
 
+TABLE_COLUMNS: tuple[tuple[str, str], ...] = (
+    ("criterion", "Критерий"),
+    ("verdict", "Вердикт"),
+    ("severity", "Критичность"),
+    ("file", "Файл"),
+    ("line", "Строка"),
+    ("quote", "Цитата"),
+    ("evidence", "Обоснование"),
+    ("source", "Источник"),
+    ("checked", "Дата проверки"),
+    ("support", "Статус поддержки"),
+    ("latest", "Последняя версия"),
+    ("recommended", "Рекомендуемая версия"),
+    ("recommendation", "Рекомендация"),
+    ("confidence", "Уверенность"),
+    ("module", "Модуль"),
+)
+
+
+def _render_table_header(column_key: str, label: str) -> str:
+    """Возвращает заголовок колонки с клиентским фильтром."""
+
+    return f"""
+          <th>
+            <button type="button" class="column-filter-trigger" data-column-filter="{column_key}" data-column-label="{_esc(label)}" aria-expanded="false">
+              <span>{_esc(label)}</span>
+              <span class="column-filter-mark" aria-hidden="true">▾</span>
+            </button>
+          </th>"""
+
+
 def _render_findings_table(findings: list[Finding]) -> str:
     """Показывает таблицу найденных случаев."""
 
+    headers = "\n".join(_render_table_header(key, label) for key, label in TABLE_COLUMNS)
     rows = "\n".join(_render_finding_row(finding) for finding in findings)
     if not rows:
         rows = '<tr><td colspan="15">По выбранным условиям случаев нет.</td></tr>'
@@ -860,21 +986,7 @@ def _render_findings_table(findings: list[Finding]) -> str:
       </colgroup>
       <thead>
         <tr>
-          <th>Критерий</th>
-          <th>Вердикт</th>
-          <th>Критичность</th>
-          <th>Файл</th>
-          <th>Строка</th>
-          <th>Цитата</th>
-          <th>Обоснование</th>
-          <th>Источник</th>
-          <th>Дата проверки</th>
-          <th>Статус поддержки</th>
-          <th>Последняя версия</th>
-          <th>Рекомендуемая версия</th>
-          <th>Рекомендация</th>
-          <th>Уверенность</th>
-          <th>Модуль</th>
+{headers}
         </tr>
       </thead>
       <tbody>{rows}</tbody>
@@ -1060,8 +1172,118 @@ const table = document.getElementById("findings-table");
 const hideUnknown = document.getElementById("flt-hide-unknown");
 const criterionButtons = document.querySelectorAll("[data-criterion-filter]");
 const activeCriterionLabel = document.getElementById("active-criterion-label");
+const activeColumnFilterLabel = document.getElementById("active-column-filter-label");
 const resultCount = document.getElementById("filter-result-count");
+const columnFilterButtons = table ? Array.from(table.querySelectorAll("[data-column-filter]")) : [];
+const columnFilterState = new Map();
 let activeCriterion = "all";
+let activeColumnMenu = null;
+
+function rowValue(row, columnIndex) {
+  const cell = row.cells[columnIndex];
+  if (!cell) return "";
+  return cell.textContent.replace(/\\s+/g, " ").trim();
+}
+
+function valueLabel(value) {
+  return value || "Пусто";
+}
+
+function sortedColumnValues(columnIndex) {
+  if (!table) return [];
+  const values = new Set();
+  table.querySelectorAll("tbody tr.frow").forEach((row) => values.add(rowValue(row, columnIndex)));
+  return Array.from(values).sort((left, right) => valueLabel(left).localeCompare(valueLabel(right), "ru"));
+}
+
+function closeColumnMenu() {
+  if (activeColumnMenu) activeColumnMenu.remove();
+  activeColumnMenu = null;
+  columnFilterButtons.forEach((button) => button.setAttribute("aria-expanded", "false"));
+}
+
+function updateColumnFilterState(columnIndex, values, checkedValues) {
+  if (checkedValues.length === values.length) {
+    columnFilterState.delete(columnIndex);
+  } else {
+    columnFilterState.set(columnIndex, new Set(checkedValues));
+  }
+  columnFilterButtons.forEach((button, index) => {
+    button.classList.toggle("is-active", columnFilterState.has(index));
+  });
+  if (activeColumnFilterLabel) {
+    const activeCount = columnFilterState.size;
+    activeColumnFilterLabel.textContent = activeCount ? `Колонки: ${activeCount}` : "Колонки: нет";
+  }
+  applyFilters();
+}
+
+function buildColumnMenu(button, columnIndex) {
+  closeColumnMenu();
+  const values = sortedColumnValues(columnIndex);
+  const selected = columnFilterState.get(columnIndex);
+  const menu = document.createElement("div");
+  menu.className = "column-filter-menu";
+  menu.setAttribute("role", "dialog");
+
+  const head = document.createElement("div");
+  head.className = "column-filter-head";
+  const title = document.createElement("span");
+  title.textContent = button.dataset.columnLabel || "Колонка";
+  const clear = document.createElement("button");
+  clear.type = "button";
+  clear.className = "column-filter-clear";
+  clear.textContent = "Сбросить";
+  clear.addEventListener("click", (event) => {
+    event.stopPropagation();
+    columnFilterState.delete(columnIndex);
+    closeColumnMenu();
+    columnFilterButtons.forEach((item, index) => item.classList.toggle("is-active", columnFilterState.has(index)));
+    if (activeColumnFilterLabel) {
+      const activeCount = columnFilterState.size;
+      activeColumnFilterLabel.textContent = activeCount ? `Колонки: ${activeCount}` : "Колонки: нет";
+    }
+    applyFilters();
+  });
+  head.append(title, clear);
+  menu.append(head);
+
+  const list = document.createElement("div");
+  list.className = "column-filter-options";
+  if (values.length === 0) {
+    const empty = document.createElement("div");
+    empty.className = "column-filter-empty";
+    empty.textContent = "Нет значений";
+    list.append(empty);
+  } else {
+    values.forEach((value) => {
+      const option = document.createElement("label");
+      option.className = "column-filter-option";
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.value = value;
+      checkbox.checked = selected ? selected.has(value) : true;
+      const caption = document.createElement("span");
+      caption.className = "column-filter-value";
+      caption.textContent = valueLabel(value);
+      checkbox.addEventListener("change", () => {
+        const checkedValues = Array.from(list.querySelectorAll("input[type='checkbox']:checked")).map((item) => item.value);
+        updateColumnFilterState(columnIndex, values, checkedValues);
+      });
+      option.append(checkbox, caption);
+      list.append(option);
+    });
+  }
+  menu.append(list);
+
+  document.body.append(menu);
+  const rect = button.getBoundingClientRect();
+  const left = Math.min(Math.max(12, rect.left), window.innerWidth - menu.offsetWidth - 12);
+  menu.style.left = `${left}px`;
+  menu.style.top = `${rect.bottom + 8}px`;
+  button.setAttribute("aria-expanded", "true");
+  activeColumnMenu = menu;
+}
 
 function updateEmptyState() {
   if (!table) return;
@@ -1081,7 +1303,8 @@ function applyFilters() {
   const rows = table.querySelectorAll("tbody tr.frow");
   rows.forEach((row) => {
     const byCriterion = activeCriterion === "all" || row.dataset.criterion === activeCriterion;
-    row.style.display = byCriterion ? "" : "none";
+    const byColumns = Array.from(columnFilterState.entries()).every(([columnIndex, selected]) => selected.has(rowValue(row, columnIndex)));
+    row.style.display = byCriterion && byColumns ? "" : "none";
   });
   updateEmptyState();
 }
@@ -1100,6 +1323,27 @@ criterionButtons.forEach((button) => {
   });
 });
 
+columnFilterButtons.forEach((button, columnIndex) => {
+  button.addEventListener("click", (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    if (button.getAttribute("aria-expanded") === "true") {
+      closeColumnMenu();
+      return;
+    }
+    buildColumnMenu(button, columnIndex);
+  });
+});
+
+document.addEventListener("click", (event) => {
+  if (activeColumnMenu && !activeColumnMenu.contains(event.target)) closeColumnMenu();
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") closeColumnMenu();
+});
+
+window.addEventListener("resize", closeColumnMenu);
 if (hideUnknown) hideUnknown.addEventListener("change", applyFilters);
 applyFilters();
 })();

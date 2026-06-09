@@ -168,8 +168,8 @@ def run_from_form(form: dict[str, str], state: WebState) -> AuditReport:
     settings = AuditSettings(
         input_path=input_path,
         output_path=state.report_dir,
-        allow_network=form.get("check_links") == "on",
-        use_model=form.get("use_model") == "on",
+        allow_network=True,
+        use_model=True,
         include_unknown=True,
         include_pass=True,
         openrouter_api_key=api_key,
@@ -204,8 +204,6 @@ def render_page(report: AuditReport | None, state: WebState, form_values: dict[s
     manifest_path = form.get("manifest_path") or ""
     admin_url_template = form.get("admin_url_template") or ""
     link_allowlist = form.get("link_allowlist") or ""
-    use_model_checked = form.get("use_model", "on" if form_values is None and report is None else "") == "on"
-    check_links_checked = form.get("check_links", "on" if form_values is None else "") == "on"
     body = "\n".join(
         [
             _render_topbar(),
@@ -217,8 +215,6 @@ def render_page(report: AuditReport | None, state: WebState, form_values: dict[s
                 manifest_path,
                 admin_url_template,
                 link_allowlist,
-                use_model_checked,
-                check_links_checked,
                 state,
             ),
             _render_error(state.last_error),
@@ -503,13 +499,11 @@ tr:last-child td { border-bottom: 0; }
 .advanced-run { margin-top: 14px; }
 .advanced-run > summary { color: var(--info); cursor: pointer; font-size: 13px; font-weight: 900; }
 .advanced-run[open] > summary { margin-bottom: 12px; }
-.cost-note, .filter-note {
+.filter-note {
   display: inline-flex; align-items: center; border-radius: 999px;
   padding: 5px 10px; font-size: 12px; font-weight: 800;
 }
-.cost-note { color: #8a5a10; background: #f5e6bd; }
 .filter-note { color: var(--info); background: #e7eefb; }
-.link-allowlist-field.is-hidden { display: none; }
 .filter-bar {
   display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
   margin: 16px 0 12px; padding: 12px 14px;
@@ -581,8 +575,6 @@ def _render_run_panel(
     manifest_path: str,
     admin_url_template: str,
     link_allowlist: str,
-    use_model_checked: bool,
-    check_links_checked: bool,
     state: WebState,
 ) -> str:
     """Возвращает форму запуска, свёрнутую после построения отчёта."""
@@ -590,9 +582,6 @@ def _render_run_panel(
     has_key = bool(get_env_value(("OPENROUTER_API_KEY", "OPEN_ROUTER_API_KEY"), state.env_values))
     key_note = "ключ OpenRouter найден" if has_key else "ключ OpenRouter не найден"
     open_attr = "" if report is not None else " open"
-    use_model_attr = " checked" if use_model_checked else ""
-    check_links_attr = " checked" if check_links_checked else ""
-    allowlist_class = "" if check_links_checked else " is-hidden"
     restart_button = '<span class="link-button run-restart" role="button" tabindex="0">Перезапустить</span>' if report is not None else ""
     return f"""
 <section class="run-panel">
@@ -623,13 +612,6 @@ def _render_run_panel(
         </div>
         <button class="button" type="submit">Запустить</button>
       </div>
-      <div class="run-zone">
-        <div class="options">
-          <label class="check"><input type="checkbox" name="use_model"{use_model_attr}> Модельные проверки</label>
-          <label class="check"><input type="checkbox" id="check_links" name="check_links"{check_links_attr}> Проверять внешние ссылки</label>
-          <span class="cost-note">влияют на время и стоимость</span>
-        </div>
-      </div>
       <details class="advanced-run">
         <summary>Дополнительно</summary>
         <div class="form-grid form-grid-extra">
@@ -641,7 +623,7 @@ def _render_run_panel(
             <label for="admin_url_template">Шаблон ссылки админки</label>
             <input id="admin_url_template" name="admin_url_template" type="text" value="{_esc(admin_url_template)}" spellcheck="false">
           </div>
-          <div class="link-allowlist-field{allowlist_class}">
+          <div>
             <label for="link_allowlist">Разрешённые домены</label>
             <input id="link_allowlist" name="link_allowlist" type="text" value="{_esc(link_allowlist)}" spellcheck="false">
           </div>
@@ -1003,15 +985,6 @@ if (restart && form) {
     if (event.key === "Enter" || event.key === " ") submitCurrentForm(event);
   });
 }
-
-const checkLinks = document.getElementById("check_links");
-const allowlistField = document.querySelector(".link-allowlist-field");
-function updateAllowlistVisibility() {
-  if (!allowlistField) return;
-  allowlistField.classList.toggle("is-hidden", !(checkLinks && checkLinks.checked));
-}
-if (checkLinks) checkLinks.addEventListener("change", updateAllowlistVisibility);
-updateAllowlistVisibility();
 
 const diagnostics = document.querySelector(".diagnostics");
 if (diagnostics) diagnostics.removeAttribute("open");

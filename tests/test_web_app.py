@@ -12,7 +12,10 @@ def test_render_page_contains_project_input(workspace_tmp_path: Path) -> None:
     assert "Проверка локального проекта" in html
     assert "Путь к проекту" in html
     assert str(workspace_tmp_path) in html
-    assert 'id="check_links" name="check_links" checked' in html
+    assert "Модельные проверки" not in html
+    assert "Проверять внешние ссылки" not in html
+    assert 'name="use_model"' not in html
+    assert 'name="check_links"' not in html
 
 
 def test_render_page_has_no_demo_project_by_default(workspace_tmp_path: Path) -> None:
@@ -103,3 +106,29 @@ def test_run_from_form_stores_pass_findings_but_csv_hides_them(workspace_tmp_pat
     assert persisted is not None
     assert any(finding.verdict == Verdict.PASS for finding in persisted.findings)
     assert "Проверено" not in csv_text
+
+
+def test_run_from_form_always_enables_models_and_network(workspace_tmp_path: Path, monkeypatch) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    captured = {}
+
+    class _FakeRunner:
+        def __init__(self, settings):
+            captured["settings"] = settings
+
+        def run(self):
+            return AuditReport(
+                summary=RunSummary(started_at="2026-06-08T00:00:00+00:00", input_path=str(project)),
+                units=[],
+                entities=[],
+                findings=[],
+            )
+
+    monkeypatch.setattr("content_audit.web_app.AuditRunner", _FakeRunner)
+    state = WebState(default_input=None, report_dir=workspace_tmp_path / "reports", env_values={"OPENROUTER_API_KEY": "key"})
+
+    run_from_form({"input_path": str(project)}, state)
+
+    assert captured["settings"].use_model is True
+    assert captured["settings"].allow_network is True

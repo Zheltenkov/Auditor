@@ -49,20 +49,20 @@ def test_render_page_contains_extended_report_columns(workspace_tmp_path: Path) 
     assert "Статус поддержки" in html
     assert "Info" in html
     assert "Critical / Major" in html
-    assert "Карта отчёта" in html
-    assert "Контроль прогона" in html
+    assert "Критерий — фильтр таблицы" in html
+    assert "Диагностика прогона" in html
     assert "Покрытие ТЗ" in html
     assert "Модельные проверки не выполнялись" in html
-    assert "Критерии и сообщения" in html
+    assert "случаев" in html
     assert 'data-criterion-filter="all"' in html
     assert 'data-criterion-filter="actuality"' in html
     assert 'data-criterion="actuality"' in html
     assert 'id="active-criterion-label"' in html
     assert 'id="filter-result-count"' in html
-    severity_block = html.split("<label>Критичность</label>", 1)[1]
-    assert severity_block.index("Critical") < severity_block.index("Major")
-    assert severity_block.index("Major") < severity_block.index("Minor")
-    assert severity_block.index("Minor") < severity_block.index("Info")
+    summary_block = html.split('class="summary-strip"', 1)[1]
+    assert summary_block.index("critical") < summary_block.index("major")
+    assert summary_block.index("major") < summary_block.index("minor")
+    assert summary_block.index("minor") < summary_block.index("info")
     assert 'id="flt-hide-unknown"' in html
     assert 'id="flt-show-pass"' in html
     assert 'name="hide_unknown"' not in html

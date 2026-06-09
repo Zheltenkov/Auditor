@@ -306,7 +306,7 @@ h1 { margin: 0; font-size: 24px; line-height: 1.15; letter-spacing: 0; }
 .muted { color: var(--muted); font-size: 13px; margin: 6px 0 0; }
 .form-grid { display: grid; grid-template-columns: minmax(0, 1fr) 210px 138px; gap: 12px; align-items: end; }
 .form-grid-extra { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 260px; margin-top: 12px; }
-label { display: block; font-size: 12px; color: var(--muted); font-weight: 800; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 7px; }
+label { display: block; font-size: 12px; color: var(--muted); font-weight: 800; letter-spacing: 0; margin-bottom: 7px; }
 input[type="text"], select {
   width: 100%;
   height: 44px;
@@ -352,36 +352,51 @@ input[type="text"]:focus, select:focus { border-color: var(--accent); box-shadow
   margin-top: 20px; padding: 30px; border: 1px dashed var(--border);
   border-radius: var(--radius); color: var(--muted); background: rgba(255,253,250,.58);
 }
-.summary { margin-top: 20px; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
-.stat {
+.summary-strip {
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
   background: var(--surface);
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
   padding: 16px 18px;
 }
-.stat-value { font-size: 28px; font-weight: 900; color: var(--accent); line-height: 1; }
-.stat-label { margin-top: 8px; color: var(--muted); font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; }
-.stat-detail { margin-top: 8px; color: var(--muted); font-size: 12px; font-weight: 700; }
+.summary-main { display: flex; align-items: baseline; gap: 12px; min-width: 0; flex-wrap: wrap; }
+.summary-number { font-size: 30px; font-weight: 900; color: var(--text); line-height: 1; }
+.summary-text { color: var(--muted); font-size: 14px; font-weight: 800; }
+.severity-inline { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+.severity-chip {
+  display: inline-flex; align-items: center; min-height: 32px;
+  border-radius: 999px; padding: 5px 12px;
+  font-size: 13px; font-weight: 900; white-space: nowrap;
+}
+.severity-chip-critical { color: var(--danger); background: var(--danger-soft); }
+.severity-chip-major { color: #98630c; background: #f3dfac; }
+.severity-chip-minor { color: var(--muted); background: #ece7dc; }
+.severity-chip-info { color: var(--muted); background: var(--surface-muted); }
 .section { margin-top: 26px; }
 .section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; border-bottom: 1px solid var(--border-soft); padding-bottom: 12px; margin-bottom: 14px; }
 .section h2 { margin: 0; font-size: 20px; }
-.grid-two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .grid-three { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
-.metric-map { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
-.criteria-panel { grid-column: 1 / -1; }
-.criteria-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px; }
+.criteria-strip { margin-top: 22px; }
+.criteria-title { color: var(--muted); font-size: 13px; font-weight: 900; margin-bottom: 8px; }
+.criteria-hint { color: var(--muted); font-size: 13px; margin-bottom: 10px; }
+.criteria-chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .criterion-filter {
-  width: 100%;
-  min-height: 116px;
+  min-height: 38px;
   border: 1px solid var(--border-soft);
-  border-radius: var(--radius-sm);
-  padding: 12px;
+  border-radius: 999px;
+  padding: 7px 13px;
   background: var(--surface-strong);
   color: var(--text);
-  text-align: left;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
   cursor: pointer;
-  font: inherit;
+  font: 900 13px var(--font-sans);
 }
 .criterion-filter:hover,
 .criterion-filter.is-active {
@@ -389,11 +404,9 @@ input[type="text"]:focus, select:focus { border-color: var(--accent); box-shadow
   box-shadow: 0 0 0 3px rgba(14,143,111,.12);
 }
 .criterion-filter.is-active { background: var(--accent-soft); }
-.criterion-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
-.criterion-name { font-weight: 900; font-size: 13px; line-height: 1.25; }
-.criterion-count { font: 900 18px var(--font-mono); color: var(--accent); white-space: nowrap; }
-.criterion-meta { margin-top: 8px; color: var(--muted); font-size: 12px; font-weight: 800; }
-.criterion-message { margin-top: 8px; color: var(--text); font-size: 12px; line-height: 1.35; overflow-wrap: anywhere; }
+.criterion-filter.is-empty { color: #8b8b84; background: transparent; opacity: .7; }
+.criterion-filter.is-empty:not(.is-active) { box-shadow: none; }
+.criterion-count { color: inherit; font: 900 13px var(--font-mono); }
 .panel {
   background: var(--surface);
   border: 1px solid var(--border-strong);
@@ -449,7 +462,7 @@ th, td {
   overflow-wrap: anywhere;
   word-break: normal;
 }
-th { background: var(--surface-muted); color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .04em; }
+th { background: var(--surface-muted); color: var(--muted); font-size: 11px; letter-spacing: 0; }
 tr:last-child td { border-bottom: 0; }
 .mono { font-family: var(--font-mono); font-size: 12px; overflow-wrap: anywhere; }
 .pill {
@@ -493,11 +506,11 @@ tr:last-child td { border-bottom: 0; }
 .link-allowlist-field.is-hidden { display: none; }
 .filter-bar {
   display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-  margin: 20px 0 12px; padding: 12px 14px;
+  margin: 16px 0 12px; padding: 12px 14px;
   background: var(--surface); border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm); box-shadow: var(--shadow-sm);
 }
-.filter-bar-label { color: var(--muted); font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: .04em; }
+.filter-bar-label { color: var(--muted); font-size: 12px; font-weight: 900; letter-spacing: 0; }
 .filter-chip {
   display: inline-flex; align-items: center; min-height: 30px;
   border-radius: 999px; padding: 5px 10px;
@@ -506,8 +519,26 @@ tr:last-child td { border-bottom: 0; }
 }
 table.findings.hide-pass tr[data-verdict="pass"] { display: none; }
 table.findings.hide-unknown tr[data-verdict="unknown"] { display: none; }
+.diagnostics {
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  padding: 0;
+}
+.diagnostics > summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 16px 18px;
+  font-weight: 900;
+  color: var(--muted);
+}
+.diagnostics > summary::-webkit-details-marker { display: none; }
+.diagnostics-body { padding: 0 18px 18px; }
 @media (max-width: 980px) {
-  .form-grid, .summary, .grid-two, .grid-three, .metric-map { grid-template-columns: 1fr; }
+  .form-grid, .grid-three { grid-template-columns: 1fr; }
+  .summary-strip { align-items: flex-start; flex-direction: column; }
+  .severity-inline { justify-content: flex-start; }
   .panel-head { display: block; }
   .topbar-inner, .shell { padding-left: 16px; padding-right: 16px; }
 }
@@ -663,10 +694,10 @@ def _render_dashboard(report: AuditReport, report_dir: Path) -> str:
     return "\n".join(
         [
             _render_summary(report),
-            _render_report_map(report),
-            _render_observability(report),
+            _render_criterion_filters(report),
             _render_filter_bar(),
             _render_findings_table(report.findings),
+            _render_observability(report),
             _render_downloads(report_dir),
         ]
     )
@@ -699,18 +730,19 @@ def _render_summary(report: AuditReport) -> str:
     summary = report.summary
     cases = _case_findings(report)
     by_severity = Counter(finding.severity.value for finding in cases)
-    affected_units = len({finding.unit_id for finding in cases})
-    unknown = sum(1 for finding in cases if finding.verdict == Verdict.UNKNOWN)
     passed = sum(1 for finding in report.findings if finding.verdict == Verdict.PASS)
-    critical = by_severity.get(Severity.CRITICAL.value, 0)
-    major = by_severity.get(Severity.MAJOR.value, 0)
     return f"""
-<section id="summary" class="summary">
-  {_stat("Единицы", summary.units_total, f"затронуто: {affected_units}")}
-  {_stat("Случаи", len(cases), f"успешных: {passed}")}
-  {_stat("Нужна проверка", unknown, "можно скрыть фильтром")}
-  {_stat("Critical / Major", f"{critical} / {major}", "приоритет ТЗ")}
-  {_stat("Файлы", summary.files_total, "прочитано")}
+<section id="summary" class="summary-strip">
+  <div class="summary-main">
+    <span class="summary-number">{len(cases)}</span>
+    <span class="summary-text">случаев · {summary.files_total} файлов · {passed} успешных</span>
+  </div>
+  <div class="severity-inline">
+    {_severity_chip(Severity.CRITICAL, by_severity.get(Severity.CRITICAL.value, 0))}
+    {_severity_chip(Severity.MAJOR, by_severity.get(Severity.MAJOR.value, 0))}
+    {_severity_chip(Severity.MINOR, by_severity.get(Severity.MINOR.value, 0))}
+    {_severity_chip(Severity.INFO, by_severity.get(Severity.INFO.value, 0))}
+  </div>
 </section>
 """
 
@@ -732,12 +764,11 @@ def _render_observability(report: AuditReport) -> str:
         else '<div class="metric-empty">Модельные проверки не выполнялись.</div>'
     )
     return f"""
-<section class="section">
-  <div class="section-head">
-    <h2>Контроль прогона</h2>
-    <span class="muted">версии запросов: {_esc(', '.join(report.summary.prompt_versions.values()) or 'нет')}</span>
-  </div>
-  <div class="grid-three">
+<details class="section diagnostics">
+  <summary>Диагностика прогона — шаги, стоимость, покрытие ТЗ, версии запросов</summary>
+  <div class="diagnostics-body">
+    <div class="muted">версии запросов: {_esc(', '.join(report.summary.prompt_versions.values()) or 'нет')}</div>
+    <div class="grid-three">
     <div class="panel">
       <label>Стоимость и кэш</label>
       {usage_markup}
@@ -751,80 +782,40 @@ def _render_observability(report: AuditReport) -> str:
       {_render_requirement_status(report)}
     </div>
   </div>
-</section>
-"""
-
-
-def _render_report_map(report: AuditReport) -> str:
-    """Показывает основные срезы отчёта в одном компактном блоке."""
-
-    cases = _case_findings(report)
-    by_severity = Counter(finding.severity.value for finding in cases)
-    severity_values = {item.value: by_severity.get(item.value, 0) for item in Severity}
-    by_branch = Counter(finding.branch or "без ветки" for finding in cases)
-    by_unit = Counter(finding.unit_id for finding in cases)
-    unit_labels = {unit.unit_id: f"{unit.name} · {unit.unit_id}" for unit in report.units}
-    return f"""
-<section class="section">
-  <div class="section-head">
-    <h2>Карта отчёта</h2>
-    <span class="muted">модель: {'включена' if report.summary.model_used else 'выключена'} · сеть: {'использовалась' if report.summary.network_used else 'не использовалась'} · единиц с случаями: {len(by_unit)}</span>
   </div>
-  <div class="metric-map">
-    <div class="panel criteria-panel">
-      <label>Критерии и сообщения</label>
-      {_render_criterion_filters(report)}
-    </div>
-    <div class="panel">
-      <label>Критичность</label>
-      {_bars(severity_values, {item.value: SEVERITY_LABELS[item] for item in Severity}, sort_by_count=False)}
-    </div>
-    <div class="panel">
-      <label>Ветки</label>
-      {_bars(dict(by_branch), {})}
-    </div>
-    <div class="panel">
-      <label>Единицы</label>
-      {_bars(dict(by_unit), unit_labels)}
-    </div>
-  </div>
-</section>
+</details>
 """
 
 
 def _render_criterion_filters(report: AuditReport) -> str:
-    """Рисует кликабельные критерии, которые фильтруют таблицу."""
+    """Рисует компактные чипы критериев, которые фильтруют таблицу."""
 
     cases = _case_findings(report)
     by_criterion = Counter(finding.criterion.value for finding in cases)
     buttons = [
         f"""
 <button type="button" class="criterion-filter is-active" data-criterion-filter="all" data-criterion-label="все">
-  <span class="criterion-top">
-    <span class="criterion-name">Все критерии</span>
-    <span class="criterion-count">{len(cases)}</span>
-  </span>
-  <span class="criterion-meta">показывает все строки таблицы с учётом галочек ниже</span>
-  <span class="criterion-message">Выберите конкретный критерий, чтобы оставить в таблице только его сообщения.</span>
+  <span>Все</span><span class="criterion-count">{len(cases)}</span>
 </button>
 """
     ]
     for criterion in Criterion:
-        criterion_cases = [finding for finding in cases if finding.criterion == criterion]
         count = by_criterion.get(criterion.value, 0)
+        empty_class = " is-empty" if count == 0 else ""
         buttons.append(
             f"""
-<button type="button" class="criterion-filter" data-criterion-filter="{criterion.value}" data-criterion-label="{_esc(CRITERION_LABELS[criterion])}">
-  <span class="criterion-top">
-    <span class="criterion-name">{_esc(CRITERION_LABELS[criterion])}</span>
-    <span class="criterion-count">{count}</span>
-  </span>
-  <span class="criterion-meta">{_esc(_criterion_severity_summary(criterion_cases))}</span>
-  <span class="criterion-message">{_esc(_criterion_message_preview(criterion_cases))}</span>
+<button type="button" class="criterion-filter{empty_class}" data-criterion-filter="{criterion.value}" data-criterion-label="{_esc(CRITERION_LABELS[criterion])}" title="{_esc(CRITERION_LABELS[criterion])}">
+  <span>{_esc(_criterion_short_label(criterion))}</span><span class="criterion-count">{count}</span>
 </button>
 """
         )
-    return f'<div class="criteria-grid">{"".join(buttons)}</div>'
+    return f"""
+<section class="criteria-strip">
+  <div class="criteria-title">Критерий — фильтр таблицы</div>
+  <div class="criteria-hint">Нажмите критерий, чтобы оставить в таблице только связанные с ним сообщения.</div>
+  <div class="criteria-chips">{"".join(buttons)}</div>
+</section>
+"""
 
 
 def _render_requirement_status(report: AuditReport) -> str:
@@ -845,39 +836,31 @@ def _render_requirement_status(report: AuditReport) -> str:
     return _metric_rows(rows)
 
 
-def _criterion_severity_summary(findings: list[Finding]) -> str:
-    """Кратко показывает критичность внутри одного критерия."""
+def _severity_chip(severity: Severity, count: int) -> str:
+    """Рисует компактный счётчик критичности в общей сводке."""
 
-    if not findings:
-        return "нет найденных случаев"
-    counts = Counter(finding.severity for finding in findings)
-    parts = [f"{SEVERITY_LABELS[severity]}: {counts[severity]}" for severity in Severity if counts.get(severity)]
-    return " · ".join(parts)
-
-
-def _criterion_message_preview(findings: list[Finding]) -> str:
-    """Берёт первое понятное сообщение, чтобы связать критерий со строками таблицы."""
-
-    if not findings:
-        return "По этому критерию нет строк с замечаниями."
-    finding = sorted(findings, key=lambda item: _severity_rank(item.severity), reverse=True)[0]
-    if finding.evidence:
-        message = f"{finding.evidence[0].title}: {finding.evidence[0].detail}"
-    else:
-        message = finding.recommendation
-    return _truncate(message, 150)
+    return (
+        f'<span class="severity-chip severity-chip-{severity.value}">'
+        f'{count} {_esc(SEVERITY_LABELS[severity].lower())}</span>'
+    )
 
 
-def _severity_rank(severity: Severity) -> int:
-    """Сортирует критичность от высокой к низкой."""
+def _criterion_short_label(criterion: Criterion) -> str:
+    """Короткие подписи нужны, чтобы фильтры помещались в одну строку."""
 
-    order = {
-        Severity.INFO: 0,
-        Severity.MINOR: 1,
-        Severity.MAJOR: 2,
-        Severity.CRITICAL: 3,
+    labels = {
+        Criterion.ACTUALITY: "Актуальность",
+        Criterion.MARKET_FIT: "Рынок",
+        Criterion.RIGHTS: "Права",
+        Criterion.CORRECTNESS: "Точность",
+        Criterion.READABILITY: "Грамотность",
+        Criterion.CHECKLIST_ALIGNMENT: "Чек-лист",
+        Criterion.WORKLOAD: "Трудоёмкость",
+        Criterion.EXAM: "Экзамен",
+        Criterion.LANGUAGE: "Язык",
+        Criterion.IMAGE_QUALITY: "Изображения",
     }
-    return order[severity]
+    return labels[criterion]
 
 
 def _render_findings_table(findings: list[Finding]) -> str:
@@ -1024,6 +1007,9 @@ function updateAllowlistVisibility() {
 if (checkLinks) checkLinks.addEventListener("change", updateAllowlistVisibility);
 updateAllowlistVisibility();
 
+const diagnostics = document.querySelector(".diagnostics");
+if (diagnostics) diagnostics.removeAttribute("open");
+
 const table = document.getElementById("findings-table");
 const hideUnknown = document.getElementById("flt-hide-unknown");
 const showPass = document.getElementById("flt-show-pass");
@@ -1093,13 +1079,6 @@ def _metric_rows(rows: list[tuple[str, object]]) -> str:
     )
 
 
-def _stat(label: str, value: object, detail: str = "") -> str:
-    """Рисует счётчик."""
-
-    detail_markup = f'<div class="stat-detail">{_esc(detail)}</div>' if detail else ""
-    return f'<div class="stat"><div class="stat-value">{_esc(str(value))}</div><div class="stat-label">{_esc(label)}</div>{detail_markup}</div>'
-
-
 def _bars(values: dict[str, int | float], labels: dict[str, str], sort_by_count: bool = True) -> str:
     """Рисует горизонтальные полосы распределения."""
 
@@ -1132,15 +1111,6 @@ def _esc(value: str) -> str:
     """Экранирует текст для HTML."""
 
     return html.escape(unquote(value), quote=True)
-
-
-def _truncate(value: str, limit: int) -> str:
-    """Обрезает длинные подписи без разрыва разметки."""
-
-    compact = " ".join(str(value).split())
-    if len(compact) <= limit:
-        return compact
-    return compact[: max(0, limit - 1)].rstrip() + "…"
 
 
 def _parse_allowlist(value: str) -> list[str]:

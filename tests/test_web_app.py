@@ -16,6 +16,10 @@ def test_render_page_contains_project_input(workspace_tmp_path: Path) -> None:
     assert "Проверять внешние ссылки" not in html
     assert 'name="use_model"' not in html
     assert 'name="check_links"' not in html
+    assert 'name="model_name"' not in html
+    assert "Общая оценка" in html
+    assert "Техническая актуальность" in html
+    assert "Факты и источники" in html
 
 
 def test_render_page_has_no_demo_project_by_default(workspace_tmp_path: Path) -> None:
@@ -64,7 +68,7 @@ def test_render_page_contains_extended_report_columns(workspace_tmp_path: Path) 
     assert "Критерий — фильтр таблицы" in html
     assert "Диагностика прогона" in html
     assert "Покрытие ТЗ" in html
-    assert "Модельные проверки не выполнялись" in html
+    assert "Свежих вызовов моделей нет" in html
     assert "случаев" in html
     assert 'data-criterion-filter="all"' in html
     assert 'data-criterion-filter="actuality"' in html
@@ -126,9 +130,21 @@ def test_run_from_form_always_enables_models_and_network(workspace_tmp_path: Pat
             )
 
     monkeypatch.setattr("content_audit.web_app.AuditRunner", _FakeRunner)
-    state = WebState(default_input=None, report_dir=workspace_tmp_path / "reports", env_values={"OPENROUTER_API_KEY": "key"})
+    state = WebState(
+        default_input=None,
+        report_dir=workspace_tmp_path / "reports",
+        env_values={
+            "OPENROUTER_API_KEY": "key",
+            "OPENROUTER_MODEL": "openai/general",
+            "OPENROUTER_TECH_MODEL": "qwen/tech",
+            "OPENROUTER_FACT_MODEL": "perplexity/facts",
+        },
+    )
 
-    run_from_form({"input_path": str(project)}, state)
+    run_from_form({"input_path": str(project), "model_name": "perplexity/sonar"}, state)
 
     assert captured["settings"].use_model is True
     assert captured["settings"].allow_network is True
+    assert captured["settings"].openrouter_model == "openai/general"
+    assert captured["settings"].openrouter_tech_model == "qwen/tech"
+    assert captured["settings"].openrouter_fact_model == "perplexity/facts"

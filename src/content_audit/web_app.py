@@ -160,7 +160,7 @@ def run_from_form(form: dict[str, str], state: WebState) -> AuditReport:
     if not raw_input:
         raise ValueError("Укажите путь к проекту.")
     input_path = Path(raw_input).expanduser().resolve()
-    model_name = form.get("model_name") or get_env_value(("OPENROUTER_MODEL", "OPEN_ROUTER_MODEL"), state.env_values) or DEFAULT_MODEL
+    model_name = get_env_value(("OPENROUTER_MODEL", "OPEN_ROUTER_MODEL"), state.env_values) or DEFAULT_MODEL
     fact_model_name = get_env_value(("OPENROUTER_FACT_MODEL", "OPEN_ROUTER_FACT_MODEL"), state.env_values) or DEFAULT_FACT_MODEL
     tech_model_name = get_env_value(("OPENROUTER_TECH_MODEL", "OPEN_ROUTER_TECH_MODEL"), state.env_values) or DEFAULT_TECH_MODEL
     api_key = get_env_value(("OPENROUTER_API_KEY", "OPEN_ROUTER_API_KEY"), state.env_values)
@@ -200,10 +200,10 @@ def render_page(report: AuditReport | None, state: WebState, form_values: dict[s
 
     form = form_values or {}
     input_value = form.get("input_path") or (report.summary.input_path if report else str(state.default_input or ""))
-    model_name = form.get("model_name") or get_env_value(("OPENROUTER_MODEL", "OPEN_ROUTER_MODEL"), state.env_values) or DEFAULT_MODEL
     manifest_path = form.get("manifest_path") or ""
     admin_url_template = form.get("admin_url_template") or ""
     link_allowlist = form.get("link_allowlist") or ""
+    model_routes = _model_routes(state)
     body = "\n".join(
         [
             _render_topbar(),
@@ -211,10 +211,10 @@ def render_page(report: AuditReport | None, state: WebState, form_values: dict[s
             _render_run_panel(
                 report,
                 input_value,
-                model_name,
                 manifest_path,
                 admin_url_template,
                 link_allowlist,
+                model_routes,
                 state,
             ),
             _render_error(state.last_error),
@@ -306,7 +306,7 @@ body {
 .panel-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 18px; margin-bottom: 18px; }
 h1 { margin: 0; font-size: 24px; line-height: 1.15; letter-spacing: 0; }
 .muted { color: var(--muted); font-size: 13px; margin: 6px 0 0; }
-.form-grid { display: grid; grid-template-columns: minmax(0, 1fr) 210px 138px; gap: 12px; align-items: end; }
+.form-grid { display: grid; grid-template-columns: minmax(0, 1fr) 138px; gap: 12px; align-items: end; }
 .form-grid-extra { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 260px; margin-top: 12px; }
 label { display: block; font-size: 12px; color: var(--muted); font-weight: 800; letter-spacing: 0; margin-bottom: 7px; }
 input[type="text"], select {
@@ -499,6 +499,20 @@ tr:last-child td { border-bottom: 0; }
 .advanced-run { margin-top: 14px; }
 .advanced-run > summary { color: var(--info); cursor: pointer; font-size: 13px; font-weight: 900; }
 .advanced-run[open] > summary { margin-bottom: 12px; }
+.model-routes {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.model-route {
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  background: var(--surface-strong);
+}
+.model-route-name { color: var(--muted); font-size: 12px; font-weight: 900; }
+.model-route-value { margin-top: 4px; font: 700 12px var(--font-mono); overflow-wrap: anywhere; }
 .filter-note {
   display: inline-flex; align-items: center; border-radius: 999px;
   padding: 5px 10px; font-size: 12px; font-weight: 800;
@@ -536,7 +550,7 @@ table.findings.hide-unknown tr[data-verdict="unknown"] { display: none; }
 .diagnostics > summary::-webkit-details-marker { display: none; }
 .diagnostics-body { padding: 0 18px 18px; }
 @media (max-width: 980px) {
-  .form-grid, .grid-three { grid-template-columns: 1fr; }
+  .form-grid, .form-grid-extra, .grid-three, .model-routes { grid-template-columns: 1fr; }
   .summary-strip { align-items: flex-start; flex-direction: column; }
   .severity-inline { justify-content: flex-start; }
   .panel-head { display: block; }
@@ -571,10 +585,10 @@ def _render_topbar() -> str:
 def _render_run_panel(
     report: AuditReport | None,
     input_value: str,
-    model_name: str,
     manifest_path: str,
     admin_url_template: str,
     link_allowlist: str,
+    model_routes: dict[str, str],
     state: WebState,
 ) -> str:
     """Возвращает форму запуска, свёрнутую после построения отчёта."""
@@ -587,7 +601,7 @@ def _render_run_panel(
 <section class="run-panel">
   <details class="run-details"{open_attr}>
     <summary class="run-bar">
-      <span class="run-bar-text">{_esc(_run_bar_text(report, input_value, model_name))}</span>
+      <span class="run-bar-text">{_esc(_run_bar_text(report, input_value))}</span>
       <span class="run-bar-actions">
         {restart_button}
         <span class="link-button">{_esc(key_note)}</span>
@@ -605,10 +619,6 @@ def _render_run_panel(
         <div>
           <label for="input_path">Путь к проекту</label>
           <input id="input_path" name="input_path" type="text" value="{_esc(input_value)}" spellcheck="false">
-        </div>
-        <div>
-          <label for="model_name">Модель</label>
-          <select id="model_name" name="model_name">{_model_options(model_name)}</select>
         </div>
         <button class="button" type="submit">Запустить</button>
       </div>
@@ -628,6 +638,7 @@ def _render_run_panel(
             <input id="link_allowlist" name="link_allowlist" type="text" value="{_esc(link_allowlist)}" spellcheck="false">
           </div>
         </div>
+        {_render_model_routes(model_routes)}
       </details>
     </form>
   </details>
@@ -635,26 +646,39 @@ def _render_run_panel(
 """
 
 
-def _run_bar_text(report: AuditReport | None, input_value: str, model_name: str) -> str:
+def _run_bar_text(report: AuditReport | None, input_value: str) -> str:
     """Короткая строка-шапка для свёрнутого блока запуска."""
 
     if report is None:
         return "Проверка локального проекта"
     project = Path(report.summary.input_path).name or Path(input_value).name or input_value
     cases = sum(1 for finding in report.findings if finding.verdict != Verdict.PASS)
-    return f"{project} · {model_name} · {cases} случаев"
+    return f"{project} · {cases} случаев"
 
 
-def _model_options(selected_model: str) -> str:
-    """Рисует варианты модели без риска опечатки в частых сценариях."""
+def _model_routes(state: WebState) -> dict[str, str]:
+    """Возвращает модели по ролям проверки."""
 
-    options = [DEFAULT_MODEL, DEFAULT_TECH_MODEL, DEFAULT_FACT_MODEL]
-    if selected_model and selected_model not in options:
-        options.insert(0, selected_model)
-    return "\n".join(
-        f'<option value="{_esc(model)}"{" selected" if model == selected_model else ""}>{_esc(model)}</option>'
-        for model in options
+    return {
+        "Общая оценка": get_env_value(("OPENROUTER_MODEL", "OPEN_ROUTER_MODEL"), state.env_values) or DEFAULT_MODEL,
+        "Техническая актуальность": get_env_value(("OPENROUTER_TECH_MODEL", "OPEN_ROUTER_TECH_MODEL"), state.env_values) or DEFAULT_TECH_MODEL,
+        "Факты и источники": get_env_value(("OPENROUTER_FACT_MODEL", "OPEN_ROUTER_FACT_MODEL"), state.env_values) or DEFAULT_FACT_MODEL,
+    }
+
+
+def _render_model_routes(routes: dict[str, str]) -> str:
+    """Показывает роли моделей без выбора между разными задачами."""
+
+    items = "\n".join(
+        f"""
+<div class="model-route">
+  <div class="model-route-name">{_esc(name)}</div>
+  <div class="model-route-value">{_esc(model)}</div>
+</div>
+"""
+        for name, model in routes.items()
     )
+    return f'<div class="model-routes">{items}</div>'
 
 
 def _render_error(error: str | None) -> str:
@@ -749,7 +773,7 @@ def _render_observability(report: AuditReport) -> str:
     usage_markup = (
         _bars(usage_rows, {})
         if any(value for value in usage_rows.values())
-        else '<div class="metric-empty">Модельные проверки не выполнялись.</div>'
+        else '<div class="metric-empty">Свежих вызовов моделей нет.</div>'
     )
     return f"""
 <details class="section diagnostics">

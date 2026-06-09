@@ -571,7 +571,6 @@ def _render_run_panel(
     <div class="panel-head">
       <div>
         <h1>Проверка локального проекта</h1>
-        <p class="muted">Укажите папку проекта и запустите полный аудит.</p>
       </div>
     </div>
     <form id="run-form" method="post" action="/run">

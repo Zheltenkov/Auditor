@@ -74,7 +74,6 @@ TECH_KEYWORDS = {
     "gitlab",
     "gnu",
     "java",
-    "makefile",
     "node",
     "node.js",
     "pcre2",
@@ -82,6 +81,10 @@ TECH_KEYWORDS = {
     "python",
     "ubuntu",
 }
+
+TRUSTED_REDIRECT_HOST_GROUPS = (
+    frozenset({"opros.so", "oprosso.ru", "oprosso.net", "new.oprosso.net"}),
+)
 
 FACT_MARKER_RE = re.compile(
     r"\b("
@@ -1267,6 +1270,8 @@ verdict='unknown' ставь, если источников недостаточ
             item = _first_result_item(record.get("response"))
             if item is None:
                 continue
+            if _is_uninformative_technology_item(item):
+                continue
             findings.append(_finding_from_technology_item(unit, self.name, entity, item, record, cache_hit, self.prompt_version))
         return findings
 
@@ -1657,11 +1662,19 @@ def _redirect_smells_like_rot(original_url: str, final_url: str | None) -> bool:
     final = urlparse(final_url)
     original_host = (original.hostname or "").lower().removeprefix("www.")
     final_host = (final.hostname or "").lower().removeprefix("www.")
+    if _same_trusted_redirect_family(original_host, final_host) and (final.path or "/") not in {"", "/"}:
+        return False
     if original_host and final_host and original_host != final_host:
         return True
     original_path = original.path or "/"
     final_path = final.path or "/"
     return original_path not in {"", "/"} and final_path in {"", "/"}
+
+
+def _same_trusted_redirect_family(original_host: str, final_host: str) -> bool:
+    """Разрешаем известные пары коротких ссылок и основных доменов платформ."""
+
+    return any(original_host in group and final_host in group for group in TRUSTED_REDIRECT_HOST_GROUPS)
 
 
 def _url_policy_error(url: str) -> str | None:
@@ -2324,6 +2337,27 @@ def _finding_from_technology_item(
         recommended_version=_optional_model_text(item.get("recommended_version")),
         prompt_version=prompt_version,
     )
+
+
+def _is_uninformative_technology_item(item: dict[str, Any]) -> bool:
+    """Отбрасываем пустой unknown от модели, чтобы не плодить строки без основания."""
+
+    verdict = _verdict_from_model_value(item.get("verdict"), Verdict.UNKNOWN)
+    if verdict != Verdict.UNKNOWN:
+        return False
+    if _sources_from_item(item):
+        return False
+    informative_keys = (
+        "evidence",
+        "reason",
+        "explanation",
+        "recommendation",
+        "support_status",
+        "status",
+        "latest_version",
+        "recommended_version",
+    )
+    return not any(_optional_model_text(item.get(key)) for key in informative_keys)
 
 
 def _external_check_error(unit: ContentUnit, checker_name: str, criterion: Criterion, exc: OpenRouterError) -> Finding:

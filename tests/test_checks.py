@@ -140,6 +140,37 @@ def test_technology_checker_creates_actuality_candidate(workspace_tmp_path: Path
     assert any(finding.criterion == Criterion.ACTUALITY for finding in findings)
 
 
+def test_technology_checker_ignores_makefile_target_instruction(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "check-list.yml").write_text(
+        "- The program is built with Makefile with target s21_cat.\n",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+    entities = extract_entities(unit)
+
+    findings = TechnologyFreshnessChecker().check(unit, entities, CheckContext(_settings(workspace_tmp_path, project)))
+
+    assert findings == []
+
+
+def test_technology_checker_skips_unknown_without_evidence(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text("Use Alpine 3.20.\n", encoding="utf-8")
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+    entities = extract_entities(unit)
+    context = CheckContext(
+        _settings(workspace_tmp_path, project),
+        tech_model_client=_FakeJsonClient({"verdict": "unknown", "severity": "info"}),
+    )
+
+    findings = TechnologyFreshnessChecker().check(unit, entities, context)
+
+    assert findings == []
+
+
 def test_market_fit_checker_passes_when_all_business_signals_exist(workspace_tmp_path: Path) -> None:
     project = workspace_tmp_path / "unit"
     project.mkdir()
@@ -434,3 +465,21 @@ def test_link_checker_does_not_make_first_404_critical(workspace_tmp_path: Path,
 
     assert findings[0].severity == Severity.MAJOR
     assert findings[0].verdict == Verdict.FAIL
+
+
+def test_link_checker_accepts_oprosso_short_link_redirect(workspace_tmp_path: Path, monkeypatch) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text("[survey](http://opros.so/kAnXy)\n", encoding="utf-8")
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+    entities = extract_entities(unit)
+    settings = _settings(workspace_tmp_path, project).model_copy(update={"allow_network": True})
+    monkeypatch.setattr(
+        checks_module,
+        "_check_url",
+        lambda *_args: (200, "https://oprosso.ru/p/4cb31ec3f47a4596bc758ea1861fb624", None),
+    )
+
+    findings = LinkChecker().check(unit, entities, CheckContext(settings))
+
+    assert findings == []

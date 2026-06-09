@@ -9,10 +9,11 @@ from pathlib import Path
 from content_audit.domain import CRITERION_LABELS, SEVERITY_LABELS, VERDICT_LABELS, AuditReport, Verdict
 
 
-def write_report(report: AuditReport, output_path: Path, include_pass: bool = False) -> None:
+def write_report(report: AuditReport, output_path: Path) -> None:
     """Записываем полный отчёт, таблицу для методологов и краткую сводку."""
 
     output_path.mkdir(parents=True, exist_ok=True)
+    report = _without_pass_findings(report)
     (output_path / "report.json").write_text(
         json.dumps(report.model_dump(mode="json"), ensure_ascii=False, indent=2),
         encoding="utf-8",
@@ -21,17 +22,24 @@ def write_report(report: AuditReport, output_path: Path, include_pass: bool = Fa
         json.dumps(report.summary.model_dump(mode="json"), ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
-    _write_csv(report, output_path / "report.csv", include_pass=include_pass)
+    _write_csv(report, output_path / "report.csv")
 
 
-def _write_csv(report: AuditReport, path: Path, include_pass: bool) -> None:
+def _without_pass_findings(report: AuditReport) -> AuditReport:
+    """Защищает выгрузки от успешных строк даже при ручной сборке отчёта."""
+
+    findings = [finding for finding in report.findings if finding.verdict != Verdict.PASS]
+    if len(findings) == len(report.findings):
+        return report
+    return report.model_copy(update={"findings": findings})
+
+
+def _write_csv(report: AuditReport, path: Path) -> None:
     """Формируем таблицу результата в виде, близком к ТЗ."""
 
     unit_by_id = {unit.unit_id: unit for unit in report.units}
     rows = []
     for finding in report.findings:
-        if finding.verdict == Verdict.PASS and not include_pass:
-            continue
         unit = unit_by_id.get(finding.unit_id)
         evidence = " | ".join(f"{item.title}: {item.detail}" for item in finding.evidence)
         rows.append(

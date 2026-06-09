@@ -44,7 +44,6 @@ def main(argv: list[str] | None = None) -> int:
         allow_network=not args.skip_network,
         use_model=args.use_model,
         include_unknown=not args.hide_unknown,
-        include_pass=args.include_pass,
         max_file_bytes=args.max_file_bytes,
         link_timeout_seconds=args.link_timeout,
         min_image_width=args.min_image_width,
@@ -56,7 +55,7 @@ def main(argv: list[str] | None = None) -> int:
     )
 
     report = AuditRunner(settings).run()
-    write_report(report, settings.output_path, include_pass=args.include_pass)
+    write_report(report, settings.output_path)
     if args.gold:
         write_evaluation(report, args.gold.expanduser().resolve(), settings.output_path / "evaluation.json")
     _print_summary(report.summary, settings.output_path)
@@ -87,7 +86,6 @@ def _build_parser() -> argparse.ArgumentParser:
         help=f"Модель OpenRouter для проверки актуальности технологий. По умолчанию: {DEFAULT_OPENROUTER_TECH_MODEL}.",
     )
     parser.add_argument("--hide-unknown", action="store_true", help="Не включать случаи с вердиктом 'нужна проверка'.")
-    parser.add_argument("--include-pass", action="store_true", help="Включать положительные проверки в CSV.")
     parser.add_argument("--max-file-bytes", type=int, default=2_000_000, help="Максимальный размер текстового файла.")
     parser.add_argument("--link-timeout", type=float, default=8.0, help="Таймаут проверки ссылки в секундах.")
     parser.add_argument("--min-image-width", type=int, default=640, help="Минимальная ширина изображения.")

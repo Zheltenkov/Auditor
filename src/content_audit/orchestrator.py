@@ -95,9 +95,9 @@ class AuditRunner:
         return OpenRouterClient(api_key=self.settings.openrouter_api_key or "", model=model_name or fallback_model)
 
     def _filter_findings(self, findings: list[Finding]) -> list[Finding]:
-        """Убираем положительные и неизвестные случаи, если пользователь это запросил."""
+        """Убираем успешные и, при необходимости, неизвестные случаи."""
 
-        result = findings if self.settings.include_pass else [finding for finding in findings if finding.verdict != Verdict.PASS]
+        result = [finding for finding in findings if finding.verdict != Verdict.PASS]
         if self.settings.include_unknown:
             return result
         return [finding for finding in result if finding.verdict != Verdict.UNKNOWN]

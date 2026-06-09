@@ -90,7 +90,6 @@ class AuditSettings(BaseModel):
     allow_network: bool = False
     use_model: bool = False
     include_unknown: bool = True
-    include_pass: bool = False
     max_file_bytes: int = 2_000_000
     link_timeout_seconds: float = 8.0
     min_image_width: int = 640

@@ -77,15 +77,15 @@ def test_render_page_contains_extended_report_columns(workspace_tmp_path: Path) 
     assert summary_block.index("major") < summary_block.index("minor")
     assert summary_block.index("minor") < summary_block.index("info")
     assert 'id="flt-hide-unknown"' in html
-    assert 'id="flt-show-pass"' in html
     assert 'name="hide_unknown"' not in html
-    assert 'name="include_pass"' not in html
     assert 'data-verdict="unknown"' in html
-    assert 'class="findings hide-pass"' in html
+    assert 'class="findings"' in html
+    assert "Показывать успешные" not in html
+    assert "успешных" not in html
     assert "Перезапустить" in html
 
 
-def test_run_from_form_stores_pass_findings_but_csv_hides_them(workspace_tmp_path: Path) -> None:
+def test_run_from_form_excludes_pass_findings_from_report(workspace_tmp_path: Path) -> None:
     project = workspace_tmp_path / "unit"
     project.mkdir()
     (project / "README.md").write_text("## Part 1. Работа с cat\n", encoding="utf-8")
@@ -103,9 +103,9 @@ def test_run_from_form_stores_pass_findings_but_csv_hides_them(workspace_tmp_pat
     persisted = load_latest_report(report_dir)
     csv_text = (report_dir / "report.csv").read_text(encoding="utf-8-sig")
 
-    assert any(finding.verdict == Verdict.PASS for finding in report.findings)
+    assert all(finding.verdict != Verdict.PASS for finding in report.findings)
     assert persisted is not None
-    assert any(finding.verdict == Verdict.PASS for finding in persisted.findings)
+    assert all(finding.verdict != Verdict.PASS for finding in persisted.findings)
     assert "Проверено" not in csv_text
 
 

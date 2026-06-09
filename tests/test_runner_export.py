@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from content_audit.domain import AuditSettings
+from content_audit.domain import AuditReport, AuditSettings, Criterion, Finding, RunSummary, Severity, Verdict
 from content_audit.exporters import write_report
 from content_audit.orchestrator import AuditRunner
 
@@ -36,3 +36,30 @@ def test_runner_writes_reports(workspace_tmp_path: Path) -> None:
     assert "Статус поддержки" in csv_text
     assert "Последняя версия" in csv_text
     assert "Рекомендуемая версия" in csv_text
+
+
+def test_exporter_does_not_write_pass_findings(workspace_tmp_path: Path) -> None:
+    output = workspace_tmp_path / "reports"
+    report = AuditReport(
+        summary=RunSummary(started_at="2026-06-08T00:00:00+00:00", input_path=str(workspace_tmp_path)),
+        units=[],
+        entities=[],
+        findings=[
+            Finding(
+                finding_id="pass",
+                unit_id="unit",
+                branch=None,
+                criterion=Criterion.CHECKLIST_ALIGNMENT,
+                severity=Severity.INFO,
+                verdict=Verdict.PASS,
+                confidence=0.9,
+                recommendation="Ничего не делать.",
+                checker_name="checklist_checker",
+            )
+        ],
+    )
+
+    write_report(report, output)
+
+    assert "Проверено" not in (output / "report.csv").read_text(encoding="utf-8-sig")
+    assert '"findings": []' in (output / "report.json").read_text(encoding="utf-8")

@@ -23,7 +23,6 @@ from content_audit.domain import (
     Criterion,
     Finding,
     Severity,
-    Verdict,
 )
 from content_audit.env import get_env_value, load_env_file
 from content_audit.exporters import write_report
@@ -170,14 +169,13 @@ def run_from_form(form: dict[str, str], state: WebState) -> AuditReport:
         allow_network=True,
         use_model=True,
         include_unknown=True,
-        include_pass=True,
         openrouter_api_key=api_key,
         openrouter_model=model_name,
         openrouter_fact_model=fact_model_name,
         openrouter_tech_model=tech_model_name,
     )
     report = AuditRunner(settings).run()
-    write_report(report, state.report_dir, include_pass=False)
+    write_report(report, state.report_dir)
     return report
 
 
@@ -499,7 +497,6 @@ tr:last-child td { border-bottom: 0; }
   color: var(--accent-deep); background: var(--accent-soft);
   font-size: 12px; font-weight: 900;
 }
-table.findings.hide-pass tr[data-verdict="pass"] { display: none; }
 table.findings.hide-unknown tr[data-verdict="unknown"] { display: none; }
 .diagnostics {
   background: var(--surface);
@@ -593,7 +590,7 @@ def _run_bar_text(report: AuditReport | None, input_value: str) -> str:
     if report is None:
         return "Проверка локального проекта"
     project = Path(report.summary.input_path).name or Path(input_value).name or input_value
-    cases = sum(1 for finding in report.findings if finding.verdict != Verdict.PASS)
+    cases = len(report.findings)
     return f"{project} · {cases} случаев"
 
 
@@ -639,7 +636,6 @@ def _render_filter_bar() -> str:
   <span class="filter-bar-label">Фильтры таблицы</span>
   <span class="filter-chip" id="active-criterion-label">Критерий: все</span>
   <label class="check"><input type="checkbox" id="flt-hide-unknown"> Скрыть «нужна проверка»</label>
-  <label class="check"><input type="checkbox" id="flt-show-pass"> Показывать успешные</label>
   <span class="filter-note" id="filter-result-count">видно: 0</span>
   <span class="filter-note">мгновенно, без перезапуска</span>
 </section>
@@ -647,9 +643,9 @@ def _render_filter_bar() -> str:
 
 
 def _case_findings(report: AuditReport) -> list[Finding]:
-    """Для экранных счётчиков случаем считаем всё, кроме успешных проверок."""
+    """Возвращает строки, требующие внимания аудитора."""
 
-    return [finding for finding in report.findings if finding.verdict != Verdict.PASS]
+    return list(report.findings)
 
 
 def _render_summary(report: AuditReport) -> str:
@@ -658,12 +654,11 @@ def _render_summary(report: AuditReport) -> str:
     summary = report.summary
     cases = _case_findings(report)
     by_severity = Counter(finding.severity.value for finding in cases)
-    passed = sum(1 for finding in report.findings if finding.verdict == Verdict.PASS)
     return f"""
 <section id="summary" class="summary-strip">
   <div class="summary-main">
     <span class="summary-number">{len(cases)}</span>
-    <span class="summary-text">случаев · {summary.files_total} файлов · {passed} успешных</span>
+    <span class="summary-text">случаев · {summary.files_total} файлов</span>
   </div>
   <div class="severity-inline">
     {_severity_chip(Severity.CRITICAL, by_severity.get(Severity.CRITICAL.value, 0))}
@@ -805,7 +800,7 @@ def _render_findings_table(findings: list[Finding]) -> str:
     <span class="muted">одна строка — один найденный случай</span>
   </div>
   <div class="table-wrap">
-    <table id="findings-table" class="findings hide-pass">
+    <table id="findings-table" class="findings">
       <colgroup>
         <col class="col-criterion">
         <col class="col-verdict">
@@ -931,7 +926,6 @@ if (diagnostics) diagnostics.removeAttribute("open");
 
 const table = document.getElementById("findings-table");
 const hideUnknown = document.getElementById("flt-hide-unknown");
-const showPass = document.getElementById("flt-show-pass");
 const criterionButtons = document.querySelectorAll("[data-criterion-filter]");
 const activeCriterionLabel = document.getElementById("active-criterion-label");
 const resultCount = document.getElementById("filter-result-count");
@@ -952,7 +946,6 @@ function updateEmptyState() {
 function applyFilters() {
   if (!table) return;
   table.classList.toggle("hide-unknown", !!(hideUnknown && hideUnknown.checked));
-  table.classList.toggle("hide-pass", !(showPass && showPass.checked));
   const rows = table.querySelectorAll("tbody tr.frow");
   rows.forEach((row) => {
     const byCriterion = activeCriterion === "all" || row.dataset.criterion === activeCriterion;
@@ -976,7 +969,6 @@ criterionButtons.forEach((button) => {
 });
 
 if (hideUnknown) hideUnknown.addEventListener("change", applyFilters);
-if (showPass) showPass.addEventListener("change", applyFilters);
 applyFilters();
 </script>
 """

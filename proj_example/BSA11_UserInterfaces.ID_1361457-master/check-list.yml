@@ -1,0 +1,299 @@
+introduction: >
+   - The School 21 methodology can lead to high eduse caseational results only if peer-to-peer assessment is done as responsibly as possible. Please read the instruse casetions carefully before starting the check.
+
+   - Be friendly and polite. Be respectful of the other person and the work they have done. Be construse casetive when giving feedback.
+
+   - When reviewing the work, notice for yourself any incorrect or possibly controversial moments. Discuss them with the author of the solution.
+
+   - Try to be open to a different opinion or way of interpreting the task. It is possible that both your approach and the approach of another may be correct.    
+  
+   - If you haven't finished the project yourself, be sure to read it completely before reviewing it.
+
+guidelines: >
+  - Evaluate only the files that are in the GIT repository of the student or group.
+
+  -	Start reviewing a group project only when all team members are present.
+
+  -	Use the special flags in the end of the checklist, for example, "EMPTY_WORK", if the repository does not contain the student's (or group's) work in the src directory of the develop branch, or "CHEAT" in the case of plagiarism or if the student (or anyone from the group being reviewed) cannot explain their decision at any time during the review. Also, the "CHEAT" flag is applicable if the following two points are not fulfilled. If one of the flags at the end of the checklist applies, the project will be considered a failure. However, except for a case of cheating, you are encouraged to continue reviewing the project and try to work with another student to figure out the problem that led to the failed solution.  
+  
+  -	Doublecheck that the GIT repository is the one corresponding to the student or the group. 
+  
+  -	Meticulously check that nothing malicious has been used to mislead you.
+  
+  -	In controversial cases, keep in mind that the checklist only defines the general order of the review. The final decision remains with the reviewer.
+
+quick_actions:
+  - EMPTY_WORK
+  - CHEAT
+
+language: en
+comment: ""
+name: BSA11_UserInterfaces
+sections:
+  - kind: "1"
+    name: Main part
+    description: ""
+    questions:
+      - name: Exercise 00 — Choosing the Form of Product Presentation
+        description: >-
+          For task 1, the form of product presentation is specified:
+
+          1. The device(s) on which the software product is supposed to be used is specified.
+
+          2. The type of the software product is specified.
+
+          3. The method(s) of managing the product is specified.
+
+          4. Localization need(s) are specified.
+
+          5. Presented in tabular form.
+
+        rating: "6"
+
+      - name: Exercise 01 — Screen Forms of Classifiers and References
+        description: >-
+          Screen forms of classifiers and references are described for task 1.
+
+          1. A list of classifiers and references is compiled, specifying:
+
+              a. the name of the classifier/reference;
+
+              b. related references and classifiers that are required to be populated.
+
+          2. Layouts (sketches) of classifiers/references screens are developed:
+
+              a. the name of the classifier/references is indicated;
+
+              b. the frame of the list form is specified. 
+
+              c. the frame of operations (main and additional) is specified;
+
+              d. calls of operations, transition and cancel operations are specified.
+
+          3. Main operations for classifiers and references are described:
+
+              a. access rights by roles to operations;
+
+              b. conditions of operations execution;
+
+              c. the result of the operation depending on the conditions:
+                - in a classifier;
+
+                - in other parts of the system.
+
+          4. Additional operations are described:
+
+              a. sorting, sort fields, default state;
+
+              b. filtering, filter fields, saving filters, messages when there is no result;
+
+              c. searching, search fields, match accuracy, messages when there is no result;
+
+              d. duplication from another record when adding (if any);
+
+              e. calculation of totals (if any).
+
+          5. Logging specified:
+
+              a. Operations requiring logging;
+
+              b. attributes stored during logging;
+
+              c. service fields requiring logging (date, time, user, other).
+
+          6. The results are presented in tabular form in several tables.
+
+        rating: "6"
+
+      - name: Exercise 02 — Data on the Screen Forms of Classifiers and References
+        description: >-
+          For task 1, the data on the screen forms of classifiers and references are described.
+
+          1. Fields on the list screen are specified:
+              1. short name of the field;
+
+              2. description;
+
+              3. presentation format:
+                  1. type;
+
+                  2. length (if text);
+
+                  3. mandatory or not;
+
+                  4. default value;
+
+                  5. visualization of fields in case of undefined values;
+
+                  6. method of visualization in case of fields exceeding the screen boundaries;
+
+                  7. selection from the classifier/reference;
+
+                  8. conditions/restrictions/checks;
+
+                  9. error/warning message.
+
+          2. The needs are described:
+              1. pagination (numbering of records);
+
+              2. calculation of sums (number of records / sum / average / etc.).
+
+              3. Checks and error messages for incorrect data entry.
+
+              4. The result is in tabular form.
+
+        rating: "6"
+
+      - name: Exercise 03 — Key Role Scenarios
+        description: >-
+          For Task 1, key main process scenarios are developed for each role:
+            - Manager
+
+            - Master
+
+            - Client
+
+          1. Main process task diagrams for each role are developed:
+
+              a. tasks are presented as rectangles;
+
+              b. movement through the main success scenario between tasks is presented by arrows.
+
+          2. Key scenarios to fulfill the main processes for each role are created:
+
+              a. screen forms are in rectangles;
+
+              b. each permissible movement opportunity is indicated as an arrow;
+
+              c. the arrows show the transition condition (action or transition to action) in a form clear enough for development;
+
+              d. exiting before the end of the process, without saving the results is provided;
+
+              e. The primary purpose of each screen is indicated.
+
+          3. Beginning and ending are indicated by appropriate elements.
+
+        rating: "6"
+
+      - name: Exercise 04 — List of Screen Forms
+        description: >-
+          For Task 1, the main process screens for the roles are described:
+            - Manager
+
+            - Master
+
+            - Client
+          
+          1. A list of screen forms is compiled, specifying:
+
+              a. screen identifier;
+
+              b. main purpose (main action) by role;
+
+              c. other actions of the role;
+
+              d. data required to perform the action;
+
+              e. the access right of each role to the data is represented in the screen.
+
+          2. Presented in tabular form.
+
+        rating: "6"
+
+      - name: Exercise 05 — Screen Forms
+        description: >-
+          For Task 1, for each screen form listed in Ex.04:
+          
+          1. Layouts (sketches) of the screen form are developed, specifying:
+
+              a. the name of the form;
+
+              b. the frame(s) of the main operation;
+
+              c. frame(s) of other operations;
+
+              d. calls of operations, transition and cancel operations;
+
+              e. data frames (list and card);
+
+              f. the role(s) of the users to whom the screen is accessible.
+
+          2. Main operations are described:
+
+              a. access rights by roles to the operation;
+
+              b. conditions of operations execution;
+
+              c. the result of the operation depending on the conditions:
+
+                - on the data in the current window,
+
+                - in other parts of the system. 
+
+          3. Additional operations are described:
+
+              a. sorting, sort fields, default state;
+
+              b. filtering, filter fields, saving filters, messages in case of no result;
+
+              c. searching, search fields, match accuracy, messages in case of no result;
+
+              d. duplication from another record when adding (if any);
+
+              e. calculation of totals (if any).
+
+          4. Logging is specified:
+
+              a.	operations requiring logging;
+
+              b.	attributes stored during logging;
+
+              c.	service fields requiring logging. 
+
+          5.Presented in tabular form.
+
+        rating: "6"
+
+      - name: Exercise 06 — Controls Description
+        description: >-
+          For Task 1, the controls for inputting and correcting on screen forms are described.
+          
+          1. For each sc reen form containing input/correction operations the following is specified:
+
+              a. screen identifier;
+
+              b. role(s);
+
+              c. the main purpose (main action) in the context of the role(s);
+
+              d. object (class) containing the data presented on the screen.
+
+          2. Controls for each object (class) are described:
+
+              a. pagination,
+
+              b. field name,
+
+              c. field mnemonic (if any),
+
+              d. description of the control,
+
+              e. error message in case of negative control completion,
+
+              f. result of the operation in case of negative control completion,
+
+              g. result of the operation in case of positive completion of the control.
+
+          3. The need for logging in case of negative control completion is specified.
+          
+          4. Logging parameters are specified:
+          
+              a. operations requiring logging;
+
+              b. attributes stored during logging;
+
+              c. service fields requiring logging.
+
+          5. Presented in tabular form.
+
+        rating: "6"

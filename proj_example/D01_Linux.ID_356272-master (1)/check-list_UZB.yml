@@ -1,0 +1,199 @@
+introduction: >
+  School 21 metodologiyasi qachonki tenga-teng tekshiruvlar jiddiy ravishda olib borilsagina o’z ma’nosiga ega bo’ladi. Iltimos tekshiruvni boshlashdan oldin barcha ko’rsatmalarni diqqat bilan o’qing. 
+
+  - Iltimos, tekshiruv davomida suhbatlashayotganda xushmuomala, muloyim bo’ling va bir biringizni xurmat qiling.
+
+  - Shaxs bajargan loyihaning mavjud bo’lgan kamchiliklarini ko’rsating va ularni muhokama qilishga vaqt ajrating.
+
+  - Yodda tutingki, ba'zida vazifalarni talqin qilishda va funksiyalar ko'lamida farqlar bo'lishi mumkin. Iltimos, boshqalarning qarashlariga ochiq munosabatda bo'ling.
+guidelines: >
+  - Faqat talaba yoki jamoaning GIT omboridagi src papkasidagi fayllarni baholang.
+
+  - Agar loyihani hali tugatmagan bo'lsangiz, tekshirishni boshlashdan oldin to'liq yo'riqnomani o'qib chiqishingiz shart.
+
+  - Jamoa loyihasini ko'rib chiqishni faqat jamoa to'liq tarkibda ishtirok etganda boshlashni ta'minlang.
+
+  - Quyidagilar haqida xabar berish uchun nazorat roʻyxatidagi maxsus bayroqchalardan foydalaning, masalan, agar omborda develop tarmog’ining src papkasida talaba (yoki jamoa)ning ishi boʻlmasa, “boʻsh loyiha” yoki ko’chirilgan taqdirda yoki agar talaba (yoki jamoa) ko'rib chiqish paytida istalgan vaqtda o'z ishini tushuntira olmasa, shuningdek, quyidagi bandlardan biri bajarilmasa, “ko’chirilgan” bayroqchasidan foydalaning. Biroq, ko’chirish holatlaridan tashqari, keyingi ko'rib chiqishda ularning oldini olish uchun vaziyatni keltirib chiqargan muammolarni aniqlash uchun loyihani ko'rib chiqishni davom ettirish tavsiya etiladi.
+
+  - GIT ombori talaba yoki jamoa omboriga mos kelishini ikki marta tekshiring.
+
+  - Sizni chalg’itish uchun hech qanday zararli narsa ishlatilmaganligini diqqat bilan tekshiring.
+
+  - Bahsli holatlarda, nazorat ro'yxati faqat tekshirishning umumiy tartibini belgilashini unutmang. Loyihani baholash bo'yicha yakuniy qaror tekshiruvchida qoladi. 
+
+  - Fikr-mulohazalar shakli to'ldirilgan yoki to'ldirilmaganligini tekshiring (https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624). 
+
+quick_actions:
+  - EMPTY_WORK
+  - CHEAT
+language: uz
+name: DO1
+comment: ""
+sections:
+
+  - kind: "1"
+    name: Asosiy qism 
+    description: ""
+    questions:
+      - name: Linux
+        description: >
+          - Hisobot src papkasida
+          
+          - Hisobotda .md kengaytmasi mavjud
+          
+          - Barcha vazifalar 2-darajali sarlavha sifatida ta'kidlangan
+          
+          - Hisobotdagi barcha skrinshotlar unda ko'rsatilgan narsalar bilan izohlanadi
+          
+          - Barcha skrinshotlar ekranning faqat tegishli qismini ko'rsatish uchun kesilgan
+
+        rating: "5"
+      - name: OT_o'rnatish
+        description: >
+          - There is a screenshot of the call and output of cat /etc/issue сommand
+
+          - Command output looks like this: Ubuntu 24.04 LTS
+
+          - Installed OS doesn't have GUI
+
+        rating: "5"
+      - name: User_creation
+        description: >
+          - There is a screenshot of the command call to create a user
+
+          - The command includes the -G adm argument
+
+          - There is a screenshot of the call and output of cat /etc/passwd command
+
+        rating: "5"
+      - name: OS_tarmoq_konfiguratsiyasi
+        description: >
+          - There are 7 points describing what has been done for all parts of the task
+
+          - There is an explanation for the presence of the lo interface in the output of the command showing the network interfaces
+
+          - DHCP (Dynamic Host Configuration Protocol) is decoded
+
+          - Hostname, timezone value, ip, gw, dns settings are given
+
+          - There is a screenshot of call and output of ping 1.1.1.1 and ping ya.ru commands
+
+          - There is the "0% packet loss" phrase in the next-to-last line of the command output
+
+        rating: "6"
+      - name: OS_yangilash
+        description: >
+          - There is a screenshot of the call and output of sudo apt upgrade command
+
+          - In the last line of the output the number of all packages is 0
+
+        rating: "5"
+      - name: sudo
+        description: >
+          - Sudo buyrug'ining maqsadi tushuntiriladi
+
+          - Xost nomi buyrug'i chaqiruvi va chiqishining skrinshoti mavjud
+
+          - Buyruq chiqishi 3-qismdagi xost nomidan farq qiladi
+
+        rating: "6"
+      - name: Vaqt_boshqaruvi
+        description: >
+          - Joriy vaqt mintaqangizda vaqtni beruvchi buyruq chaqiruvi va chiqishining skrinshoti mavjud
+          
+          - Buyruqning chiqishi hisobot yozuvchining buyruqni chaqirishi mumkin bo'lgan joriy sana va vaqtni o'z ichiga oladi
+          
+          - Timedatectl buyruq chaqiruvining skrinshoti mavjud va chiqish 
+          
+          - Buyruq chiqishida NTPSynchronized=ha mavjud
+
+        rating: "6"
+      - name: Matn_muharrirlari
+        description: >
+          - test_X.txt fayli ochilgan turli matn muharrirlarining 3 ta skrinshoti mavjud, bu yerda X fayl yaratilgan muharrirning nomi.
+          
+          - Fayllarning har birida taxallus mavjud
+          
+          - Saqlangan o'zgarishlar bilan chiqish uchun nima qilish kerakligi ko'rsatilgan
+          
+          - test_X.txt fayli ochilgan turli matn muharrirlarining 3 ta skrinshoti mavjud, bu yerda X fayl yaratilgan muharrirning nomi.
+          
+          - Har bir faylda 21 maktab 21 qator mavjud. O'zgarishlarni saqlamasdan chiqish uchun nima qilish kerakligi ko'rsatilgan.
+          
+          - Turli matn muharrirlarining so'zlarni qidirish natijalari bilan 3 ta skrinshoti mavjud
+          
+          - Bitta so'zni boshqasiga almashtirish buyruqlari kiritilgan turli xil matn muharrirlarining 3 ta skrinshoti mavjud
+
+        rating: "6"
+      - name: SSHD
+        description: >
+          - Vazifaning barcha qismlari uchun nima qilinganligini tavsiflovchi 5 ta nuqta mavjud
+          
+          - ps buyrug'ining ma'nolari va vazifa tugmachalarida qo'llaniladigan ma'nolari tushuntiriladi
+          
+          - netstat -tan buyrug'i chaqiruvi va chiqishining skrinshoti mavjud.
+          
+          - Buyruq chiqishida tcp 0 0.0.0.0:2022 0.0.0.0 mavjud:* LISTEN
+          
+          - -tan tugmalarining ma'nolari, har bir chiqish ustunining qiymati, 0.0.0.0 qiymati tushuntirilgan.
+
+        rating: "6"
+      - name: top_and_htop
+        description: >
+          - Ish vaqti, ruxsat berilgan foydalanuvchilar soni, umumiy tizim yuki, jarayonlarning umumiy soni, protsessor yuki, xotira yuki, eng ko'p xotira sarflaydigan jarayon pid, eng ko'p CPU vaqtini talab qiladigan jarayon haqida ma'lumotlar mavjud.
+          
+          - PID, PERCENT_CPU, PERCENT_MEM, TIME bo'yicha tartiblangan htop buyrug'i chiqishining skrinshotlari mavjud
+          
+          - Sshd jarayoni uchun filtrlangan htop buyrug'i chiqishining skrinshotlari mavjud
+          
+          - Qidiruv orqali topilgan syslog jarayoni bilan htop buyrug'i chiqishining skrinshotlari mavjud
+          
+          - Xost nomi, soat va ish vaqti chiqishi qo'shilgan htop buyrug'ining skrinshotlari mavjud
+
+        rating: "6"
+      - name: fdisk
+        description: >
+          - Qattiq diskning nomi, uning sig'imi va sektorlar soni, shuningdek, almashtirish hajmi mavjud
+
+        rating: "5"
+      - name: df
+        description: >
+          - df buyrug'ining chiqishiga ko'ra, quyidagi parametrlar belgilanadi: bo'lim hajmi, ishlatilgan bo'sh joy, bo'sh joy, ishlatilgan foiz
+          
+          - Hisobotda chiqishda ishlatiladigan birlik kibibayt 
+          
+          - Ekanligi ko'rsatilgan df -Th buyrug'i chiqishiga ko'ra, quyidagi parametrlar ko'rsatilgan: bo'lim hajmi, ishlatilgan joy, bo'sh joy, ishlatilgan foiz
+          
+          - Hisobotda fayl tizimining turi ext[raqam] ekanligi ko'rsatilgan.
+
+        rating: "6"
+      - name: du
+        description: >
+          - du -h /home, du -h /var, du -h /var/log buyruqlarini chaqirish va chiqarish skrinshotlari mavjud.
+          
+          - du -ha /var/log/* buyruq chaqiruvi va chiqishining skrinshoti mavjud
+
+        rating: "5"
+      - name: ncdu
+        description: >
+          - /home, /var, /var/log papkalarining hajmini ko'rsatadigan ncdu buyruq interfeysining skrinshotlari mavjud.
+          
+          - Ko'rsatilgan o'lchamlar du buyrug'ining vazifasidagi bilan taxminan bir xil
+
+        rating: "5"
+      - name: Loglar
+        description: >
+          - Oxirgi muvaffaqiyatli kirish vaqti, foydalanuvchi nomi va kirish usuli mavjud
+          
+          - SSHd xizmatini qayta ishga tushirish xabarini ko'rsatadigan /var/log/syslog faylining skrinshoti mavjud
+
+        rating: "5"
+      - name: CRON
+        description: >
+          - /var/log/syslog faylining skrinshoti mavjud bo'lib, u ish vaqti buyrug'iga ikkita qo'ng'iroqni 2 daqiqa farq bilan bildiradi.
+          
+          - CRON uchun joriy vazifalar ro'yxatining skrinshoti mavjud
+          
+          - Skrinshotda */2 * * * * ish vaqti liniyasi mavjud
+
+        rating: "5"

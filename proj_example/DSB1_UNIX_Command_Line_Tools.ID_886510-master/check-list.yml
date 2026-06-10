@@ -1,0 +1,153 @@
+introduction: >
+  - School 21 methodology only makes sense if peer-to-peer reviews are taken seriously. Please read all the guidelines carefully before starting the review.
+
+  - Please remain courteous, polite, respectful, and constructive in all communications during this review.
+
+  - Point out possible flaws in the person's work and take the time to discuss and debate them.
+
+  - Keep in mind that sometimes there may be differences in interpretation of tasks and scope of functionality. Please remain open to each other's vision.
+guidelines: >
+  - Evaluate only the files located in the src folder of the student's or group's GIT repository.
+
+  - If you have not finished the project yet, it is compulsory to read the entire instruction before starting the review. 
+
+  - Ensure to start reviewing a group project only when the team is present in full.
+
+  - Use special flags in the checklist to report, for example, "empty work" if the repository does not contain the student's (or group's) work in the src folder of the develop branch, or "cheat" in the case of cheating, or if the student (or group) is unable to explain their work at any time during the review, or if any of the items below are not met. However, except in cases of cheating, you are encouraged to continue reviewing the project to identify the problems that caused the situation so that they can be avoided in the next review.
+
+  - Double check that the GIT repository is the one corresponding to the student or group.
+
+  - Carefully check that nothing malicious has been used to fool you.
+
+  - In controversial cases, remember that the checklist determines only the general order of the check. The final decision on project evaluation remains with the reviewer.
+
+quick_actions:
+  - EMPTY_WORK
+  - CHEAT
+language: en
+name: Day00
+comment: ""
+sections:
+
+  - kind: "1"
+    name: Main part
+    description: ""
+    questions:
+      - name: Exercise 00. Data Retrieval
+        description: >
+          - Does the file `hh.json` exist in the repository directory?
+
+          - Does `hh.json` contain information about exactly 20 vacancies?
+
+          - In the case of making a request to the HeadHunter API:
+
+            - Does the file `hh.sh` exist in the repository directory?
+
+            - Is `hh.sh` executable?
+
+            - Are there no hardcoded tokens or secrets in `hh.sh`?
+
+            - Does `hh.sh` create the `hh.json` file as a result of execution?
+
+            - Does `hh.sh` work with different search keywords passed as an argument?
+
+            - Is `hh.json` formatted so that each JSON field is on a separate line?
+
+        rating: "6"
+
+      - name: Exercise 01. Transforming JSON to CSV
+        description: >
+          - Do files `filter.jq` and `hh.csv` exist in the directory of the repository?
+
+          - Does `filter.jq` produce file `hh.csv`?
+
+          - Does `hh.csv` contain only specified 5 columns?
+
+          - Does `hh.csv` contain all the values in any row delimited by a comma?
+
+          - Does `hh.csv` contain the headers?
+
+          - Is nothing except authorized function used to produce the result?
+
+        rating: "6"
+
+      - name: Exercise 02. Sorting a file
+        description: >
+          - Do files `sorter.sh` and `hh_sorted.csv` exist in the directory of the repository?
+
+          - Is `sorter.sh` executable?
+
+          - Does `sorter.sh` store the file `hh_sorted.csv` as a result of execution? 
+
+          - Is `hh_sorted.csv` sorted correctly?
+
+          - Is `hh_sorted.csv` a valid CSV file (comma is a delimiter and there are no spaces before and after the delimiter)?
+
+          - Does `hh_sorted.csv` contain the headers?
+
+          - Is nothing except authorized function used to produce the result?
+
+        rating: "6"
+
+      - name: Exercise 03. Replacing string in a file
+        description: >
+          - Do files `cleaner.sh` and `hh_positions.csv` exist in the directory of the repository?
+
+          - Is `cleaner.sh` executable?
+
+          - Does `cleaner.sh` store the file `hh_positions.csv` as a result of execution?
+
+          - Is `hh_positions.csv` sorted correctly?
+
+          - Is `hh_positions.csv` a valid CSV file?
+
+          - Does `hh_positions.csv` contain the headers?
+
+          - Are strings “Junior”, “Middle” and “Senior” kept accordingly to the exercise?
+
+          - Is in all other cases “-” used for the field?
+
+          - Is nothing except authorized function used to produce the result? 
+
+        rating: "6"
+
+      - name: Exercise 04. Descriptive statistics
+        description: >
+          - Do files `counter.sh` and `hh_uniq_positions.csv` exist in the directory of the repository?
+
+          - Is `counter.sh` executable?
+
+          - Does `counter.sh` store the file `hh_uniq_positions.csv` as a result of execution?
+
+          - Is `hh_uniq_positions.csv` sorted correctly?
+
+          - Is `hh_uniq_positions.csv` a valid CSV file?
+
+          - Does `hh_uniq_positions.csv` contain the headers?
+
+          - Is nothing except authorized function used to produce the result? 
+
+        rating: "6"
+        
+      - name: Exercise 05. Partitioning and concatenation
+        description: >
+          - Do files `partitioner.sh` and `concatenator.sh` exist in the directory of the repository?
+
+          - Are `partitioner.sh` and `concatenator.sh` executable?
+
+          - Does `partitioner.sh` store the files with correct names corresponding to the dates?
+
+          - Does each file produced by `partitioner.sh` contain only the dates that correspond to the names of the files?
+
+          - Is each file produced by `partitioner.sh` a valid CSV file?
+
+          - Does each file produced by `partitioner.sh` contain the headers?
+
+          - Does `concatenator.sh` take as input all the files of `partitioner.sh`?
+
+          - Is the result of `concatenator.sh` is identical to the result of Exercise 03?
+
+          - Is nothing except authorized function used to produce the result? 
+
+        rating: "6"  
+

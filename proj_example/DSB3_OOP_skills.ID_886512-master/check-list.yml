@@ -1,0 +1,112 @@
+introduction: >
+  - School 21 methodology only makes sense if peer-to-peer reviews are taken seriously. Please read all the guidelines carefully before starting the review.
+
+  - Please remain courteous, polite, respectful, and constructive in all communications during this review.
+
+  - Point out possible flaws in the person's work and take the time to discuss and debate them.
+
+  - Keep in mind that sometimes there may be differences in interpretation of tasks and scope of functionality. Please remain open to each other's vision.
+guidelines: >
+  - Evaluate only the files located in the src folder of the student's or group's GIT repository.
+
+  - If you have not finished the project yet, it is compulsory to read the entire instruction before starting the review. 
+
+  - Ensure to start reviewing a group project only when the team is present in full.
+
+  - Use special flags in the checklist to report, for example, "empty work" if the repository does not contain the student's (or group's) work in the src folder of the develop branch, or "cheat" in the case of cheating, or if the student (or group) is unable to explain their work at any time during the review, or if any of the items below are not met. However, except in cases of cheating, you are encouraged to continue reviewing the project to identify the problems that caused the situation so that they can be avoided in the next review.
+
+  - Double check that the GIT repository is the one corresponding to the student or group.
+
+  - Carefully check that nothing malicious has been used to fool you.
+
+  - In controversial cases, remember that the checklist determines only the general order of the check. The final decision on project evaluation remains with the reviewer.
+
+quick_actions:
+  - EMPTY_WORK
+  - CHEAT
+language: en
+name: DSB3_OOP_skills
+comment: ""
+sections:
+
+  - kind: "1"
+    name: Main part
+    description: ""
+    questions:
+      - name: Exercise 00. Simple class
+        description: >
+          - Does the code contain the class `Must_Read`?
+
+          - Does the script work as expected?
+
+        rating: "6"
+
+      - name: Exercise 01. Method
+        description: >
+          - Does the code contain the `Research` class?
+
+          - Does the class contain the method `file_reader()`?
+
+          - Does the script display the expected result in the subject?
+
+        rating: "6"
+
+      - name: Exercise 02. Constructor
+        description: >
+          - Has the class a constructor `__init__()`, and is the path stored in a variable within the constructor?
+
+          - Does `file_reader()` not have the path to the file as an argument?
+
+          - Is an exception raised if a file with the wrong scheme is given?
+
+          - Does the script display the expected result for the subject?
+
+        rating: "6"
+
+      - name: Exercise 03. Nested class
+        description: >
+          - Does `file_reader()` have a has_header argument with the default value of `True`?
+
+          - If you provide files with and without headers and pass the corresponding `has_header` argument to the main program, does the script still display the required information?
+
+          - Does the code have a `Calculations` class with two methods: `counts()` and `fractions()`?
+
+          - Do all the methods work correctly?
+
+        rating: "6"
+
+      - name: Exercise 04. Inheritance
+        description: >
+          - Does `counts()` not have data as an argument?
+
+          - Is data stored in a variable inside the `Calculations` class constructor?
+
+          - Does `Analytics` inherit from `Calculations`?
+
+          - Do all the methods work correctly?
+
+          - If you run `counts()` from the Analytics class, does it work correctly without errors?
+
+        rating: "6"
+        
+      - name: Exercise 05. Config and the main program
+        description: >
+          - Are all the parameters stored in `config.py`?
+
+          - Does `analytics.py` only contain imports and classes with their methods, without the main program's logic?
+
+          - Does `make_report.py` save the result as described in the subject?
+
+          - If you change the parameters in `config.py`, does it change the program's behavior?
+
+        rating: "6"
+        
+      - name: Exercise 06. Logging
+        description: >
+          - Do all methods store information about their work in the `analytics.log` file?
+
+          - Is the format of the log file correct?
+
+          - Does the main program send messages to Telegram in both cases, whether the report was successfully created or an error occurred?
+
+        rating: "6"

@@ -1,0 +1,155 @@
+introduction: >
+  - The School 21 methodology can lead to high eduse caseational results only if peer-to-peer assessment is done as responsibly as possible. Please read the instruse casetions carefully before starting the check.
+
+   - Be friendly and polite. Be respectful of the other Persona and the work they have done. Be construse casetive when giving feedback.
+
+   - When reviewing the work, notice for yourself any incorrect or possibly controversial moments. Discuss them with the author of the solution.
+
+   - Try to be open to a different opinion or way of interpreting the task. It is possible that both your approach and the approach of another may be correct.    
+  
+   - If you haven't finished the project yourself, be sure to read it completely before reviewing it.
+
+guidelines: >
+  - Evaluate only the files that are in the GIT repository of the student or group.
+
+  -	Start reviewing a group project only when all team members are present.
+
+  -	Use the special flags in the end of the checklist, for example, "EMPTY_WORK", if the repository does not contain the student's (or group's) work in the src directory of the develop branch, or "CHEAT" in the case of plagiarism or if the student (or anyone from the group being reviewed) cannot explain their decision at any time during the review. Also, the "CHEAT" flag is applicable if the following two points are not fulfilled. If one of the flags at the end of the checklist applies, the project will be considered a failure. However, except for a case of cheating, you are encouraged to continue reviewing the project and try to work with another student to figure out the problem that led to the failed solution.  
+  
+  -	Doublecheck that the GIT repository is the one corresponding to the student or the group. 
+  
+  -	Meticulously check that nothing malicious has been used to mislead you.
+  
+  -	In controversial cases, keep in mind that the checklist only defines the general order of the review. The final decision remains with the reviewer.
+
+quick_actions:
+  - EMPTY_WORK
+  - CHEAT
+
+language: en
+comment: ""
+name: BSA09_Objects_and_Roles
+sections:
+  - kind: "1"
+    name: Main part
+    description: ""
+    questions:
+      - name: Exercise 00 — Persona Class Description
+        description: |-
+          For task 1, the Persona class is described.
+          - The purpose of the Persona class based on the task description and UCs is specified.
+          - attributes (as a minimum) are defined:
+            - Persona identifier;
+            - registration data for access to the system (login, password);
+            - name, (patronymic) — for addresses;
+            - phone number — for sending sms and calls;
+            - date of registration.
+          - The following is specified for attributes:
+            - name;
+            - key (primary, external — if any);
+            - data type;
+            - for text data — length limitation;
+            - whether it is required or not;
+            - default value;
+            - comments.
+        rating: "6"
+
+      - name: Exercise 01 — Description of Clients and Employees Entities
+        description: |-
+          For task 1 the entities Clients, Employees are described, for each entity:
+          - The purpose of the entities according to the application in UC and the description in the task is specified.
+          - Attributes (as a minimum) are defined:
+            - record identifier (primary key);
+            - Persona entity identifier (foreign key);
+            - the date of the record.
+          - For attributes, the following are specified:
+            - name;
+            - key (primary, external — if any);
+            - data type;
+            - for text data, the length limit;
+            - whether it is required or not;
+            - default value;
+            - comments.
+        rating: "6"
+
+      - name: Exercise 02 — Description of Reference Entities
+        description: |-
+          For Task 1, the reference entities that provide the implementation of UC01, UC02, UC03 are described:
+          - Employee Roles;
+          - Services;
+          - Master Services.
+          - For each entity, the following are described:
+            - The purpose of the entity.
+            - The attributes of the entity are defined:
+              - Employee Roles:
+                - Record identifier,
+                - employee — identifier of the entity Employees,
+                - role (list of values: master, manager).
+              - Services:
+                - record identifier,
+                - name of the service.
+              - Master services:
+                - record identifier,
+                - employee identifier — foreign key to the Employees entity,
+                - service identifier — foreign key to the Services entity.
+              - Attributes are defined, specified:
+                - name;
+                - data type;
+                - length limit (for textual data);
+                - whether it is required or not;
+                - default value/empty value;
+                - comments.
+        rating: "6"
+
+      - name: Exercise 03 — Description of the Service Slots Entity (Description of entities)
+        description: |-
+          For Task 1, the Service Slots entity is described:
+          - The purpose is specified.
+          - Attributes are defined, as a minimum:
+            - record identifier,
+            - date;
+            - slot start time;
+            - master (foreign key to the Employees entity);
+            - client (foreign key to the Customers entity).
+          - Attributes are defined, specifying:
+            - name;
+            - data type;
+            - length limit (for text data);
+            - whether it is required or not;
+            - default value;
+            - comments.
+
+        rating: "6"
+
+      - name: Exercise 04 — Create a Class Diagram
+        description: |-
+          A class diagram is created for task 1.
+          - The class diagram contains the entities specified in Ex. 00 to Ex.03 .
+          - The classes in UML notation are specified:
+            - name — at the top, bolded, capitalized;
+            - attributes — in the middle part, left-aligned, capitalized;
+            - methods — not specified.
+          - Specify primary and foreign keys.
+          - Relationships between classes are established, described with semantic words.
+          - The cardinality is specified on the relationships: 1:1, 1:*, *:1.
+
+        rating: "6"
+
+  - kind: "2"
+    name: Bonus part
+    description: ""
+    questions:
+      - name: Exercise 05 — Description of Discounts for Client, Notification to Client Entities
+        description: |-
+          For task 1 describe Discounts for Client, Notification to Client entities
+          - Specify the purpose.
+          - Identify the attributes.
+          - Define and specify attribute parameters.
+
+        rating: "6"
+
+      - name: Exercise 06 — Updating the Class Diagram
+        description: |-
+          For Task 1, add the Discounts for Client, Notification to Client entities to the class diagram.
+
+        rating: "5"

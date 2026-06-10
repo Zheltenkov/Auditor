@@ -1,0 +1,154 @@
+introduction: >
+  School 21 metodologiyasi qachonki tenga-teng tekshiruvlar jiddiy ravishda olib borilsagina o’z ma’nosiga ega bo’ladi. Iltimos tekshiruvni boshlashdan oldin barcha ko’rsatmalarni diqqat bilan o’qing. 
+
+  - Iltimos, tekshiruv davomida suhbatlashayotganda xushmuomala, muloyim bo’ling va bir biringizni xurmat qiling.
+
+  - Shaxs bajargan loyihaning mavjud bo’lgan kamchiliklarini ko’rsating va ularni muhokama qilishga vaqt ajrating.
+
+  - Yodda tutingki, ba'zida vazifalarni talqin qilishda va funksiyalar ko'lamida farqlar bo'lishi mumkin. Iltimos, boshqalarning qarashlariga ochiq munosabatda bo'ling.
+guidelines: >
+  - Faqat talaba yoki jamoaning GIT omboridagi src papkasidagi fayllarni baholang.
+
+  - Agar loyihani hali tugatmagan bo'lsangiz, tekshirishni boshlashdan oldin to'liq yo'riqnomani o'qib chiqishingiz shart.
+
+  - Jamoa loyihasini ko'rib chiqishni faqat jamoa to'liq tarkibda ishtirok etganda boshlashni ta'minlang.
+
+  - Quyidagilar haqida xabar berish uchun nazorat roʻyxatidagi maxsus bayroqchalardan foydalaning, masalan, agar omborda develop tarmog’ining src papkasida talaba (yoki jamoa)ning ishi boʻlmasa, “boʻsh loyiha” yoki ko’chirilgan taqdirda yoki agar talaba (yoki jamoa) ko'rib chiqish paytida istalgan vaqtda o'z ishini tushuntira olmasa, shuningdek, quyidagi bandlardan biri bajarilmasa, “ko’chirilgan” bayroqchasidan foydalaning. Biroq, ko’chirish holatlaridan tashqari, keyingi ko'rib chiqishda ularning oldini olish uchun vaziyatni keltirib chiqargan muammolarni aniqlash uchun loyihani ko'rib chiqishni davom ettirish tavsiya etiladi.
+
+  - GIT ombori talaba yoki jamoa omboriga mos kelishini ikki marta tekshiring.
+
+  - Sizni chalg’itish uchun hech qanday zararli narsa ishlatilmaganligini diqqat bilan tekshiring.
+
+  - Bahsli holatlarda, nazorat ro'yxati faqat tekshirishning umumiy tartibini belgilashini unutmang. Loyihani baholash bo'yicha yakuniy qaror tekshiruvchida qoladi. 
+
+  - Fikr-mulohazalar shakli to'ldirilgan yoki to'ldirilmaganligini tekshiring (https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624).
+
+quick_actions:
+  - EMPTY_WORK
+  - CHEAT
+language: uz
+name: DO4
+comment: ""
+sections:
+
+  - kind: "1"
+    name: Asosiy qism
+    description: ""
+    questions:
+      - name: Linux_Monitoring_v2.0
+        description: >
+          - Bash-skriptlar src papkasida. 
+          
+          - Har bir vazifa quyidagi nomdagi papkada joylashgan: 0x, bu yerda x - vazifa raqami 
+          
+          - Barcha skriptlar parchalanadi va bir nechta fayllarga bo'linadi 
+          
+          - Main.sh deb nomlangan har bir vazifa uchun asosiy skript fayli 
+          
+          - Barcha skriptlarda noto'g'ri kiritish tekshiruvlar mavjud (barcha parametrlar koʻrsatilmagan, notoʻgʻri format parametrlari va h.k.)
+
+        rating: "5"
+      - name: Fayl generatori
+        description: >
+          - Turli parametr qiymatlari bilan ishga tushirilganda, to'g'ri fayl va papkalar yaratiladi
+          
+          - Noto'g'ri qiymatlar bilan ishga tushirilganda (masalan, ikkinchi, uchinchi yoki oltinchi parametr uchun 0), skript to'g'ri tugaydi
+          
+          - Noto'g'ri kiritish uchun tekshiruvlar mavjud (barcha parametrlar ko'rsatilmagan, noto'g'ri format parametrlari va boshqalar)
+          
+          - Jild va fayl nomlari tegishli parametrda oʻrnatilgan tartibda belgilarni oʻz ichiga oladi (masalan, ab parametrida baaa_021121 kabi nom boʻlishi mumkin emas)
+          
+          - Skript barcha yaratilgan papkalar va fayllar (to'liq yo'l, yaratilgan sana, fayl hajmi) ma'lumotlari bilan log faylini yaratadi.
+
+        rating: "6"
+      - name: Fayl tizimining tiqilib qolishi
+        description: >
+          - Skriptni ishga tushirgandan so'ng, skript tomonidan yaratilgan papkalar va fayllar quyidagi buyruqlar yordamida ko'rsatiladi: find / -type f -name "*_021121.*", find / -type d -name "*_021121", bu yerda 021121 skriptning joriy boshlanish sanasi
+          
+          - Noto'g'ri kiritish uchun tekshiruvlar mavjud (barcha parametrlar ko'rsatilmagan, noto'g'ri format parametrlari va boshqalar)
+          
+          - Jild va fayl nomlari tegishli parametrda oʻrnatilgan tartibda belgilarni oʻz ichiga oladi (masalan, ab parametrida baaa_021121 kabi nom boʻlishi mumkin emas)
+          
+          - Skript barcha yaratilgan papkalar va fayllar (to'liq yo'l, yaratilgan sana, fayl hajmi) ma'lumotlari bilan log faylini yaratadi. Shuningdek, u skriptning boshlanish vaqti, tugash vaqti va umumiy ish vaqti haqida ma'lumotni o'z ichiga oladi
+          
+          - Fayl tizimida 1 Gb bo'sh joy qolganda skript tugaydi. Bu df -h / buyrug'i bilan tekshirilishi mumkin
+
+        rating: "6"
+      - name: Fayl tizimini tozalash
+        description: >
+          - Skriptni ishga tushirgandan so'ng, quyidagi buyruqlar ishlatilganda skript tomonidan o'chirilgan papkalar va fayllar ko'rsatilmaydi: find / -type f -name "*_021121.*", find / -type d - name "*_021121", bu yerda 021121 skriptning joriy boshlanish sanasi
+          
+          - Skript uchta usulda ishlaydi: log fayli, nom niqobi va foydalanuvchi tomonidan kiritilgan yaratilgan sana va vaqt oralig'i bo'yicha
+          
+          - Noto'g'ri kiritish uchun tekshiruvlar mavjud (barcha parametrlar ko'rsatilmagan, noto'g'ri format parametrlari va boshqalar)
+
+
+        rating: "6"
+      - name: Log generatori
+        description: >
+          - Skript/dasturni ishga tushirgandan so'ng, tasodifiy ma'lumotlar va butun fayl uchun bir xil sanani o'z ichiga olgan yozuvlar bilan 5 ta fayl yaratiladi
+          
+          - Sana ketma-ket o'sib boradi, ya'ni bir kun ichida kechqurundan ertalabgacha va yana orqaga sakrashlar bo'lmaydi.
+          
+          - Skriptingiz/dasturingiz sharhlarida ishlatilgan javob kodlarining har biri nimani anglatishi ko'rsatilgan
+          
+          - Noto'g'ri kiritish uchun tekshiruvlar mavjud (barcha parametrlar ko'rsatilmagan, noto'g'ri format parametrlari va boshqalar)
+
+        rating: "6"
+      - name: Monitoring
+        description: >
+          - Skriptni 1-parametr bilan ishga tushirganda, barcha chiqish yozuvlari xato kodi bo'yicha tartiblanadi
+          
+          - 2-parametrli skriptni ishga tushirishda mos IP-lar mavjud emas. 3-parametrli skriptni ishga tushirishda barcha chiqish yozuvlarida 4xx yoki 5xx xato kodlari mavjud
+          
+          - 4-parametr bilan skriptni ishga tushirganda, mos keladigan IP-lar mavjud emas, lekin ayni paytda ular 3-parametr bilan ishlaganda chiqadigan IP-lar qatoriga kiradi.
+          
+          - Skriptni 4-parametr bilan ishga tushirganda, barcha IP chiqishlari 4xx va 5x xato kodlari bilan yozuvlarga mos keladi.
+          
+          - Noto'g'ri kiritish uchun tekshiruvlar mavjud (barcha parametrlar ko'rsatilmagan, noto'g'ri format parametrlari va boshqalar)
+
+        rating: "6"
+      - name: GoAccess
+        description: >
+          - Peer oldingi nuqtaga o'xshash ma'lumotni qanday olish mumkinligini ko'rsatishga qodir
+          
+          - Konsol chiqishida ko'rsatilgan bir xil ma'lumot mahalliy mashinadagi GoAccess veb-interfeysida ko'rsatiladi
+
+        rating: "6"
+      - name: Prometheus va Grafana
+        description: >
+          - Mahalliy mashinadan Prometheus veb-interfeysiga kirish imkoniyati mavjud
+          
+          - Grafana veb-interfeysi protsessor, xotira, qattiq diskda bo'sh joy va disk kiritish-chiqarish bilan panellarni ko'rsatadi
+          
+          - 2-qismdan skriptni ishga tushirganda, siz qattiq diskdagi yukning ko'payishini ko'rasiz
+          
+          - Stress -c 2 -i 1 -m 1 --vm-bytes 32M -t 10s buyrug'ini ishga tushirganda, siz protsessor, xotira va qattiq disk yuklanishini ko'rishingiz mumkin.
+
+        rating: "6"
+      - name: Tayyor asboblar paneli
+        description: >
+          - Grafana veb-interfeysi protsessordan foydalanish, o'rtacha yuklanish, xotiradan foydalanish, disk kiritish/chiqarish, diskdan foydalanish, qabul qilingan tarmoq, tarmoq uzatilgan panellarni ko'rsatadi.
+          
+          - 2-qismdan skriptni ishga tushirganda, siz qattiq diskdagi yukning ko'payishini ko'rasiz
+          
+          - Stress -c 2 -i 1 -m 1 --vm-bytes 32M -t 10s buyrug'ini ishga tushirganda, siz protsessor, xotira va qattiq disk yuklanishini ko'rishingiz mumkin.
+          
+          - Ikkinchi virtual mashinani ishga tushirishda va iperf3 orqali ulanishni sinab ko'rishda siz tarmoq yukining ortishini ko'rishingiz mumkin
+
+        rating: "6"
+  - kind: "2"
+    name: Bonus qismi
+    description: ""
+    questions:
+      - name: Sizning shaxsiy node_exporter’ingiz
+        description: >          
+          - O'zingizning node_exporter, skript/dastur tomonidan yaratilgan sahifaga xizmat qiluvchi nginx va Prometey skriptini/dasturini ishga tushirgandan so'ng, Grafana veb-interfeysi protsessor, xotira va qattiq diskdagi bo'sh joy bilan panellarni ko'rsatadi.
+          
+          - Sahifa skript/dastur yoki cron yordam dasturi ichidagi tsikl yordamida har 3 soniyadan ko'p bo'lmagan holda yangilanadi.
+          
+          - 2-qismdan skriptni ishga tushirganda, siz qattiq diskdagi yukning ko'payishini ko'rasiz
+          
+          - Stress -c 2 -i 1 -m 1 --vm-bytes 32M -t 10s buyrug'ini ishga tushirganda, siz protsessor, xotira va qattiq disk yuklanishini ko'rishingiz mumkin.
+
+        rating: "6"

@@ -1,0 +1,155 @@
+introduction: >
+  School 21 methodology only makes sense if peer-to-peer reviews are taken seriously. Please read all the guidelines carefully before starting the review.
+
+  - Please remain courteous, polite, respectful, and constructive in all communications during this review.
+
+  - Point out possible flaws in the person's work and take the time to discuss and debate them.
+
+  - Keep in mind that sometimes there may be differences in interpretation of tasks and scope of functionality. Please remain open to each other's vision.
+guidelines: >
+  - Evaluate only the files located in the src folder of the student's or group's GIT repository.
+
+  - If you have not finished the project yet, it is compulsory to read the entire instruction before starting the review. 
+
+  - Ensure to start reviewing a group project only when the team is present in full.
+
+  - Use special flags in the checklist to report, for example, "empty work" if the repository does not contain the student's (or group's) work in the src folder of the develop branch, or "cheat" in the case of cheating, or if the student (or group) is unable to explain their work at any time during the review, or if any of the items below are not met. However, except in cases of cheating, you are encouraged to continue reviewing the project to identify the problems that caused the situation so that they can be avoided in the next review.
+
+  - Double check that the GIT repository is the one corresponding to the student or group.
+
+  - Carefully check that nothing malicious has been used to fool you.
+
+  - In controversial cases, remember that the checklist determines only the general order of the check. The final decision on project evaluation remains with the reviewer.
+
+  - Check whether the feedback form is filled or not (https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624).
+
+quick_actions:
+  - EMPTY_WORK
+  - CHEAT
+language: en
+name: DO4
+comment: ""
+sections:
+
+  - kind: "1"
+    name: Main part
+    description: ""
+    questions:
+      - name: Linux_Monitoring_v2.0
+        description: >
+          - Bash-scripts are in the src folder
+
+          - Each task is in a folder named: 0x, where x is the task number
+
+          - All scripts are decomposed and split into several files
+
+          - The main script file for each task named main.sh
+
+          -All scripts have checks for incorrect input (not all parameters specified, wrong format parameters, etc.)
+
+        rating: "5"
+      - name: File generator
+        description: >
+          - When run with different parameter values, the correct files and folders are created
+
+          - When run with invalid values (e.g. 0 for the second, third or sixth parameter), the script terminates correctly
+
+          - There are checks for incorrect input (not all parameters specified, wrong format parameters, etc.)
+
+          - Folder and file names contain characters in the order in which they were set in the corresponding parameter (e.g. the ab parameter cannot have a name like baaa_021121)
+
+          - The script creates a log file with data on all created folders and files (full path, creation date, file size)
+
+        rating: "6"
+      - name: File system clogging
+        description: >
+          - After running the script, the folders and files created by the script are shown using commands like: find / -type f -name "\*_021121.\*", find / -type d -name "\*_021121", where 021121 is the current start date of the script
+
+          - There are checks for incorrect input (not all parameters specified, wrong format parameters, etc.)
+
+          - Folder and file names contain characters in the order in which they were set in the corresponding parameter (e.g. the ab parameter cannot have a name like baaa_021121)
+
+          - The script creates a log file with data on all created folders and files (full path, creation date, file size). It also contains information about the start time, end time and total running time of the script
+
+          - The script terminates when 1GB of free space is left on the file system. It can be checked with the df -h / command
+
+        rating: "6"
+      - name: Cleaning the file system
+        description: >
+          - After running the script, the folders and files deleted by the script are not shown when using commands like: find / -type f -name "\*_021121.\*", find / -type d -name "\*_021121", where 021121 is the current start date of the script
+
+          - The script works in three ways: by the log file, by the name mask and by the date and time interval of creation, entered by the user
+
+          - There are checks for incorrect input (not all parameters specified, wrong format parameters, etc.)
+
+        rating: "6"
+      - name: Log generator
+        description: >
+          - After running the script/program, 5 files are created, with entries containing random data and a date that is the same for the whole file
+
+          - The date grows sequentially, i.e. there are no jumps from evening to morning and back again within a single log day
+
+          - It is specified in the comments of your script/program what each of the response codes used means.
+
+          - There are checks for incorrect input (not all parameters specified, wrong format parameters, etc.)
+
+        rating: "6"
+      - name: Monitoring
+        description: >
+          - When running the script with parameter 1, all output entries are sorted by error code
+
+          - There are no matching IPs when running the script with parameter 2
+
+          - When running the script with parameter 3, all output entries have an 4xx or 5xx error codes
+
+          - When running the script with parameter 4, there are no matching IPs, but at the same time they are among the IPs output when running with parameter 3
+
+          - When running the script with parameter 4, all IPs output correspond to entries with the 4xx and 5x error codes
+
+          - There are checks for incorrect input (not all parameters specified, wrong format parameters, etc.)
+
+        rating: "6"
+      - name: GoAccess
+        description: >
+          - Peer is able to indicate how information similar to the previous point can be obtained
+
+          - The same information displayed in the console output is shown in the GoAccess web interface on the local machine
+
+        rating: "6"
+      - name: Prometheus and Grafana
+        description: >
+          - There is an access to the Prometheus web interface from the local machine
+
+          - The Grafana web interface displays panels with CPU, Memory, free hard disk space and Disk I/O
+
+          - When running the script from part 2, you see an increase in the load on the hard disk
+
+          - When running stress -c 2 -i 1 -m 1 --vm-bytes 32M -t 10s command, you can see the CPU, Memory and hard disk load increase
+
+        rating: "6"
+      - name: Ready-made dashboard
+        description: >
+          - The Grafana web interface displays panels with CPU Usage, Load Average, Memory Usage, Disk I/O, Disk Usage, Network Received, Network Transmitted
+
+          - When running the script from part 2, you see an increase in the load on the hard disk
+
+          - When running stress -c 2 -i 1 -m 1 --vm-bytes 32M -t 10s command, you can see the CPU, Memory and hard disk load increase
+
+          - When starting a second virtual machine and testing the connection via iperf3, you can see an increase in network load
+
+        rating: "6"
+  - kind: "2"
+    name: Bonus part
+    description: ""
+    questions:
+      - name: Your own node_exporter
+        description: >
+          - After running the script/program of your own node_exporter, nginx that serves the page created by the script/program, and Prometheus, the Grafana web interface shows panels with CPU, Memory and free space on the hard disk
+
+          - The page is refreshed no more often than every 3 seconds using a loop within a script/program or a cron utility
+
+          - When running the script from part 2, you see an increase in the load on the hard disk
+
+          - When running stress -c 2 -i 1 -m 1 --vm-bytes 32M -t 10s command, you can see the CPU, Memory and hard disk load increase
+
+        rating: "6"

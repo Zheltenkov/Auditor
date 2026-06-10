@@ -1,0 +1,203 @@
+introduction: >
+  - The School 21 methodology can lead to high eduse caseational results only if peer-to-peer assessment is done as responsibly as possible. Please read the instruse casetions carefully before starting the check.
+
+   - Be friendly and polite. Be respectful of the other person and the work they have done. Be construse casetive when giving feedback.
+
+   - When reviewing the work, notice for yourself any incorrect or possibly controversial moments. Discuss them with the author of the solution.
+
+   - Try to be open to a different opinion or way of interpreting the task. It is possible that both your approach and the approach of another may be correct.    
+  
+   - If you haven't finished the project yourself, be sure to read it completely before reviewing it.
+
+guidelines: >
+  - Evaluate only the files that are in the GIT repository of the student or group.
+
+  -	Start reviewing a group project only when all team members are present.
+
+  -	Use the special flags in the end of the checklist, for example, "EMPTY_WORK", if the repository does not contain the student's (or group's) work in the src directory of the develop branch, or "CHEAT" in the case of plagiarism or if the student (or anyone from the group being reviewed) cannot explain their decision at any time during the review. Also, the "CHEAT" flag is applicable if the following two points are not fulfilled. If one of the flags at the end of the checklist applies, the project will be considered a failure. However, except for a case of cheating, you are encouraged to continue reviewing the project and try to work with another student to figure out the problem that led to the failed solution.  
+  
+  -	Doublecheck that the GIT repository is the one corresponding to the student or the group. 
+  
+  -	Meticulously check that nothing malicious has been used to mislead you.
+  
+  -	In controversial cases, keep in mind that the checklist only defines the general order of the review. The final decision remains with the reviewer.
+
+quick_actions:
+  - EMPTY_WORK
+  - CHEAT
+
+language: en
+comment: ""
+name: BSA15_REST
+sections:
+  - kind: "1"
+    name: Main part
+    description: ""
+    questions:
+      - name: Exercise 00 – Terminology
+        description: |-
+          The terms and their definitions (explanations) are compared.
+          - REST — architectural style of interaction of distributed application components in a network.
+          - Caching — increasing the performance of web applications by using previously stored data.
+          - Scalability — the ability of a system, network, or process to increase its performance as resources are added.
+          - Asynchrony — inconsistency, mismatch with something in time; non-simultaneity. 
+
+        rating: "6"
+
+      - name: Exercise 01 — Data Preparation
+        description: |-
+          Ported from previous projects.
+          - Identify someone who worked in another group when Day09 was completed.
+          - Select the classes needed to implement UC02, UC03, UC04 from the Day09 project.
+          - Data structures with attribute descriptions are transferred:
+            - from peer's project variant;
+            - from another project variant.
+
+        rating: "5"
+
+      - name: Exercise 02 — UC Update
+        description: |-
+          UC04 Register a client (manager) is analyzed and completed.
+          - What has been done:
+            - The sequence of steps and alternative scenarios for each step are described.
+            - The information in each step of the scenario is specified:
+              - about the application (server, client, service);
+              - the role(s) performing the actions.
+            - For steps where there is integration interaction, the integration methods are specified.
+            - The references used in UC are listed.
+            - For steps where links to references are involved in the integration interaction, the UC is refined considering the reference data transfer (one of the options is selected):
+              - The current reference record is transferred before the UC is executed (included in the precondition);
+              - The required reference record is transferred with the initial message;
+              - the reference is updated as needed if a missing record is detected.
+
+        rating: "6"
+
+      - name: Exercise 03 — References Integration
+        description: |-
+          For references used in UC04 Register Client (Manager) integration solutions are described:
+          - The references used in UC are listed.
+          - For each reference, the need for integration is specified.
+          - If integration is required, the integration option is specified:
+            - full reference transfer;
+            - transfer of the delta (changes in the reference since the last transfer);
+            - transfer the reference records related to the transferred data;
+            - search for the reference record corresponding to the transferred data.
+          - Depending on the selected solution option, the integration method is specified for each transferred reference.
+
+        rating: "6"
+
+      - name: Exercise 04 — Definition and Description of Methods
+        description: |-
+          According to the conditions of task 1, the requirements for integration UC04 Register a Client (Manager) are described.
+          - Question-answer sets are created for each integration case.
+          - The HTTP method that is appropriate for each integration case, including directories, is determined based on the following criteria:
+            - The CRUD operation performed on the data.
+            - Whether a secure method is required.
+            - Whether an idempotent method is required.
+          - Each query contains:
+            - a method;
+            - an assumed URL path;
+            - parameters (if applicable);
+            - request body — a description of what the body should contain (if applicable).
+          - The response set contains at least 2 responses — successful and unsuccessful.
+          - All responses contain:
+            - a status code;
+            - a response body — a description of what it should contain (if applicable).
+
+        rating: "6"
+
+      - name: Exercise 05 — Description of Request/Response Elements
+        description: |-
+          For each integration option UC04 Register Client (Manager), the elements of the request/response body (input/output parameters) are described.
+          - The following is specified:
+            - Integration option from UC, including references;
+            - Business integration assignment;
+            - Method;
+            - Transfer direction;
+            - Request or Response;
+            - List of request/response body elements with details:
+              - Block identifier (if applicable);
+              - Element identifier;
+              - Name by entity;
+              - Item type;
+              - Dimensionality (field length);
+              - Mandatory;
+              - Correspondence of the element to the sending system for requests or to the receiving system for responses;
+              - Comments (constraints, conditions, link to a reference).
+
+        rating: "6"
+        
+      - name: Exercise 06 — Mapping
+        description: |-
+          - For each integration option UC04 Register Client (Manager), the request/response body data (input/output parameters) have been mapped:
+            - between the sending system and the transmitted message;
+            - between the transferred message and the receiving system.
+          - Specified:
+            - System side:
+              - Entity/class (identifier and business name),
+              - Nested block/multiple,
+              - Element/field,
+              - Data type,
+              - Dimensionality,
+              - Mandatory,
+              - Conditions, constraints,
+              - Link to a reference.
+            - Message side — described in ex.5.
+
+        rating: "6"
+
+      - name: Exercise 07 — Errors Description
+        description: |-
+          - For each UC04 Register Client (Manager) integration option, the requirements for handling errors that may occur during integration are described, specifying:
+            - the integration option;
+            - the item to be tested;
+            - the state of the test;
+            - error code;
+            - error message;
+            - criticality (warning/criticism/blocker).
+          - Error handling requirements are described for each step.
+          - Requirements for receiving external system messages are described:
+            - mandatory field violation;
+            - type violation;
+            - dimensionality violations;
+            - logical conditions;
+            - handling of external system unavailability;
+            - requirements for reconciling links to records in references from different systems.
+          - At least 15 error handling requirements are described for each integration option.
+
+        rating: "6"
+        
+  - kind: "2"
+    name: Bonus part
+    description: ""
+    questions:
+      - name: Exercise 08 — UC Update
+        description: |-
+          UC02 Analyzed and refined.
+          - The sequence of steps and alternative scenarios for each step are described.
+          - For each step of the scenario, specify the following information:
+            - about the application (server, client, service);
+            - the role(s) performing the actions.
+          - Integration methods are specified for steps where there is an integration interaction.
+
+        rating: "6"
+
+      - name: Exercise 09 — Definition and Description of Methods
+        description: |-
+          According to the conditions of task 1, the requests for integration UC02 Create Master Schedule are described.
+          - Question-answer sets are created for each integration case.
+          - The HTTP method that is appropriate for each integration case is determined based on the following criteria:
+            - The CRUD operation being performed on the data.
+            - Whether a secure method is required.
+            - Whether an idempotent method is required.
+          - Each query contains:
+            - a method;
+            - an assumed URL path;
+            - parameters (if applicable);
+            - the body of the request, or a description of what the body should contain (if applicable).
+          - The response set contains at least 2 responses — successful and unsuccessful.
+          - All responses contain:
+            - a status code;
+            - the body of the response or a description of what the body should contain (if applicable).
+
+        rating: "6"

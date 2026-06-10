@@ -1,0 +1,201 @@
+introduction: >
+  - School 21 methodology only makes sense if peer-to-peer reviews are taken seriously. Please read all the guidelines carefully before starting the review.
+
+  - Please remain courteous, polite, respectful, and constructive in all communications during this review.
+
+  - Point out possible flaws in the person's work and take the time to discuss and debate them.
+
+  - Keep in mind that sometimes there may be differences in interpretation of tasks and scope of functionality. Please remain open to each other's vision.
+guidelines: >
+  - Evaluate only the files located in the src folder of the student's or group's GIT repository.
+
+  - If you have not finished the project yet, it is compulsory to read the entire instruction before starting the review. 
+
+  - Ensure to start reviewing a group project only when the team is present in full.
+
+  - Use special flags in the checklist to report, for example, "empty work" if the repository does not contain the student's (or group's) work in the src folder of the develop branch, or "cheat" in the case of cheating, or if the student (or group) is unable to explain their work at any time during the review, or if any of the items below are not met. However, except in cases of cheating, you are encouraged to continue reviewing the project to identify the problems that caused the situation so that they can be avoided in the next review.
+
+  - Double check that the GIT repository is the one corresponding to the student or group.
+
+  - Carefully check that nothing malicious has been used to fool you.
+
+  - In controversial cases, remember that the checklist determines only the general order of the check. The final decision on project evaluation remains with the reviewer.
+  
+  - Check whether the feedback form is filled or not (https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624).
+
+quick_actions:
+  - EMPTY_WORK
+  - CHEAT
+language: en
+name: DO1
+comment: ""
+sections:
+
+  - kind: "1"
+    name: Main part
+    description: ""
+    questions:
+      - name: Linux
+        description: >
+          - The report is in the src folder
+
+          - The report has the .md extension
+
+          - All tasks are highlighted as level 2 headers
+
+          - All screenshots in the report are captioned with what is shown in it
+
+          - All screenshots are cropped to show only the relevant part of the screen
+
+        rating: "5"
+      - name: OS_installation
+        description: >
+          - There is a screenshot of the call and output of cat /etc/issue сommand
+
+          - Command output looks like this: Ubuntu 24.04 LTS
+
+          - Installed OS doesn't have GUI
+
+        rating: "5"
+      - name: User_creation
+        description: >
+          - There is a screenshot of the command call to create a user
+
+          - The command includes the -G adm argument
+
+          - There is a screenshot of the call and output of cat /etc/passwd command
+
+        rating: "5"
+      - name: OS_network_configure
+        description: >
+          - There are 7 points describing what has been done for all parts of the task
+
+          - There is an explanation for the presence of the lo interface in the output of the command showing the network interfaces
+
+          - DHCP (Dynamic Host Configuration Protocol) is decoded
+
+          - Hostname, timezone value, ip, gw, dns settings are given
+
+          - There is a screenshot of call and output of ping 1.1.1.1 and ping ya.ru commands
+
+          - There is the "0% packet loss" phrase in the next-to-last line of the command output
+
+        rating: "6"
+      - name: OS_update
+        description: >
+          - There is a screenshot of the call and output of sudo apt upgrade command
+
+          - In the last line of the output the number of all packages is 0
+
+        rating: "5"
+      - name: sudo
+        description: >
+          - The purpose of the sudo command is explained
+
+          - There is a screenshot of the hostname command call and output
+
+          - The command output is different from hostname in Part 3
+
+        rating: "6"
+      - name: Time_management
+        description: >
+          - There is a screenshot of the command call and output, that gives time in your current timezone
+
+          - The output of the command contains the current date and time at which the report writer was able to call the command
+
+          - There is a screenshot of the timedatectl command call and output
+
+          - Command output contains NTPSynchronized=yes
+
+        rating: "6"
+      - name: Text_editors
+        description: >
+          - There are 3 screenshots of different text editors in which the test_X.txt file is opened, where X is the name of the editor in which the file was created
+
+          - Each of the files contains a nickname
+
+          - It is specified what is done to exit with the changes saved
+
+          - There are 3 screenshots of different text editors in which the test_X.txt file is opened, where X is the name of the editor in which the file was created
+
+          - There is a 21 School 21 line in each of the files
+
+          - It is specified what is done to exit without saving changes
+
+          - There are 3 screenshots of different text editors with word search results
+
+          - There are 3 screenshots of different text editors with commands entered to replace one word with another
+
+        rating: "6"
+      - name: SSHD
+        description: >
+          - There are 5 points describing what has been done for all parts of the task
+
+          - The meanings of the ps command and used in task keys are explained
+
+          - There is a screenshot of the netstat -tan command call and output
+
+          - The command output contains tcp 0 0.0.0.0:2022 0.0.0.0:* LISTEN
+
+          - The meanings of -tan keys, the value of each output column, the value 0.0.0.0 are explained
+
+        rating: "6"
+      - name: top_and_htop
+        description: >
+          - There is information about uptime, number of authorized users, total system load, total number of processes, cpu load, memory load, pid of the process taking the highest memory usage, pid of the process taking the most CPU time
+
+          - There are screenshots of htop command output sorted by PID, PERCENT_CPU, PERCENT_MEM, TIME
+
+          - There are screenshots of htop command output filtered for sshd process
+
+          - There are screenshots of the htop command output with the syslog process found by searching
+
+          - There are screenshots of the htop command output with hostname, clock and uptime output added
+
+        rating: "6"
+      - name: fdisk
+        description: >
+          - There is the name of the hard disk, its capacity and number of sectors, and also its swap size
+
+        rating: "5"
+      - name: df
+        description: >
+          - According to the df command output, the following parameters are specified: partition size, space used, space free, percentage used
+
+          - It is specified in the report that unit used in the output is kibibyte
+
+          - According to the df  -Th command output, the following parameters are specified: partition size, space used, space free, percentage used
+
+          - It is specified in the report that the file system type is ext[number]
+
+        rating: "6"
+      - name: du
+        description: >
+          - There are screenshots of the du -h /home, du -h /var, du -h /var/log commands call and output
+
+          - There is a screenshot of the du -ha /var/log/* command call and output
+
+        rating: "5"
+      - name: ncdu
+        description: >
+          - There are screenshots of the ncdu command interface showing the size of the /home, /var, /var/log folders
+
+          - The shown sizes are approximately the same as in the du command's task
+
+        rating: "5"
+      - name: Logs
+        description: >
+          - There are the last successful login time, user name and login method
+
+          - There is a screenshot of /var/log/syslog file showing the SSHd service restart message
+
+        rating: "5"
+      - name: CRON
+        description: >
+          - There is a screenshot of /var/log/syslog file reporting two calls to the uptime command with 2 minutes differences
+
+          - There is a screenshot of the current task list for CRON
+
+          - The screenshot has the */2 * * * * uptime line
+
+        rating: "5"

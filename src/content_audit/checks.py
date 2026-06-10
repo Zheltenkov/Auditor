@@ -17,6 +17,7 @@ import requests
 import yaml
 
 from content_audit.cache import AuditCache
+from content_audit.checklist_matching import extract_checklist_question_names, match_checklist_to_readme
 from content_audit.dependencies import (
     CompatibilityIssue,
     DependencyCandidate,
@@ -100,20 +101,6 @@ FACT_MARKER_RE = re.compile(
 FACT_DATE_RE = re.compile(r"\b(?:19|20)\d{2}(?:[-./](?:0?[1-9]|1[0-2])(?:[-./](?:0?[1-9]|[12]\d|3[01]))?)?\b")
 INTERNAL_MARKDOWN_LINK_RE = re.compile(r"\[[^\]]+\]\(\s*#[^)]+\)")
 MARKDOWN_LINK_RE = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
-CHECKLIST_STOP_TOKENS = {
-    "part",
-    "task",
-    "step",
-    "section",
-    "chapter",
-    "module",
-    "exercise",
-    "project",
-    "qism",
-    "часть",
-    "раздел",
-    "задание",
-}
 REQUIREMENT_CLAIM_MARKERS = (
     " must ",
     " should ",
@@ -406,7 +393,6 @@ class ChecklistChecker(BaseChecker):
 
         findings: list[Finding] = []
         readme_text = "\n".join(file.text for file in unit.files if file.kind == "readme")
-        normalized_readme = normalize_for_match(readme_text)
         for checklist_file in checklist_files:
             try:
                 payload = yaml.safe_load(checklist_file.text) or {}
@@ -428,7 +414,7 @@ class ChecklistChecker(BaseChecker):
                 )
                 continue
 
-            question_names = _extract_checklist_question_names(payload)
+            question_names = extract_checklist_question_names(payload)
             if not question_names:
                 findings.append(
                     _finding(
@@ -447,9 +433,8 @@ class ChecklistChecker(BaseChecker):
                 )
                 continue
 
-            matched = sum(1 for name in question_names if _checklist_name_matches_readme(name, normalized_readme))
-            ratio = matched / len(question_names)
-            if ratio < 0.5:
+            match_result = match_checklist_to_readme(question_names, readme_text)
+            if match_result.ratio < 0.5:
                 findings.append(
                     _finding(
                         unit,
@@ -463,7 +448,9 @@ class ChecklistChecker(BaseChecker):
                         [
                             Evidence(
                                 title="Связность README и чек-листа",
-                                detail=f"Сопоставлено {matched} из {len(question_names)} пунктов чек-листа.",
+                                detail=(
+                                    f"Сопоставлено {match_result.matched} из {match_result.total} пунктов чек-листа."
+                                ),
                             )
                         ],
                         "Методологу нужно проверить, что пункты чек-листа однозначно соответствуют заданиям в README.",
@@ -481,7 +468,12 @@ class ChecklistChecker(BaseChecker):
                         0.75,
                         None,
                         TextLocation(file_path=checklist_file.relative_path),
-                        [Evidence(title="Чек-лист", detail=f"Найдено {len(question_names)} пунктов, сопоставлено {matched}.")],
+                        [
+                            Evidence(
+                                title="Чек-лист",
+                                detail=f"Найдено {match_result.total} пунктов, сопоставлено {match_result.matched}.",
+                            )
+                        ],
                         "Действий не требуется; при пилоте можно заменить грубое сопоставление на модельную проверку смысла.",
                         False,
                     )
@@ -1750,45 +1742,6 @@ def _is_inside(path: Path, root: Path) -> bool:
         return True
     except ValueError:
         return False
-
-
-def _extract_checklist_question_names(payload: object) -> list[str]:
-    """Достаём имена вопросов из YAML-чек-листа."""
-
-    if not isinstance(payload, dict):
-        return []
-    names: list[str] = []
-    for section in payload.get("sections", []) or []:
-        if not isinstance(section, dict):
-            continue
-        for question in section.get("questions", []) or []:
-            if isinstance(question, dict) and question.get("name"):
-                names.append(str(question["name"]))
-    return names
-
-
-def _checklist_name_matches_readme(name: str, normalized_readme: str) -> bool:
-    """Грубо сопоставляем Part_1.CAT с заголовками вроде Part 1."""
-
-    normalized = normalize_for_match(name)
-    if normalized and normalized in normalized_readme:
-        return True
-    part_match = re.search(r"part\s+(\d+)", normalized)
-    if part_match and f"part {part_match.group(1)}" in normalized_readme:
-        return True
-    numbers = re.findall(r"\d+", normalized)
-    tokens = [
-        token
-        for token in re.findall(r"[a-zа-яё0-9]+", normalized)
-        if token not in CHECKLIST_STOP_TOKENS and not token.isdigit() and len(token) >= 2
-    ]
-    if not tokens:
-        return False
-    token_hits = sum(1 for token in tokens if re.search(rf"\b{re.escape(token)}\b", normalized_readme))
-    number_hits = sum(1 for number in numbers if re.search(rf"\b{re.escape(number)}\b", normalized_readme))
-    if numbers:
-        return token_hits == len(tokens) and number_hits > 0
-    return token_hits == len(tokens)
 
 
 def _detect_language_profile(unit: ContentUnit) -> tuple[set[str], list[dict[str, str]]]:

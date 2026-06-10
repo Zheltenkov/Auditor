@@ -6,7 +6,6 @@ import hashlib
 import ipaddress
 import json
 import re
-import struct
 from abc import ABC, abstractmethod
 from datetime import datetime, timezone
 from pathlib import Path
@@ -46,18 +45,20 @@ from content_audit.domain import (
     TextLocation,
     Verdict,
 )
+from content_audit.image_rights import (
+    image_evidence_queries,
+    image_rights_signals,
+    is_decorative_image,
+    read_image_dimensions,
+)
 from content_audit.openrouter import OpenRouterClient, OpenRouterError
 from content_audit.rights import (
     DATASET_RE,
-    DECORATIVE_HINTS,
-    DECORATIVE_MAX_SIDE,
     MANIFEST_NAMES,
     CodeMatch,
     RightsSignal,
     grade_rights_signal,
-    has_attribution_near,
     license_policy,
-    read_image_provenance,
     resolve_dependency_licenses,
     scan_project_licenses,
 )
@@ -590,7 +591,7 @@ class ImageQualityChecker(BaseChecker):
             target_path = (source_file.parent / target).resolve()
             if not target_path.exists() or not _is_inside(target_path, unit.root_path):
                 continue
-            dimensions = _read_image_dimensions(target_path)
+            dimensions = read_image_dimensions(target_path)
             if dimensions is None:
                 findings.append(
                     _finding(
@@ -610,7 +611,7 @@ class ImageQualityChecker(BaseChecker):
                 continue
             width, height = dimensions
             if width < context.settings.min_image_width or height < context.settings.min_image_height:
-                if _is_decorative_image(entity.value, entity.quote, width, height):
+                if is_decorative_image(entity.value, entity.quote, width, height):
                     continue
                 findings.append(
                     _finding(
@@ -795,7 +796,7 @@ class RightsAndOriginalityChecker(BaseChecker):
         signals: list[RightsSignal] = []
         signals.extend(self._project_license_signals(unit))
         signals.extend(self._dependency_license_signals(unit))
-        signals.extend(self._image_rights_signals(unit, entities))
+        signals.extend(image_rights_signals(unit, entities))
         signals.extend(self._dataset_rights_signals(unit))
         signals.extend(self._code_similarity_signals(unit))
         signals.extend(self._external_evidence_signals(unit, entities, context))
@@ -882,49 +883,6 @@ class RightsAndOriginalityChecker(BaseChecker):
                         confidence=0.55,
                     )
                 )
-        return signals
-
-    def _image_rights_signals(self, unit: ContentUnit, entities: list[ExtractedEntity]) -> list[RightsSignal]:
-        signals: list[RightsSignal] = []
-        seen_resources: set[str] = set()
-        for entity in _entities_of_type(entities, EntityType.IMAGE):
-            if self._is_decorative_reference(entity.value, entity.quote):
-                continue
-            resource_key = normalize_for_match(entity.value)
-            if resource_key in seen_resources:
-                continue
-            source_text = self._source_file_text(unit, entity.location)
-            if has_attribution_near(source_text, entity.value):
-                continue
-
-            target_path = self._resolve_local_image(unit, entity)
-            if target_path is not None:
-                if not self._is_significant_image(entity, target_path):
-                    continue
-                provenance = read_image_provenance(target_path)
-                if provenance.author or provenance.copyright or provenance.license or provenance.has_c2pa:
-                    continue
-                detail = f"У значимого изображения нет локальных метаданных об авторе/лицензии: {entity.value}"
-            else:
-                target, _fragment = urldefrag(entity.value)
-                if urlparse(target).scheme not in {"http", "https"}:
-                    continue
-                detail = f"Внешнее изображение указано без явного источника/лицензии рядом со ссылкой: {entity.value}"
-
-            signals.append(
-                RightsSignal(
-                    kind="image_provenance",
-                    risk="no_source",
-                    deterministic=True,
-                    title="Изображение без подтверждённых прав",
-                    detail=detail,
-                    recommendation="Добавить источник, автора и лицензию изображения или подтвердить права вручную.",
-                    quote=entity.quote,
-                    location=entity.location,
-                    confidence=0.65,
-                )
-            )
-            seen_resources.add(resource_key)
         return signals
 
     def _dataset_rights_signals(self, unit: ContentUnit) -> list[RightsSignal]:
@@ -1033,48 +991,8 @@ class RightsAndOriginalityChecker(BaseChecker):
                             "location": TextLocation(file_path=file.relative_path, line_start=line_number, line_end=line_number),
                         }
                     )
-        for entity in _entities_of_type(entities, EntityType.IMAGE):
-            target, _fragment = urldefrag(entity.value)
-            if urlparse(target).scheme in {"http", "https"} and not self._is_decorative_reference(entity.value, entity.quote):
-                queries.append(
-                    {
-                        "kind": "image_provenance",
-                        "title": "Возможный источник изображения",
-                        "text": f"Найди источник и лицензию изображения по ссылке или имени: {entity.value}",
-                        "quote": entity.quote,
-                        "location": entity.location,
-                    }
-                )
+        queries.extend(image_evidence_queries(entities))
         return queries
-
-    def _resolve_local_image(self, unit: ContentUnit, entity: ExtractedEntity) -> Path | None:
-        target, _fragment = urldefrag(entity.value)
-        if not target or urlparse(target).scheme in {"http", "https"}:
-            return None
-        source_file = unit.root_path / entity.location.file_path
-        target_path = (source_file.parent / target).resolve()
-        if target_path.exists() and _is_inside(target_path, unit.root_path):
-            return target_path
-        return None
-
-    def _is_significant_image(self, entity: ExtractedEntity, path: Path) -> bool:
-        dimensions = _read_image_dimensions(path)
-        if dimensions is None:
-            return True
-        width, height = dimensions
-        if width < DECORATIVE_MAX_SIDE and height < DECORATIVE_MAX_SIDE:
-            return False
-        return not _is_decorative_image(entity.value, entity.quote, width, height)
-
-    def _is_decorative_reference(self, value: str, quote: str) -> bool:
-        marker_text = f"{value} {quote}".lower()
-        return any(hint in marker_text for hint in DECORATIVE_HINTS)
-
-    def _source_file_text(self, unit: ContentUnit, location: TextLocation) -> str:
-        for file in unit.files:
-            if file.relative_path == location.file_path:
-                return file.text
-        return ""
 
     def _has_license_terms_near(self, text: str, needle: str) -> bool:
         position = text.lower().find(needle.lower())
@@ -1803,32 +1721,6 @@ def _language_from_content(text: str) -> str | None:
     return None
 
 
-def _read_image_dimensions(path: Path) -> tuple[int, int] | None:
-    """Читаем размеры PNG/JPEG без внешних библиотек."""
-
-    try:
-        with path.open("rb") as handle:
-            header = handle.read(24)
-            if header.startswith(b"\x89PNG\r\n\x1a\n") and len(header) >= 24:
-                width, height = struct.unpack(">II", header[16:24])
-                return int(width), int(height)
-            if header.startswith(b"\xff\xd8"):
-                return _read_jpeg_dimensions(header + handle.read())
-    except OSError:
-        return None
-    return None
-
-
-def _is_decorative_image(path: str, quote: str, width: int, height: int) -> bool:
-    """Не ругаем маленькие иконки, бейджи и логотипы как содержательные изображения."""
-
-    marker_text = f"{path} {quote}".lower()
-    decorative_markers = ("icon", "badge", "logo", "favicon", "avatar", "shield", "икон", "логотип")
-    if any(marker in marker_text for marker in decorative_markers):
-        return True
-    return width <= 128 and height <= 128
-
-
 def _market_fit_signals(unit: ContentUnit, patterns: dict[str, tuple[str, ...]]) -> dict[str, dict[str, object]]:
     """Ищет признаки данных, бизнес-контекста и метрик успеха."""
 
@@ -1959,24 +1851,6 @@ def _first_market_location(signals: dict[str, dict[str, object]]) -> TextLocatio
             continue
         line = first.get("line_start") if isinstance(first.get("line_start"), int) else None
         return TextLocation(file_path=str(first["file_path"]), line_start=line, line_end=line)
-    return None
-
-
-def _read_jpeg_dimensions(data: bytes) -> tuple[int, int] | None:
-    """Находим SOF-сегмент JPEG и достаём ширину/высоту."""
-
-    index = 2
-    while index < len(data) - 9:
-        if data[index] != 0xFF:
-            index += 1
-            continue
-        marker = data[index + 1]
-        block_length = int.from_bytes(data[index + 2 : index + 4], "big")
-        if marker in {0xC0, 0xC1, 0xC2, 0xC3}:
-            height = int.from_bytes(data[index + 5 : index + 7], "big")
-            width = int.from_bytes(data[index + 7 : index + 9], "big")
-            return width, height
-        index += 2 + block_length
     return None
 
 

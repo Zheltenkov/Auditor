@@ -29,6 +29,7 @@ GENERIC_MODEL_DETAILS = {
     "Фактологическая проверка без отдельного пояснения.",
     "Модельная проверка без отдельного источника.",
 }
+LOW_EVIDENCE_ACTUALITY_CONFIDENCE = 0.3
 
 
 def postprocess_findings(findings: list[Finding]) -> tuple[list[Finding], list[str]]:
@@ -38,6 +39,7 @@ def postprocess_findings(findings: list[Finding]) -> tuple[list[Finding], list[s
     kept: list[Finding] = []
     tool_errors: list[Finding] = []
     empty_model_results = 0
+    low_evidence_actuality = 0
     rights_duplicates = 0
 
     for finding in findings:
@@ -47,13 +49,16 @@ def postprocess_findings(findings: list[Finding]) -> tuple[list[Finding], list[s
         if _is_empty_model_result(finding):
             empty_model_results += 1
             continue
+        if _is_low_evidence_actuality_unknown(finding):
+            low_evidence_actuality += 1
+            continue
         if finding.checker_name == "model_rubric_checker" and finding.criterion == Criterion.RIGHTS:
             rights_duplicates += 1
             continue
         kept.append(_normalize_review_and_severity(finding))
 
     collapsed, duplicate_count = _collapse_language_duplicates(kept)
-    warnings.extend(_warning_summary(tool_errors, empty_model_results, rights_duplicates, duplicate_count))
+    warnings.extend(_warning_summary(tool_errors, empty_model_results, low_evidence_actuality, rights_duplicates, duplicate_count))
     return collapsed, warnings
 
 
@@ -82,6 +87,21 @@ def _is_empty_model_result(finding: Finding) -> bool:
     if not details:
         return True
     return all(detail in GENERIC_MODEL_DETAILS for detail in details)
+
+
+def _is_low_evidence_actuality_unknown(finding: Finding) -> bool:
+    """Удаляет проверки актуальности без источников, версий и уверенности."""
+
+    if finding.checker_name != "tech_freshness_checker" or finding.criterion != Criterion.ACTUALITY:
+        return False
+    if finding.verdict != Verdict.UNKNOWN:
+        return False
+    if finding.confidence >= LOW_EVIDENCE_ACTUALITY_CONFIDENCE:
+        return False
+    if finding.source or finding.latest_version or finding.recommended_version:
+        return False
+    support_status = (finding.support_status or "").strip().lower()
+    return support_status in {"", "неизвестно", "unknown", "не проверялось"}
 
 
 def _normalize_review_and_severity(finding: Finding) -> Finding:
@@ -220,6 +240,7 @@ def _merge_language_group(primary: Finding, group: list[Finding]) -> Finding:
 def _warning_summary(
     tool_errors: list[Finding],
     empty_model_results: int,
+    low_evidence_actuality: int,
     rights_duplicates: int,
     duplicate_count: int,
 ) -> list[str]:
@@ -233,6 +254,10 @@ def _warning_summary(
         )
     if empty_model_results:
         warnings.append(f"Постобработка: {empty_model_results} пустых модельных результатов без уверенности удалены из таблицы.")
+    if low_evidence_actuality:
+        warnings.append(
+            f"Постобработка: {low_evidence_actuality} низкоуверенных проверок актуальности без источников и версий удалены из таблицы."
+        )
     if rights_duplicates:
         warnings.append(f"Постобработка: {rights_duplicates} дублей по правам от общей модельной рубрики удалены.")
     if duplicate_count:

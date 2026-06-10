@@ -155,6 +155,33 @@ def test_technology_checker_ignores_makefile_target_instruction(workspace_tmp_pa
     assert findings == []
 
 
+def test_tech_freshness_checker_ignores_exercise_numbers_and_turn_in_labels(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text(
+        "10.1. [Exercise 06. Sorting a dictionary](#exercise-06-sorting-a-dictionary)\n"
+        "- Turn-in directory: `ex00/`.\n",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+    entities = extract_entities(unit)
+    fake_client = _FakeJsonClient(
+        {
+            "verdict": "unknown",
+            "severity": "info",
+            "confidence": 0.1,
+            "support_status": "неизвестно",
+            "evidence": "Нет проверяемой версии технологии.",
+        }
+    )
+    context = CheckContext(_settings(workspace_tmp_path, project), tech_model_client=fake_client)
+
+    findings = TechFreshnessChecker().check(unit, entities, context)
+
+    assert findings == []
+    assert fake_client.calls == 0
+
+
 def test_technology_checker_skips_unknown_without_evidence(workspace_tmp_path: Path) -> None:
     project = workspace_tmp_path / "unit"
     project.mkdir()
@@ -164,6 +191,31 @@ def test_technology_checker_skips_unknown_without_evidence(workspace_tmp_path: P
     context = CheckContext(
         _settings(workspace_tmp_path, project),
         tech_model_client=_FakeJsonClient({"verdict": "unknown", "severity": "info"}),
+    )
+
+    findings = TechnologyFreshnessChecker().check(unit, entities, context)
+
+    assert findings == []
+
+
+def test_technology_checker_skips_low_confidence_unknown_without_sources(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text("Use Alpine 3.20.\n", encoding="utf-8")
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+    entities = extract_entities(unit)
+    context = CheckContext(
+        _settings(workspace_tmp_path, project),
+        tech_model_client=_FakeJsonClient(
+            {
+                "verdict": "unknown",
+                "severity": "info",
+                "confidence": 0.1,
+                "support_status": "неизвестно",
+                "evidence": "Недостаточно источников для проверки.",
+                "recommendation": "Проверить вручную.",
+            }
+        ),
     )
 
     findings = TechnologyFreshnessChecker().check(unit, entities, context)

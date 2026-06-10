@@ -72,6 +72,21 @@ def test_postprocess_drops_empty_model_unknown_and_rights_rubric_duplicate() -> 
     assert any("дублей по правам" in warning for warning in warnings)
 
 
+def test_postprocess_drops_low_evidence_actuality_unknown() -> None:
+    finding = _finding(
+        checker_name="tech_freshness_checker",
+        verdict=Verdict.UNKNOWN,
+        confidence=0.1,
+        evidence=[Evidence(title="Актуальность технологии", detail="Недостаточно контекста для определения актуальности.")],
+        prompt_version="tech_freshness_checker:v1",
+    ).model_copy(update={"support_status": "неизвестно"})
+
+    findings, warnings = postprocess_findings([finding])
+
+    assert findings == []
+    assert any("низкоуверенных проверок актуальности" in warning for warning in warnings)
+
+
 def test_postprocess_aligns_fail_info_and_recalculates_review_flag() -> None:
     finding = _finding(
         checker_name="model_rubric_checker",

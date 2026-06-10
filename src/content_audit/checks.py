@@ -81,6 +81,10 @@ TECH_KEYWORDS = {
     "python",
     "ubuntu",
 }
+NON_TECH_VERSION_LABEL_RE = re.compile(
+    r"(?i)\b(?:chapter|exercise|section|part|task|step|lesson|module|unit|turn-in|files?\s+to\s+turn\s+in)\b"
+)
+LOW_CONFIDENCE_UNKNOWN_THRESHOLD = 0.3
 
 TRUSTED_REDIRECT_HOST_GROUPS = (
     frozenset({"opros.so", "oprosso.ru", "oprosso.net", "new.oprosso.net"}),
@@ -2004,11 +2008,57 @@ def _looks_like_actuality_candidate(entity: ExtractedEntity) -> bool:
     context = f"{value} {entity.context or ''}".lower()
     if len(lowered) < 2:
         return False
+    if _is_non_technology_version_label(value):
+        return False
     if re.fullmatch(r"(19|20)\d{2}", lowered):
         return any(keyword in context for keyword in TECH_KEYWORDS)
     if any(keyword in lowered for keyword in TECH_KEYWORDS):
         return True
-    return entity.entity_type == EntityType.VERSION and any(keyword in context for keyword in TECH_KEYWORDS)
+    return entity.entity_type == EntityType.VERSION and _has_nearby_technology_context(context)
+
+
+def _is_non_technology_version_label(value: str) -> bool:
+    """Отбрасывает номера упражнений и служебные подписи, похожие на версии."""
+
+    normalized = value.strip().lower()
+    if NON_TECH_VERSION_LABEL_RE.search(normalized):
+        return True
+    if re.fullmatch(r"ex\d{1,3}", normalized):
+        return True
+    return False
+
+
+def _has_nearby_technology_context(context: str) -> bool:
+    """Проверяет, что версия стоит рядом с настоящей технологической сущностью."""
+
+    if not any(keyword in context for keyword in TECH_KEYWORDS):
+        return False
+    return any(
+        marker in context
+        for marker in (
+            "version",
+            "верси",
+            "interpreter",
+            "интерпретатор",
+            "runtime",
+            "image",
+            "образ",
+            "standard",
+            "стандарт",
+            "release",
+            "lts",
+            "support",
+            "поддерж",
+            "python",
+            "java",
+            "alpine",
+            "ubuntu",
+            "gcc",
+            "node",
+            "posix",
+            "c11",
+        )
+    )
 
 
 def _normalise_technology_value(value: str) -> str:
@@ -2348,6 +2398,12 @@ def _is_uninformative_technology_item(item: dict[str, Any]) -> bool:
         return False
     if _sources_from_item(item):
         return False
+    if _optional_model_text(item.get("latest_version")) or _optional_model_text(item.get("recommended_version")):
+        return False
+    confidence = _parse_confidence(item.get("confidence"))
+    support_status = (_optional_model_text(item.get("support_status")) or _optional_model_text(item.get("status")) or "").lower()
+    if confidence < LOW_CONFIDENCE_UNKNOWN_THRESHOLD and support_status in {"", "неизвестно", "unknown", "не проверялось"}:
+        return True
     informative_keys = (
         "evidence",
         "reason",

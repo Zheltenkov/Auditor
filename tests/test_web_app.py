@@ -110,12 +110,26 @@ def test_render_page_contains_extended_report_columns(workspace_tmp_path: Path) 
     assert 'data-criterion-filter="all"' in html
     assert 'data-criterion-filter="actuality"' in html
     assert 'data-criterion="actuality"' in html
+    assert 'data-severity-filter="critical"' in html
+    assert 'data-severity-filter="major"' in html
+    assert 'data-severity-filter="minor"' in html
+    assert 'data-severity-filter="info"' in html
     assert 'id="active-criterion-label"' in html
+    assert 'id="active-severity-label"' in html
     assert 'id="active-column-filter-label"' in html
     assert 'id="filter-result-count"' in html
     assert 'data-column-filter="criterion"' in html
     assert 'data-column-filter="severity"' in html
     assert "columnFilterState" in html
+    assert "activeSeverity" in html
+    assert "мгновенно, без перезапуска" not in html
+    assert "/download?file=report.xlsx" in html
+    assert "/download?file=report.csv" in html
+    assert "/download?file=report.json" in html
+    assert "/download?file=run_summary.json" not in html
+    topbar = html.split('<header class="topbar">', 1)[1].split("</header>", 1)[0]
+    assert 'href="#findings"' not in topbar
+    assert "Таблица" not in topbar
     summary_block = html.split('class="summary-strip"', 1)[1]
     assert summary_block.index("critical") < summary_block.index("major")
     assert summary_block.index("major") < summary_block.index("minor")

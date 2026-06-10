@@ -1,4 +1,5 @@
 from pathlib import Path
+from zipfile import ZipFile
 
 from content_audit.domain import AuditReport, AuditSettings, Criterion, Finding, RunSummary, Severity, Verdict
 from content_audit.exporters import write_report
@@ -29,6 +30,7 @@ def test_runner_writes_reports(workspace_tmp_path: Path) -> None:
     ]
     assert (output / "report.json").exists()
     assert (output / "report.csv").exists()
+    assert (output / "report.xlsx").exists()
     assert (output / "run_summary.json").exists()
     csv_text = (output / "report.csv").read_text(encoding="utf-8-sig")
     assert "Источник" in csv_text
@@ -36,6 +38,10 @@ def test_runner_writes_reports(workspace_tmp_path: Path) -> None:
     assert "Статус поддержки" in csv_text
     assert "Последняя версия" in csv_text
     assert "Рекомендуемая версия" in csv_text
+    with ZipFile(output / "report.xlsx") as workbook:
+        sheet = workbook.read("xl/worksheets/sheet1.xml").decode("utf-8")
+    assert "Критерий" in sheet
+    assert "Рекомендуемая версия" in sheet
 
 
 def test_exporter_does_not_write_pass_findings(workspace_tmp_path: Path) -> None:
@@ -63,3 +69,6 @@ def test_exporter_does_not_write_pass_findings(workspace_tmp_path: Path) -> None
 
     assert "Проверено" not in (output / "report.csv").read_text(encoding="utf-8-sig")
     assert '"findings": []' in (output / "report.json").read_text(encoding="utf-8")
+    with ZipFile(output / "report.xlsx") as workbook:
+        sheet = workbook.read("xl/worksheets/sheet1.xml").decode("utf-8")
+    assert "Проверено" not in sheet

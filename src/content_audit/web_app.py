@@ -213,9 +213,9 @@ class AuditWebHandler(BaseHTTPRequestHandler):
         self.end_headers()
 
     def _send_report_file(self, file_name: str) -> None:
-        """Отдаём CSV/JSON отчёт из текущей папки результатов."""
+        """Отдаём файлы отчёта из текущей папки результатов."""
 
-        safe_names = {"report.csv", "report.json", "run_summary.json", "evaluation.json"}
+        safe_names = {"report.xlsx", "report.csv", "report.json", "run_summary.json", "evaluation.json"}
         if file_name not in safe_names:
             self.send_error(HTTPStatus.BAD_REQUEST, "Неверное имя файла")
             return
@@ -570,9 +570,14 @@ input[type="text"]:focus, select:focus { border-color: var(--accent); box-shadow
 .severity-inline { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
 .severity-chip {
   display: inline-flex; align-items: center; min-height: 32px;
+  border: 0;
   border-radius: 999px; padding: 5px 12px;
-  font-size: 13px; font-weight: 900; white-space: nowrap;
+  font: 900 13px var(--font-sans);
+  white-space: nowrap;
+  cursor: pointer;
 }
+.severity-chip:hover,
+.severity-chip.is-active { box-shadow: 0 0 0 3px rgba(14,143,111,.12); }
 .severity-chip-critical { color: var(--danger); background: var(--danger-soft); }
 .severity-chip-major { color: #98630c; background: #f3dfac; }
 .severity-chip-minor { color: var(--muted); background: #ece7dc; }
@@ -641,8 +646,8 @@ table {
 col.col-criterion { width: 150px; }
 col.col-verdict { width: 170px; }
 col.col-severity { width: 130px; }
-col.col-file { width: 260px; }
-col.col-line { width: 82px; }
+col.col-file { width: 190px; }
+col.col-line { width: 120px; }
 col.col-quote { width: 360px; }
 col.col-evidence { width: 380px; }
 col.col-source { width: 320px; }
@@ -814,22 +819,23 @@ tr:last-child td { border-bottom: 0; }
 }
 .run-progress.is-error { border-color: rgba(196, 54, 54, .35); background: var(--danger-soft); }
 .filter-note {
-  display: inline-flex; align-items: center; border-radius: 999px;
+  display: inline-flex; align-items: center; min-height: 30px; border-radius: 999px;
   padding: 5px 10px; font-size: 12px; font-weight: 800;
 }
 .filter-note { color: var(--info); background: #e7eefb; }
 .filter-bar {
-  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
   margin: 16px 0 12px; padding: 12px 14px;
   background: var(--surface); border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm); box-shadow: var(--shadow-sm);
 }
-.filter-bar-label { color: var(--muted); font-size: 12px; font-weight: 900; letter-spacing: 0; }
+.filter-bar .check { min-height: 30px; margin: 0; }
+.filter-bar-label { color: var(--muted); font-size: 12px; font-weight: 900; letter-spacing: 0; white-space: nowrap; }
 .filter-chip {
   display: inline-flex; align-items: center; min-height: 30px;
   border-radius: 999px; padding: 5px 10px;
   color: var(--accent-deep); background: var(--accent-soft);
-  font-size: 12px; font-weight: 900;
+  font-size: 12px; font-weight: 900; white-space: nowrap;
 }
 table.findings.hide-unknown tr[data-verdict="unknown"] { display: none; }
 .diagnostics {
@@ -874,7 +880,6 @@ def _render_topbar() -> str:
     </div>
     <nav class="top-actions">
       <a class="link-button" href="#summary">Сводка</a>
-      <a class="link-button" href="#findings">Таблица</a>
       <a class="link-button" href="/logout">Выйти</a>
     </nav>
   </div>
@@ -983,10 +988,10 @@ def _render_filter_bar() -> str:
 <section class="filter-bar" id="filter-bar">
   <span class="filter-bar-label">Фильтры таблицы</span>
   <span class="filter-chip" id="active-criterion-label">Критерий: все</span>
+  <span class="filter-chip" id="active-severity-label">Критичность: все</span>
   <span class="filter-chip" id="active-column-filter-label">Колонки: нет</span>
   <label class="check"><input type="checkbox" id="flt-hide-unknown"> Скрыть «нужна проверка»</label>
   <span class="filter-note" id="filter-result-count">видно: 0</span>
-  <span class="filter-note">мгновенно, без перезапуска</span>
 </section>
 """
 
@@ -1101,7 +1106,7 @@ def _render_requirement_status(report: AuditReport) -> str:
     rows = [
         ("Ветка и единица", f"{affected_branches} веток · {affected_units} ед."),
         ("Критичность", "Critical / Major / Minor / Info"),
-        ("Экспорт", "CSV и JSON"),
+        ("Экспорт", "XLSX / CSV / JSON"),
         ("Ссылки", "сеть использовалась" if summary.network_used else "сеть выключена"),
         ("Стоимость", "учтена" if usage.calls_total or usage.cache_hits else "нет модельных вызовов"),
     ]
@@ -1112,8 +1117,10 @@ def _severity_chip(severity: Severity, count: int) -> str:
     """Рисует компактный счётчик критичности в общей сводке."""
 
     return (
-        f'<span class="severity-chip severity-chip-{severity.value}">'
-        f'{count} {_esc(SEVERITY_LABELS[severity].lower())}</span>'
+        f'<button type="button" class="severity-chip severity-chip-{severity.value}" '
+        f'data-severity-filter="{severity.value}" '
+        f'data-severity-label="{_esc(SEVERITY_LABELS[severity].lower())}">'
+        f'{count} {_esc(SEVERITY_LABELS[severity].lower())}</button>'
     )
 
 
@@ -1243,12 +1250,10 @@ def _render_downloads(report_dir: Path) -> str:
     """Показывает ссылки на файлы отчёта."""
 
     links = [
+        ("XLSX", "report.xlsx"),
         ("CSV", "report.csv"),
         ("JSON", "report.json"),
-        ("Сводка", "run_summary.json"),
     ]
-    if (report_dir / "evaluation.json").exists():
-        links.append(("Метрики", "evaluation.json"))
     items = "\n".join(f'<a class="link-button" href="/download?file={quote(name)}">{label}</a>' for label, name in links)
     return f"""
 <section class="section">
@@ -1386,12 +1391,15 @@ if (diagnostics) diagnostics.removeAttribute("open");
 const table = document.getElementById("findings-table");
 const hideUnknown = document.getElementById("flt-hide-unknown");
 const criterionButtons = document.querySelectorAll("[data-criterion-filter]");
+const severityButtons = document.querySelectorAll("[data-severity-filter]");
 const activeCriterionLabel = document.getElementById("active-criterion-label");
+const activeSeverityLabel = document.getElementById("active-severity-label");
 const activeColumnFilterLabel = document.getElementById("active-column-filter-label");
 const resultCount = document.getElementById("filter-result-count");
 const columnFilterButtons = table ? Array.from(table.querySelectorAll("[data-column-filter]")) : [];
 const columnFilterState = new Map();
 let activeCriterion = "all";
+let activeSeverity = "all";
 let activeColumnMenu = null;
 
 function rowValue(row, columnIndex) {
@@ -1518,8 +1526,9 @@ function applyFilters() {
   const rows = table.querySelectorAll("tbody tr.frow");
   rows.forEach((row) => {
     const byCriterion = activeCriterion === "all" || row.dataset.criterion === activeCriterion;
+    const bySeverity = activeSeverity === "all" || row.dataset.severity === activeSeverity;
     const byColumns = Array.from(columnFilterState.entries()).every(([columnIndex, selected]) => selected.has(rowValue(row, columnIndex)));
-    row.style.display = byCriterion && byColumns ? "" : "none";
+    row.style.display = byCriterion && bySeverity && byColumns ? "" : "none";
   });
   updateEmptyState();
 }
@@ -1531,6 +1540,21 @@ criterionButtons.forEach((button) => {
     if (activeCriterionLabel) {
       const label = button.dataset.criterionLabel || "все";
       activeCriterionLabel.textContent = `Критерий: ${label}`;
+    }
+    applyFilters();
+    const findings = document.getElementById("findings");
+    if (findings) findings.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+});
+
+severityButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const nextSeverity = button.dataset.severityFilter || "all";
+    activeSeverity = activeSeverity === nextSeverity ? "all" : nextSeverity;
+    severityButtons.forEach((item) => item.classList.toggle("is-active", activeSeverity !== "all" && item === button));
+    if (activeSeverityLabel) {
+      const label = activeSeverity === "all" ? "все" : button.dataset.severityLabel || nextSeverity;
+      activeSeverityLabel.textContent = `Критичность: ${label}`;
     }
     applyFilters();
     const findings = document.getElementById("findings");

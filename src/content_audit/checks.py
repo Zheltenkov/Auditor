@@ -98,6 +98,39 @@ FACT_MARKER_RE = re.compile(
     re.IGNORECASE,
 )
 FACT_DATE_RE = re.compile(r"\b(?:19|20)\d{2}(?:[-./](?:0?[1-9]|1[0-2])(?:[-./](?:0?[1-9]|[12]\d|3[01]))?)?\b")
+INTERNAL_MARKDOWN_LINK_RE = re.compile(r"\[[^\]]+\]\(\s*#[^)]+\)")
+MARKDOWN_LINK_RE = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
+CHECKLIST_STOP_TOKENS = {
+    "part",
+    "task",
+    "step",
+    "section",
+    "chapter",
+    "module",
+    "exercise",
+    "project",
+    "qism",
+    "часть",
+    "раздел",
+    "задание",
+}
+REQUIREMENT_CLAIM_MARKERS = (
+    " must ",
+    " should ",
+    " need to ",
+    " needs to ",
+    " required ",
+    " requirement ",
+    " have to ",
+    "должен",
+    "должна",
+    "должны",
+    "нужно",
+    "необходимо",
+    "требуется",
+    "следует",
+    "обязательно",
+)
 
 
 class CheckContext:
@@ -624,7 +657,12 @@ verdict='fail' используй только для грубой пробле�
 verdict='unknown' используй, если контекста недостаточно.
 Все пояснения и рекомендации пиши на русском языке."""
 
-    PLACEHOLDER_RE = re.compile(r"\b(TODO|TBD|FIXME|lorem ipsum)\b|здесь будет|дописать|заглушка", re.IGNORECASE)
+    PLACEHOLDER_RE = re.compile(
+        r"\b(TODO|TBD|FIXME|lorem ipsum)\b|"
+        r"\bздесь\s+будет\s+(?:текст|описание|картинка|изображение|пример|раздел|таблица|ссылка)\b|"
+        r"\b(?:дописать|заглушка)\b",
+        re.IGNORECASE,
+    )
 
     def check(self, unit: ContentUnit, entities: list[ExtractedEntity], context: CheckContext) -> list[Finding]:
         del entities
@@ -1736,7 +1774,21 @@ def _checklist_name_matches_readme(name: str, normalized_readme: str) -> bool:
     if normalized and normalized in normalized_readme:
         return True
     part_match = re.search(r"part\s+(\d+)", normalized)
-    return bool(part_match and f"part {part_match.group(1)}" in normalized_readme)
+    if part_match and f"part {part_match.group(1)}" in normalized_readme:
+        return True
+    numbers = re.findall(r"\d+", normalized)
+    tokens = [
+        token
+        for token in re.findall(r"[a-zа-яё0-9]+", normalized)
+        if token not in CHECKLIST_STOP_TOKENS and not token.isdigit() and len(token) >= 2
+    ]
+    if not tokens:
+        return False
+    token_hits = sum(1 for token in tokens if re.search(rf"\b{re.escape(token)}\b", normalized_readme))
+    number_hits = sum(1 for number in numbers if re.search(rf"\b{re.escape(number)}\b", normalized_readme))
+    if numbers:
+        return token_hits == len(tokens) and number_hits > 0
+    return token_hits == len(tokens)
 
 
 def _detect_language_profile(unit: ContentUnit) -> tuple[set[str], list[dict[str, str]]]:
@@ -2118,6 +2170,8 @@ def _extract_fact_claims(unit: ContentUnit, limit: int) -> list[dict[str, Any]]:
             continue
         for line_number, line in enumerate(file.text.splitlines(), start=1):
             for candidate in _split_claim_line(line):
+                if _is_markdown_navigation_claim(candidate):
+                    continue
                 claim = _clean_claim_text(candidate)
                 key = normalize_for_match(claim)
                 if key in seen or not _looks_like_fact_claim(claim):
@@ -2145,6 +2199,7 @@ def _clean_claim_text(value: str) -> str:
     """Убираем Markdown-маркеры, которые не относятся к смыслу утверждения."""
 
     cleaned = re.sub(r"^\s*(?:#{1,6}|[-*]|\d+[.)])\s*", "", value.strip())
+    cleaned = MARKDOWN_LINK_RE.sub(r"\1", cleaned)
     cleaned = re.sub(r"\s+", " ", cleaned)
     return cleaned.strip()
 
@@ -2157,9 +2212,29 @@ def _looks_like_fact_claim(value: str) -> bool:
         return False
     if lowered.startswith(("http://", "https://", "![", "[")):
         return False
+    if _is_markdown_navigation_claim(value):
+        return False
+    if _is_requirement_claim(value):
+        return False
     if len(re.findall(r"\w+", value, flags=re.UNICODE)) < 5:
         return False
     return bool(FACT_DATE_RE.search(value) or FACT_MARKER_RE.search(value) or any(keyword in lowered for keyword in TECH_KEYWORDS))
+
+
+def _is_markdown_navigation_claim(value: str) -> bool:
+    """Отсекаем строки оглавления и внутренние якоря, которые не являются фактами."""
+
+    if not INTERNAL_MARKDOWN_LINK_RE.search(value):
+        return False
+    without_links = INTERNAL_MARKDOWN_LINK_RE.sub("", value)
+    return len(re.findall(r"\w+", without_links, flags=re.UNICODE)) <= 3
+
+
+def _is_requirement_claim(value: str) -> bool:
+    """Отсекаем требования курса: их нужно оценивать рубрикой, а не внешним фактчеком."""
+
+    lowered = f" {value.lower()} "
+    return any(marker in lowered for marker in REQUIREMENT_CLAIM_MARKERS)
 
 
 def _fact_check_prompt(claim: dict[str, Any]) -> str:

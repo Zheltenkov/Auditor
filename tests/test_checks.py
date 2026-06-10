@@ -56,6 +56,23 @@ def test_checklist_checker_accepts_part_names(workspace_tmp_path: Path) -> None:
     assert findings[0].verdict == Verdict.PASS
 
 
+def test_checklist_checker_matches_number_and_keyword_across_language(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README_UZB.md").write_text("## 1-qism. cat utilitasi bilan ishlash\n", encoding="utf-8")
+    (project / "check-list.yml").write_text(
+        "sections:\n"
+        "  - questions:\n"
+        "      - name: Part_1.CAT\n",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+
+    findings = ChecklistChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
+
+    assert findings[0].verdict == Verdict.PASS
+
+
 def test_language_checker_flags_single_language(workspace_tmp_path: Path) -> None:
     project = workspace_tmp_path / "unit"
     project.mkdir()
@@ -94,6 +111,29 @@ def test_readability_checker_does_not_flag_long_lines_without_model(workspace_tm
     findings = ReadabilityChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
 
     assert findings == []
+
+
+def test_readability_checker_does_not_flag_normal_here_will_be_phrase(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text("В этом разделе здесь будет описан порядок настройки сервиса.\n", encoding="utf-8")
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+
+    findings = ReadabilityChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
+
+    assert findings == []
+
+
+def test_readability_checker_flags_real_placeholder_phrase(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text("Здесь будет описание проекта.\n", encoding="utf-8")
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+
+    findings = ReadabilityChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
+
+    assert findings[0].severity == Severity.MAJOR
+    assert findings[0].verdict == Verdict.FAIL
 
 
 def test_readability_checker_lets_model_decide_long_line_warning(workspace_tmp_path: Path) -> None:
@@ -472,6 +512,34 @@ def test_fact_checker_perplexity_uses_sources_and_cache(workspace_tmp_path: Path
     assert first[0].source == "https://docs.python.org/3/whatsnew/3.10.html"
     assert first[0].prompt_version == "fact_checker_perplexity:v1"
     assert second[0].extra["cache_hit"] is True
+
+
+def test_fact_checker_skips_navigation_and_course_requirements(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text(
+        "- [Python 3.10 supports structural pattern matching since the 2021 release](#python-310)\n"
+        "Python scripts should be placed in src according to the project rules.\n"
+        "Python 3.10 supports structural pattern matching since the 2021 release.\n",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=2000)
+    fake_client = _FakeJsonClient(
+        {
+            "verdict": "pass",
+            "confidence": 0.9,
+            "evidence": "Утверждение подтверждается документацией Python.",
+            "sources": [{"title": "Python docs", "url": "https://docs.python.org/3/whatsnew/3.10.html"}],
+            "recommendation": "Действий не требуется.",
+        }
+    )
+    context = CheckContext(_settings(workspace_tmp_path, project), fact_model_client=fake_client)
+
+    findings = FactCheckerPerplexity().check(unit, [], context)
+
+    assert fake_client.calls == 1
+    assert len(findings) == 1
+    assert "structural pattern matching" in findings[0].quote
 
 
 def test_link_checker_blocks_private_ip_before_network(workspace_tmp_path: Path) -> None:

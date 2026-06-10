@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 import argparse
+import hmac
 import html
 import json
 import mimetypes
-import os
+import secrets
 from collections import Counter
+from http.cookies import SimpleCookie
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -33,6 +35,9 @@ DEFAULT_REPORT_DIR = Path("reports") / "ui_latest"
 DEFAULT_MODEL = "openai/gpt-4o-mini"
 DEFAULT_FACT_MODEL = "perplexity/sonar"
 DEFAULT_TECH_MODEL = "qwen/qwen3-coder"
+AUTH_COOKIE_NAME = "audit_auth"
+AVATAR_PATH = Path(__file__).resolve().parents[2] / "avatar-placeholder.jpg"
+AVATAR_ROUTE = "/assets/avatar-placeholder.jpg"
 
 
 class WebState:
@@ -43,6 +48,15 @@ class WebState:
         self.report_dir = report_dir
         self.env_values = env_values
         self.last_error: str | None = None
+        self.auth_username = get_env_value(("AUTH_USERNAME",), env_values) or ""
+        self.auth_password = get_env_value(("AUTH_PASSWORD",), env_values) or ""
+        self.auth_sessions: set[str] = set()
+
+    @property
+    def auth_enabled(self) -> bool:
+        """Возвращает True, если в окружении заданы статические учётные данные."""
+
+        return bool(self.auth_username and self.auth_password)
 
 
 class AuditWebHandler(BaseHTTPRequestHandler):
@@ -54,6 +68,25 @@ class AuditWebHandler(BaseHTTPRequestHandler):
         """Отдаём главную страницу или файл отчёта."""
 
         route = urlparse(self.path)
+        if route.path == AVATAR_ROUTE:
+            self._send_avatar()
+            return
+        if route.path == "/favicon.ico":
+            self.send_response(HTTPStatus.NO_CONTENT)
+            self.end_headers()
+            return
+        if route.path == "/logout":
+            self._logout()
+            return
+        if route.path == "/login":
+            if self._is_authenticated():
+                self._redirect("/")
+                return
+            self._send_html(render_login_page())
+            return
+        if not self._is_authenticated():
+            self._redirect("/login")
+            return
         if route.path == "/":
             self._send_html(render_page(None, self.state))
             return
@@ -61,16 +94,21 @@ class AuditWebHandler(BaseHTTPRequestHandler):
             params = parse_qs(route.query)
             self._send_report_file(params.get("file", [""])[0])
             return
-        if route.path == "/favicon.ico":
-            self.send_response(HTTPStatus.NO_CONTENT)
-            self.end_headers()
-            return
         self.send_error(HTTPStatus.NOT_FOUND, "Страница не найдена")
 
     def do_POST(self) -> None:  # noqa: N802 - интерфейс стандартной библиотеки.
         """Запускаем аудит по данным формы."""
 
         route = urlparse(self.path)
+        if route.path == "/login":
+            self._handle_login()
+            return
+        if route.path == "/logout":
+            self._logout()
+            return
+        if not self._is_authenticated():
+            self._send_html(render_login_page("Войдите, чтобы продолжить."), status=HTTPStatus.UNAUTHORIZED)
+            return
         if route.path != "/run":
             self.send_error(HTTPStatus.NOT_FOUND, "Страница не найдена")
             return
@@ -96,15 +134,83 @@ class AuditWebHandler(BaseHTTPRequestHandler):
         parsed = parse_qs(body, keep_blank_values=True)
         return {key: values[0] for key, values in parsed.items()}
 
-    def _send_html(self, body: str, status: HTTPStatus = HTTPStatus.OK) -> None:
+    def _send_html(self, body: str, status: HTTPStatus = HTTPStatus.OK, headers: dict[str, str] | None = None) -> None:
         """Отправляем HTML-страницу."""
 
         payload = body.encode("utf-8")
         self.send_response(status)
         self.send_header("Content-Type", "text/html; charset=utf-8")
         self.send_header("Content-Length", str(len(payload)))
+        for key, value in (headers or {}).items():
+            self.send_header(key, value)
         self.end_headers()
         self.wfile.write(payload)
+
+    def _send_avatar(self) -> None:
+        """Отдаёт аватар для верхнего меню и страницы входа."""
+
+        if not AVATAR_PATH.exists():
+            self.send_error(HTTPStatus.NOT_FOUND, "Аватар не найден")
+            return
+        payload = AVATAR_PATH.read_bytes()
+        content_type = mimetypes.guess_type(AVATAR_PATH.name)[0] or "image/jpeg"
+        self.send_response(HTTPStatus.OK)
+        self.send_header("Content-Type", content_type)
+        self.send_header("Cache-Control", "public, max-age=86400")
+        self.send_header("Content-Length", str(len(payload)))
+        self.end_headers()
+        self.wfile.write(payload)
+
+    def _handle_login(self) -> None:
+        """Проверяет статические учётные данные и создаёт cookie-сессию."""
+
+        form = self._read_form()
+        if credentials_match(form.get("username", ""), form.get("password", ""), self.state):
+            token = secrets.token_urlsafe(32)
+            self.state.auth_sessions.add(token)
+            self._redirect("/", cookie=_auth_cookie(token))
+            return
+        self._send_html(render_login_page("Неверный логин или пароль"), status=HTTPStatus.UNAUTHORIZED)
+
+    def _logout(self) -> None:
+        """Удаляет текущую сессию и возвращает на страницу входа."""
+
+        token = self._auth_token()
+        if token:
+            self.state.auth_sessions.discard(token)
+        self._redirect("/login", cookie=_clear_auth_cookie())
+
+    def _is_authenticated(self) -> bool:
+        """Проверяет наличие действующей статической сессии."""
+
+        if not self.state.auth_enabled:
+            return True
+        token = self._auth_token()
+        return bool(token and token in self.state.auth_sessions)
+
+    def _auth_token(self) -> str | None:
+        """Достаёт токен авторизации из cookie."""
+
+        raw_cookie = self.headers.get("Cookie", "")
+        if not raw_cookie:
+            return None
+        cookie = SimpleCookie()
+        try:
+            cookie.load(raw_cookie)
+        except Exception:  # noqa: BLE001 - битая cookie просто считается отсутствующей.
+            return None
+        morsel = cookie.get(AUTH_COOKIE_NAME)
+        return morsel.value if morsel else None
+
+    def _redirect(self, location: str, cookie: str | None = None) -> None:
+        """Отправляет редирект с опциональным Set-Cookie."""
+
+        self.send_response(HTTPStatus.SEE_OTHER)
+        self.send_header("Location", location)
+        if cookie:
+            self.send_header("Set-Cookie", cookie)
+        self.send_header("Content-Length", "0")
+        self.end_headers()
 
     def _send_report_file(self, file_name: str) -> None:
         """Отдаём CSV/JSON отчёт из текущей папки результатов."""
@@ -211,13 +317,58 @@ def render_page(report: AuditReport | None, state: WebState, form_values: dict[s
     return f"<!doctype html><html lang=\"ru\"><head>{_render_head()}</head><body>{body}</body></html>"
 
 
-def _render_head() -> str:
+def render_login_page(error: str = "") -> str:
+    """Собирает страницу статической авторизации."""
+
+    error_html = f'<div class="login-error">{_esc(error)}</div>' if error else ""
+    body = f"""
+<main class="login-shell">
+  <form class="login-box" method="post" action="/login">
+    <div class="login-mark" aria-hidden="true">
+      <img src="{AVATAR_ROUTE}" alt="">
+    </div>
+    <h1>Авторизация</h1>
+    <label for="username">Логин</label>
+    <input id="username" name="username" autocomplete="username" required>
+    <label for="password">Пароль</label>
+    <input id="password" name="password" type="password" autocomplete="current-password" required>
+    <button class="login-submit" type="submit">Войти</button>
+    {error_html}
+  </form>
+</main>
+"""
+    return f"<!doctype html><html lang=\"ru\"><head>{_render_head('Авторизация')}</head><body class=\"login-page\">{body}</body></html>"
+
+
+def credentials_match(username: str, password: str, state: WebState) -> bool:
+    """Сравнивает логин и пароль с `.env` без раннего выхода по символам."""
+
+    if not state.auth_enabled:
+        return True
+    username_ok = hmac.compare_digest(username.encode("utf-8"), state.auth_username.encode("utf-8"))
+    password_ok = hmac.compare_digest(password.encode("utf-8"), state.auth_password.encode("utf-8"))
+    return username_ok and password_ok
+
+
+def _auth_cookie(token: str) -> str:
+    """Формирует защищённую cookie локальной сессии."""
+
+    return f"{AUTH_COOKIE_NAME}={token}; Path=/; Max-Age=28800; HttpOnly; SameSite=Lax"
+
+
+def _clear_auth_cookie() -> str:
+    """Формирует cookie для сброса локальной сессии."""
+
+    return f"{AUTH_COOKIE_NAME}=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax"
+
+
+def _render_head(title: str = "Аудит контента · Панель отчёта") -> str:
     """Возвращает заголовок страницы и стили."""
 
     return """
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Аудит контента · Панель отчёта</title>
+<title>__PAGE_TITLE__</title>
 <style>
 :root {
   --bg: #f4f1ea;
@@ -273,14 +424,77 @@ body {
 .wordmark { display: flex; align-items: center; gap: 12px; min-width: 0; }
 .glyph {
   width: 32px; height: 32px; border-radius: var(--radius-sm);
-  display: grid; place-items: center; color: #fff; font-weight: 800;
-  background: linear-gradient(135deg, var(--accent), var(--accent-bright));
+  display: grid; place-items: center; overflow: hidden;
+  background: var(--surface-strong);
   box-shadow: 0 10px 24px rgba(14, 143, 111, .24);
 }
+.glyph img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .brand-title { font-weight: 800; font-size: 15px; }
 .brand-sub { color: var(--muted); font-size: 12px; font-weight: 600; }
 .top-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 .shell { padding-top: 26px; padding-bottom: 72px; }
+body.login-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+.login-box {
+  width: min(380px, 100%);
+  padding: 24px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+.login-mark {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 16px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--surface-strong);
+  box-shadow: var(--shadow-sm);
+}
+.login-mark img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.login-box h1 { margin: 4px 0 20px; font-size: 28px; font-weight: 800; line-height: 1.2; }
+.login-box label { display: block; margin: 14px 0 6px; color: var(--muted); font-size: 12px; font-weight: 800; }
+.login-box input {
+  width: 100%;
+  height: 42px;
+  padding: 0 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface-strong);
+  color: var(--text);
+  font: 14px var(--font-sans);
+}
+.login-box input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(14,143,111,.14);
+}
+.login-submit {
+  width: 100%;
+  height: 42px;
+  margin-top: 20px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--accent-bright);
+  color: var(--text);
+  font-weight: 800;
+  cursor: pointer;
+}
+.login-submit:hover { background: var(--accent); color: #fff; }
+.login-error {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--danger-soft);
+  color: var(--danger);
+  font-size: 13px;
+  font-weight: 800;
+}
 .run-panel {
   background: var(--surface);
   border: 1px solid var(--border-strong);
@@ -642,7 +856,7 @@ table.findings.hide-unknown tr[data-verdict="unknown"] { display: none; }
   .topbar-inner, .shell { padding-left: 16px; padding-right: 16px; }
 }
 </style>
-"""
+""".replace("__PAGE_TITLE__", _esc(title), 1)
 
 
 def _render_topbar() -> str:
@@ -652,7 +866,7 @@ def _render_topbar() -> str:
 <header class="topbar">
   <div class="topbar-inner">
     <div class="wordmark">
-      <span class="glyph">А</span>
+      <span class="glyph"><img src="/assets/avatar-placeholder.jpg" alt=""></span>
       <span>
         <div class="brand-title">Аудит контента</div>
         <div class="brand-sub">проверка учебных проектов</div>
@@ -661,6 +875,7 @@ def _render_topbar() -> str:
     <nav class="top-actions">
       <a class="link-button" href="#summary">Сводка</a>
       <a class="link-button" href="#findings">Таблица</a>
+      <a class="link-button" href="/logout">Выйти</a>
     </nav>
   </div>
 </header>

@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from content_audit.domain import AuditReport, Finding, RunSummary, Severity, Verdict, Criterion
-from content_audit.web_app import WebState, load_latest_report, render_page, run_from_form
+from content_audit.web_app import WebState, credentials_match, load_latest_report, render_login_page, render_page, run_from_form
 
 
 def test_render_page_contains_project_input(workspace_tmp_path: Path) -> None:
@@ -20,6 +20,43 @@ def test_render_page_contains_project_input(workspace_tmp_path: Path) -> None:
     assert "Подготовка запуска" in html
     assert "ключ OpenRouter" not in html
     assert "Укажите папку проекта" not in html
+
+
+def test_render_login_page_uses_static_avatar_and_fields() -> None:
+    html = render_login_page("Неверный логин или пароль")
+
+    assert "Авторизация" in html
+    assert 'action="/login"' in html
+    assert 'name="username"' in html
+    assert 'name="password"' in html
+    assert "/assets/avatar-placeholder.jpg" in html
+    assert "Неверный логин или пароль" in html
+
+
+def test_credentials_match_uses_env_values_without_rendering_secret(workspace_tmp_path: Path) -> None:
+    state = WebState(
+        default_input=workspace_tmp_path,
+        report_dir=workspace_tmp_path / "reports",
+        env_values={"AUTH_USERNAME": "auditor", "AUTH_PASSWORD": "secret-password"},
+    )
+
+    html = render_login_page()
+
+    assert state.auth_enabled
+    assert credentials_match("auditor", "secret-password", state)
+    assert not credentials_match("auditor", "wrong", state)
+    assert "secret-password" not in html
+
+
+def test_credentials_match_accepts_unicode_values(workspace_tmp_path: Path) -> None:
+    state = WebState(
+        default_input=workspace_tmp_path,
+        report_dir=workspace_tmp_path / "reports",
+        env_values={"AUTH_USERNAME": "аудитор", "AUTH_PASSWORD": "пароль"},
+    )
+
+    assert credentials_match("аудитор", "пароль", state)
+    assert not credentials_match("аудитор", "неверно", state)
 
 
 def test_render_page_has_no_demo_project_by_default(workspace_tmp_path: Path) -> None:

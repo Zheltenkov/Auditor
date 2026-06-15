@@ -9,6 +9,7 @@ from pathlib import Path
 from xml.sax.saxutils import escape
 
 from content_audit.domain import CRITERION_LABELS, SEVERITY_LABELS, VERDICT_LABELS, AuditReport, Verdict
+from content_audit.report_formatting import format_finding_explanation, format_finding_fragment
 
 
 def write_report(report: AuditReport, output_path: Path) -> None:
@@ -54,7 +55,6 @@ def _report_rows(report: AuditReport) -> list[dict[str, object]]:
     rows = []
     for finding in report.findings:
         unit = unit_by_id.get(finding.unit_id)
-        evidence = " | ".join(f"{item.title}: {item.detail}" for item in finding.evidence)
         rows.append(
             {
                 "Ветка": finding.branch or "",
@@ -63,18 +63,17 @@ def _report_rows(report: AuditReport) -> list[dict[str, object]]:
                 "Критерий": CRITERION_LABELS[finding.criterion],
                 "Файл": finding.location.file_path if finding.location else "",
                 "Строка": finding.location.line_start if finding.location else "",
-                "Цитата": finding.quote or "",
+                "Фрагмент": format_finding_fragment(finding),
                 "Вердикт": VERDICT_LABELS[finding.verdict],
                 "Критичность": SEVERITY_LABELS[finding.severity],
                 "Уверенность": f"{finding.confidence:.2f}",
-                "Обоснование": evidence,
+                "Обоснование": format_finding_explanation(finding),
                 "Источник": finding.source or "",
                 "Дата проверки": _format_checked_at(finding),
                 "Статус поддержки": finding.support_status or "",
                 "Последняя версия": finding.latest_version or "",
                 "Рекомендуемая версия": finding.recommended_version or "",
                 "Версия модельного запроса": finding.prompt_version or "",
-                "Рекомендация": finding.recommendation,
                 "Нужен человек": "да" if finding.needs_human_review else "нет",
                 "Проверяющий модуль": finding.checker_name,
             }
@@ -194,18 +193,17 @@ def _xlsx_columns(fieldnames: list[object]) -> str:
         "Критерий": 28,
         "Файл": 32,
         "Строка": 10,
-        "Цитата": 44,
+        "Фрагмент": 42,
         "Вердикт": 18,
         "Критичность": 16,
         "Уверенность": 14,
-        "Обоснование": 48,
+        "Обоснование": 68,
         "Источник": 36,
         "Дата проверки": 24,
         "Статус поддержки": 20,
         "Последняя версия": 18,
         "Рекомендуемая версия": 22,
         "Версия модельного запроса": 28,
-        "Рекомендация": 48,
         "Нужен человек": 16,
         "Проверяющий модуль": 26,
     }
@@ -236,7 +234,7 @@ def _empty_fieldnames() -> list[str]:
         "Критерий",
         "Файл",
         "Строка",
-        "Цитата",
+        "Фрагмент",
         "Вердикт",
         "Критичность",
         "Уверенность",
@@ -247,7 +245,6 @@ def _empty_fieldnames() -> list[str]:
         "Последняя версия",
         "Рекомендуемая версия",
         "Версия модельного запроса",
-        "Рекомендация",
         "Нужен человек",
         "Проверяющий модуль",
     ]

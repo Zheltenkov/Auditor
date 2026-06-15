@@ -24,6 +24,37 @@ def test_extracts_links_versions_dates_and_images(workspace_tmp_path: Path) -> N
     assert "https://example.com/docs" in values
 
 
+def test_does_not_extract_scheme_example_as_link(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text(
+        "**https://** — scheme, transport indication, protocol.\n"
+        "Docs: https://example.com/docs\n",
+        encoding="utf-8",
+    )
+
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+    values = {entity.value for entity in extract_entities(unit)}
+
+    assert "https://" not in values
+    assert "https://example.com/docs" in values
+
+
+def test_strips_markdown_emphasis_from_link_edges(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text(
+        "**Resources: https://21-school.ru/blog**\n",
+        encoding="utf-8",
+    )
+
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+    values = {entity.value for entity in extract_entities(unit)}
+
+    assert "https://21-school.ru/blog" in values
+    assert "https://21-school.ru/blog**" not in values
+
+
 def test_version_extraction_requires_known_technology_prefix(workspace_tmp_path: Path) -> None:
     project = workspace_tmp_path / "unit"
     project.mkdir()

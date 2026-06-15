@@ -112,6 +112,17 @@ FACT_DATE_RE = re.compile(r"\b(?:19|20)\d{2}(?:[-./](?:0?[1-9]|1[0-2])(?:[-./](?
 INTERNAL_MARKDOWN_LINK_RE = re.compile(r"\[[^\]]+\]\(\s*#[^)]+\)")
 MARKDOWN_LINK_RE = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
 README_FACT_FILE_RE = re.compile(r"^readme(?:_rus)?\.md$", re.IGNORECASE)
+README_TASK_SECTION_RE = re.compile(
+    r"(?i)^\s*#{2,6}\s*(?:chapter\s+iv|chapter\s+v|description\s+of\s+tasks|task\s+\d+|exercise\s+\d+|"
+    r"задач[а-я]*\s+\d+|упражнен[а-я]*\s+\d+)"
+)
+README_THEORY_SECTION_RE = re.compile(
+    r"(?i)^\s*#{2,6}\s*(?:chapter\s+iii|theory|general\s+concepts|documentation|mapping|error\s+handling|"
+    r"теори[яи]|основные\s+понятия|документаци[яи]|маппинг|обработка\s+ошибок)"
+)
+README_DEFINITION_LINE_RE = re.compile(r"^\s*(?:\*\*)?[A-ZА-ЯЁ][^:\n]{1,90}(?:\*\*)?\s*[:—-]\s+\S")
+README_EXERCISE_OPTION_RE = re.compile(r"^\s*(?:\d+[).]|[A-ZА-ЯЁ][).])\s+")
+README_FEEDBACK_LINE_RE = re.compile(r"(?i)(feedback|опрос|educational experience|оставить отзыв|leave your feedback)")
 REQUIREMENT_CLAIM_MARKERS = (
     " must ",
     " should ",
@@ -129,6 +140,7 @@ REQUIREMENT_CLAIM_MARKERS = (
     "следует",
     "обязательно",
 )
+MODEL_RUBRIC_ALLOWED_CRITERIA = {Criterion.WORKLOAD}
 
 
 class CheckContext:
@@ -469,7 +481,7 @@ class ChecklistChecker(BaseChecker):
                 recommendation_parts.append(
                     "Проверить связь пунктов чек-листа с требованиями README; текущий сигнал основан на лексическом сопоставлении."
                 )
-            if description_result.ratio < 0.5:
+            if description_result.ratio == 0:
                 severity = Severity.MAJOR
                 verdict = Verdict.WARNING
                 confidence = max(confidence, 0.82)
@@ -480,6 +492,7 @@ class ChecklistChecker(BaseChecker):
                 if severity == Severity.INFO:
                     severity = Severity.MINOR
                     verdict = Verdict.WARNING
+                    confidence = min(confidence, 0.72)
                 recommendation_parts.append(
                     "Доработать пункты без критериев приёмки, ожидаемых артефактов или примеров."
                 )
@@ -1112,10 +1125,12 @@ class MarketFitChecker(BaseChecker):
         ),
         "business_context": (
             r"\b(business problem|business case|customer problem|stakeholder|user persona|target audience|use case|client need|"
-            r"business process|market segment)\b",
+            r"business process|market segment|customer base|online booking|manual labour|manual labor|employee labour costs|"
+            r"employee labor costs|barbershop|barbershops|booking system)\b",
             r"(бизнес[-\s]?задач\w*|бизнес[-\s]?контекст\w*|проблем\w*\s+бизнес\w*|заказчик\w*|"
             r"целев\w*\s+аудитори\w*|пользовательск\w*\s+сценари\w*|потребност\w*\s+(?:клиент\w*|пользовател\w*)|"
-            r"бизнес[-\s]?процесс\w*|сегмент\w*\s+рынк\w*)",
+            r"бизнес[-\s]?процесс\w*|сегмент\w*\s+рынк\w*|клиентск\w*\s+баз\w*|онлайн[-\s]?запис\w*|"
+            r"ручн\w*\s+труд\w*|трудозатрат\w*|барбершоп\w*)",
         ),
         "success_metrics": (
             r"\b(kpi|conversion|revenue|retention|churn|nps|ltv|cac|arpu|roi|gmv|mau|dau|sla|"
@@ -1318,7 +1333,7 @@ verdict='unknown' ставь только для важного утвержде
                 break
 
             for item in _result_items(record.get("response")):
-                if _is_uninformative_readme_fact_item(item):
+                if _is_uninformative_readme_fact_item(item) or not _is_allowed_readme_fact_item(item, batch):
                     continue
                 finding = _finding_from_readme_fact_item(unit, self.name, batch, item, record, cache_hit, self.prompt_version)
                 if finding.verdict != Verdict.PASS:
@@ -1668,13 +1683,13 @@ class ModelRubricChecker(BaseChecker):
     SYSTEM_PROMPT = """Ты проверяешь учебный контент как инженер-методолог.
 Верни только JSON: {"findings": [ ... ]}.
 Каждый элемент: criterion, severity, verdict, confidence, quote, file_path, line_start, evidence, recommendation.
-Критерии: market_fit, correctness, workload, readability, checklist_alignment, actuality.
+Критерий только один: workload.
 Все текстовые поля ответа пиши на русском языке.
 Не используй английский язык в рекомендации, если только цитируешь исходный термин из материала.
 Не придумывай источники. Если доказательств мало, ставь verdict='unknown' и needs_human_review=true.
-Для market_fit и workload не ставь severity='critical': это консультационные критерии до калибровки на данных.
+Для workload не ставь severity='critical': это консультационный критерий до калибровки на данных.
 Для workload ставь verdict='unknown', если нет данных о реальном времени прохождения или трудозатратах.
-Не возвращай criterion='rights': оригинальность и права проверяет отдельный специализированный модуль."""
+Не проверяй фактологию, рынок, чек-лист, ссылки, права, язык, изображения и актуальность технологий: эти зоны закрывают отдельные специализированные модули."""
 
     def check(self, unit: ContentUnit, entities: list[ExtractedEntity], context: CheckContext) -> list[Finding]:
         del entities
@@ -1703,11 +1718,15 @@ class ModelRubricChecker(BaseChecker):
             ]
         context.record_model_result(context.model_client, cache_hit=False, prompt_version=self.prompt_version)
 
-        return [
-            _finding_from_model_item(unit, self.name, item, self.prompt_version)
-            for item in response.get("findings", [])
-            if isinstance(item, dict)
-        ]
+        findings: list[Finding] = []
+        for item in response.get("findings", []):
+            if not isinstance(item, dict):
+                continue
+            finding = _finding_from_model_item(unit, self.name, item, self.prompt_version)
+            if finding.criterion not in MODEL_RUBRIC_ALLOWED_CRITERIA:
+                continue
+            findings.append(finding)
+        return findings
 
 
 def default_checkers(
@@ -2045,7 +2064,7 @@ def _market_fit_verdict(score: int) -> tuple[Verdict, Severity]:
 
     if score >= 3:
         return Verdict.PASS, Severity.INFO
-    if score == 2:
+    if score >= 1:
         return Verdict.WARNING, Severity.MINOR
     return Verdict.WARNING, Severity.MAJOR
 
@@ -2334,23 +2353,83 @@ def _extract_readme_fact_batches(unit: ContentUnit, max_lines_per_batch: int, ma
     for file in sorted(unit.files, key=lambda item: item.relative_path.lower()):
         if not _is_fact_readme_file(file.relative_path):
             continue
-        lines = file.text.splitlines()
-        for start_index in range(0, len(lines), max_lines_per_batch):
-            chunk = lines[start_index : start_index + max_lines_per_batch]
-            numbered_text = "\n".join(f"{start_index + offset + 1}: {line}" for offset, line in enumerate(chunk))
+        candidates = _readme_fact_candidate_lines(file.text.splitlines())
+        for start_index in range(0, len(candidates), max_lines_per_batch):
+            chunk = candidates[start_index : start_index + max_lines_per_batch]
+            numbered_text = "\n".join(f"{line_number}: {line}" for line_number, line in chunk)
             if not numbered_text.strip():
                 continue
+            allowed_lines = [line_number for line_number, _line in chunk]
             batches.append(
                 {
                     "file_path": file.relative_path,
-                    "line_start": start_index + 1,
-                    "line_end": start_index + len(chunk),
+                    "line_start": min(allowed_lines),
+                    "line_end": max(allowed_lines),
                     "text": numbered_text,
+                    "allowed_lines": allowed_lines,
                 }
             )
             if len(batches) >= max_batches:
                 return batches
     return batches
+
+
+def _readme_fact_candidate_lines(lines: list[str]) -> list[tuple[int, str]]:
+    """Оставляет для README-фактчека только определения и внешне проверяемые утверждения."""
+
+    candidates: list[tuple[int, str]] = []
+    in_task_section = False
+    for line_number, line in enumerate(lines, start=1):
+        stripped = line.strip()
+        if README_THEORY_SECTION_RE.search(stripped):
+            in_task_section = False
+        elif README_TASK_SECTION_RE.search(stripped):
+            in_task_section = True
+        if not _is_readme_fact_candidate_line(stripped, in_task_section):
+            continue
+        candidates.append((line_number, line))
+    return candidates
+
+
+def _is_readme_fact_candidate_line(line: str, in_task_section: bool) -> bool:
+    """Отсекает учебные инструкции, дистракторы и локальные требования проекта."""
+
+    if not line or in_task_section:
+        return False
+    if line.startswith("#") or README_FEEDBACK_LINE_RE.search(line):
+        return False
+    if _is_markdown_navigation_claim(line) or README_EXERCISE_OPTION_RE.match(line):
+        return False
+    claim = _clean_claim_text(line)
+    if _looks_like_fact_claim(claim):
+        return True
+    return _looks_like_definition_line(claim)
+
+
+def _looks_like_definition_line(value: str) -> bool:
+    """Разрешает проверку терминологических определений из теоретических разделов."""
+
+    if len(value) < 20 or len(value) > 520:
+        return False
+    if not README_DEFINITION_LINE_RE.search(value):
+        return False
+    lowered = value.lower()
+    return bool(FACT_MARKER_RE.search(value) or any(keyword in lowered for keyword in TECH_KEYWORDS) or ":" in value)
+
+
+def _is_allowed_readme_fact_item(item: dict[str, Any], batch: dict[str, Any]) -> bool:
+    """Не принимает от модели строку, которой не было во входе специального фактчека."""
+
+    file_path = str(item.get("file_path") or batch["file_path"])
+    if Path(file_path).name.lower() != Path(str(batch["file_path"])).name.lower():
+        return False
+    allowed_lines = set(batch.get("allowed_lines") or [])
+    if not allowed_lines:
+        return True
+    line_start = _parse_optional_int(item.get("line_start"))
+    if line_start is None:
+        return False
+    return line_start in allowed_lines
 
 
 def _is_fact_readme_file(relative_path: str) -> bool:

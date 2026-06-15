@@ -4,7 +4,7 @@ import zipfile
 import pytest
 
 from content_audit import web_app as web_app_module
-from content_audit.domain import AuditReport, Finding, RunSummary, Severity, Verdict, Criterion
+from content_audit.domain import AuditReport, Evidence, Finding, RunSummary, Severity, TextLocation, Verdict, Criterion
 from content_audit.web_app import (
     INTERNAL_ARCHIVE_NAME_FIELD,
     INTERNAL_ARCHIVE_PATH_FIELD,
@@ -107,6 +107,9 @@ def test_render_page_contains_extended_report_columns(workspace_tmp_path: Path) 
                 severity=Severity.INFO,
                 verdict=Verdict.UNKNOWN,
                 confidence=0.5,
+                quote="Use Java 21.",
+                location=TextLocation(file_path="README.md", line_start=3),
+                evidence=[Evidence(title="Проверка", detail="Технологию нужно сверить с актуальными источниками")],
                 recommendation="Проверить вручную.",
                 needs_human_review=True,
                 checker_name="tech_freshness_checker",
@@ -118,6 +121,12 @@ def test_render_page_contains_extended_report_columns(workspace_tmp_path: Path) 
 
     assert "Источник" in html
     assert "Статус поддержки" in html
+    assert "Фрагмент" in html
+    assert "Цитата" not in html
+    assert 'data-column-filter="recommendation"' not in html
+    assert "Что найдено:" in html
+    assert "Что сделать:" in html
+    assert "Проверить вручную." in html
     assert "Info" in html
     assert "Critical / Major" in html
     assert "Критерий — фильтр таблицы" in html

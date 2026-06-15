@@ -34,6 +34,10 @@ from content_audit.domain import (
     Severity,
 )
 from content_audit.env import get_env_value, load_env_file
+from content_audit.report_formatting import (
+    format_finding_explanation_html,
+    format_finding_fragment,
+)
 from content_audit.exporters import write_report
 from content_audit.orchestrator import AuditRunner
 
@@ -918,7 +922,7 @@ input[type="text"]:focus, select:focus { border-color: var(--accent); box-shadow
 }
 table {
   width: 100%;
-  min-width: 2720px;
+  min-width: 2320px;
   table-layout: fixed;
   border-collapse: collapse;
 }
@@ -927,14 +931,13 @@ col.col-verdict { width: 170px; }
 col.col-severity { width: 130px; }
 col.col-file { width: 190px; }
 col.col-line { width: 120px; }
-col.col-quote { width: 360px; }
-col.col-evidence { width: 380px; }
+col.col-fragment { width: 340px; }
+col.col-evidence { width: 520px; }
 col.col-source { width: 320px; }
 col.col-checked { width: 190px; }
 col.col-support { width: 160px; }
 col.col-latest { width: 160px; }
 col.col-recommended { width: 190px; }
-col.col-recommendation { width: 380px; }
 col.col-confidence { width: 110px; }
 col.col-module { width: 190px; }
 th, td {
@@ -1053,11 +1056,13 @@ tr:last-child td { border-bottom: 0; }
 .pill-fail { color: var(--danger); background: var(--danger-soft); }
 .pill-warning, .pill-unknown { color: var(--warn); background: var(--warn-soft); }
 .pill-pass { color: var(--accent-deep); background: var(--accent-soft); }
-.quote, .evidence, .source, .recommendation {
+.fragment, .evidence, .source {
   color: var(--text);
   white-space: normal;
   overflow-wrap: anywhere;
 }
+.reason-label { color: var(--muted); font-weight: 900; }
+.reason-action { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border-soft); }
 .downloads { display: flex; gap: 8px; flex-wrap: wrap; }
 .loading { opacity: .72; pointer-events: none; }
 .run-details > summary { list-style: none; cursor: pointer; outline: none; }
@@ -1432,14 +1437,13 @@ TABLE_COLUMNS: tuple[tuple[str, str], ...] = (
     ("severity", "Критичность"),
     ("file", "Файл"),
     ("line", "Строка"),
-    ("quote", "Цитата"),
+    ("fragment", "Фрагмент"),
     ("evidence", "Обоснование"),
     ("source", "Источник"),
     ("checked", "Дата проверки"),
     ("support", "Статус поддержки"),
     ("latest", "Последняя версия"),
     ("recommended", "Рекомендуемая версия"),
-    ("recommendation", "Рекомендация"),
     ("confidence", "Уверенность"),
     ("module", "Модуль"),
 )
@@ -1463,8 +1467,8 @@ def _render_findings_table(findings: list[Finding]) -> str:
     headers = "\n".join(_render_table_header(key, label) for key, label in TABLE_COLUMNS)
     rows = "\n".join(_render_finding_row(finding) for finding in findings)
     if not rows:
-        rows = '<tr><td colspan="15">По выбранным условиям случаев нет.</td></tr>'
-    rows += '\n<tr id="no-match" class="no-match" style="display:none"><td colspan="15">Под выбранные фильтры ничего не попадает.</td></tr>'
+        rows = '<tr><td colspan="14">По выбранным условиям случаев нет.</td></tr>'
+    rows += '\n<tr id="no-match" class="no-match" style="display:none"><td colspan="14">Под выбранные фильтры ничего не попадает.</td></tr>'
     return f"""
 <section id="findings" class="section">
   <div class="section-head">
@@ -1479,14 +1483,13 @@ def _render_findings_table(findings: list[Finding]) -> str:
         <col class="col-severity">
         <col class="col-file">
         <col class="col-line">
-        <col class="col-quote">
+        <col class="col-fragment">
         <col class="col-evidence">
         <col class="col-source">
         <col class="col-checked">
         <col class="col-support">
         <col class="col-latest">
         <col class="col-recommended">
-        <col class="col-recommendation">
         <col class="col-confidence">
         <col class="col-module">
       </colgroup>
@@ -1505,10 +1508,11 @@ def _render_findings_table(findings: list[Finding]) -> str:
 def _render_finding_row(finding: Finding) -> str:
     """Показывает строку найденного случая."""
 
-    evidence = " | ".join(f"{item.title}: {item.detail}" for item in finding.evidence)
     file_path = finding.location.file_path if finding.location else ""
     line = str(finding.location.line_start or "") if finding.location else ""
     checked_at = finding.checked_at.isoformat() if finding.checked_at else ""
+    explanation = format_finding_explanation_html(finding, _esc)
+    fragment = format_finding_fragment(finding)
     return f"""
 <tr class="frow" data-criterion="{finding.criterion.value}" data-verdict="{finding.verdict.value}" data-severity="{finding.severity.value}">
   <td>{_esc(CRITERION_LABELS[finding.criterion])}</td>
@@ -1516,14 +1520,13 @@ def _render_finding_row(finding: Finding) -> str:
   <td>{_pill(SEVERITY_LABELS[finding.severity], f"pill-{finding.severity.value}")}</td>
   <td class="mono">{_esc(file_path)}</td>
   <td class="mono">{_esc(line)}</td>
-  <td class="quote">{_esc(finding.quote or "")}</td>
-  <td class="evidence">{_esc(evidence)}</td>
+  <td class="fragment">{_esc(fragment)}</td>
+  <td class="evidence">{explanation}</td>
   <td class="source">{_esc(finding.source or "")}</td>
   <td class="mono">{_esc(checked_at)}</td>
   <td>{_esc(finding.support_status or "")}</td>
   <td class="mono">{_esc(finding.latest_version or "")}</td>
   <td class="mono">{_esc(finding.recommended_version or "")}</td>
-  <td class="recommendation">{_esc(finding.recommendation)}</td>
   <td class="mono">{finding.confidence:.2f}</td>
   <td class="mono">{_esc(finding.checker_name)}</td>
 </tr>

@@ -11,6 +11,7 @@ from content_audit.checks import (
     LanguageCoverageChecker,
     LinkChecker,
     MarketFitChecker,
+    ModelRubricChecker,
     ReadmeFactActualityChecker,
     ReadabilityChecker,
     RegionalAvailabilityChecker,
@@ -123,6 +124,35 @@ def test_checklist_checker_flags_missing_expanded_descriptions_as_major(workspac
     assert findings[0].severity == Severity.MAJOR
     assert findings[0].extra["description_ratio"] == 0.0
     assert findings[0].extra["incomplete_questions"] == ["Part_1.CAT"]
+
+
+def test_checklist_checker_keeps_partial_descriptions_minor(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text(
+        "## Exercise 00 - Terminology\n"
+        "## Exercise 01 - Data Preparation\n"
+        "## Exercise 02 - UC Update\n",
+        encoding="utf-8",
+    )
+    (project / "check-list.yml").write_text(
+        "sections:\n"
+        "  - questions:\n"
+        "      - name: Exercise 00 - Terminology\n"
+        "        description: Terms are compared.\n"
+        "      - name: Exercise 01 - Data Preparation\n"
+        "        description: Ported from previous projects.\n"
+        "      - name: Exercise 02 - UC Update\n"
+        "        description: UC is analyzed. The response set must contain request.json, at least 2 responses, expected output and an example.\n",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=3000)
+
+    findings = ChecklistChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
+
+    assert findings[0].verdict == Verdict.WARNING
+    assert findings[0].severity == Severity.MINOR
+    assert 0.0 < findings[0].extra["description_ratio"] < 0.8
 
 
 def test_language_checker_flags_single_language(workspace_tmp_path: Path) -> None:
@@ -392,6 +422,26 @@ def test_market_fit_checker_flags_missing_success_metrics(workspace_tmp_path: Pa
 
     assert findings[0].verdict == Verdict.WARNING
     assert findings[0].severity == Severity.MINOR
+    assert findings[0].extra["sub_checks"]["success_metrics"]["present"] is False
+
+
+def test_market_fit_checker_detects_service_business_context_without_dataset(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text(
+        "The management of a chain of barbershops decided to implement an online booking system.\n"
+        "The objective is to expand the customer base and reduce employee labour costs and manual labour.\n",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=2000)
+
+    findings = MarketFitChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
+
+    assert findings[0].verdict == Verdict.WARNING
+    assert findings[0].severity == Severity.MINOR
+    assert findings[0].extra["market_fit_score"] == 1
+    assert findings[0].extra["sub_checks"]["business_context"]["present"] is True
+    assert findings[0].extra["sub_checks"]["real_data"]["present"] is False
     assert findings[0].extra["sub_checks"]["success_metrics"]["present"] is False
 
 
@@ -675,15 +725,21 @@ def test_fact_checker_skips_navigation_and_course_requirements(workspace_tmp_pat
 def test_readme_fact_actuality_checker_only_reads_main_and_russian_readme(workspace_tmp_path: Path) -> None:
     project = workspace_tmp_path / "unit"
     project.mkdir()
-    (project / "README.md").write_text("Python 3.10 was released in 2021.\n", encoding="utf-8")
-    (project / "README_RUS.md").write_text("Python 3.10 поддерживает pattern matching.\n", encoding="utf-8")
+    (project / "README.md").write_text(
+        "Python 3.10 was released in October 2021 and introduced structural pattern matching.\n",
+        encoding="utf-8",
+    )
+    (project / "README_RUS.md").write_text(
+        "Python 3.10 поддерживает структурное сопоставление pattern matching с релиза 2021 года.\n",
+        encoding="utf-8",
+    )
     (project / "README_UZB.md").write_text("Bu fayl maxsus fakt tekshiruviga kirmaydi.\n", encoding="utf-8")
     unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=2000)
     fake_client = _FakeJsonClient(
         {
             "findings": [
                 {
-                    "claim": "Python 3.10 поддерживает pattern matching.",
+                    "claim": "Python 3.10 поддерживает структурное сопоставление pattern matching с релиза 2021 года.",
                     "criterion": "actuality",
                     "verdict": "warning",
                     "severity": "minor",
@@ -713,11 +769,74 @@ def test_readme_fact_actuality_checker_only_reads_main_and_russian_readme(worksp
     assert findings[0].latest_version == "3.14"
 
 
+def test_readme_fact_actuality_checker_skips_exercise_options_and_task_requirements(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text(
+        "## Chapter III\n"
+        "REST is an architectural style for distributed systems.\n"
+        "## Chapter V\n"
+        "### Exercise 00 — Terminology\n"
+        "1) The ability of a system to increase performance without adding resources.\n"
+        "The system should notify clients through Telegram and SMS.\n",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=2000)
+    fake_client = _FakeJsonClient({"findings": []})
+    context = CheckContext(_settings(workspace_tmp_path, project), fact_model_client=fake_client)
+
+    findings = ReadmeFactActualityChecker().check(unit, [], context)
+
+    assert findings == []
+    assert fake_client.calls == 1
+    assert "REST is an architectural style" in fake_client.user_prompt
+    assert "without adding resources" not in fake_client.user_prompt
+    assert "notify clients" not in fake_client.user_prompt
+
+
 def test_full_model_audit_includes_readme_fact_checker() -> None:
     checker_names = [checker.name for checker in default_checkers(use_model=True)]
 
     assert "readme_fact_actuality_checker" in checker_names
     assert "fact_checker_perplexity" in checker_names
+
+
+def test_model_rubric_checker_only_keeps_workload_findings(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text("# Проект\n", encoding="utf-8")
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+    fake_client = _FakeJsonClient(
+        {
+            "findings": [
+                {
+                    "criterion": "checklist_alignment",
+                    "severity": "critical",
+                    "verdict": "fail",
+                    "confidence": 0.9,
+                    "quote": "Проверьте, что ни одно вредоносное ПО не использовалось.",
+                    "file_path": "check-list.yml",
+                    "line_start": 13,
+                    "evidence": "Ложный дубль специализированной проверки.",
+                    "recommendation": "Не должно попасть в отчёт.",
+                },
+                {
+                    "criterion": "workload",
+                    "severity": "info",
+                    "verdict": "unknown",
+                    "confidence": 0.5,
+                    "evidence": "Нет данных о реальном времени прохождения.",
+                    "recommendation": "Собрать данные платформы о трудозатратах.",
+                },
+            ]
+        }
+    )
+    context = CheckContext(_settings(workspace_tmp_path, project), model_client=fake_client)
+
+    findings = ModelRubricChecker().check(unit, [], context)
+
+    assert len(findings) == 1
+    assert findings[0].criterion == Criterion.WORKLOAD
 
 
 def test_regional_availability_checker_uses_curated_ru_rules(workspace_tmp_path: Path) -> None:

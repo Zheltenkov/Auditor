@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import re
+from urllib.parse import urlparse
 
 from content_audit.domain import ContentUnit, EntityType, ExtractedEntity, TextLocation
 from content_audit.text_utils import context_around, line_end_for_match, line_for_offset, quote_around
@@ -57,7 +58,9 @@ def _extract_by_regex(
 
     result: list[ExtractedEntity] = []
     for match in pattern.finditer(text):
-        value = match.group(0).rstrip(".,;:")
+        value = match.group(0).rstrip(".,;:*!?")
+        if entity_type == EntityType.LINK and not urlparse(value).hostname:
+            continue
         result.append(
             ExtractedEntity(
                 entity_id=_entity_id(unit_id, relative_path, entity_type, value, match.start()),

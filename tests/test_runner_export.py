@@ -1,7 +1,18 @@
+import csv
 from pathlib import Path
 from zipfile import ZipFile
 
-from content_audit.domain import AuditReport, AuditSettings, Criterion, Finding, RunSummary, Severity, Verdict
+from content_audit.domain import (
+    AuditReport,
+    AuditSettings,
+    Criterion,
+    Evidence,
+    Finding,
+    RunSummary,
+    Severity,
+    TextLocation,
+    Verdict,
+)
 from content_audit.exporters import write_report
 from content_audit.orchestrator import AuditRunner
 
@@ -38,10 +49,13 @@ def test_runner_writes_reports(workspace_tmp_path: Path) -> None:
     assert "Статус поддержки" in csv_text
     assert "Последняя версия" in csv_text
     assert "Рекомендуемая версия" in csv_text
+    assert "Фрагмент" in csv_text
+    assert "Цитата" not in csv_text
     with ZipFile(output / "report.xlsx") as workbook:
         sheet = workbook.read("xl/worksheets/sheet1.xml").decode("utf-8")
     assert "Критерий" in sheet
     assert "Рекомендуемая версия" in sheet
+    assert "Фрагмент" in sheet
 
 
 def test_runner_includes_code_similarity_in_rights_findings(workspace_tmp_path: Path) -> None:
@@ -99,3 +113,42 @@ def test_exporter_does_not_write_pass_findings(workspace_tmp_path: Path) -> None
     with ZipFile(output / "report.xlsx") as workbook:
         sheet = workbook.read("xl/worksheets/sheet1.xml").decode("utf-8")
     assert "Проверено" not in sheet
+
+
+def test_exporter_merges_recommendation_into_explanation(workspace_tmp_path: Path) -> None:
+    output = workspace_tmp_path / "reports"
+    report = AuditReport(
+        summary=RunSummary(started_at="2026-06-08T00:00:00+00:00", input_path=str(workspace_tmp_path)),
+        units=[],
+        entities=[],
+        findings=[
+            Finding(
+                finding_id="human",
+                unit_id="unit",
+                branch=None,
+                criterion=Criterion.CORRECTNESS,
+                severity=Severity.MAJOR,
+                verdict=Verdict.FAIL,
+                confidence=0.8,
+                quote="Cacheability: the server stores responses for future use.",
+                location=TextLocation(file_path="README.md", line_start=89),
+                evidence=[
+                    Evidence(
+                        title="Проверка README",
+                        detail="Проверка README: сервер не обязан хранить ответы для будущего использования",
+                    )
+                ],
+                recommendation="Уточнить определение кэширования REST.",
+                checker_name="readme_fact_actuality_checker",
+            )
+        ],
+    )
+
+    write_report(report, output)
+
+    with (output / "report.csv").open(encoding="utf-8-sig", newline="") as handle:
+        rows = list(csv.DictReader(handle))
+    assert rows[0]["Фрагмент"] == "Cacheability: the server stores responses for future use."
+    assert "Рекомендация" not in rows[0]
+    assert "Что найдено:" in rows[0]["Обоснование"]
+    assert "Что сделать:" in rows[0]["Обоснование"]

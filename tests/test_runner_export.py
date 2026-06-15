@@ -44,6 +44,33 @@ def test_runner_writes_reports(workspace_tmp_path: Path) -> None:
     assert "Рекомендуемая версия" in sheet
 
 
+def test_runner_includes_code_similarity_in_rights_findings(workspace_tmp_path: Path) -> None:
+    corpus = workspace_tmp_path / "corpus"
+    first = corpus / "first"
+    second = corpus / "second"
+    first.mkdir(parents=True)
+    second.mkdir(parents=True)
+    code = """
+def normalize_value(value):
+    value = value.strip().lower()
+    return value.replace(' ', '-')
+
+def build_slug(parts):
+    return '-'.join(normalize_value(part) for part in parts)
+"""
+    for project, filename in ((first, "main.py"), (second, "solution.py")):
+        (project / "README.md").write_text("# Проект\n", encoding="utf-8")
+        (project / "LICENSE").write_text("MIT\n", encoding="utf-8")
+        (project / filename).write_text(code, encoding="utf-8")
+
+    report = AuditRunner(AuditSettings(input_path=corpus, output_path=workspace_tmp_path / "out")).run()
+
+    matches = [finding for finding in report.findings if finding.extra.get("kind") == "code_similarity"]
+    assert matches
+    assert all(finding.criterion == Criterion.RIGHTS for finding in matches)
+    assert all(finding.severity == Severity.MINOR for finding in matches)
+
+
 def test_exporter_does_not_write_pass_findings(workspace_tmp_path: Path) -> None:
     output = workspace_tmp_path / "reports"
     report = AuditReport(

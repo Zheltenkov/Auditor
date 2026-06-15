@@ -3,12 +3,17 @@
 from __future__ import annotations
 
 import argparse
+import shutil
+import tarfile
+import zipfile
 import hmac
 import html
 import json
 import mimetypes
 import secrets
 from collections import Counter
+from email import policy
+from email.parser import BytesParser
 from http.cookies import SimpleCookie
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -38,6 +43,12 @@ DEFAULT_TECH_MODEL = "qwen/qwen3-coder"
 AUTH_COOKIE_NAME = "audit_auth"
 AVATAR_PATH = Path(__file__).resolve().parents[2] / "avatar-placeholder.jpg"
 AVATAR_ROUTE = "/assets/avatar-placeholder.jpg"
+ARCHIVE_FIELD_NAME = "project_archive"
+INTERNAL_ARCHIVE_PATH_FIELD = "__archive_path"
+INTERNAL_ARCHIVE_NAME_FIELD = "__archive_name"
+INTERNAL_UPLOAD_DIR_FIELD = "__upload_dir"
+MAX_ARCHIVE_BYTES = 250_000_000
+WEB_TEMP_DIR = Path(".tmp") / "web"
 
 
 class WebState:
@@ -130,7 +141,13 @@ class AuditWebHandler(BaseHTTPRequestHandler):
         """Разбираем тело формы."""
 
         length = int(self.headers.get("Content-Length", "0"))
-        body = self.rfile.read(length).decode("utf-8")
+        if length > MAX_ARCHIVE_BYTES:
+            raise ValueError("Архив слишком большой для загрузки.")
+        content_type = self.headers.get("Content-Type", "")
+        body = self.rfile.read(length)
+        if content_type.lower().startswith("multipart/form-data"):
+            return _read_multipart_form(body, content_type)
+        body = body.decode("utf-8")
         parsed = parse_qs(body, keep_blank_values=True)
         return {key: values[0] for key, values in parsed.items()}
 
@@ -259,30 +276,181 @@ def main(argv: list[str] | None = None) -> int:
 def run_from_form(form: dict[str, str], state: WebState) -> AuditReport:
     """Создаёт настройки из формы, запускает аудит и сохраняет отчёт."""
 
+    cleanup_dirs = _cleanup_dirs_from_form(form)
+    try:
+        input_path, source_label, extracted_dir = _resolve_run_input(form, state)
+        if extracted_dir is not None:
+            cleanup_dirs.append(extracted_dir)
+        model_name = get_env_value(("OPENROUTER_MODEL", "OPEN_ROUTER_MODEL"), state.env_values) or DEFAULT_MODEL
+        fact_model_name = get_env_value(("OPENROUTER_FACT_MODEL", "OPEN_ROUTER_FACT_MODEL"), state.env_values) or DEFAULT_FACT_MODEL
+        tech_model_name = get_env_value(("OPENROUTER_TECH_MODEL", "OPEN_ROUTER_TECH_MODEL"), state.env_values) or DEFAULT_TECH_MODEL
+        api_key = get_env_value(("OPENROUTER_API_KEY", "OPEN_ROUTER_API_KEY"), state.env_values)
+        settings = AuditSettings(
+            input_path=input_path,
+            output_path=state.report_dir,
+            allow_network=True,
+            use_model=True,
+            include_unknown=True,
+            openrouter_api_key=api_key,
+            openrouter_model=model_name,
+            openrouter_fact_model=fact_model_name,
+            openrouter_tech_model=tech_model_name,
+        )
+        report = AuditRunner(settings).run()
+        if source_label:
+            report = report.model_copy(update={"summary": report.summary.model_copy(update={"input_path": source_label})})
+        write_report(report, state.report_dir)
+        return report
+    finally:
+        _cleanup_directories(cleanup_dirs)
+
+
+def _resolve_run_input(form: dict[str, str], state: WebState) -> tuple[Path, str | None, Path | None]:
+    """Определяет источник проверки: загруженный архив или локальный путь."""
+
+    archive_path_value = (form.get(INTERNAL_ARCHIVE_PATH_FIELD) or "").strip()
+    if archive_path_value:
+        archive_path = Path(archive_path_value).expanduser().resolve()
+        archive_name = (form.get(INTERNAL_ARCHIVE_NAME_FIELD) or archive_path.name).strip()
+        extracted_dir = _make_web_temp_dir("audit_project_")
+        try:
+            _extract_archive(archive_path, extracted_dir)
+            input_path = _select_extracted_project_root(extracted_dir)
+        except Exception:
+            shutil.rmtree(extracted_dir, ignore_errors=True)
+            raise
+        return input_path, f"Архив: {archive_name}", extracted_dir
+
     raw_input = (form.get("input_path") or "").strip()
     if not raw_input and state.default_input is not None:
         raw_input = str(state.default_input)
     if not raw_input:
-        raise ValueError("Укажите путь к проекту.")
-    input_path = Path(raw_input).expanduser().resolve()
-    model_name = get_env_value(("OPENROUTER_MODEL", "OPEN_ROUTER_MODEL"), state.env_values) or DEFAULT_MODEL
-    fact_model_name = get_env_value(("OPENROUTER_FACT_MODEL", "OPEN_ROUTER_FACT_MODEL"), state.env_values) or DEFAULT_FACT_MODEL
-    tech_model_name = get_env_value(("OPENROUTER_TECH_MODEL", "OPEN_ROUTER_TECH_MODEL"), state.env_values) or DEFAULT_TECH_MODEL
-    api_key = get_env_value(("OPENROUTER_API_KEY", "OPEN_ROUTER_API_KEY"), state.env_values)
-    settings = AuditSettings(
-        input_path=input_path,
-        output_path=state.report_dir,
-        allow_network=True,
-        use_model=True,
-        include_unknown=True,
-        openrouter_api_key=api_key,
-        openrouter_model=model_name,
-        openrouter_fact_model=fact_model_name,
-        openrouter_tech_model=tech_model_name,
+        raise ValueError("Укажите путь к проекту или загрузите архив.")
+    return Path(raw_input).expanduser().resolve(), None, None
+
+
+def _cleanup_dirs_from_form(form: dict[str, str]) -> list[Path]:
+    """Берёт из формы только внутренние временные папки, созданные загрузчиком."""
+
+    upload_dir = (form.get(INTERNAL_UPLOAD_DIR_FIELD) or "").strip()
+    return [Path(upload_dir)] if upload_dir else []
+
+
+def _cleanup_directories(paths: list[Path]) -> None:
+    """Удаляет временные данные запуска, не трогая папку отчёта."""
+
+    for path in paths:
+        shutil.rmtree(path, ignore_errors=True)
+
+
+def _make_web_temp_dir(prefix: str) -> Path:
+    """Создаёт временную папку внутри рабочего каталога приложения."""
+
+    WEB_TEMP_DIR.mkdir(parents=True, exist_ok=True)
+    for _attempt in range(100):
+        path = WEB_TEMP_DIR / f"{prefix}{secrets.token_hex(8)}"
+        try:
+            path.mkdir()
+            return path.resolve()
+        except FileExistsError:
+            continue
+    raise RuntimeError("Не удалось создать временную папку загрузки.")
+
+
+def _read_multipart_form(body: bytes, content_type: str) -> dict[str, str]:
+    """Разбирает multipart-форму и сохраняет загруженный архив во временную папку."""
+
+    message = BytesParser(policy=policy.default).parsebytes(
+        f"Content-Type: {content_type}\r\nMIME-Version: 1.0\r\n\r\n".encode("utf-8") + body
     )
-    report = AuditRunner(settings).run()
-    write_report(report, state.report_dir)
-    return report
+    form: dict[str, str] = {}
+    upload_dir: Path | None = None
+    for part in message.iter_parts():
+        name = part.get_param("name", header="content-disposition")
+        if not name:
+            continue
+        payload = part.get_payload(decode=True) or b""
+        filename = part.get_filename()
+        if filename:
+            if not payload or name != ARCHIVE_FIELD_NAME:
+                continue
+            upload_dir = upload_dir or _make_web_temp_dir("audit_upload_")
+            safe_name = Path(filename).name or "project_archive"
+            archive_path = upload_dir / safe_name
+            archive_path.write_bytes(payload)
+            form[INTERNAL_ARCHIVE_PATH_FIELD] = str(archive_path)
+            form[INTERNAL_ARCHIVE_NAME_FIELD] = safe_name
+            form[INTERNAL_UPLOAD_DIR_FIELD] = str(upload_dir)
+            continue
+        charset = part.get_content_charset() or "utf-8"
+        form[name] = payload.decode(charset, errors="replace")
+    return form
+
+
+def _extract_archive(archive_path: Path, target_dir: Path) -> None:
+    """Безопасно распаковывает zip/tar-архив без выхода за пределы временной папки."""
+
+    if not archive_path.exists():
+        raise ValueError("Загруженный архив не найден.")
+    suffixes = "".join(archive_path.suffixes).lower()
+    if zipfile.is_zipfile(archive_path):
+        _extract_zip_archive(archive_path, target_dir)
+    elif tarfile.is_tarfile(archive_path) or suffixes in {".tar", ".tar.gz", ".tgz", ".tar.bz2", ".tbz2", ".tar.xz", ".txz"}:
+        _extract_tar_archive(archive_path, target_dir)
+    else:
+        raise ValueError("Поддерживаются архивы ZIP, TAR, TAR.GZ, TGZ, TAR.BZ2 и TAR.XZ.")
+    if not any(target_dir.rglob("*")):
+        raise ValueError("Архив пустой или не содержит файлов проекта.")
+
+
+def _extract_zip_archive(archive_path: Path, target_dir: Path) -> None:
+    """Распаковывает ZIP с защитой от путей вида ../file."""
+
+    with zipfile.ZipFile(archive_path) as archive:
+        for member in archive.infolist():
+            if member.is_dir():
+                continue
+            destination = _safe_archive_destination(target_dir, member.filename)
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            with archive.open(member) as source, destination.open("wb") as output:
+                shutil.copyfileobj(source, output)
+
+
+def _extract_tar_archive(archive_path: Path, target_dir: Path) -> None:
+    """Распаковывает TAR, не извлекая ссылки и специальные файлы."""
+
+    with tarfile.open(archive_path) as archive:
+        for member in archive.getmembers():
+            if not member.isfile():
+                continue
+            destination = _safe_archive_destination(target_dir, member.name)
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            source = archive.extractfile(member)
+            if source is None:
+                continue
+            with source, destination.open("wb") as output:
+                shutil.copyfileobj(source, output)
+
+
+def _safe_archive_destination(target_dir: Path, member_name: str) -> Path:
+    """Проверяет, что путь из архива не выходит из временной папки."""
+
+    destination = (target_dir / member_name).resolve()
+    target_root = target_dir.resolve()
+    if not destination.is_relative_to(target_root):
+        raise ValueError("Архив содержит небезопасный путь.")
+    return destination
+
+
+def _select_extracted_project_root(extracted_dir: Path) -> Path:
+    """Выбирает корень проекта внутри архива."""
+
+    entries = [path for path in extracted_dir.iterdir() if path.name != "__MACOSX"]
+    directories = [path for path in entries if path.is_dir()]
+    files = [path for path in entries if path.is_file()]
+    if len(directories) == 1 and not files:
+        return directories[0].resolve()
+    return extracted_dir.resolve()
 
 
 def load_latest_report(report_dir: Path) -> AuditReport | None:
@@ -299,7 +467,10 @@ def render_page(report: AuditReport | None, state: WebState, form_values: dict[s
     """Собирает полную страницу веб-интерфейса."""
 
     form = form_values or {}
-    input_value = form.get("input_path") or (report.summary.input_path if report else str(state.default_input or ""))
+    if form_values is not None and "input_path" in form:
+        input_value = form.get("input_path", "")
+    else:
+        input_value = report.summary.input_path if report else str(state.default_input or "")
     body = "\n".join(
         [
             _render_topbar(),
@@ -519,6 +690,32 @@ input[type="text"], select {
   outline: none;
 }
 input[type="text"]:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(14,143,111,.14); }
+.upload-zone {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
+  padding: 13px 16px;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: rgba(255,253,250,.72);
+  cursor: pointer;
+}
+.upload-zone:hover,
+.upload-zone.is-dragging {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.upload-zone input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.upload-title { font-size: 13px; font-weight: 900; color: var(--text); }
+.upload-name { color: var(--muted); font: 800 12px var(--font-sans); overflow-wrap: anywhere; text-align: right; }
 .button {
   border: 0;
   border-radius: 999px;
@@ -910,7 +1107,7 @@ def _render_run_panel(
         <h1>Проверка локального проекта</h1>
       </div>
     </div>
-    <form id="run-form" method="post" action="/run">
+    <form id="run-form" method="post" action="/run" enctype="multipart/form-data">
       <div class="form-grid">
         <div>
           <label for="input_path">Путь к проекту</label>
@@ -918,6 +1115,11 @@ def _render_run_panel(
         </div>
         <button class="button" type="submit">Запустить</button>
       </div>
+      <label class="upload-zone" for="{ARCHIVE_FIELD_NAME}">
+        <input id="{ARCHIVE_FIELD_NAME}" name="{ARCHIVE_FIELD_NAME}" type="file" accept=".zip,.tar,.gz,.tgz,.bz2,.xz">
+        <span class="upload-title">Архив проекта</span>
+        <span class="upload-name" id="archive-file-name">ZIP / TAR / TGZ</span>
+      </label>
       <div class="run-progress" id="run-progress" role="status" aria-live="polite" aria-busy="false" hidden>
         <div class="run-progress-head">
           <span>Готовность отчёта</span>
@@ -1277,6 +1479,9 @@ const progressFill = document.getElementById("run-progress-fill");
 const progressPercent = document.getElementById("run-progress-percent");
 const progressStage = document.getElementById("run-progress-stage");
 const progressElapsed = document.getElementById("run-progress-elapsed");
+const archiveInput = document.getElementById("project_archive");
+const archiveFileName = document.getElementById("archive-file-name");
+const archiveZone = archiveInput ? archiveInput.closest(".upload-zone") : null;
 const progressStages = [
   [8, "Подготовка запуска"],
   [22, "Загрузка файлов"],
@@ -1345,10 +1550,9 @@ if (form) {
     startProgress();
 
     try {
-      const payload = new URLSearchParams(new FormData(form));
+      const payload = new FormData(form);
       const response = await fetch(form.action, {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
         body: payload
       });
       const html = await response.text();
@@ -1369,6 +1573,19 @@ if (form) {
       }
     }
   });
+}
+
+if (archiveInput && archiveFileName) {
+  archiveInput.addEventListener("change", () => {
+    const file = archiveInput.files && archiveInput.files[0];
+    archiveFileName.textContent = file ? file.name : "ZIP / TAR / TGZ";
+  });
+}
+
+if (archiveZone) {
+  archiveZone.addEventListener("dragenter", () => archiveZone.classList.add("is-dragging"));
+  archiveZone.addEventListener("dragleave", () => archiveZone.classList.remove("is-dragging"));
+  archiveZone.addEventListener("drop", () => archiveZone.classList.remove("is-dragging"));
 }
 
 const restart = document.querySelector(".run-restart");

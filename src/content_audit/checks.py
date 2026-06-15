@@ -16,7 +16,11 @@ import requests
 import yaml
 
 from content_audit.cache import AuditCache
-from content_audit.checklist_matching import extract_checklist_question_names, match_checklist_to_readme
+from content_audit.checklist_matching import (
+    assess_checklist_description_quality,
+    extract_checklist_questions,
+    match_checklist_to_readme,
+)
 from content_audit.dependencies import (
     CompatibilityIssue,
     DependencyCandidate,
@@ -52,6 +56,11 @@ from content_audit.image_rights import (
     read_image_dimensions,
 )
 from content_audit.openrouter import OpenRouterClient, OpenRouterError
+from content_audit.regional_availability import (
+    RegionalAvailabilityMatch,
+    load_regional_availability_rules,
+    match_regional_availability,
+)
 from content_audit.rights import (
     DATASET_RE,
     MANIFEST_NAMES,
@@ -102,6 +111,7 @@ FACT_MARKER_RE = re.compile(
 FACT_DATE_RE = re.compile(r"\b(?:19|20)\d{2}(?:[-./](?:0?[1-9]|1[0-2])(?:[-./](?:0?[1-9]|[12]\d|3[01]))?)?\b")
 INTERNAL_MARKDOWN_LINK_RE = re.compile(r"\[[^\]]+\]\(\s*#[^)]+\)")
 MARKDOWN_LINK_RE = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
+README_FACT_FILE_RE = re.compile(r"^readme(?:_rus)?\.md$", re.IGNORECASE)
 REQUIREMENT_CLAIM_MARKERS = (
     " must ",
     " should ",
@@ -415,7 +425,8 @@ class ChecklistChecker(BaseChecker):
                 )
                 continue
 
-            question_names = extract_checklist_question_names(payload)
+            questions = extract_checklist_questions(payload)
+            question_names = [question.name for question in questions]
             if not question_names:
                 findings.append(
                     _finding(
@@ -435,27 +446,74 @@ class ChecklistChecker(BaseChecker):
                 continue
 
             match_result = match_checklist_to_readme(question_names, readme_text)
-            if match_result.ratio < 0.5:
+            description_result = assess_checklist_description_quality(questions)
+            evidence_detail = (
+                f"Сильных совпадений: {match_result.strong_matched} из {match_result.total}; "
+                f"слабых совпадений: {match_result.weak_matched} из {match_result.total}; "
+                f"не сопоставлено: {len(match_result.unmatched_names)} из {match_result.total}. "
+                f"Развёрнутых описаний: {description_result.complete} из {description_result.total}."
+            )
+            if match_result.unmatched_names:
+                evidence_detail += f" Не сопоставлены: {', '.join(match_result.unmatched_names[:8])}."
+            if description_result.incomplete_names:
+                evidence_detail += f" Недостаточно описаны: {', '.join(description_result.incomplete_names[:8])}."
+
+            severity = Severity.INFO
+            verdict = Verdict.PASS
+            recommendation_parts: list[str] = []
+            confidence = 0.78
+            if match_result.strong_ratio < 0.5:
+                severity = Severity.MINOR
+                verdict = Verdict.WARNING
+                confidence = min(confidence, 0.65)
+                recommendation_parts.append(
+                    "Проверить связь пунктов чек-листа с требованиями README; текущий сигнал основан на лексическом сопоставлении."
+                )
+            if description_result.ratio < 0.5:
+                severity = Severity.MAJOR
+                verdict = Verdict.WARNING
+                confidence = max(confidence, 0.82)
+                recommendation_parts.append(
+                    "Добавить развёрнутые описания пунктов: критерии приёмки, ожидаемые артефакты и примеры."
+                )
+            elif description_result.ratio < 0.8:
+                if severity == Severity.INFO:
+                    severity = Severity.MINOR
+                    verdict = Verdict.WARNING
+                recommendation_parts.append(
+                    "Доработать пункты без критериев приёмки, ожидаемых артефактов или примеров."
+                )
+
+            if verdict != Verdict.PASS:
                 findings.append(
                     _finding(
                         unit,
                         self.name,
                         Criterion.CHECKLIST_ALIGNMENT,
-                        Severity.MAJOR,
-                        Verdict.WARNING,
-                        0.7,
+                        severity,
+                        verdict,
+                        confidence,
                         None,
                         TextLocation(file_path=checklist_file.relative_path),
                         [
                             Evidence(
                                 title="Связность README и чек-листа",
-                                detail=(
-                                    f"Сопоставлено {match_result.matched} из {match_result.total} пунктов чек-листа."
-                                ),
+                                detail=evidence_detail,
                             )
                         ],
-                        "Методологу нужно проверить, что пункты чек-листа однозначно соответствуют заданиям в README.",
+                        " ".join(recommendation_parts),
                         True,
+                        extra={
+                            "matched_ratio": match_result.ratio,
+                            "strong_matched": match_result.strong_matched,
+                            "weak_matched": match_result.weak_matched,
+                            "strong_matched_questions": list(match_result.strong_matched_names),
+                            "weak_matched_questions": list(match_result.weak_matched_names),
+                            "unmatched_questions": list(match_result.unmatched_names),
+                            "description_ratio": description_result.ratio,
+                            "complete_description_questions": list(description_result.complete_names),
+                            "incomplete_questions": list(description_result.incomplete_names),
+                        },
                     )
                 )
             else:
@@ -472,11 +530,22 @@ class ChecklistChecker(BaseChecker):
                         [
                             Evidence(
                                 title="Чек-лист",
-                                detail=f"Найдено {match_result.total} пунктов, сопоставлено {match_result.matched}.",
+                                detail=evidence_detail,
                             )
                         ],
-                        "Действий не требуется; при пилоте можно заменить грубое сопоставление на модельную проверку смысла.",
+                        "Действий не требуется; структура чек-листа и базовая связность с README выглядят достаточными.",
                         False,
+                        extra={
+                            "matched_ratio": match_result.ratio,
+                            "strong_matched": match_result.strong_matched,
+                            "weak_matched": match_result.weak_matched,
+                            "strong_matched_questions": list(match_result.strong_matched_names),
+                            "weak_matched_questions": list(match_result.weak_matched_names),
+                            "unmatched_questions": list(match_result.unmatched_names),
+                            "description_ratio": description_result.ratio,
+                            "complete_description_questions": list(description_result.complete_names),
+                            "incomplete_questions": list(description_result.incomplete_names),
+                        },
                     )
                 )
         return findings
@@ -488,24 +557,45 @@ class LanguageCoverageChecker(BaseChecker):
     name = "language_coverage_checker"
 
     def check(self, unit: ContentUnit, entities: list[ExtractedEntity], context: CheckContext) -> list[Finding]:
-        del entities, context
+        del entities
         languages, mismatches = _detect_language_profile(unit)
-        severity = Severity.INFO if len(languages) >= 2 else Severity.MINOR
-        verdict = Verdict.PASS if len(languages) >= 2 else Verdict.WARNING
+        expected_languages = tuple(context.settings.expected_languages)
+        missing_languages = tuple(language for language in expected_languages if language not in languages)
+        coverage_ratio = (
+            (len(expected_languages) - len(missing_languages)) / len(expected_languages)
+            if expected_languages
+            else None
+        )
+        verdict = Verdict.INFO if missing_languages or not expected_languages else Verdict.PASS
+        detail_parts = [f"Обнаружены: {', '.join(sorted(languages)) or 'не определены'}."]
+        if expected_languages:
+            detail_parts.append(f"Ожидались: {', '.join(expected_languages)}.")
+        if missing_languages:
+            detail_parts.append(f"Отсутствуют: {', '.join(missing_languages)}.")
+        elif expected_languages:
+            detail_parts.append("Ожидаемый набор языков найден.")
+        else:
+            detail_parts.append("Ожидаемый набор языков не задан; строка носит мониторинговый характер.")
         findings = [
             _finding(
                 unit,
                 self.name,
                 Criterion.LANGUAGE,
-                severity,
+                Severity.INFO,
                 verdict,
                 0.8,
                 None,
                 None,
-                [Evidence(title="Языковые версии", detail=f"Обнаружены: {', '.join(sorted(languages)) or 'не определены'}.")],
-                "Если для ветки требуется многоязычность, добавить недостающие версии материалов.",
-                len(languages) < 2,
-                extra={"languages": sorted(languages), "mismatches": mismatches},
+                [Evidence(title="Языковые версии", detail=" ".join(detail_parts))],
+                "Использовать как мониторинг языкового покрытия; добавлять языковые версии только если это требуется политикой платформы.",
+                False,
+                extra={
+                    "languages": sorted(languages),
+                    "expected_languages": list(expected_languages),
+                    "missing_languages": list(missing_languages),
+                    "coverage_ratio": coverage_ratio,
+                    "mismatches": mismatches,
+                },
             )
         ]
         for mismatch in mismatches:
@@ -795,7 +885,7 @@ class RightsAndOriginalityChecker(BaseChecker):
     def check(self, unit: ContentUnit, entities: list[ExtractedEntity], context: CheckContext) -> list[Finding]:
         signals: list[RightsSignal] = []
         signals.extend(self._project_license_signals(unit))
-        signals.extend(self._dependency_license_signals(unit))
+        signals.extend(self._dependency_license_signals(unit, context))
         signals.extend(image_rights_signals(unit, entities))
         signals.extend(self._dataset_rights_signals(unit))
         signals.extend(self._code_similarity_signals(unit))
@@ -852,37 +942,34 @@ class RightsAndOriginalityChecker(BaseChecker):
             )
         ]
 
-    def _dependency_license_signals(self, unit: ContentUnit) -> list[RightsSignal]:
+    def _dependency_license_signals(self, unit: ContentUnit, context: CheckContext) -> list[RightsSignal]:
         manifests = [file for file in unit.files if Path(file.relative_path).name.lower() in MANIFEST_NAMES]
         signals: list[RightsSignal] = []
+        seen: set[tuple[str, str, str]] = set()
+        if context.settings.allow_network:
+            registry_client = DependencyRegistryClient(context.settings.link_timeout_seconds)
+            for candidate in extract_dependency_candidates(unit):
+                if candidate.group in {"engine", "runtime"}:
+                    continue
+                metadata = _dependency_registry_metadata(candidate, registry_client, context)
+                if metadata is None or not metadata.license_spdx:
+                    continue
+                signal = _dependency_license_signal(candidate.name, metadata.license_spdx, metadata.source_url, candidate.location)
+                if signal is None:
+                    continue
+                key = (candidate.ecosystem, candidate.name.lower(), metadata.license_spdx)
+                if key in seen:
+                    continue
+                seen.add(key)
+                signals.append(signal)
+
         for package, spdx in resolve_dependency_licenses(manifests):
-            policy = license_policy(spdx)
-            if policy == "deny":
-                signals.append(
-                    RightsSignal(
-                        kind="dependency_license",
-                        risk="violation",
-                        deterministic=True,
-                        title="Несовместимая лицензия зависимости",
-                        detail=f"Зависимость {package} указана с лицензией {spdx}, которая требует отдельного согласования.",
-                        recommendation=f"Заменить {package} на пермиссивный аналог или согласовать использование.",
-                        source=spdx,
-                        confidence=0.9,
-                    )
-                )
-            elif policy == "review" and spdx is not None:
-                signals.append(
-                    RightsSignal(
-                        kind="dependency_license",
-                        risk="unverifiable",
-                        deterministic=True,
-                        title="Лицензия зависимости требует разбора",
-                        detail=f"{package}: {spdx}. Условия лицензии нужно проверить вручную.",
-                        recommendation=f"Проверить условия лицензии {package} и допустимость использования в учебном проекте.",
-                        source=spdx,
-                        confidence=0.55,
-                    )
-                )
+            signal = _dependency_license_signal(package, spdx, None, None)
+            if signal is not None:
+                key = ("local", package.lower(), spdx or "")
+                if key not in seen:
+                    seen.add(key)
+                    signals.append(signal)
         return signals
 
     def _dataset_rights_signals(self, unit: ContentUnit) -> list[RightsSignal]:
@@ -1017,16 +1104,25 @@ class MarketFitChecker(BaseChecker):
     }
     signal_patterns = {
         "real_data": (
-            r"\b(dataset|datasets|real data|data files?|kaggle|open data|huggingface datasets)\b",
-            r"(датасет\w*|выборк\w*|файл\w*\s+данн\w*|таблиц\w*\s+данн\w*|реальн\w*\s+данн\w*|набор\s+данн\w*)",
+            r"\b(dataset|datasets|real data|production data|historical data|customer data|sales data|transaction data|"
+            r"kaggle|open data|huggingface datasets|uci repository|data source)\b",
+            r"(датасет\w*|выборк\w*|реальн\w*\s+данн\w*|историческ\w*\s+данн\w*|открыт\w*\s+данн\w*|"
+            r"обезличенн\w*\s+данн\w*|данн\w*\s+(?:клиент\w*|пользовател\w*|продаж\w*|транзакц\w*|заказ\w*|заявк\w*)|"
+            r"набор\s+данн\w*)",
         ),
         "business_context": (
-            r"\b(business problem|customer|stakeholder|user persona|target audience|use case|client)\b",
-            r"(бизнес[-\s]?задач\w*|бизнес[-\s]?контекст\w*|проблем\w*\s+бизнес\w*|заказчик\w*|клиент\w*|целев\w*\s+аудитори\w*)",
+            r"\b(business problem|business case|customer problem|stakeholder|user persona|target audience|use case|client need|"
+            r"business process|market segment)\b",
+            r"(бизнес[-\s]?задач\w*|бизнес[-\s]?контекст\w*|проблем\w*\s+бизнес\w*|заказчик\w*|"
+            r"целев\w*\s+аудитори\w*|пользовательск\w*\s+сценари\w*|потребност\w*\s+(?:клиент\w*|пользовател\w*)|"
+            r"бизнес[-\s]?процесс\w*|сегмент\w*\s+рынк\w*)",
         ),
         "success_metrics": (
-            r"\b(kpi|conversion|revenue|retention|churn|sla|latency|business metric|business requirement|quality target)\b",
-            r"(бизнес[-\s]?метрик\w*|метрик\w*\s+успех\w*|kpi|конверси\w*|выручк\w*|удержан\w*|отток\w*|\bsla\b|бизнес[-\s]?требован\w*|требован\w*\s+бизнес\w*)",
+            r"\b(kpi|conversion|revenue|retention|churn|nps|ltv|cac|arpu|roi|gmv|mau|dau|sla|"
+            r"business metric|business requirement|quality target|service level|time to resolution)\b",
+            r"(бизнес[-\s]?метрик\w*|метрик\w*\s+успех\w*|kpi|конверси\w*|выручк\w*|удержан\w*|отток\w*|"
+            r"средн\w*\s+чек\w*|стоимост\w*\s+(?:привлечени\w*|обработк\w*)|врем\w*\s+обработк\w*|\bsla\b|"
+            r"бизнес[-\s]?требован\w*|требован\w*\s+бизнес\w*|целев\w*\s+показател\w*)",
         ),
     }
     SYSTEM_PROMPT = """Ты проверяешь соответствие учебного проекта прикладной рыночной задаче.
@@ -1034,6 +1130,9 @@ class MarketFitChecker(BaseChecker):
 Проверь, не пропустили ли правила перефразированный бизнес-контекст.
 Верни только JSON: {"verdict":"pass|warning|unknown","severity":"info|minor|major","confidence":0.0,
 "evidence":"","recommendation":"","real_data":true,"business_context":true,"success_metrics":true}.
+real_data=true ставь только при реальном, внешнем, публичном, историческом или production-like датасете; тестовые фикстуры, мок-данные и технические отчёты не считаются.
+business_context=true ставь только если есть бизнес-проблема, целевая аудитория, заказчик, пользовательский сценарий или бизнес-процесс.
+success_metrics=true ставь только если есть бизнес-метрики, бизнес-требования, целевые показатели или ограничения результата.
 Не ставь severity='critical'. Если данных мало, ставь verdict='unknown'.
 Все пояснения и рекомендации пиши на русском языке."""
 
@@ -1175,6 +1274,58 @@ verdict='unknown' ставь, если источников недостаточ
         return findings
 
 
+class ReadmeFactActualityChecker(BaseChecker):
+    """Проверяет фактологию и актуальность только в README.md и README_RUS.md."""
+
+    name = "readme_fact_actuality_checker"
+    prompt_version = "readme_fact_actuality_checker:v1"
+    max_lines_per_batch = 90
+    max_batches = 8
+    SYSTEM_PROMPT = """Ты проверяешь README учебного проекта через внешние источники.
+Твоя задача — найти только утверждения, которые требуют внимания методолога:
+фактологические ошибки, устаревшие даты, неверные определения, устаревшие или конфликтующие стеки технологий, версии, стандарты, библиотеки и инструменты.
+Игнорируй правила выполнения задания, требования курса, навигацию, оглавление, вкусовые оценки и формулировки без проверяемого внешнего факта.
+Если во фрагменте нет проблемы, верни пустой список findings.
+Верни только JSON: {"findings":[{"claim":"","verdict":"warning|fail|unknown","severity":"info|minor|major|critical","confidence":0.0,"file_path":"","line_start":1,"evidence":"","sources":[{"title":"","url":""}],"recommendation":"","support_status":"","latest_version":"","recommended_version":""}]}.
+Все найденные проблемы относятся к критерию «Точность и корректность», включая даты, версии, поддержку технологий, библиотеки, стандарты и стеки.
+verdict='fail' ставь, если утверждение противоречит источникам.
+verdict='warning' ставь, если утверждение частично устарело, неполное или нуждается в уточнении.
+verdict='unknown' ставь только для важного утверждения, которое нельзя подтвердить источниками.
+Не придумывай источники; если ссылки нет, оставь sources пустым списком.
+Все пояснения и рекомендации пиши на русском языке."""
+
+    def check(self, unit: ContentUnit, entities: list[ExtractedEntity], context: CheckContext) -> list[Finding]:
+        del entities
+        if context.fact_model_client is None:
+            return []
+
+        findings: list[Finding] = []
+        for batch in _extract_readme_fact_batches(unit, self.max_lines_per_batch, self.max_batches):
+            cache_key = _hash_cache_key("readme_fact", f"{self.prompt_version}|{batch['file_path']}|{batch['text']}")
+            prompt = _readme_fact_check_prompt(batch)
+            try:
+                record, cache_hit = _cached_model_json(
+                    context,
+                    "readme_fact",
+                    cache_key,
+                    context.fact_model_client,
+                    self.SYSTEM_PROMPT,
+                    prompt,
+                    self.prompt_version,
+                )
+            except OpenRouterError as exc:
+                findings.append(_external_check_error(unit, self.name, Criterion.CORRECTNESS, exc))
+                break
+
+            for item in _result_items(record.get("response")):
+                if _is_uninformative_readme_fact_item(item):
+                    continue
+                finding = _finding_from_readme_fact_item(unit, self.name, batch, item, record, cache_hit, self.prompt_version)
+                if finding.verdict != Verdict.PASS:
+                    findings.append(finding)
+        return findings
+
+
 class TechFreshnessChecker(BaseChecker):
     """Проверяет актуальность технологий и версий с источниками."""
 
@@ -1303,24 +1454,7 @@ class DependencyFreshnessChecker(BaseChecker):
     ) -> DependencyMetadata | None:
         """Получает метаданные официального реестра с кэшированием."""
 
-        if not context.settings.allow_network:
-            return None
-        cache_key = dependency_cache_key(candidate)
-        if context.cache is not None:
-            cached = context.cache.get("dependency_registry", cache_key)
-            if cached is not None:
-                try:
-                    return metadata_from_record(cached)
-                except (KeyError, ValueError, TypeError):
-                    pass
-        try:
-            metadata = registry_client.fetch(candidate)
-        except DependencyRegistryError:
-            return None
-        if context.cache is not None:
-            context.cache.set("dependency_registry", cache_key, metadata_to_record(metadata))
-            context.cache.save()
-        return metadata
+        return _dependency_registry_metadata(candidate, registry_client, context)
 
     def _finding_from_dependency(
         self,
@@ -1489,6 +1623,42 @@ class DependencyFreshnessChecker(BaseChecker):
         )
 
 
+class RegionalAvailabilityChecker(BaseChecker):
+    """Проверяет доступность сервисов и технологий из РФ по кураторской базе."""
+
+    name = "regional_availability_checker"
+
+    def check(self, unit: ContentUnit, entities: list[ExtractedEntity], context: CheckContext) -> list[Finding]:
+        rules = load_regional_availability_rules(context.settings.input_path)
+        if not rules:
+            return []
+
+        findings: list[Finding] = []
+        seen: set[tuple[str, str, str, int | None]] = set()
+        for entity in entities:
+            if entity.entity_type not in {EntityType.LINK, EntityType.TECHNOLOGY, EntityType.VERSION}:
+                continue
+            match = match_regional_availability(entity.value, rules)
+            if match is None:
+                continue
+            key = (match.rule.pattern.lower(), entity.location.file_path, entity.value.lower(), entity.location.line_start)
+            if key in seen:
+                continue
+            seen.add(key)
+            findings.append(_finding_from_regional_availability_match(unit, self.name, match, entity))
+
+        for candidate in extract_dependency_candidates(unit):
+            match = match_regional_availability(candidate.name, rules)
+            if match is None:
+                continue
+            key = (match.rule.pattern.lower(), candidate.location.file_path, candidate.name.lower(), candidate.location.line_start)
+            if key in seen:
+                continue
+            seen.add(key)
+            findings.append(_finding_from_regional_availability_match(unit, self.name, match, candidate))
+        return findings
+
+
 class ModelRubricChecker(BaseChecker):
     """Модельная проверка критериев, которые трудно закрыть правилами."""
 
@@ -1540,7 +1710,10 @@ class ModelRubricChecker(BaseChecker):
         ]
 
 
-def default_checkers(use_model: bool) -> list[BaseChecker]:
+def default_checkers(
+    use_model: bool,
+    code_similarity_index: dict[str, list[CodeMatch]] | None = None,
+) -> list[BaseChecker]:
     """Возвращает набор проверок для первого рабочего прототипа."""
 
     checkers: list[BaseChecker] = [
@@ -1552,12 +1725,14 @@ def default_checkers(use_model: bool) -> list[BaseChecker]:
         ExamPresenceChecker(),
         ImageQualityChecker(),
         ReadabilityChecker(),
-        RightsAndOriginalityChecker(),
+        RightsAndOriginalityChecker(code_similarity_index=code_similarity_index),
         MarketFitChecker(),
         DependencyFreshnessChecker(),
+        RegionalAvailabilityChecker(),
         TechFreshnessChecker(),
     ]
     if use_model:
+        checkers.append(ReadmeFactActualityChecker())
         checkers.append(FactCheckerPerplexity())
         checkers.append(ModelRubricChecker())
     return checkers
@@ -1734,6 +1909,8 @@ def _market_fit_signals(unit: ContentUnit, patterns: dict[str, tuple[str, ...]])
             stripped = line.strip()
             if not stripped:
                 continue
+            if _is_market_fit_noise_line(stripped):
+                continue
             lowered = stripped.lower()
             for signal_name, signal_patterns in patterns.items():
                 if signals[signal_name]["present"]:
@@ -1755,20 +1932,92 @@ def _market_fit_signals(unit: ContentUnit, patterns: dict[str, tuple[str, ...]])
 def _mark_dataset_files(unit: ContentUnit, signals: dict[str, dict[str, object]]) -> None:
     """Файлы данных тоже считаются признаком работы с реальными данными."""
 
-    data_suffixes = (".csv", ".xlsx", ".parquet", ".jsonl")
     for file in unit.files:
-        lower_path = file.relative_path.lower()
-        if (
-            lower_path.endswith(data_suffixes)
-            or lower_path.startswith(("data/", "dataset/"))
-            or "/data/" in lower_path
-            or "/dataset" in lower_path
-        ):
+        if _looks_like_market_dataset_file(file.relative_path):
             signals["real_data"]["present"] = True
             signals["real_data"]["matches"] = [
                 {"file_path": file.relative_path, "line_start": None, "text": "Найден файл или папка данных."}
             ]
             return
+
+
+def _looks_like_market_dataset_file(relative_path: str) -> bool:
+    """Отличает датасет от технических отчётов, фикстур и ожидаемых выходов."""
+
+    lower_path = relative_path.lower()
+    data_suffixes = (".csv", ".xlsx", ".parquet", ".jsonl")
+    if not lower_path.endswith(data_suffixes):
+        return False
+    if _is_market_fit_noise_path(lower_path):
+        return False
+    path_parts = lower_path.split("/")
+    if any(part in {"data", "dataset", "datasets"} for part in path_parts):
+        return True
+    return bool(
+        re.search(
+            r"(customer|client|sales|transaction|order|churn|bank|retail|market|user|billing|claim|loan|price|product|"
+            r"клиент|продаж|транзакц|заказ|отток|банк|рынок|пользовател|заявк|кредит|товар)",
+            lower_path,
+            flags=re.IGNORECASE,
+        )
+    )
+
+
+def _is_market_fit_noise_path(lower_path: str) -> bool:
+    """Фильтрует технические данные, которые не доказывают работу с рынком."""
+
+    return bool(
+        re.search(
+            r"(^|/)(test|tests|fixture|fixtures|mock|mocks|expected|actual|output|outputs|report|reports|coverage|"
+            r"autotest|golden)(/|\.|_|-)",
+            lower_path,
+        )
+    )
+
+
+def _is_market_fit_noise_line(value: str) -> bool:
+    """Отсекает строки про тесты, фикстуры и технический вывод."""
+
+    lowered = value.lower()
+    technical_markers = (
+        "autotest",
+        "unit test",
+        "integration test",
+        "fixture",
+        "mock",
+        "expected output",
+        "correct output",
+        "test data",
+        "synthetic data",
+        "toy dataset",
+        "тестов",
+        "автотест",
+        "фикстур",
+        "мок",
+        "ожидаем",
+        "стандартн",
+        "синтетическ",
+        "игрушечн",
+    )
+    if not any(marker in lowered for marker in technical_markers):
+        return False
+    business_markers = (
+        "business",
+        "customer",
+        "client",
+        "market",
+        "revenue",
+        "retention",
+        "churn",
+        "бизнес",
+        "клиент",
+        "заказчик",
+        "рынок",
+        "выруч",
+        "удержан",
+        "отток",
+    )
+    return not any(marker in lowered for marker in business_markers)
 
 
 def _merge_market_signals(
@@ -2078,6 +2327,58 @@ def _fact_check_prompt(claim: dict[str, Any]) -> str:
     return json.dumps(payload, ensure_ascii=False, indent=2)
 
 
+def _extract_readme_fact_batches(unit: ContentUnit, max_lines_per_batch: int, max_batches: int) -> list[dict[str, Any]]:
+    """Готовит README.md и README_RUS.md к проверке с сохранением номеров строк."""
+
+    batches: list[dict[str, Any]] = []
+    for file in sorted(unit.files, key=lambda item: item.relative_path.lower()):
+        if not _is_fact_readme_file(file.relative_path):
+            continue
+        lines = file.text.splitlines()
+        for start_index in range(0, len(lines), max_lines_per_batch):
+            chunk = lines[start_index : start_index + max_lines_per_batch]
+            numbered_text = "\n".join(f"{start_index + offset + 1}: {line}" for offset, line in enumerate(chunk))
+            if not numbered_text.strip():
+                continue
+            batches.append(
+                {
+                    "file_path": file.relative_path,
+                    "line_start": start_index + 1,
+                    "line_end": start_index + len(chunk),
+                    "text": numbered_text,
+                }
+            )
+            if len(batches) >= max_batches:
+                return batches
+    return batches
+
+
+def _is_fact_readme_file(relative_path: str) -> bool:
+    """Ограничивает специальную фактологическую проверку двумя README-файлами."""
+
+    return bool(README_FACT_FILE_RE.fullmatch(Path(relative_path).name))
+
+
+def _readme_fact_check_prompt(batch: dict[str, Any]) -> str:
+    """Формирует контракт проверки README-фрагмента."""
+
+    payload = {
+        "check_date": datetime.now(timezone.utc).date().isoformat(),
+        "file_path": batch["file_path"],
+        "line_start": batch["line_start"],
+        "line_end": batch["line_end"],
+        "numbered_text": batch["text"],
+        "scope": [
+            "проверяемые определения",
+            "даты и временные утверждения",
+            "версии и поддержка технологий",
+            "стеки технологий, библиотеки, стандарты и инструменты",
+            "прочие утверждения о внешнем мире, которые можно подтвердить источниками",
+        ],
+    }
+    return json.dumps(payload, ensure_ascii=False, indent=2)
+
+
 def _technology_check_prompt(entity: ExtractedEntity) -> str:
     """Формируем входной контракт проверки актуальности технологии."""
 
@@ -2142,6 +2443,86 @@ def _first_result_item(payload: object) -> dict[str, Any] | None:
     return payload
 
 
+def _result_items(payload: object) -> list[dict[str, Any]]:
+    """Разбирает JSON-ответ модели, который может содержать несколько найденных случаев."""
+
+    if isinstance(payload, list):
+        return [item for item in payload if isinstance(item, dict)]
+    if not isinstance(payload, dict):
+        return []
+    for key in ("findings", "items", "results"):
+        value = payload.get(key)
+        if isinstance(value, list):
+            return [item for item in value if isinstance(item, dict)]
+    item = _first_result_item(payload)
+    return [item] if item is not None else []
+
+
+def _dependency_registry_metadata(
+    candidate: DependencyCandidate,
+    registry_client: DependencyRegistryClient,
+    context: CheckContext,
+) -> DependencyMetadata | None:
+    """Получает метаданные зависимости из реестра через общий кэш аудита."""
+
+    if not context.settings.allow_network:
+        return None
+    cache_key = dependency_cache_key(candidate)
+    if context.cache is not None:
+        cached = context.cache.get("dependency_registry", cache_key)
+        if cached is not None:
+            try:
+                return metadata_from_record(cached)
+            except (KeyError, ValueError, TypeError):
+                pass
+    try:
+        metadata = registry_client.fetch(candidate)
+    except DependencyRegistryError:
+        return None
+    if context.cache is not None:
+        context.cache.set("dependency_registry", cache_key, metadata_to_record(metadata))
+        context.cache.save()
+    return metadata
+
+
+def _dependency_license_signal(
+    package: str,
+    spdx: str | None,
+    source_url: str | None,
+    location: TextLocation | None,
+) -> RightsSignal | None:
+    """Преобразует лицензию пакета в сигнал по правам."""
+
+    policy = license_policy(spdx)
+    if policy == "deny":
+        return RightsSignal(
+            kind="dependency_license",
+            risk="violation",
+            deterministic=True,
+            title="Несовместимая лицензия зависимости",
+            detail=f"Зависимость {package} указана с лицензией {spdx}, которая требует отдельного согласования.",
+            recommendation=f"Заменить {package} на пермиссивный аналог или согласовать использование.",
+            location=location,
+            source=spdx,
+            url=source_url,
+            confidence=0.9,
+        )
+    if policy == "review" and spdx is not None:
+        return RightsSignal(
+            kind="dependency_license",
+            risk="unverifiable",
+            deterministic=True,
+            title="Лицензия зависимости требует разбора",
+            detail=f"{package}: {spdx}. Условия лицензии нужно проверить вручную.",
+            recommendation=f"Проверить условия лицензии {package} и допустимость использования в учебном проекте.",
+            location=location,
+            source=spdx,
+            url=source_url,
+            confidence=0.55,
+        )
+    return None
+
+
 def _finding_from_dependency_issue(unit: ContentUnit, checker_name: str, issue: CompatibilityIssue) -> Finding:
     """Преобразует конфликт зависимостей в строку отчёта."""
 
@@ -2168,6 +2549,48 @@ def _finding_from_dependency_issue(unit: ContentUnit, checker_name: str, issue: 
             "required_spec": issue.required_spec,
         },
         support_status="конфликт ограничений",
+    )
+
+
+def _finding_from_regional_availability_match(
+    unit: ContentUnit,
+    checker_name: str,
+    match: RegionalAvailabilityMatch,
+    source_entity: ExtractedEntity | DependencyCandidate,
+) -> Finding:
+    """Преобразует правило региональной доступности в строку отчёта."""
+
+    severity = {
+        "unavailable": Severity.MAJOR,
+        "limited": Severity.MINOR,
+        "manual_review": Severity.INFO,
+    }.get(match.rule.status, Severity.INFO)
+    status_label = {
+        "unavailable": "недоступно в РФ",
+        "limited": "ограничено в РФ",
+        "manual_review": "проверить доступность из РФ",
+    }.get(match.rule.status, "проверить доступность из РФ")
+    quote = source_entity.quote if isinstance(source_entity, ExtractedEntity) else _dependency_quote(source_entity)
+    return _finding(
+        unit,
+        checker_name,
+        Criterion.ACTUALITY,
+        severity,
+        Verdict.WARNING if match.rule.status in {"unavailable", "limited"} else Verdict.UNKNOWN,
+        0.85,
+        quote,
+        source_entity.location,
+        [Evidence(title="Доступность из РФ", detail=match.rule.reason, url=match.rule.source)],
+        "Заменить сервис на доступный аналог, добавить зеркало или явно описать обходной вариант для учебного проекта.",
+        True,
+        extra={
+            "regional_profile": "ru",
+            "matched_value": match.value,
+            "matched_pattern": match.rule.pattern,
+            "rule_updated_at": match.rule.updated_at,
+        },
+        source=match.rule.source,
+        support_status=status_label,
     )
 
 
@@ -2251,6 +2674,62 @@ def _finding_from_fact_item(
         source=_source_summary(sources),
         checked_at=_checked_at_from_record(record),
         prompt_version=prompt_version,
+    )
+
+
+def _finding_from_readme_fact_item(
+    unit: ContentUnit,
+    checker_name: str,
+    batch: dict[str, Any],
+    item: dict[str, Any],
+    record: dict[str, Any],
+    cache_hit: bool,
+    prompt_version: str,
+) -> Finding:
+    """Преобразует результат специальной проверки README в строку отчёта."""
+
+    verdict = _verdict_from_model_value(item.get("verdict"), Verdict.UNKNOWN)
+    severity = _enum_or_default(Severity, item.get("severity"), _severity_from_verdict(verdict))
+    evidence_text = _model_text(item, ("evidence", "reason", "explanation"), "Проверка README без отдельного пояснения.")
+    sources = _sources_from_item(item)
+    line_start = _parse_optional_int(item.get("line_start")) or int(batch["line_start"])
+    location = TextLocation(file_path=str(item.get("file_path") or batch["file_path"]), line_start=line_start, line_end=line_start)
+    quote = _model_text(item, ("claim", "quote"), "")
+    return _finding(
+        unit,
+        checker_name,
+        Criterion.CORRECTNESS,
+        severity,
+        verdict,
+        _parse_confidence(item.get("confidence")),
+        quote or None,
+        location,
+        [Evidence(title="Проверка README", detail=evidence_text, url=_first_source_url(sources))],
+        _model_text(item, ("recommendation",), "Проверить утверждение по источнику и обновить README."),
+        verdict != Verdict.PASS,
+        extra={"cache_hit": cache_hit, "model": record.get("model"), "claim": quote, "scope": "readme_fact_check"},
+        source=_source_summary(sources),
+        checked_at=_checked_at_from_record(record),
+        support_status=_optional_model_text(item.get("support_status")),
+        latest_version=_optional_model_text(item.get("latest_version")),
+        recommended_version=_optional_model_text(item.get("recommended_version")),
+        prompt_version=prompt_version,
+    )
+
+
+def _is_uninformative_readme_fact_item(item: dict[str, Any]) -> bool:
+    """Отбрасывает пустые ответы, чтобы в отчёт не попадали технические заглушки."""
+
+    verdict = _verdict_from_model_value(item.get("verdict"), Verdict.UNKNOWN)
+    if verdict == Verdict.PASS:
+        return True
+    if verdict != Verdict.UNKNOWN:
+        return False
+    if _sources_from_item(item):
+        return False
+    return not any(
+        _optional_model_text(item.get(key))
+        for key in ("claim", "quote", "evidence", "reason", "explanation", "recommendation")
     )
 
 

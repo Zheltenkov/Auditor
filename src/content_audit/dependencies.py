@@ -39,6 +39,7 @@ class DependencyMetadata:
     latest_version: str | None
     source_url: str
     checked_at: datetime
+    license_spdx: str | None = None
     required_python: str | None = None
     peer_dependencies: dict[str, str] = field(default_factory=dict)
     engines: dict[str, str] = field(default_factory=dict)
@@ -88,6 +89,7 @@ class DependencyRegistryClient:
             latest_version=str(latest) if latest else None,
             source_url=url,
             checked_at=datetime.now(timezone.utc),
+            license_spdx=_license_value(version_payload.get("license") or payload.get("license")),
             peer_dependencies=_string_dict(version_payload.get("peerDependencies")),
             engines=_string_dict(version_payload.get("engines")),
         )
@@ -103,6 +105,7 @@ class DependencyRegistryClient:
             latest_version=str(info.get("version") or "") or None,
             source_url=url,
             checked_at=datetime.now(timezone.utc),
+            license_spdx=_license_value(info.get("license_expression") or info.get("license")),
             required_python=str(info.get("requires_python") or "") or None,
         )
 
@@ -167,7 +170,7 @@ def find_compatibility_issues(
 def dependency_cache_key(candidate: DependencyCandidate) -> str:
     """Создаёт стабильный ключ для кэша официальных реестров."""
 
-    return f"{candidate.ecosystem}:{_normalise_package_name(candidate.name)}:{candidate.spec}"
+    return f"v2:{candidate.ecosystem}:{_normalise_package_name(candidate.name)}:{candidate.spec}"
 
 
 def dependency_identity(candidate: DependencyCandidate) -> tuple[str, str]:
@@ -186,6 +189,7 @@ def metadata_from_record(record: dict[str, Any]) -> DependencyMetadata:
         latest_version=str(record["latest_version"]) if record.get("latest_version") else None,
         source_url=str(record["source_url"]),
         checked_at=checked_at,
+        license_spdx=str(record["license_spdx"]) if record.get("license_spdx") else None,
         required_python=str(record["required_python"]) if record.get("required_python") else None,
         peer_dependencies=_string_dict(record.get("peer_dependencies")),
         engines=_string_dict(record.get("engines")),
@@ -201,6 +205,7 @@ def metadata_to_record(metadata: DependencyMetadata) -> dict[str, Any]:
         "latest_version": metadata.latest_version,
         "source_url": metadata.source_url,
         "checked_at": metadata.checked_at.isoformat(),
+        "license_spdx": metadata.license_spdx,
         "required_python": metadata.required_python,
         "peer_dependencies": metadata.peer_dependencies,
         "engines": metadata.engines,
@@ -544,6 +549,20 @@ def _string_dict(value: object) -> dict[str, str]:
     if not isinstance(value, dict):
         return {}
     return {str(key): str(item) for key, item in value.items()}
+
+
+def _license_value(value: object) -> str | None:
+    """Нормализует лицензию из ответа реестра до короткой строки."""
+
+    if isinstance(value, str):
+        cleaned = value.strip()
+        return cleaned or None
+    if isinstance(value, dict):
+        for key in ("type", "name", "id"):
+            item = value.get(key)
+            if isinstance(item, str) and item.strip():
+                return item.strip()
+    return None
 
 
 def _normalise_package_name(value: str) -> str:

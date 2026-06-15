@@ -40,6 +40,7 @@ class Verdict(StrEnum):
     FAIL = "fail"
     WARNING = "warning"
     UNKNOWN = "unknown"
+    INFO = "info"
     PASS = "pass"
 
 
@@ -78,6 +79,7 @@ VERDICT_LABELS: dict[Verdict, str] = {
     Verdict.FAIL: "Проблема",
     Verdict.WARNING: "Предупреждение",
     Verdict.UNKNOWN: "Нужна проверка",
+    Verdict.INFO: "Информация",
     Verdict.PASS: "Проверено",
 }
 
@@ -90,6 +92,7 @@ class AuditSettings(BaseModel):
     allow_network: bool = False
     use_model: bool = False
     include_unknown: bool = True
+    expected_languages: tuple[str, ...] = ("RUS", "ENG", "UZ", "TG")
     max_file_bytes: int = 2_000_000
     link_timeout_seconds: float = 8.0
     min_image_width: int = 640
@@ -108,6 +111,38 @@ class AuditSettings(BaseModel):
         if value is None:
             return None
         return value.expanduser().resolve()
+
+    @field_validator("expected_languages", mode="before")
+    @classmethod
+    def normalize_expected_languages(cls, value: object) -> tuple[str, ...]:
+        """Приводим политику языков к кодам RUS/ENG/UZ/TG без дублей."""
+
+        if value is None:
+            return ()
+        raw_items = value.split(",") if isinstance(value, str) else value
+        if not isinstance(raw_items, (list, tuple, set)):
+            return ("RUS", "ENG", "UZ", "TG")
+        aliases = {
+            "RU": "RUS",
+            "RUS": "RUS",
+            "RUSSIAN": "RUS",
+            "РУС": "RUS",
+            "ENG": "ENG",
+            "EN": "ENG",
+            "ENGLISH": "ENG",
+            "UZ": "UZ",
+            "UZB": "UZ",
+            "UZBEK": "UZ",
+            "TG": "TG",
+            "TAJ": "TG",
+            "TAJIK": "TG",
+        }
+        result: list[str] = []
+        for item in raw_items:
+            code = aliases.get(str(item).strip().upper())
+            if code and code not in result:
+                result.append(code)
+        return tuple(result)
 
 
 class ContentFile(BaseModel):

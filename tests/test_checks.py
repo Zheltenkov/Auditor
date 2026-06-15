@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 from pathlib import Path
 
 from content_audit import checks as checks_module
@@ -10,12 +11,16 @@ from content_audit.checks import (
     LanguageCoverageChecker,
     LinkChecker,
     MarketFitChecker,
+    ReadmeFactActualityChecker,
     ReadabilityChecker,
+    RegionalAvailabilityChecker,
     RightsAndOriginalityChecker,
     RightsChecker,
     TechFreshnessChecker,
     TechnologyFreshnessChecker,
+    default_checkers,
 )
+from content_audit.dependencies import DependencyCandidate, DependencyMetadata, DependencyRegistryClient
 from content_audit.domain import AuditSettings, Criterion, Severity, Verdict
 from content_audit.extraction import extract_entities
 from content_audit.ingestion import discover_content_units, load_unit_files
@@ -33,8 +38,11 @@ class _FakeJsonClient:
         self.last_call_usage = {"prompt_tokens": 10, "completion_tokens": 5, "total_tokens": 15, "cost_usd": 0.001}
 
     def complete_json(self, system_prompt: str, user_prompt: str, max_retries: int = 2):
-        del system_prompt, user_prompt, max_retries
+        del system_prompt, max_retries
         self.calls += 1
+        self.user_prompt = user_prompt
+        self.user_prompts = getattr(self, "user_prompts", [])
+        self.user_prompts.append(user_prompt)
         return self.response
 
 
@@ -45,7 +53,8 @@ def test_checklist_checker_accepts_part_names(workspace_tmp_path: Path) -> None:
     (project / "check-list.yml").write_text(
         "sections:\n"
         "  - questions:\n"
-        "      - name: Part_1.CAT\n",
+        "      - name: Part_1.CAT\n"
+        "        description: Must check src/cat.c, expected stdout and error handling. Example input is provided.\n",
         encoding="utf-8",
     )
     unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
@@ -63,7 +72,8 @@ def test_checklist_checker_matches_number_and_keyword_across_language(workspace_
     (project / "check-list.yml").write_text(
         "sections:\n"
         "  - questions:\n"
-        "      - name: Part_1.CAT\n",
+        "      - name: Part_1.CAT\n"
+        "        description: Must check src/cat.c, expected stdout and error handling. Example input is provided.\n",
         encoding="utf-8",
     )
     unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
@@ -71,6 +81,48 @@ def test_checklist_checker_matches_number_and_keyword_across_language(workspace_
     findings = ChecklistChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
 
     assert findings[0].verdict == Verdict.PASS
+
+
+def test_checklist_checker_keeps_lexical_weak_match_minor(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text("## Part 4. Log generator\n", encoding="utf-8")
+    (project / "check-list.yml").write_text(
+        "sections:\n"
+        "  - questions:\n"
+        "      - name: Part_4.File_generator\n"
+        "        description: Must check src/log_generator.c, expected output and error handling. Example input is provided.\n",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+
+    findings = ChecklistChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
+
+    assert findings[0].criterion == Criterion.CHECKLIST_ALIGNMENT
+    assert findings[0].verdict == Verdict.WARNING
+    assert findings[0].severity == Severity.MINOR
+    assert findings[0].extra["strong_matched"] == 0
+    assert findings[0].extra["weak_matched"] == 1
+
+
+def test_checklist_checker_flags_missing_expanded_descriptions_as_major(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text("## Part 1. Работа с cat\n", encoding="utf-8")
+    (project / "check-list.yml").write_text(
+        "sections:\n"
+        "  - questions:\n"
+        "      - name: Part_1.CAT\n",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+
+    findings = ChecklistChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
+
+    assert findings[0].verdict == Verdict.WARNING
+    assert findings[0].severity == Severity.MAJOR
+    assert findings[0].extra["description_ratio"] == 0.0
+    assert findings[0].extra["incomplete_questions"] == ["Part_1.CAT"]
 
 
 def test_language_checker_flags_single_language(workspace_tmp_path: Path) -> None:
@@ -81,8 +133,27 @@ def test_language_checker_flags_single_language(workspace_tmp_path: Path) -> Non
 
     findings = LanguageCoverageChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
 
-    assert findings[0].verdict == Verdict.WARNING
+    assert findings[0].verdict == Verdict.INFO
+    assert findings[0].severity == Severity.INFO
     assert findings[0].extra["languages"] == ["RUS"]
+    assert findings[0].extra["expected_languages"] == ["RUS", "ENG", "UZ", "TG"]
+    assert findings[0].extra["missing_languages"] == ["ENG", "UZ", "TG"]
+    assert findings[0].needs_human_review is False
+
+
+def test_language_checker_passes_when_expected_languages_are_present(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README_RUS.md").write_text("# Проект\n", encoding="utf-8")
+    (project / "README.md").write_text("# Project\nThis project explains the task for students.\n", encoding="utf-8")
+    settings = _settings(workspace_tmp_path, project).model_copy(update={"expected_languages": ("RUS", "ENG")})
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+
+    findings = LanguageCoverageChecker().check(unit, [], CheckContext(settings))
+
+    assert findings[0].verdict == Verdict.PASS
+    assert findings[0].extra["coverage_ratio"] == 1.0
+    assert findings[0].extra["missing_languages"] == []
 
 
 def test_language_checker_cross_checks_suffix_with_content(workspace_tmp_path: Path) -> None:
@@ -285,6 +356,28 @@ def test_market_fit_checker_passes_when_all_business_signals_exist(workspace_tmp
     assert findings[0].needs_human_review is False
 
 
+def test_market_fit_checker_accepts_target_audience_and_business_requirements(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    data_dir = project / "datasets"
+    data_dir.mkdir()
+    (data_dir / "orders.parquet").write_text("id,total\n1,100\n", encoding="utf-8")
+    (project / "README.md").write_text(
+        "Целевая аудитория: менеджеры интернет-магазина, которые планируют закупки.\n"
+        "Пользовательский сценарий: прогнозировать спрос по историческим данным заказов.\n"
+        "Бизнес-требование: сократить время обработки заявок и контролировать SLA.\n",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=2000)
+
+    findings = MarketFitChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
+
+    assert findings[0].verdict == Verdict.PASS
+    assert findings[0].extra["sub_checks"]["real_data"]["present"] is True
+    assert findings[0].extra["sub_checks"]["business_context"]["present"] is True
+    assert findings[0].extra["sub_checks"]["success_metrics"]["present"] is True
+
+
 def test_market_fit_checker_flags_missing_success_metrics(workspace_tmp_path: Path) -> None:
     project = workspace_tmp_path / "unit"
     project.mkdir()
@@ -312,6 +405,10 @@ def test_market_fit_checker_does_not_count_generic_technical_data_as_market_fit(
         "Интеграционные тесты сравнивают результат со стандартным выводом.\n",
         encoding="utf-8",
     )
+    (project / "reports.csv").write_text("metric,value\ncoverage,90\n", encoding="utf-8")
+    tests_dir = project / "tests" / "fixtures"
+    tests_dir.mkdir(parents=True)
+    (tests_dir / "expected.csv").write_text("value\n42\n", encoding="utf-8")
     unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=2000)
 
     findings = MarketFitChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
@@ -427,6 +524,39 @@ def test_rights_checker_flags_dataset_without_license_terms(workspace_tmp_path: 
     assert findings[0].needs_human_review is True
 
 
+def test_rights_checker_uses_registry_dependency_license(workspace_tmp_path: Path, monkeypatch) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text("# Проект\n", encoding="utf-8")
+    (project / "LICENSE").write_text("MIT\n", encoding="utf-8")
+    (project / "package.json").write_text('{"dependencies":{"copyleft-lib":"1.0.0"}}', encoding="utf-8")
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=5000)
+
+    def fake_fetch(self, candidate: DependencyCandidate) -> DependencyMetadata:
+        del self
+        return DependencyMetadata(
+            ecosystem=candidate.ecosystem,
+            name=candidate.name,
+            latest_version="1.0.0",
+            source_url=f"https://registry.npmjs.org/{candidate.name}",
+            checked_at=datetime.now(timezone.utc),
+            license_spdx="GPL-3.0-only",
+        )
+
+    monkeypatch.setattr(DependencyRegistryClient, "fetch", fake_fetch)
+    context = CheckContext(AuditSettings(input_path=project, output_path=workspace_tmp_path / "out", allow_network=True))
+
+    findings = RightsAndOriginalityChecker().check(unit, [], context)
+
+    license_findings = [finding for finding in findings if finding.extra["kind"] == "dependency_license"]
+    assert len(license_findings) == 1
+    assert license_findings[0].criterion == Criterion.RIGHTS
+    assert license_findings[0].severity == Severity.CRITICAL
+    assert license_findings[0].verdict == Verdict.FAIL
+    assert license_findings[0].source == "GPL-3.0-only"
+    assert license_findings[0].evidence[0].url == "https://registry.npmjs.org/copyleft-lib"
+
+
 def test_image_quality_checker_ignores_decorative_small_icons(workspace_tmp_path: Path) -> None:
     project = workspace_tmp_path / "unit"
     project.mkdir()
@@ -540,6 +670,88 @@ def test_fact_checker_skips_navigation_and_course_requirements(workspace_tmp_pat
     assert fake_client.calls == 1
     assert len(findings) == 1
     assert "structural pattern matching" in findings[0].quote
+
+
+def test_readme_fact_actuality_checker_only_reads_main_and_russian_readme(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text("Python 3.10 was released in 2021.\n", encoding="utf-8")
+    (project / "README_RUS.md").write_text("Python 3.10 поддерживает pattern matching.\n", encoding="utf-8")
+    (project / "README_UZB.md").write_text("Bu fayl maxsus fakt tekshiruviga kirmaydi.\n", encoding="utf-8")
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=2000)
+    fake_client = _FakeJsonClient(
+        {
+            "findings": [
+                {
+                    "claim": "Python 3.10 поддерживает pattern matching.",
+                    "criterion": "actuality",
+                    "verdict": "warning",
+                    "severity": "minor",
+                    "confidence": 0.82,
+                    "file_path": "README_RUS.md",
+                    "line_start": 1,
+                    "evidence": "Утверждение требует уточнения по версии.",
+                    "sources": [{"title": "Python docs", "url": "https://docs.python.org/3/whatsnew/3.10.html"}],
+                    "support_status": "поддерживается",
+                    "latest_version": "3.14",
+                    "recommended_version": "3.14",
+                    "recommendation": "Уточнить актуальную версию Python.",
+                }
+            ]
+        }
+    )
+    context = CheckContext(_settings(workspace_tmp_path, project), fact_model_client=fake_client)
+
+    findings = ReadmeFactActualityChecker().check(unit, [], context)
+
+    assert fake_client.calls == 2
+    assert "README.md" in fake_client.user_prompts[0]
+    assert "README_RUS.md" in fake_client.user_prompts[1]
+    assert all("README_UZB.md" not in prompt for prompt in fake_client.user_prompts)
+    assert findings[0].criterion == Criterion.CORRECTNESS
+    assert findings[0].source == "https://docs.python.org/3/whatsnew/3.10.html"
+    assert findings[0].latest_version == "3.14"
+
+
+def test_full_model_audit_includes_readme_fact_checker() -> None:
+    checker_names = [checker.name for checker in default_checkers(use_model=True)]
+
+    assert "readme_fact_actuality_checker" in checker_names
+    assert "fact_checker_perplexity" in checker_names
+
+
+def test_regional_availability_checker_uses_curated_ru_rules(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text(
+        "The task uses https://blocked.example/api and the ExampleCloud SDK.\n",
+        encoding="utf-8",
+    )
+    (project / "requirements.txt").write_text("examplecloud==1.0.0\n", encoding="utf-8")
+    (project / "regional_availability_ru.yml").write_text(
+        "rules:\n"
+        "  - pattern: blocked.example\n"
+        "    target: service\n"
+        "    status: unavailable\n"
+        "    reason: Сервис недоступен из РФ по кураторской базе.\n"
+        "    source: https://kb.example/blocked\n"
+        "    updated_at: 2026-06-01\n"
+        "  - pattern: examplecloud\n"
+        "    target: package\n"
+        "    status: limited\n"
+        "    reason: SDK требует проверки доступности из РФ.\n",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=5000)
+    entities = extract_entities(unit)
+    context = CheckContext(_settings(workspace_tmp_path, project))
+
+    findings = RegionalAvailabilityChecker().check(unit, entities, context)
+
+    assert {finding.support_status for finding in findings} == {"недоступно в РФ", "ограничено в РФ"}
+    assert all(finding.criterion == Criterion.ACTUALITY for finding in findings)
+    assert any(finding.severity == Severity.MAJOR for finding in findings)
+    assert any(finding.source == "https://kb.example/blocked" for finding in findings)
 
 
 def test_link_checker_blocks_private_ip_before_network(workspace_tmp_path: Path) -> None:

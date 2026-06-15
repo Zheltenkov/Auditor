@@ -7,6 +7,7 @@ from datetime import datetime, timezone
 
 from content_audit.cache import AuditCache
 from content_audit.checks import CheckContext, default_checkers
+from content_audit.code_similarity import build_code_similarity_index
 from content_audit.domain import AuditReport, AuditSettings, ExtractedEntity, Finding, ModelUsageSummary, RunStep, RunSummary, Verdict
 from content_audit.extraction import extract_entities
 from content_audit.ingestion import discover_content_units, load_unit_files
@@ -48,8 +49,13 @@ class AuditRunner:
             cache=cache,
         )
         model_used = any(client is not None for client in (model_client, fact_model_client, tech_model_client))
-        checkers = default_checkers(use_model=self.settings.use_model and model_used)
-        _finish_step(steps, "Подготовка проверок", step_started, f"Модулей: {len(checkers)}")
+        code_similarity_index = build_code_similarity_index(units)
+        checkers = default_checkers(
+            use_model=self.settings.use_model and model_used,
+            code_similarity_index=code_similarity_index,
+        )
+        similarity_pairs = sum(len(matches) for matches in code_similarity_index.values())
+        _finish_step(steps, "Подготовка проверок", step_started, f"Модулей: {len(checkers)}, совпадений кода: {similarity_pairs}")
 
         all_entities: list[ExtractedEntity] = []
         all_findings: list[Finding] = []

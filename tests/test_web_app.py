@@ -1,7 +1,18 @@
 from pathlib import Path
+import zipfile
 
 from content_audit.domain import AuditReport, Finding, RunSummary, Severity, Verdict, Criterion
-from content_audit.web_app import WebState, credentials_match, load_latest_report, render_login_page, render_page, run_from_form
+from content_audit.web_app import (
+    INTERNAL_ARCHIVE_NAME_FIELD,
+    INTERNAL_ARCHIVE_PATH_FIELD,
+    INTERNAL_UPLOAD_DIR_FIELD,
+    WebState,
+    credentials_match,
+    load_latest_report,
+    render_login_page,
+    render_page,
+    run_from_form,
+)
 
 
 def test_render_page_contains_project_input(workspace_tmp_path: Path) -> None:
@@ -12,9 +23,10 @@ def test_render_page_contains_project_input(workspace_tmp_path: Path) -> None:
     assert "Проверка локального проекта" in html
     assert "Путь к проекту" in html
     assert str(workspace_tmp_path) in html
-    assert html.count("<input") == 1
+    assert html.count("<input") == 2
     assert 'name="input_path"' in html
-    assert "<select" not in html
+    assert 'name="project_archive"' in html
+    assert "Архив проекта" in html
     assert 'id="run-progress"' in html
     assert "Готовность отчёта" in html
     assert "Подготовка запуска" in html
@@ -211,3 +223,44 @@ def test_run_from_form_always_enables_models_and_network(workspace_tmp_path: Pat
     assert captured["settings"].openrouter_model == "openai/general"
     assert captured["settings"].openrouter_tech_model == "qwen/tech"
     assert captured["settings"].openrouter_fact_model == "perplexity/facts"
+
+
+def test_run_from_form_extracts_archive_and_removes_temporary_files(workspace_tmp_path: Path, monkeypatch) -> None:
+    upload_dir = workspace_tmp_path / "upload"
+    upload_dir.mkdir()
+    archive_path = upload_dir / "project.zip"
+    with zipfile.ZipFile(archive_path, "w") as archive:
+        archive.writestr("project/README.md", "# Проект\n")
+
+    captured = {}
+
+    class _FakeRunner:
+        def __init__(self, settings):
+            captured["settings"] = settings
+            captured["input_path"] = settings.input_path
+
+        def run(self):
+            assert (captured["input_path"] / "README.md").exists()
+            return AuditReport(
+                summary=RunSummary(started_at="2026-06-08T00:00:00+00:00", input_path=str(captured["input_path"])),
+                units=[],
+                entities=[],
+                findings=[],
+            )
+
+    monkeypatch.setattr("content_audit.web_app.AuditRunner", _FakeRunner)
+    state = WebState(default_input=None, report_dir=workspace_tmp_path / "reports", env_values={"OPENROUTER_API_KEY": "key"})
+
+    report = run_from_form(
+        {
+            INTERNAL_ARCHIVE_PATH_FIELD: str(archive_path),
+            INTERNAL_ARCHIVE_NAME_FIELD: archive_path.name,
+            INTERNAL_UPLOAD_DIR_FIELD: str(upload_dir),
+        },
+        state,
+    )
+
+    assert report.summary.input_path == "Архив: project.zip"
+    assert captured["settings"].input_path.name == "project"
+    assert not upload_dir.exists()
+    assert not captured["input_path"].exists()

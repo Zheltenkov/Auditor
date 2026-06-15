@@ -44,6 +44,7 @@ def main(argv: list[str] | None = None) -> int:
         allow_network=not args.skip_network,
         use_model=args.use_model,
         include_unknown=not args.hide_unknown,
+        expected_languages=args.expected_languages if args.expected_languages is not None else ("RUS", "ENG", "UZ", "TG"),
         max_file_bytes=args.max_file_bytes,
         link_timeout_seconds=args.link_timeout,
         min_image_width=args.min_image_width,
@@ -86,6 +87,11 @@ def _build_parser() -> argparse.ArgumentParser:
         help=f"Модель OpenRouter для проверки актуальности технологий. По умолчанию: {DEFAULT_OPENROUTER_TECH_MODEL}.",
     )
     parser.add_argument("--hide-unknown", action="store_true", help="Не включать случаи с вердиктом 'нужна проверка'.")
+    parser.add_argument(
+        "--expected-languages",
+        default=None,
+        help="Ожидаемые языки через запятую, например RUS,ENG,UZ,TG. Пустая строка отключает политику.",
+    )
     parser.add_argument("--max-file-bytes", type=int, default=2_000_000, help="Максимальный размер текстового файла.")
     parser.add_argument("--link-timeout", type=float, default=8.0, help="Таймаут проверки ссылки в секундах.")
     parser.add_argument("--min-image-width", type=int, default=640, help="Минимальная ширина изображения.")

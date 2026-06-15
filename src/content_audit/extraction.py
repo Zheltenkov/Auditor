@@ -13,8 +13,10 @@ URL_RE = re.compile(r"https?://[^\s\])>\"']+", re.IGNORECASE)
 MARKDOWN_IMAGE_RE = re.compile(r"!\[[^\]]*]\((?P<target>[^)\s]+)(?:\s+\"[^\"]*\")?\)")
 VERSION_RE = re.compile(
     r"\b("
-    r"(?:[A-Z][A-Za-z0-9.+#-]{1,30})\s*(?:version|версии|версия)?\s*[vV]?\d+(?:\.\d+){0,3}"
-    r"|(?:C|Java|Python|Node\.?js|Alpine|Ubuntu|POSIX|GCC|Bash|grep|cat)\s*[.\-]?\s*[vV]?\d+(?:\.\d+){0,3}"
+    r"(?:C|Java|Python|Node\.?js|Alpine|Ubuntu(?:\s+Server)?|POSIX|GCC|Bash|Docker|"
+    r"Docker\s+Compose|PostgreSQL|MySQL|MongoDB|Redis|Django|React|Vue|Angular|Next\.?js|"
+    r"FastAPI|Flask|Spring|Kotlin|Go|Rust|TypeScript|JavaScript|PHP|Ruby|PCRE2|GNU|BusyBox)"
+    r"\s*(?:version|версии|версия)?\s*[vV]?\d+(?:\.\d+){0,3}"
     r"|POSIX\.1-\d{4}"
     r"|C\d{2}"
     r")\b",
@@ -24,7 +26,8 @@ DATE_RE = re.compile(r"\b(?:19|20)\d{2}(?:[-./](?:0?[1-9]|1[0-2])(?:[-./](?:0?[1
 TECH_RE = re.compile(
     r"\b("
     r"Java|Python|C11|POSIX|Alpine|Ubuntu|GCC|Makefile|PCRE2|regex|Docker|GitLab|GitHub|"
-    r"Rocket\.Chat|GigaChat|GNU|BusyBox|Bash"
+    r"Rocket\.Chat|GigaChat|GNU|BusyBox|Bash|PostgreSQL|MySQL|MongoDB|Redis|Django|React|"
+    r"Vue|Angular|Next\.?js|FastAPI|Flask|Spring|Kotlin|Go|Rust|TypeScript|JavaScript|PHP|Ruby"
     r")\b",
     re.IGNORECASE,
 )

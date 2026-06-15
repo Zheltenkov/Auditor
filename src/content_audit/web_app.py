@@ -446,7 +446,7 @@ def _extract_rar_archive(archive_path: Path, target_dir: Path) -> None:
     tools = _find_rar_tools()
     if not tools:
         raise ValueError(
-            "Для RAR нужен установленный распаковщик: 7zz/7z, unar, unrar или bsdtar. "
+            "Для RAR нужен установленный распаковщик: 7zz/7z, unrar, unar или bsdtar. "
             "Установите один из них на сервере или загрузите ZIP/TAR."
         )
 
@@ -491,7 +491,7 @@ def _find_rar_tools() -> list[str]:
     """Ищет все доступные распаковщики RAR в порядке предпочтения."""
 
     tools: list[str] = []
-    for tool in ("7zz", "unar", "unrar", "7z", "bsdtar"):
+    for tool in ("7zz", "unrar", "unar", "7z", "bsdtar"):
         if tool == "unar" and not shutil.which("lsar"):
             continue
         if shutil.which(tool):

@@ -301,7 +301,7 @@ def test_extract_archive_accepts_rar_extension(workspace_tmp_path: Path, monkeyp
 def test_extract_rar_requires_external_tool(workspace_tmp_path: Path, monkeypatch) -> None:
     archive_path = workspace_tmp_path / "project.rar"
     archive_path.write_bytes(b"rar")
-    monkeypatch.setattr(web_app_module, "_find_rar_tool", lambda: None)
+    monkeypatch.setattr(web_app_module, "_find_rar_tools", lambda: [])
 
     with pytest.raises(ValueError, match="Для RAR нужен"):
         _extract_rar_archive(archive_path, workspace_tmp_path / "extracted")
@@ -328,11 +328,78 @@ def test_extract_rar_uses_7z_listing_and_safe_paths(workspace_tmp_path: Path, mo
         (target_dir / "project" / "README.md").write_text("# Проект\n", encoding="utf-8")
         return _Result(0)
 
-    monkeypatch.setattr(web_app_module, "_find_rar_tool", lambda: "7z")
+    monkeypatch.setattr(web_app_module, "_find_rar_tools", lambda: ["7z"])
     monkeypatch.setattr(web_app_module.subprocess, "run", fake_run)
 
     _extract_rar_archive(archive_path, target_dir)
 
     assert commands[0][:3] == ["7z", "l", "-slt"]
     assert commands[1][0:3] == ["7z", "x", "-y"]
+    assert (target_dir / "project" / "README.md").exists()
+
+
+def test_extract_rar_falls_back_after_unsupported_7z_method(workspace_tmp_path: Path, monkeypatch) -> None:
+    archive_path = workspace_tmp_path / "project.rar"
+    archive_path.write_bytes(b"rar")
+    target_dir = workspace_tmp_path / "extracted"
+    commands: list[list[str]] = []
+
+    class _Result:
+        def __init__(self, returncode: int, stdout: str = "", stderr: str = "") -> None:
+            self.returncode = returncode
+            self.stdout = stdout
+            self.stderr = stderr
+
+    def fake_run(command, capture_output, text, timeout):
+        del capture_output, text, timeout
+        commands.append(command)
+        if command[:3] == ["7z", "l", "-slt"]:
+            return _Result(0, "----------\nPath = project/README.md\nSize = 10\n")
+        if command[0:3] == ["7z", "x", "-y"]:
+            (target_dir / "partial").mkdir(parents=True)
+            return _Result(2, stderr="ERROR: Unsupported Method : project/README.md")
+        if command[:2] == ["unrar", "lb"]:
+            return _Result(0, "project/README.md\n")
+        (target_dir / "project").mkdir(parents=True)
+        (target_dir / "project" / "README.md").write_text("# Проект\n", encoding="utf-8")
+        return _Result(0)
+
+    monkeypatch.setattr(web_app_module, "_find_rar_tools", lambda: ["7z", "unrar"])
+    monkeypatch.setattr(web_app_module.subprocess, "run", fake_run)
+
+    _extract_rar_archive(archive_path, target_dir)
+
+    assert ["unrar", "lb", str(archive_path)] in commands
+    assert not (target_dir / "partial").exists()
+    assert (target_dir / "project" / "README.md").exists()
+
+
+def test_extract_rar_supports_unar_lsar_json(workspace_tmp_path: Path, monkeypatch) -> None:
+    archive_path = workspace_tmp_path / "project.rar"
+    archive_path.write_bytes(b"rar")
+    target_dir = workspace_tmp_path / "extracted"
+    commands: list[list[str]] = []
+
+    class _Result:
+        def __init__(self, returncode: int, stdout: str = "", stderr: str = "") -> None:
+            self.returncode = returncode
+            self.stdout = stdout
+            self.stderr = stderr
+
+    def fake_run(command, capture_output, text, timeout):
+        del capture_output, text, timeout
+        commands.append(command)
+        if command[:2] == ["lsar", "-json"]:
+            return _Result(0, '{"lsarContents":[{"XADFileName":"project/README.md"}]}')
+        (target_dir / "project").mkdir(parents=True)
+        (target_dir / "project" / "README.md").write_text("# Проект\n", encoding="utf-8")
+        return _Result(0)
+
+    monkeypatch.setattr(web_app_module, "_find_rar_tools", lambda: ["unar"])
+    monkeypatch.setattr(web_app_module.subprocess, "run", fake_run)
+
+    _extract_rar_archive(archive_path, target_dir)
+
+    assert commands[0] == ["lsar", "-json", str(archive_path)]
+    assert commands[1][:4] == ["unar", "-f", "-D", "-o"]
     assert (target_dir / "project" / "README.md").exists()

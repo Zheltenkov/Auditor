@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import argparse
+import re
 import shutil
+import subprocess
 import tarfile
 import zipfile
 import hmac
@@ -388,7 +390,7 @@ def _read_multipart_form(body: bytes, content_type: str) -> dict[str, str]:
 
 
 def _extract_archive(archive_path: Path, target_dir: Path) -> None:
-    """Безопасно распаковывает zip/tar-архив без выхода за пределы временной папки."""
+    """Безопасно распаковывает архив без выхода за пределы временной папки."""
 
     if not archive_path.exists():
         raise ValueError("Загруженный архив не найден.")
@@ -397,8 +399,10 @@ def _extract_archive(archive_path: Path, target_dir: Path) -> None:
         _extract_zip_archive(archive_path, target_dir)
     elif tarfile.is_tarfile(archive_path) or suffixes in {".tar", ".tar.gz", ".tgz", ".tar.bz2", ".tbz2", ".tar.xz", ".txz"}:
         _extract_tar_archive(archive_path, target_dir)
+    elif archive_path.suffix.lower() == ".rar":
+        _extract_rar_archive(archive_path, target_dir)
     else:
-        raise ValueError("Поддерживаются архивы ZIP, TAR, TAR.GZ, TGZ, TAR.BZ2 и TAR.XZ.")
+        raise ValueError("Поддерживаются архивы ZIP, RAR, TAR, TAR.GZ, TGZ, TAR.BZ2 и TAR.XZ.")
     if not any(target_dir.rglob("*")):
         raise ValueError("Архив пустой или не содержит файлов проекта.")
 
@@ -432,10 +436,88 @@ def _extract_tar_archive(archive_path: Path, target_dir: Path) -> None:
                 shutil.copyfileobj(source, output)
 
 
+def _extract_rar_archive(archive_path: Path, target_dir: Path) -> None:
+    """Распаковывает RAR через системный инструмент после проверки списка файлов."""
+
+    tool = _find_rar_tool()
+    if tool is None:
+        raise ValueError(
+            "Для RAR нужен установленный распаковщик: 7z/7zz, unrar или bsdtar. "
+            "Установите один из них на сервере или загрузите ZIP/TAR."
+        )
+
+    list_result = subprocess.run(_rar_list_command(tool, archive_path), capture_output=True, text=True, timeout=120)
+    if list_result.returncode != 0:
+        raise ValueError(f"Не удалось прочитать RAR-архив через {tool}: {_short_process_error(list_result)}")
+
+    members = _parse_rar_listing(tool, list_result.stdout)
+    if not members:
+        raise ValueError("RAR-архив пустой или список файлов не удалось прочитать.")
+    for member_name in members:
+        _safe_archive_destination(target_dir, member_name)
+
+    extract_result = subprocess.run(_rar_extract_command(tool, archive_path, target_dir), capture_output=True, text=True, timeout=300)
+    if extract_result.returncode != 0:
+        raise ValueError(f"Не удалось распаковать RAR-архив через {tool}: {_short_process_error(extract_result)}")
+
+
+def _find_rar_tool() -> str | None:
+    """Ищет доступный распаковщик RAR в окружении приложения."""
+
+    for tool in ("7z", "7zz", "unrar", "bsdtar"):
+        if shutil.which(tool):
+            return tool
+    return None
+
+
+def _rar_list_command(tool: str, archive_path: Path) -> list[str]:
+    if tool in {"7z", "7zz"}:
+        return [tool, "l", "-slt", str(archive_path)]
+    if tool == "unrar":
+        return [tool, "lb", str(archive_path)]
+    return [tool, "-tf", str(archive_path)]
+
+
+def _rar_extract_command(tool: str, archive_path: Path, target_dir: Path) -> list[str]:
+    target_dir.mkdir(parents=True, exist_ok=True)
+    if tool in {"7z", "7zz"}:
+        return [tool, "x", "-y", f"-o{target_dir}", str(archive_path)]
+    if tool == "unrar":
+        return [tool, "x", "-o+", str(archive_path), str(target_dir)]
+    return [tool, "-xf", str(archive_path), "-C", str(target_dir)]
+
+
+def _parse_rar_listing(tool: str, output: str) -> list[str]:
+    """Достаёт пути файлов из вывода выбранного распаковщика."""
+
+    if tool in {"7z", "7zz"}:
+        members: list[str] = []
+        in_entries = False
+        for raw_line in output.splitlines():
+            line = raw_line.strip()
+            if line.startswith("----------"):
+                in_entries = True
+                continue
+            if in_entries and line.startswith("Path = "):
+                value = line.removeprefix("Path = ").strip()
+                if value:
+                    members.append(value)
+        return members
+    return [line.strip() for line in output.splitlines() if line.strip()]
+
+
+def _short_process_error(result: subprocess.CompletedProcess[str]) -> str:
+    text = (result.stderr or result.stdout or "").strip()
+    return text[:500] or f"код {result.returncode}"
+
+
 def _safe_archive_destination(target_dir: Path, member_name: str) -> Path:
     """Проверяет, что путь из архива не выходит из временной папки."""
 
-    destination = (target_dir / member_name).resolve()
+    normalized_name = member_name.replace("\\", "/").strip()
+    if normalized_name.startswith(("/", "//")) or re.match(r"^[A-Za-z]:", normalized_name):
+        raise ValueError("Архив содержит небезопасный путь.")
+    destination = (target_dir / normalized_name).resolve()
     target_root = target_dir.resolve()
     if not destination.is_relative_to(target_root):
         raise ValueError("Архив содержит небезопасный путь.")
@@ -1116,9 +1198,9 @@ def _render_run_panel(
         <button class="button" type="submit">Запустить</button>
       </div>
       <label class="upload-zone" for="{ARCHIVE_FIELD_NAME}">
-        <input id="{ARCHIVE_FIELD_NAME}" name="{ARCHIVE_FIELD_NAME}" type="file" accept=".zip,.tar,.gz,.tgz,.bz2,.xz">
+        <input id="{ARCHIVE_FIELD_NAME}" name="{ARCHIVE_FIELD_NAME}" type="file" accept=".zip,.rar,.tar,.gz,.tgz,.bz2,.xz">
         <span class="upload-title">Архив проекта</span>
-        <span class="upload-name" id="archive-file-name">ZIP / TAR / TGZ</span>
+        <span class="upload-name" id="archive-file-name">ZIP / RAR / TAR</span>
       </label>
       <div class="run-progress" id="run-progress" role="status" aria-live="polite" aria-busy="false" hidden>
         <div class="run-progress-head">
@@ -1578,7 +1660,7 @@ if (form) {
 if (archiveInput && archiveFileName) {
   archiveInput.addEventListener("change", () => {
     const file = archiveInput.files && archiveInput.files[0];
-    archiveFileName.textContent = file ? file.name : "ZIP / TAR / TGZ";
+    archiveFileName.textContent = file ? file.name : "ZIP / RAR / TAR";
   });
 }
 

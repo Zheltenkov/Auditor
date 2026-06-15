@@ -1,12 +1,17 @@
 from pathlib import Path
 import zipfile
 
+import pytest
+
+from content_audit import web_app as web_app_module
 from content_audit.domain import AuditReport, Finding, RunSummary, Severity, Verdict, Criterion
 from content_audit.web_app import (
     INTERNAL_ARCHIVE_NAME_FIELD,
     INTERNAL_ARCHIVE_PATH_FIELD,
     INTERNAL_UPLOAD_DIR_FIELD,
     WebState,
+    _extract_archive,
+    _extract_rar_archive,
     credentials_match,
     load_latest_report,
     render_login_page,
@@ -26,6 +31,7 @@ def test_render_page_contains_project_input(workspace_tmp_path: Path) -> None:
     assert html.count("<input") == 2
     assert 'name="input_path"' in html
     assert 'name="project_archive"' in html
+    assert 'accept=".zip,.rar,.tar,.gz,.tgz,.bz2,.xz"' in html
     assert "Архив проекта" in html
     assert 'id="run-progress"' in html
     assert "Готовность отчёта" in html
@@ -264,3 +270,60 @@ def test_run_from_form_extracts_archive_and_removes_temporary_files(workspace_tm
     assert captured["settings"].input_path.name == "project"
     assert not upload_dir.exists()
     assert not captured["input_path"].exists()
+
+
+def test_extract_archive_accepts_rar_extension(workspace_tmp_path: Path, monkeypatch) -> None:
+    archive_path = workspace_tmp_path / "project.rar"
+    archive_path.write_bytes(b"rar")
+    target_dir = workspace_tmp_path / "extracted"
+
+    def fake_extract_rar(path: Path, target: Path) -> None:
+        assert path == archive_path
+        (target / "project").mkdir(parents=True)
+        (target / "project" / "README.md").write_text("# Проект\n", encoding="utf-8")
+
+    monkeypatch.setattr(web_app_module, "_extract_rar_archive", fake_extract_rar)
+
+    _extract_archive(archive_path, target_dir)
+
+    assert (target_dir / "project" / "README.md").exists()
+
+
+def test_extract_rar_requires_external_tool(workspace_tmp_path: Path, monkeypatch) -> None:
+    archive_path = workspace_tmp_path / "project.rar"
+    archive_path.write_bytes(b"rar")
+    monkeypatch.setattr(web_app_module, "_find_rar_tool", lambda: None)
+
+    with pytest.raises(ValueError, match="Для RAR нужен"):
+        _extract_rar_archive(archive_path, workspace_tmp_path / "extracted")
+
+
+def test_extract_rar_uses_7z_listing_and_safe_paths(workspace_tmp_path: Path, monkeypatch) -> None:
+    archive_path = workspace_tmp_path / "project.rar"
+    archive_path.write_bytes(b"rar")
+    target_dir = workspace_tmp_path / "extracted"
+    commands: list[list[str]] = []
+
+    class _Result:
+        def __init__(self, returncode: int, stdout: str = "", stderr: str = "") -> None:
+            self.returncode = returncode
+            self.stdout = stdout
+            self.stderr = stderr
+
+    def fake_run(command, capture_output, text, timeout):
+        del capture_output, text, timeout
+        commands.append(command)
+        if command[:3] == ["7z", "l", "-slt"]:
+            return _Result(0, "----------\nPath = project/README.md\nSize = 10\n")
+        (target_dir / "project").mkdir(parents=True)
+        (target_dir / "project" / "README.md").write_text("# Проект\n", encoding="utf-8")
+        return _Result(0)
+
+    monkeypatch.setattr(web_app_module, "_find_rar_tool", lambda: "7z")
+    monkeypatch.setattr(web_app_module.subprocess, "run", fake_run)
+
+    _extract_rar_archive(archive_path, target_dir)
+
+    assert commands[0][:3] == ["7z", "l", "-slt"]
+    assert commands[1][0:3] == ["7z", "x", "-y"]
+    assert (target_dir / "project" / "README.md").exists()

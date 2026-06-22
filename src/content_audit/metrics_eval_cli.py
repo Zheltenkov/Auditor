@@ -1,0 +1,112 @@
+"""Командная строка для оценки аудита на корпусе `metrics`."""
+
+from __future__ import annotations
+
+import argparse
+from pathlib import Path
+
+from content_audit.cli import DEFAULT_OPENROUTER_FACT_MODEL, DEFAULT_OPENROUTER_MODEL, DEFAULT_OPENROUTER_TECH_MODEL
+from content_audit.corpus_evaluation import evaluate_corpus_report, write_corpus_evaluation
+from content_audit.domain import AuditSettings
+from content_audit.env import get_env_value, load_env_file
+from content_audit.exporters import write_report
+from content_audit.orchestrator import AuditRunner
+
+
+def main(argv: list[str] | None = None) -> int:
+    """Запускает аудит корпуса и считает precision/recall/F1 по Excel-разметке."""
+
+    parser = _build_parser()
+    args = parser.parse_args(argv)
+    metrics_dir = args.metrics_dir.expanduser().resolve()
+    gold_xlsx = args.gold_xlsx.expanduser().resolve() if args.gold_xlsx else _find_gold_xlsx(metrics_dir)
+    output_dir = args.output.expanduser().resolve()
+    audit_output_dir = output_dir / "audit_report"
+
+    env_file_values = load_env_file(Path(".env"))
+    settings = AuditSettings(
+        input_path=metrics_dir,
+        output_path=audit_output_dir,
+        allow_network=not args.skip_network,
+        use_model=args.use_model,
+        include_unknown=not args.hide_unknown,
+        expected_languages=args.expected_languages if args.expected_languages is not None else ("RUS", "ENG", "UZ", "TG"),
+        max_file_bytes=args.max_file_bytes,
+        link_timeout_seconds=args.link_timeout,
+        min_image_width=args.min_image_width,
+        min_image_height=args.min_image_height,
+        openrouter_api_key=get_env_value(("OPENROUTER_API_KEY", "OPEN_ROUTER_API_KEY"), env_file_values),
+        openrouter_model=args.openrouter_model
+        or get_env_value(("OPENROUTER_MODEL", "OPEN_ROUTER_MODEL"), env_file_values)
+        or DEFAULT_OPENROUTER_MODEL,
+        openrouter_fact_model=args.openrouter_fact_model
+        or get_env_value(("OPENROUTER_FACT_MODEL", "OPEN_ROUTER_FACT_MODEL"), env_file_values)
+        or DEFAULT_OPENROUTER_FACT_MODEL,
+        openrouter_tech_model=args.openrouter_tech_model
+        or get_env_value(("OPENROUTER_TECH_MODEL", "OPEN_ROUTER_TECH_MODEL"), env_file_values)
+        or DEFAULT_OPENROUTER_TECH_MODEL,
+    )
+
+    report = AuditRunner(settings).run()
+    write_report(report, audit_output_dir)
+    summary = evaluate_corpus_report(report, gold_xlsx)
+    write_corpus_evaluation(summary, output_dir)
+    _print_summary(summary, output_dir)
+    return 0
+
+
+def _build_parser() -> argparse.ArgumentParser:
+    """Описывает параметры пакетной оценки."""
+
+    parser = argparse.ArgumentParser(description="Оценка аудита на папке metrics и Excel-разметке.")
+    parser.add_argument("--metrics-dir", type=Path, default=Path("metrics"), help="Папка с тестовыми проектами и Excel.")
+    parser.add_argument("--gold-xlsx", type=Path, default=None, help="Excel-файл с эталонными ошибками.")
+    parser.add_argument("--output", type=Path, default=Path(".tmp") / "metrics_evaluation", help="Папка результата.")
+    parser.add_argument("--skip-network", action="store_true", help="Не проверять внешние ссылки по сети.")
+    parser.add_argument("--use-model", action="store_true", help="Включить модельные проверки через OpenRouter.")
+    parser.add_argument("--hide-unknown", action="store_true", help="Исключить находки 'нужна проверка' из оценки.")
+    parser.add_argument("--expected-languages", default=None, help="Ожидаемые языки через запятую.")
+    parser.add_argument("--max-file-bytes", type=int, default=2_000_000, help="Максимальный размер текстового файла.")
+    parser.add_argument("--link-timeout", type=float, default=8.0, help="Таймаут проверки ссылки.")
+    parser.add_argument("--min-image-width", type=int, default=640, help="Минимальная ширина изображения.")
+    parser.add_argument("--min-image-height", type=int, default=360, help="Минимальная высота изображения.")
+    parser.add_argument("--openrouter-model", default=None, help="Модель OpenRouter для общих модельных проверок.")
+    parser.add_argument("--openrouter-fact-model", default=None, help="Модель OpenRouter для фактологической проверки.")
+    parser.add_argument("--openrouter-tech-model", default=None, help="Модель OpenRouter для проверки технологий.")
+    return parser
+
+
+def _find_gold_xlsx(metrics_dir: Path) -> Path:
+    """Находит единственный Excel-файл в папке metrics."""
+
+    files = sorted(metrics_dir.glob("*.xlsx"))
+    if not files:
+        raise FileNotFoundError(f"В папке {metrics_dir} не найден Excel-файл с разметкой.")
+    if len(files) > 1:
+        raise ValueError(f"В папке {metrics_dir} найдено несколько Excel-файлов, укажите --gold-xlsx.")
+    return files[0]
+
+
+def _print_summary(summary, output_dir: Path) -> None:
+    """Печатает короткие итоговые метрики."""
+
+    print(f"Gold: {summary.gold_total}")
+    print(f"Predicted: {summary.predicted_total}")
+    print(f"TP/FP/FN: {summary.true_positive}/{summary.false_positive}/{summary.false_negative}")
+    print(f"Precision: {summary.precision}")
+    print(f"Recall: {summary.recall}")
+    print(f"F1-score: {summary.f1_score}")
+    print(f"Macro precision/recall/F1: {summary.macro_precision}/{summary.macro_recall}/{summary.macro_f1_score}")
+    print(
+        "Gold-scope precision/recall/F1: "
+        f"{summary.gold_scope_precision}/{summary.gold_scope_recall}/{summary.gold_scope_f1_score}"
+    )
+    print(
+        "Gold-scope macro precision/recall/F1: "
+        f"{summary.gold_scope_macro_precision}/{summary.gold_scope_macro_recall}/{summary.gold_scope_macro_f1_score}"
+    )
+    print(f"Отчёты: {output_dir}")
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -27,6 +27,20 @@ def test_loads_supported_files_only(workspace_tmp_path: Path) -> None:
     assert [file.relative_path for file in unit.files] == ["README.md"]
 
 
+def test_discovers_units_inside_single_archive_wrapper(workspace_tmp_path: Path) -> None:
+    corpus = workspace_tmp_path / "corpus"
+    project = corpus / "AP1_Go_T01.ID_1375359-master" / "AP1_Go_T01.ID_1375359-master"
+    project.mkdir(parents=True)
+    (project / "README.md").write_text("# Readme\n", encoding="utf-8")
+    (project / "check-list.yml").write_text("sections: []\n", encoding="utf-8")
+
+    units = discover_content_units(corpus)
+
+    assert len(units) == 1
+    assert units[0].name == "AP1_Go_T01.ID_1375359-master"
+    assert units[0].relative_path == "AP1_Go_T01.ID_1375359-master/AP1_Go_T01.ID_1375359-master"
+
+
 def test_loads_standard_extensionless_text_files(workspace_tmp_path: Path) -> None:
     project = workspace_tmp_path / "unit"
     project.mkdir()

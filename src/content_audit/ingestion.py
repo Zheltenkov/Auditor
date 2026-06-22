@@ -67,7 +67,8 @@ def discover_content_units(root_path: Path) -> list[ContentUnit]:
     if _looks_like_unit(root):
         return [_build_unit(root, root)]
 
-    units = [_build_unit(child, root) for child in sorted(root.iterdir()) if child.is_dir() and _looks_like_unit(child)]
+    unit_roots = [_resolve_unit_root(child) for child in sorted(root.iterdir()) if child.is_dir()]
+    units = [_build_unit(unit_root, root) for unit_root in unit_roots if unit_root is not None]
     return units or [_build_unit(root, root)]
 
 
@@ -105,6 +106,17 @@ def _looks_like_unit(path: Path) -> bool:
     if names & UNIT_MARKERS:
         return True
     return any((path / dirname).is_dir() for dirname in ("materials", "tests", "src", "misc"))
+
+
+def _resolve_unit_root(path: Path) -> Path | None:
+    """Находит реальный корень проекта внутри возможной архивной обёртки."""
+
+    if _looks_like_unit(path):
+        return path
+    child_dirs = [child for child in path.iterdir() if child.is_dir() and not child.name.startswith(".")]
+    if len(child_dirs) == 1 and _looks_like_unit(child_dirs[0]):
+        return child_dirs[0]
+    return None
 
 
 def _build_unit(unit_root: Path, discovery_root: Path) -> ContentUnit:

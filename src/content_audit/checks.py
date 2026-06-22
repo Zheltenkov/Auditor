@@ -21,6 +21,7 @@ from content_audit.checklist_matching import (
     extract_checklist_questions,
     match_checklist_to_readme,
 )
+from content_audit.checklist_grounding import assess_checklist_grounding
 from content_audit.dependencies import (
     CompatibilityIssue,
     DependencyCandidate,
@@ -459,6 +460,7 @@ class ChecklistChecker(BaseChecker):
 
             match_result = match_checklist_to_readme(question_names, readme_text)
             description_result = assess_checklist_description_quality(questions)
+            grounding_issues = assess_checklist_grounding(questions, readme_text)
             evidence_detail = (
                 f"Сильных совпадений: {match_result.strong_matched} из {match_result.total}; "
                 f"слабых совпадений: {match_result.weak_matched} из {match_result.total}; "
@@ -469,6 +471,11 @@ class ChecklistChecker(BaseChecker):
                 evidence_detail += f" Не сопоставлены: {', '.join(match_result.unmatched_names[:8])}."
             if description_result.incomplete_names:
                 evidence_detail += f" Недостаточно описаны: {', '.join(description_result.incomplete_names[:8])}."
+            if grounding_issues:
+                evidence_detail += " Возможные расхождения README и чек-листа: "
+                evidence_detail += "; ".join(
+                    f"{issue.question_name}: {issue.evidence}" for issue in grounding_issues[:5]
+                )
 
             severity = Severity.INFO
             verdict = Verdict.PASS
@@ -495,6 +502,14 @@ class ChecklistChecker(BaseChecker):
                     confidence = min(confidence, 0.72)
                 recommendation_parts.append(
                     "Доработать пункты без критериев приёмки, ожидаемых артефактов или примеров."
+                )
+            if grounding_issues:
+                grounding_severity = _max_severity(issue.severity for issue in grounding_issues)
+                severity = _worse_severity(severity, grounding_severity)
+                verdict = Verdict.WARNING
+                confidence = max(confidence, 0.82)
+                recommendation_parts.append(
+                    "Проверить пункты чек-листа, которые добавляют проверяемые требования, не описанные в README."
                 )
 
             if verdict != Verdict.PASS:
@@ -526,6 +541,16 @@ class ChecklistChecker(BaseChecker):
                             "description_ratio": description_result.ratio,
                             "complete_description_questions": list(description_result.complete_names),
                             "incomplete_questions": list(description_result.incomplete_names),
+                            "grounding_issues": [
+                                {
+                                    "question_name": issue.question_name,
+                                    "issue_type": issue.issue_type,
+                                    "detail": issue.detail,
+                                    "evidence": issue.evidence,
+                                    "severity": issue.severity.value,
+                                }
+                                for issue in grounding_issues
+                            ],
                         },
                     )
                 )
@@ -558,6 +583,7 @@ class ChecklistChecker(BaseChecker):
                             "description_ratio": description_result.ratio,
                             "complete_description_questions": list(description_result.complete_names),
                             "incomplete_questions": list(description_result.incomplete_names),
+                            "grounding_issues": [],
                         },
                     )
                 )
@@ -3115,6 +3141,29 @@ def _readability_problem_lines(value: object) -> list[int]:
         if line is not None and line > 0 and line not in lines:
             lines.append(line)
     return sorted(lines)
+
+
+SEVERITY_RANK: dict[Severity, int] = {
+    Severity.INFO: 0,
+    Severity.MINOR: 1,
+    Severity.MAJOR: 2,
+    Severity.CRITICAL: 3,
+}
+
+
+def _worse_severity(left: Severity, right: Severity) -> Severity:
+    """Возвращает более высокий уровень критичности."""
+
+    return left if SEVERITY_RANK[left] >= SEVERITY_RANK[right] else right
+
+
+def _max_severity(values: Iterable[Severity]) -> Severity:
+    """Выбирает максимальную критичность из набора сигналов."""
+
+    result = Severity.INFO
+    for value in values:
+        result = _worse_severity(result, value)
+    return result
 
 
 def _finding(

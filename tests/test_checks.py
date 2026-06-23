@@ -4,19 +4,26 @@ from pathlib import Path
 from content_audit import checks as checks_module
 from content_audit.cache import AuditCache
 from content_audit.checks import (
+    BrokenUrlSyntaxChecker,
     CheckContext,
     ChecklistChecker,
+    CurriculumRelevanceChecker,
     FactCheckerPerplexity,
     ImageQualityChecker,
     LanguageCoverageChecker,
+    LabelPunctuationChecker,
     LinkChecker,
+    LocalConsistencyChecker,
+    MarkdownStructureChecker,
     MarketFitChecker,
     ModelRubricChecker,
     ReadmeFactActualityChecker,
     ReadabilityChecker,
     RegionalAvailabilityChecker,
+    ResourceAvailabilityChecker,
     RightsAndOriginalityChecker,
     RightsChecker,
+    SpellingAndWordingChecker,
     TechFreshnessChecker,
     TechnologyFreshnessChecker,
     default_checkers,
@@ -267,6 +274,277 @@ def test_readability_checker_lets_model_decide_long_line_warning(workspace_tmp_p
     assert second[0].extra["cache_hit"] is True
     assert context.model_usage["calls_total"] == 1
     assert context.model_usage["cache_hits"] == 1
+
+
+def test_spelling_wording_checker_flags_rule_based_editorial_issues(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README_RUS.md").write_text(
+        "Чтобы завершить нажатие нужно нажатием Enter.\n"
+        "Данные поступают неупорядоченные.\n"
+        "Введите специализацию врача и дата визита.\n",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+
+    findings = SpellingAndWordingChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
+
+    assert {finding.location.line_start for finding in findings if finding.location} == {1, 2, 3}
+    assert all(finding.criterion == Criterion.READABILITY for finding in findings)
+    assert all(finding.severity == Severity.MINOR for finding in findings)
+    assert all(finding.verdict == Verdict.WARNING for finding in findings)
+    assert any(finding.extra["issue_type"] == "tautology" for finding in findings)
+
+
+def test_spelling_wording_checker_uses_model_windows_and_cache(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README_RUS.md").write_text(
+        "\n".join(
+            [
+                "Учебный проект описывает ввод данных, обработку ошибок и формат вывода.",
+                "Пользователь должен ввести специализацию врача, дату визита и выбрать действие.",
+                "Система выводит подсказки и сохраняет результат выполнения упражнения.",
+            ]
+        ),
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+    fake_client = _FakeJsonClient(
+        {
+            "findings": [
+                {
+                    "line": 2,
+                    "issue_type": "case",
+                    "quote": "специализацию врача, дату визита",
+                    "issue": "Перечисление стоит проверить на падежное согласование.",
+                    "suggestion": "Оставить единый падеж для всех элементов перечисления.",
+                    "confidence": 0.76,
+                }
+            ]
+        }
+    )
+    cache = AuditCache.load(workspace_tmp_path / "spelling_cache.json")
+    context = CheckContext(_settings(workspace_tmp_path, project), model_client=fake_client, cache=cache)
+
+    first = SpellingAndWordingChecker().check(unit, [], context)
+    second = SpellingAndWordingChecker().check(unit, [], context)
+
+    assert fake_client.calls == 1
+    assert first[0].checker_name == "spelling_wording_checker"
+    assert first[0].location is not None
+    assert first[0].location.line_start == 2
+    assert first[0].prompt_version == "spelling_wording_checker:v1"
+    assert second[0].extra["cache_hit"] is True
+    assert context.model_usage["calls_total"] == 1
+    assert context.model_usage["cache_hits"] == 1
+    assert '"line": 2' in fake_client.user_prompt
+
+
+def test_spelling_wording_checker_rejects_unanchored_model_issue(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README_RUS.md").write_text(
+        "Учебный проект описывает ввод данных, обработку ошибок и формат вывода.\n",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+    fake_client = _FakeJsonClient(
+        {
+            "findings": [
+                {
+                    "line": 99,
+                    "issue_type": "typo",
+                    "quote": "несуществующая цитата",
+                    "issue": "Модель ошиблась строкой.",
+                    "suggestion": "Не должно попасть в отчёт.",
+                    "confidence": 0.9,
+                }
+            ]
+        }
+    )
+    context = CheckContext(_settings(workspace_tmp_path, project), model_client=fake_client)
+
+    findings = SpellingAndWordingChecker().check(unit, [], context)
+
+    assert findings == []
+
+
+def test_local_consistency_checker_flags_sort_direction_conflict(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README_RUS.md").write_text(
+        "### Задание 2. Частые слова\n"
+        "Результатом является отсортированный по возрастанию список из K наиболее частых слов.\n"
+        "1) Программа считывает строку.\n"
+        "1) Программа сортирует результирующий массив по убыванию и возвращает K первых слов.\n",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+
+    findings = LocalConsistencyChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
+
+    assert len(findings) == 1
+    assert findings[0].criterion == Criterion.CORRECTNESS
+    assert findings[0].location is not None
+    assert findings[0].location.line_start == 2
+    assert findings[0].location.line_end == 4
+    assert findings[0].extra["issue_type"] == "sort_direction_conflict"
+
+
+def test_local_consistency_checker_flags_invalid_word_definition(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README_RUS.md").write_text("Словом является любой символ, разделенный пробелами.\n", encoding="utf-8")
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+
+    findings = LocalConsistencyChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
+
+    assert findings[0].criterion == Criterion.CORRECTNESS
+    assert findings[0].extra["issue_type"] == "invalid_definition"
+    assert "последовательность символов" in findings[0].recommendation
+
+
+def test_local_consistency_checker_flags_field_variant_and_table_mismatch(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text(
+        "The script should return the following fields: **Name**, **Surname**, **Email**.\n"
+        "| Name | Surname | Phone |\n"
+        "| --- | --- | --- |\n"
+        "Use E-mail as a contact field in the final file.\n",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+
+    findings = LocalConsistencyChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
+    issue_types = {finding.extra["issue_type"] for finding in findings}
+
+    assert "table_description_mismatch" in issue_types
+    assert "field_name_variant" in issue_types
+
+
+def test_full_audit_includes_local_consistency_checker() -> None:
+    checker_names = [checker.name for checker in default_checkers(use_model=True)]
+
+    assert "local_consistency_checker" in checker_names
+
+
+def test_resource_availability_checker_flags_unconfirmed_environment_path(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README_RUS.md").write_text(
+        "В виртуальной машине исходные файлы должны лежать в /opt/source21.\n",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+
+    findings = ResourceAvailabilityChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
+
+    assert len(findings) == 1
+    assert findings[0].criterion == Criterion.CORRECTNESS
+    assert findings[0].severity == Severity.MAJOR
+    assert findings[0].extra["issue_type"] == "unconfirmed_environment_path"
+    assert findings[0].quote == "/opt/source21"
+
+
+def test_checklist_checker_emits_atomic_artifact_content_finding(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    materials = project / "materials"
+    materials.mkdir()
+    (materials / "capture.pcapng").write_bytes(b"GET / HTTP/1.1\r\nHost: example.local\r\n")
+    (project / "README.md").write_text(
+        "## Task 2\n\nAnalyze the attached pcapng dump.\n",
+        encoding="utf-8",
+    )
+    (project / "check-list.yml").write_text(
+        "sections:\n"
+        "  - questions:\n"
+        "      - name: Task 2. Reverse shell evidence\n"
+        "        description: The expected pcapng contains command output from `whoami`.\n",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+
+    findings = ChecklistChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
+
+    artifact_findings = [
+        finding for finding in findings if finding.extra.get("issue_type") == "artifact_missing_expected_text"
+    ]
+    assert len(artifact_findings) == 1
+    assert "whoami" in artifact_findings[0].quote
+    assert artifact_findings[0].criterion == Criterion.CHECKLIST_ALIGNMENT
+
+
+def test_resource_availability_checker_flags_missing_required_pcap(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text(
+        "Open the provided capture `traffic.pcapng` and find suspicious packets.\n",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+
+    findings = ResourceAvailabilityChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
+
+    assert len(findings) == 1
+    assert findings[0].verdict == Verdict.FAIL
+    assert findings[0].extra["issue_type"] == "missing_local_resource"
+    assert findings[0].quote == "traffic.pcapng"
+
+
+def test_resource_availability_checker_accepts_existing_resource(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    materials = project / "materials"
+    materials.mkdir()
+    (materials / "traffic.pcapng").write_text("pcap", encoding="utf-8")
+    (project / "README.md").write_text(
+        "Open the provided capture `materials/traffic.pcapng` and find suspicious packets.\n",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+
+    findings = ResourceAvailabilityChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
+
+    assert findings == []
+
+
+def test_resource_availability_checker_flags_dataset_without_artifact(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README_RUS.md").write_text(
+        "Для выполнения задания загрузите датасет клиентов и проанализируйте продажи.\n",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+
+    findings = ResourceAvailabilityChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
+
+    assert len(findings) == 1
+    assert findings[0].extra["issue_type"] == "resource_without_artifact"
+    assert findings[0].extra["resource_kind"] == "dataset"
+
+
+def test_resource_availability_checker_ignores_output_artifact(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text(
+        "Create a script and save the result to employees.tsv.\n",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+
+    findings = ResourceAvailabilityChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
+
+    assert findings == []
+
+
+def test_full_audit_includes_resource_availability_checker() -> None:
+    checker_names = [checker.name for checker in default_checkers(use_model=True)]
+
+    assert "resource_availability_checker" in checker_names
 
 
 def test_technology_checker_creates_actuality_candidate(workspace_tmp_path: Path) -> None:
@@ -799,6 +1077,121 @@ def test_full_model_audit_includes_readme_fact_checker() -> None:
 
     assert "readme_fact_actuality_checker" in checker_names
     assert "fact_checker_perplexity" in checker_names
+    assert "curriculum_relevance_checker" in checker_names
+    assert checker_names.index("curriculum_relevance_checker") < checker_names.index("model_rubric_checker")
+
+
+def test_curriculum_relevance_checker_flags_cpp_style_for_java_without_model(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    src = project / "src"
+    src.mkdir()
+    (src / "Main.java").write_text("class Main {}\n", encoding="utf-8")
+    (project / "README.md").write_text(
+        "This Java project should follow the Google C++ Style Guide.\n",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+
+    findings = CurriculumRelevanceChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
+
+    assert len(findings) == 1
+    assert findings[0].criterion == Criterion.CORRECTNESS
+    assert findings[0].severity == Severity.MAJOR
+    assert findings[0].verdict == Verdict.WARNING
+    assert findings[0].extra["issue_type"] == "language_material_conflict"
+
+
+def test_curriculum_relevance_checker_flags_makefile_for_java_without_model(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    src = project / "src"
+    src.mkdir()
+    (src / "Main.java").write_text("class Main {}\n", encoding="utf-8")
+    (project / "README.md").write_text(
+        "The program must be built with Makefile target run.\n",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+
+    findings = CurriculumRelevanceChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
+
+    assert len(findings) == 1
+    assert findings[0].criterion == Criterion.CORRECTNESS
+    assert findings[0].severity == Severity.MINOR
+    assert findings[0].extra["issue_type"] == "language_tooling_conflict"
+
+
+def test_curriculum_relevance_checker_uses_model_for_missing_key_topic(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text(
+        "Implement a tokenizer and parser for the expression language.\n",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+    fake_client = _FakeJsonClient(
+        {
+            "findings": [
+                {
+                    "criterion": "correctness",
+                    "issue_type": "missing_key_topic",
+                    "severity": "minor",
+                    "verdict": "warning",
+                    "confidence": 0.82,
+                    "quote": "Implement a tokenizer and parser",
+                    "file_path": "README.md",
+                    "line_start": 1,
+                    "evidence": "Для задания про разбор выражений не раскрыта тема finite state machine или эквивалентный способ проектирования состояний.",
+                    "recommendation": "Добавить методическое пояснение про конечный автомат или явно указать другой ожидаемый подход.",
+                }
+            ]
+        }
+    )
+    context = CheckContext(_settings(workspace_tmp_path, project), model_client=fake_client)
+
+    findings = CurriculumRelevanceChecker().check(unit, [], context)
+
+    assert fake_client.calls == 1
+    assert "finite state machine" in fake_client.user_prompt
+    assert len(findings) == 1
+    assert findings[0].checker_name == "curriculum_relevance_checker"
+    assert findings[0].prompt_version == "curriculum_relevance_checker:v1"
+    assert findings[0].extra["issue_type"] == "missing_key_topic"
+
+
+def test_curriculum_relevance_checker_drops_low_confidence_model_methodology(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text(
+        "Implement a tokenizer and parser for the expression language.\n",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+    fake_client = _FakeJsonClient(
+        {
+            "findings": [
+                {
+                    "criterion": "correctness",
+                    "issue_type": "missing_key_topic",
+                    "severity": "minor",
+                    "verdict": "warning",
+                    "confidence": 0.6,
+                    "quote": "Implement a tokenizer and parser",
+                    "file_path": "README.md",
+                    "line_start": 1,
+                    "evidence": "Слабая гипотеза без достаточной уверенности.",
+                    "recommendation": "Не должно попасть в отчёт.",
+                }
+            ]
+        }
+    )
+    context = CheckContext(_settings(workspace_tmp_path, project), model_client=fake_client)
+
+    findings = CurriculumRelevanceChecker().check(unit, [], context)
+
+    assert fake_client.calls == 1
+    assert findings == []
 
 
 def test_model_rubric_checker_only_keeps_workload_findings(workspace_tmp_path: Path) -> None:
@@ -871,6 +1264,213 @@ def test_regional_availability_checker_uses_curated_ru_rules(workspace_tmp_path:
     assert all(finding.criterion == Criterion.ACTUALITY for finding in findings)
     assert any(finding.severity == Severity.MAJOR for finding in findings)
     assert any(finding.source == "https://kb.example/blocked" for finding in findings)
+
+
+def test_markdown_structure_checker_flags_duplicate_heading_and_anchor(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text(
+        "# Overview!\n"
+        "Text.\n"
+        "## Overview\n"
+        "More text.\n"
+        "## Overview\n",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+
+    findings = MarkdownStructureChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
+
+    issue_types = [finding.extra["issue_type"] for finding in findings]
+    assert "duplicate_anchor" in issue_types
+    assert "duplicate_heading" in issue_types
+    assert all(finding.criterion == Criterion.READABILITY for finding in findings)
+
+
+def test_markdown_structure_checker_flags_chapter_gap(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text(
+        "# Chapter I\n"
+        "Intro.\n"
+        "# Chapter III\n",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+
+    findings = MarkdownStructureChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
+
+    assert len(findings) == 1
+    assert findings[0].extra["issue_type"] == "chapter_sequence"
+    assert "Chapter II" in findings[0].evidence[0].detail
+
+
+def test_markdown_structure_checker_flags_repeated_manual_numbers(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README_RUS.md").write_text(
+        "1) Первый пункт\n"
+        "1) Второй пункт\n"
+        "1) Третий пункт\n",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+
+    findings = MarkdownStructureChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
+
+    assert len(findings) == 1
+    assert findings[0].extra["issue_type"] == "repeated_numbered_list_items"
+    assert findings[0].location.line_start == 2
+
+
+def test_markdown_structure_checker_flags_numbering_reset_inside_block(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README_RUS.md").write_text(
+        "1) Первый пункт\n"
+        "2) Второй пункт\n"
+        "3) Третий пункт\n"
+        "1) Четвёртый пункт\n"
+        "2) Пятый пункт\n",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+
+    findings = MarkdownStructureChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
+
+    assert len(findings) == 1
+    assert findings[0].extra["issue_type"] == "numbered_list_reset"
+    assert findings[0].location.line_start == 4
+
+
+def test_full_audit_runs_markdown_structure_after_broken_url_syntax() -> None:
+    checker_names = [checker.name for checker in default_checkers(use_model=False)]
+
+    assert checker_names.index("broken_url_syntax_checker") < checker_names.index("markdown_structure_checker")
+
+
+def test_label_punctuation_checker_flags_missing_colon_before_next_value(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text(
+        "Input operation \n"
+        "> `+`\n"
+        "\n"
+        "Input right operand\n"
+        "> `15`\n",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+
+    findings = LabelPunctuationChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
+
+    assert [finding.quote for finding in findings] == ["Input operation", "Input right operand"]
+    assert all(finding.criterion == Criterion.READABILITY for finding in findings)
+    assert all(finding.extra["issue_type"] == "missing_label_colon" for finding in findings)
+    assert all(finding.needs_human_review is False for finding in findings)
+
+
+def test_label_punctuation_checker_flags_inline_value_and_ignores_colon(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text(
+        "Output 42\n"
+        "Example `Save \\n Ivanov`\n"
+        "Result: ok\n"
+        "Output: `42`\n",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+
+    findings = LabelPunctuationChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
+
+    assert [finding.quote for finding in findings] == ["Output 42", "Example `Save \\n Ivanov`"]
+
+
+def test_label_punctuation_checker_does_not_flag_prose_or_yaml(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text(
+        "Output should be printed to stdout.\n"
+        "Example of valid input is shown below.\n",
+        encoding="utf-8",
+    )
+    (project / "check-list.yml").write_text(
+        "sections:\n"
+        "  - questions:\n"
+        "      - name: Example\n",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+
+    findings = LabelPunctuationChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
+
+    assert findings == []
+
+
+def test_full_audit_runs_label_punctuation_after_markdown_structure() -> None:
+    checker_names = [checker.name for checker in default_checkers(use_model=False)]
+
+    assert checker_names.index("markdown_structure_checker") < checker_names.index("label_punctuation_checker")
+
+
+def test_broken_url_syntax_checker_flags_backslash_and_missing_slash(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README_RUS.md").write_text(
+        "5 - Сломанная ссылка: https:/\\new.oprosso.net и http:/example.com.\n",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+
+    findings = BrokenUrlSyntaxChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
+
+    assert [finding.quote for finding in findings] == ["https:/\\new.oprosso.net", "http:/example.com"]
+    assert all(finding.criterion == Criterion.ACTUALITY for finding in findings)
+    assert all(finding.severity == Severity.MAJOR for finding in findings)
+    assert all(finding.verdict == Verdict.FAIL for finding in findings)
+    assert all(finding.needs_human_review is False for finding in findings)
+
+
+def test_broken_url_syntax_checker_flags_missing_colon_and_spaces(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text(
+        "Broken links: http//example.com, https://new oprosso.net/path, https://example. com/docs.\n",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+
+    findings = BrokenUrlSyntaxChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
+
+    assert {finding.quote for finding in findings} == {
+        "http//example.com",
+        "https://new oprosso.net/path",
+        "https://example. com/docs",
+    }
+
+
+def test_full_audit_runs_broken_url_syntax_before_network_link_checker() -> None:
+    checker_names = [checker.name for checker in default_checkers(use_model=False)]
+
+    assert checker_names.index("broken_url_syntax_checker") < checker_names.index("link_checker")
+
+
+def test_full_audit_runs_new_rules_in_priority_order() -> None:
+    checker_names = [checker.name for checker in default_checkers(use_model=False)]
+    priority = [
+        "broken_url_syntax_checker",
+        "markdown_structure_checker",
+        "label_punctuation_checker",
+        "spelling_wording_checker",
+        "local_consistency_checker",
+        "checklist_checker",
+        "resource_availability_checker",
+    ]
+
+    positions = [checker_names.index(checker_name) for checker_name in priority]
+
+    assert positions == sorted(positions)
 
 
 def test_link_checker_blocks_private_ip_before_network(workspace_tmp_path: Path) -> None:

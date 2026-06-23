@@ -14,7 +14,7 @@ from typing import Any
 from openpyxl import load_workbook
 from pydantic import BaseModel, Field
 
-from content_audit.domain import AuditReport, CRITERION_LABELS, Criterion
+from content_audit.domain import AuditReport, CRITERION_LABELS, Criterion, Finding
 
 
 PROJECT_COLUMN = "Проект"
@@ -80,6 +80,58 @@ class GoldCorpusItem(BaseModel):
     criteria: list[str]
 
 
+class GoldCorpusCase(BaseModel):
+    """Один атомарный эталонный случай: проект, критерий и конкретная строка/описание."""
+
+    case_id: str
+    row_number: int
+    raw_project: str
+    matched_project: str
+    project_id: str
+    criterion: str
+    line_start: int | None = None
+    line_end: int | None = None
+    gold_text: str
+
+
+class PredictedCorpusItem(BaseModel):
+    """Один найденный алгоритмом случай в формате, удобном для сопоставления."""
+
+    finding_id: str
+    project_id: str
+    project: str
+    criterion: str
+    checker_name: str
+    line_start: int | None = None
+    line_end: int | None = None
+    file_path: str | None = None
+    severity: str | None = None
+    verdict: str | None = None
+    confidence: float | None = None
+    issue_type: str | None = None
+    found_text: str
+
+
+class CorpusEvaluationMatch(BaseModel):
+    """Главная строка оценки: эталонная ошибка и сопоставленная найденная ошибка."""
+
+    project: str
+    project_id: str
+    criterion: str
+    label: str
+    gold_row_number: int
+    gold_line_range: str
+    gold_text: str
+    found_finding_id: str | None = None
+    found_checker: str | None = None
+    found_line_range: str
+    found_text: str
+    match_type: str
+    match_score: float
+    counted: bool
+    reason: str
+
+
 class CriterionMetrics(BaseModel):
     """Метрики по одному критерию."""
 
@@ -110,6 +162,17 @@ class CorpusEvaluationSummary(BaseModel):
     macro_precision: float
     macro_recall: float
     macro_f1_score: float
+    overview_gold_total: int
+    overview_predicted_total: int
+    overview_true_positive: int
+    overview_false_positive: int
+    overview_false_negative: int
+    overview_precision: float
+    overview_recall: float
+    overview_f1_score: float
+    overview_macro_precision: float
+    overview_macro_recall: float
+    overview_macro_f1_score: float
     gold_scope_predicted_total: int
     gold_scope_true_positive: int
     gold_scope_false_positive: int
@@ -121,7 +184,11 @@ class CorpusEvaluationSummary(BaseModel):
     gold_scope_macro_recall: float
     gold_scope_macro_f1_score: float
     per_criterion: list[CriterionMetrics]
+    overview_per_criterion: list[CriterionMetrics]
     gold_items: list[GoldCorpusItem]
+    gold_cases: list[GoldCorpusCase]
+    matches: list[CorpusEvaluationMatch]
+    detailed_false_positive_items: list[PredictedCorpusItem]
     false_positive_items: list[CorpusEvaluationKey]
     false_negative_items: list[CorpusEvaluationKey]
     project_mapping: dict[str, str]
@@ -136,69 +203,120 @@ class _ProjectCandidate:
     tokens: frozenset[str]
 
 
+@dataclass(frozen=True)
+class _MatchCandidate:
+    gold_case_id: str
+    prediction_id: str
+    match_type: str
+    score: float
+    reason: str
+
+
 def evaluate_corpus_report(report: AuditReport, gold_xlsx_path: Path) -> CorpusEvaluationSummary:
-    """Сравнивает отчёт аудита с Excel-разметкой на уровне `проект × критерий`."""
+    """Сравнивает отчёт аудита с Excel-разметкой на уровне конкретных эталонных ошибок."""
 
     unit_candidates = _project_candidates_from_report(report)
+    units_by_id = {unit.unit_id: unit for unit in report.units}
     gold_items, mapping_notes = load_gold_items(gold_xlsx_path, unit_candidates)
-    gold_keys = {
+    gold_cases = _gold_cases_from_items(gold_items)
+    predicted_items = _predicted_items_from_report(report, units_by_id)
+    evaluated_criteria = sorted({item.criterion for item in gold_cases})
+    predicted_items_in_scope = [
+        item
+        for item in predicted_items
+        if item.criterion in evaluated_criteria and _is_strict_evaluation_signal(item)
+    ]
+    matches, matched_prediction_ids = _match_gold_cases(gold_cases, predicted_items_in_scope)
+    detailed_false_positive_items = [
+        item for item in predicted_items_in_scope if item.finding_id not in matched_prediction_ids
+    ]
+    detailed_true_positive = sum(1 for item in matches if item.counted)
+    detailed_false_negative = len(gold_cases) - detailed_true_positive
+    detailed_false_positive = len(detailed_false_positive_items)
+    per_criterion = _per_criterion_detail_metrics(gold_cases, predicted_items_in_scope, matches)
+
+    overview_gold_keys = {
         CorpusEvaluationKey(project_id=item.project_id, criterion=criterion)
         for item in gold_items
         for criterion in item.criteria
     }
-    predicted_keys = _predicted_keys_from_report(report)
+    overview_predicted_keys = _predicted_keys_from_report(report)
 
-    true_positive_keys = gold_keys & predicted_keys
-    false_positive_keys = predicted_keys - gold_keys
-    false_negative_keys = gold_keys - predicted_keys
-    per_criterion = _per_criterion_metrics(gold_keys, predicted_keys)
-    evaluated_criteria = sorted({item.criterion for item in gold_keys})
-    gold_scope_predicted_keys = {item for item in predicted_keys if item.criterion in evaluated_criteria}
-    gold_scope_true_positive_keys = gold_keys & gold_scope_predicted_keys
-    gold_scope_false_positive_keys = gold_scope_predicted_keys - gold_keys
-    gold_scope_false_negative_keys = gold_keys - gold_scope_predicted_keys
-    gold_scope_metrics = [item for item in per_criterion if item.criterion in evaluated_criteria]
+    overview_true_positive_keys = overview_gold_keys & overview_predicted_keys
+    overview_false_positive_keys = overview_predicted_keys - overview_gold_keys
+    overview_false_negative_keys = overview_gold_keys - overview_predicted_keys
+    overview_per_criterion = _per_criterion_metrics(overview_gold_keys, overview_predicted_keys)
 
     return CorpusEvaluationSummary(
         evaluated_criteria=evaluated_criteria,
-        gold_total=len(gold_keys),
-        predicted_total=len(predicted_keys),
-        true_positive=len(true_positive_keys),
-        false_positive=len(false_positive_keys),
-        false_negative=len(false_negative_keys),
-        precision=_safe_ratio(len(true_positive_keys), len(true_positive_keys) + len(false_positive_keys)),
-        recall=_safe_ratio(len(true_positive_keys), len(true_positive_keys) + len(false_negative_keys)),
-        f1_score=_f1(len(true_positive_keys), len(false_positive_keys), len(false_negative_keys)),
+        gold_total=len(gold_cases),
+        predicted_total=len(predicted_items_in_scope),
+        true_positive=detailed_true_positive,
+        false_positive=detailed_false_positive,
+        false_negative=detailed_false_negative,
+        precision=_safe_ratio(detailed_true_positive, detailed_true_positive + detailed_false_positive),
+        recall=_safe_ratio(detailed_true_positive, detailed_true_positive + detailed_false_negative),
+        f1_score=_f1(detailed_true_positive, detailed_false_positive, detailed_false_negative),
         macro_precision=_mean([item.precision for item in per_criterion]),
         macro_recall=_mean([item.recall for item in per_criterion]),
         macro_f1_score=_mean([item.f1_score for item in per_criterion]),
-        gold_scope_predicted_total=len(gold_scope_predicted_keys),
-        gold_scope_true_positive=len(gold_scope_true_positive_keys),
-        gold_scope_false_positive=len(gold_scope_false_positive_keys),
-        gold_scope_false_negative=len(gold_scope_false_negative_keys),
+        overview_gold_total=len(overview_gold_keys),
+        overview_predicted_total=len(overview_predicted_keys),
+        overview_true_positive=len(overview_true_positive_keys),
+        overview_false_positive=len(overview_false_positive_keys),
+        overview_false_negative=len(overview_false_negative_keys),
+        overview_precision=_safe_ratio(
+            len(overview_true_positive_keys),
+            len(overview_true_positive_keys) + len(overview_false_positive_keys),
+        ),
+        overview_recall=_safe_ratio(
+            len(overview_true_positive_keys),
+            len(overview_true_positive_keys) + len(overview_false_negative_keys),
+        ),
+        overview_f1_score=_f1(
+            len(overview_true_positive_keys),
+            len(overview_false_positive_keys),
+            len(overview_false_negative_keys),
+        ),
+        overview_macro_precision=_mean([item.precision for item in overview_per_criterion]),
+        overview_macro_recall=_mean([item.recall for item in overview_per_criterion]),
+        overview_macro_f1_score=_mean([item.f1_score for item in overview_per_criterion]),
+        gold_scope_predicted_total=len(predicted_items_in_scope),
+        gold_scope_true_positive=detailed_true_positive,
+        gold_scope_false_positive=detailed_false_positive,
+        gold_scope_false_negative=detailed_false_negative,
         gold_scope_precision=_safe_ratio(
-            len(gold_scope_true_positive_keys),
-            len(gold_scope_true_positive_keys) + len(gold_scope_false_positive_keys),
+            detailed_true_positive,
+            detailed_true_positive + detailed_false_positive,
         ),
         gold_scope_recall=_safe_ratio(
-            len(gold_scope_true_positive_keys),
-            len(gold_scope_true_positive_keys) + len(gold_scope_false_negative_keys),
+            detailed_true_positive,
+            detailed_true_positive + detailed_false_negative,
         ),
         gold_scope_f1_score=_f1(
-            len(gold_scope_true_positive_keys),
-            len(gold_scope_false_positive_keys),
-            len(gold_scope_false_negative_keys),
+            detailed_true_positive,
+            detailed_false_positive,
+            detailed_false_negative,
         ),
-        gold_scope_macro_precision=_mean([item.precision for item in gold_scope_metrics]),
-        gold_scope_macro_recall=_mean([item.recall for item in gold_scope_metrics]),
-        gold_scope_macro_f1_score=_mean([item.f1_score for item in gold_scope_metrics]),
+        gold_scope_macro_precision=_mean([item.precision for item in per_criterion]),
+        gold_scope_macro_recall=_mean([item.recall for item in per_criterion]),
+        gold_scope_macro_f1_score=_mean([item.f1_score for item in per_criterion]),
         per_criterion=per_criterion,
+        overview_per_criterion=overview_per_criterion,
         gold_items=gold_items,
-        false_positive_items=sorted(false_positive_keys, key=lambda item: (item.project_id, item.criterion)),
-        false_negative_items=sorted(false_negative_keys, key=lambda item: (item.project_id, item.criterion)),
+        gold_cases=gold_cases,
+        matches=matches,
+        detailed_false_positive_items=sorted(
+            detailed_false_positive_items,
+            key=lambda item: (item.project_id, item.criterion, item.line_start or 0, item.finding_id),
+        ),
+        false_positive_items=sorted(overview_false_positive_keys, key=lambda item: (item.project_id, item.criterion)),
+        false_negative_items=sorted(overview_false_negative_keys, key=lambda item: (item.project_id, item.criterion)),
         project_mapping={item.raw_project: item.matched_project for item in gold_items},
         notes=[
-            "Сравнение выполняется на уровне проект × критерий, без сравнения строк и цитат.",
+            "Основное сравнение выполняется на уровне атомарных ошибок: проект, критерий, строка/диапазон и текст.",
+            "В строгую метрику не входят диагностические строки: низкоуверенные unknown, непроверенные ссылки и общие ресурсные предупреждения без имени файла.",
+            "Старая метрика проект × критерий сохранена только как обзорная в overview_* полях.",
             "Excel-разметка нормализуется эвристически из колонок 'Проблема' и 'Детали'.",
             *mapping_notes,
         ],
@@ -261,9 +379,552 @@ def write_corpus_evaluation(summary: CorpusEvaluationSummary, output_dir: Path) 
         json.dumps(summary.model_dump(mode="json"), ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
+    _write_matches_csv(summary.matches, output_dir / "corpus_evaluation_main.csv")
     _write_metrics_csv(summary, output_dir / "corpus_evaluation_by_criterion.csv")
+    _write_overview_metrics_csv(summary, output_dir / "corpus_evaluation_overview_by_criterion.csv")
+    _write_detailed_false_positive_csv(summary.detailed_false_positive_items, output_dir / "corpus_false_positive_detailed.csv")
     _write_items_csv(summary.false_negative_items, output_dir / "corpus_false_negative.csv")
     _write_items_csv(summary.false_positive_items, output_dir / "corpus_false_positive.csv")
+
+
+def _gold_cases_from_items(items: list[GoldCorpusItem]) -> list[GoldCorpusCase]:
+    """Разбивает Excel-строки на атомарные эталонные случаи."""
+
+    cases: list[GoldCorpusCase] = []
+    for item in items:
+        detail_cases = _split_gold_detail_cases(item.details or item.raw_problem)
+        for index, detail in enumerate(detail_cases, start=1):
+            detail_criteria = _criteria_from_gold_case(str(detail["text"])) or item.criteria
+            for criterion in detail_criteria:
+                cases.append(
+                    GoldCorpusCase(
+                        case_id=f"gold_{item.row_number}_{criterion}_{index}",
+                        row_number=item.row_number,
+                        raw_project=item.raw_project,
+                        matched_project=item.matched_project,
+                        project_id=item.project_id,
+                        criterion=criterion,
+                        line_start=detail["line_start"],
+                        line_end=detail["line_end"],
+                        gold_text=detail["text"],
+                    )
+                )
+    return cases
+
+
+def _criteria_from_gold_case(text: str) -> list[str]:
+    """Выводит критерий из конкретной строки эталонной ошибки, без размножения на весь тип проблемы."""
+
+    lowered = str(text or "").lower()
+    markers: tuple[tuple[Criterion, tuple[str, ...]], ...] = (
+        (
+            Criterion.ACTUALITY,
+            (
+                "сломанная ссылка",
+                "ссылка",
+                "url",
+                "http",
+                "https",
+                "устар",
+                "неактуаль",
+            ),
+        ),
+        (
+            Criterion.CHECKLIST_ALIGNMENT,
+            (
+                "чеклист",
+                "чек-лист",
+                "чек лист",
+                "check-list",
+                "checklist",
+            ),
+        ),
+        (
+            Criterion.READABILITY,
+            (
+                "опечат",
+                "двоеточ",
+                "нумерац",
+                "пронумер",
+                "граммат",
+                "тавтолог",
+                "формулиров",
+                "кавыч",
+                "input ",
+                "output",
+                "example",
+                "result",
+            ),
+        ),
+        (
+            Criterion.CORRECTNESS,
+            (
+                "противореч",
+                "некоррект",
+                "неверн",
+                "не является",
+                "по факту",
+                "ошибка в задании",
+            ),
+        ),
+    )
+    result: list[Criterion] = []
+    for criterion, aliases in markers:
+        if any(alias in lowered for alias in aliases):
+            result.append(criterion)
+    return [criterion.value for criterion in dict.fromkeys(result)]
+
+
+def _split_gold_detail_cases(text: str) -> list[dict[str, Any]]:
+    """Выделяет отдельные ошибки из многострочного описания разметки."""
+
+    lines = _normalise_gold_detail_lines(text)
+    if not lines:
+        lines = [str(text or "").strip()]
+    cases: list[dict[str, Any]] = []
+    for line in lines:
+        line_start, line_end = _line_range_from_text(line)
+        cases.append(
+            {
+                "line_start": line_start,
+                "line_end": line_end,
+                "text": _strip_gold_list_marker(line),
+            }
+        )
+    if cases:
+        return cases
+    line_start, line_end = _line_range_from_text(text)
+    return [{"line_start": line_start, "line_end": line_end, "text": str(text or "").strip()}]
+
+
+def _normalise_gold_detail_lines(text: str) -> list[str]:
+    """Оставляет только строки с дефектами, отделяя решения, доказательства и шапки таблиц."""
+
+    result: list[str] = []
+    for raw_line in str(text or "").splitlines():
+        line = raw_line.strip().strip('"').strip()
+        if not line or _looks_like_gold_metadata_line(line):
+            continue
+        if _starts_non_defect_gold_section(line):
+            break
+        result.append(line)
+    return result
+
+
+def _looks_like_gold_metadata_line(value: str) -> bool:
+    """Отсекает служебные строки из Excel-описания, если они попали в детали."""
+
+    lowered = re.sub(r"\s+", " ", value.lower().strip(" :"))
+    exact_headings = {
+        "строка - проблема - решение",
+        "строка проблема решение",
+        "проблема - решение",
+        "problem - solution",
+        "line - problem - solution",
+    }
+    if lowered in exact_headings:
+        return True
+    return lowered.startswith(("тип проблемы", "проект", "критерий", "архив", ":small_blue_diamond: description"))
+
+
+def _starts_non_defect_gold_section(value: str) -> bool:
+    """Определяет начало раздела с решением или доказательствами, а не с эталонной ошибкой."""
+
+    lowered = re.sub(r"\s+", " ", value.lower().strip(" :"))
+    prefixes = (
+        "предложение по решению",
+        "предлагаемое решение",
+        "решение",
+        "аргументы и исследования",
+        "аргументы",
+        "исследования",
+        "доказательства",
+        "подтверждение",
+        "скрины",
+        "скриншоты",
+    )
+    return lowered.startswith(prefixes)
+
+
+def _strip_gold_list_marker(value: str) -> str:
+    """Убирает маркер списка, не путая его с номером строки исходного файла."""
+
+    text = str(value or "").strip()
+    bullet_match = re.match(r"^\s*[*•]\s*(.+)$", text)
+    if bullet_match is not None:
+        return bullet_match.group(1).strip()
+    ordered_match = re.match(r"^\s*\d{1,3}[.)]\s+(.+)$", text)
+    if ordered_match is not None:
+        return ordered_match.group(1).strip()
+    return text
+
+
+def _line_range_from_text(value: str) -> tuple[int | None, int | None]:
+    """Достаёт строку или диапазон строк из эталонного описания."""
+
+    text = str(value or "")
+    patterns = (
+        r"^\s*(?:строк[аеи]\s*)?(\d{1,5})\s*[–—-]\s*(\d{1,5})\s+[–—-]",
+        r"^\s*(?:строк[аеи]\s*)?(\d{1,5})\s+[–—-]",
+        r"\bстрок[аеи]?\s*(\d{1,5})\s*[–—-]\s*(\d{1,5})\b",
+        r"\bстрок[аеи]?\s*(\d{1,5})\b(?=\s*[:.)]|\s|$)",
+    )
+    for pattern in patterns:
+        match = re.search(pattern, text, flags=re.IGNORECASE)
+        if match is None:
+            continue
+        start = int(match.group(1))
+        end = int(match.group(2)) if match.lastindex and match.lastindex >= 2 and match.group(2) else start
+        return min(start, end), max(start, end)
+    return None, None
+
+
+def _predicted_items_from_report(report: AuditReport, units_by_id: dict[str, Any]) -> list[PredictedCorpusItem]:
+    """Преобразует Findings в атомарные найденные случаи для детальной оценки."""
+
+    items: list[PredictedCorpusItem] = []
+    for finding in report.findings:
+        unit = units_by_id.get(finding.unit_id)
+        if unit is None:
+            continue
+        location = finding.location
+        items.append(
+            PredictedCorpusItem(
+                finding_id=finding.finding_id,
+                project_id=finding.unit_id,
+                project=unit.name,
+                criterion=finding.criterion.value,
+                checker_name=finding.checker_name,
+                line_start=location.line_start if location else None,
+                line_end=location.line_end if location else None,
+                file_path=location.file_path if location else None,
+                severity=finding.severity.value,
+                verdict=finding.verdict.value,
+                confidence=finding.confidence,
+                issue_type=str(finding.extra.get("issue_type") or ""),
+                found_text=_finding_text(finding),
+            )
+        )
+    return items
+
+
+def _is_strict_evaluation_signal(item: PredictedCorpusItem) -> bool:
+    """Оставляет в строгой метрике только находки, похожие на проверяемый дефект."""
+
+    if item.verdict == "pass":
+        return False
+    if item.verdict == "unknown" and (item.confidence or 0.0) < 0.8:
+        return False
+    if item.checker_name == "link_checker":
+        return item.verdict == "fail"
+    if item.checker_name == "resource_availability_checker":
+        return item.issue_type in {"missing_local_resource", "unconfirmed_environment_path"}
+    return True
+
+
+def _finding_text(finding: Finding) -> str:
+    """Собирает человекочитаемый текст найденной ошибки из цитаты, основания и рекомендации."""
+
+    parts: list[str] = []
+    if finding.quote:
+        parts.append(str(finding.quote))
+    for evidence in finding.evidence[:2]:
+        if evidence.detail:
+            parts.append(evidence.detail)
+    if finding.recommendation:
+        parts.append(finding.recommendation)
+    issue_type = finding.extra.get("issue_type")
+    if issue_type:
+        parts.append(str(issue_type))
+    return " | ".join(part.strip() for part in parts if part and part.strip())
+
+
+def _match_gold_cases(
+    gold_cases: list[GoldCorpusCase],
+    predicted_items: list[PredictedCorpusItem],
+) -> tuple[list[CorpusEvaluationMatch], set[str]]:
+    """Сопоставляет эталонные и найденные ошибки один-к-одному."""
+
+    gold_by_id = {item.case_id: item for item in gold_cases}
+    predicted_by_id = {item.finding_id: item for item in predicted_items}
+    counted_candidates: list[_MatchCandidate] = []
+    best_any_by_gold: dict[str, _MatchCandidate] = {}
+    for gold in gold_cases:
+        for predicted in predicted_items:
+            if gold.project_id != predicted.project_id or gold.criterion != predicted.criterion:
+                continue
+            candidate = _score_gold_prediction_match(gold, predicted)
+            current_best = best_any_by_gold.get(gold.case_id)
+            if current_best is None or candidate.score > current_best.score:
+                best_any_by_gold[gold.case_id] = candidate
+            if _is_counted_match(candidate):
+                counted_candidates.append(candidate)
+
+    assigned_gold: set[str] = set()
+    assigned_predictions: set[str] = set()
+    assigned_by_gold: dict[str, _MatchCandidate] = {}
+    for candidate in sorted(counted_candidates, key=lambda item: item.score, reverse=True):
+        if candidate.gold_case_id in assigned_gold or candidate.prediction_id in assigned_predictions:
+            continue
+        assigned_gold.add(candidate.gold_case_id)
+        assigned_predictions.add(candidate.prediction_id)
+        assigned_by_gold[candidate.gold_case_id] = candidate
+
+    rows: list[CorpusEvaluationMatch] = []
+    for gold in gold_cases:
+        candidate = assigned_by_gold.get(gold.case_id)
+        counted = candidate is not None
+        if candidate is None:
+            candidate = _best_unassigned_candidate(gold, predicted_items, assigned_predictions)
+        prediction = predicted_by_id.get(candidate.prediction_id) if candidate is not None else None
+        rows.append(_match_row(gold, prediction, candidate, counted))
+    return rows, assigned_predictions
+
+
+def _best_unassigned_candidate(
+    gold: GoldCorpusCase,
+    predicted_items: list[PredictedCorpusItem],
+    assigned_predictions: set[str],
+) -> _MatchCandidate | None:
+    """Выбирает лучший неиспользованный прогноз для объяснения незачёта."""
+
+    best: _MatchCandidate | None = None
+    for predicted in predicted_items:
+        if predicted.finding_id in assigned_predictions:
+            continue
+        if gold.project_id != predicted.project_id or gold.criterion != predicted.criterion:
+            continue
+        candidate = _score_gold_prediction_match(gold, predicted)
+        if best is None or candidate.score > best.score:
+            best = candidate
+    return best
+
+
+def _score_gold_prediction_match(gold: GoldCorpusCase, predicted: PredictedCorpusItem) -> _MatchCandidate:
+    """Оценивает пару эталонная ошибка ↔ найденная ошибка."""
+
+    line_relation = _line_relation(gold.line_start, gold.line_end, predicted.line_start, predicted.line_end)
+    text_score = _text_match_score(gold.gold_text, predicted.found_text)
+    if _same_missing_artifact_signal(gold.gold_text, predicted.found_text):
+        return _candidate(
+            gold,
+            predicted,
+            "artifact_missing_signal",
+            max(0.78, text_score),
+            "Совпали проект, критерий, ожидаемый маркер, тип артефакта и факт отсутствия маркера.",
+        )
+    if line_relation == "overlap" and text_score >= 0.25:
+        return _candidate(gold, predicted, "line_and_text", max(0.9, text_score), "Совпали проект, критерий, диапазон строк и ключевой текст ошибки.")
+    if line_relation == "overlap":
+        return _candidate(gold, predicted, "line_overlap", 0.82, "Совпали проект, критерий и строка/диапазон; текстовое совпадение слабее, но строка указывает на тот же дефект.")
+    if line_relation == "near" and text_score >= 0.2:
+        return _candidate(gold, predicted, "near_line_and_text", max(0.75, text_score), "Строки отличаются не более чем на две, критерий совпал, текст ошибки похож.")
+    if text_score >= 0.55:
+        return _candidate(gold, predicted, "text_similarity", text_score, "Совпали проект, критерий и текст ошибки; строка отсутствует или отличается.")
+    return _candidate(gold, predicted, "criterion_only", max(0.15, text_score), "Совпал только проект и критерий; для основной метрики это не засчитывается.")
+
+
+def _candidate(
+    gold: GoldCorpusCase,
+    predicted: PredictedCorpusItem,
+    match_type: str,
+    score: float,
+    reason: str,
+) -> _MatchCandidate:
+    """Создаёт внутренний объект кандидата сопоставления."""
+
+    return _MatchCandidate(
+        gold_case_id=gold.case_id,
+        prediction_id=predicted.finding_id,
+        match_type=match_type,
+        score=round(min(max(score, 0.0), 1.0), 4),
+        reason=reason,
+    )
+
+
+def _is_counted_match(candidate: _MatchCandidate) -> bool:
+    """Решает, засчитывается ли совпадение в основной метрике."""
+
+    return candidate.match_type in {
+        "line_and_text",
+        "line_overlap",
+        "near_line_and_text",
+        "text_similarity",
+        "artifact_missing_signal",
+    }
+
+
+def _match_row(
+    gold: GoldCorpusCase,
+    prediction: PredictedCorpusItem | None,
+    candidate: _MatchCandidate | None,
+    counted: bool,
+) -> CorpusEvaluationMatch:
+    """Создаёт строку главного отчёта сопоставления."""
+
+    if prediction is None or candidate is None:
+        return CorpusEvaluationMatch(
+            project=gold.matched_project,
+            project_id=gold.project_id,
+            criterion=gold.criterion,
+            label=_criterion_label(gold.criterion),
+            gold_row_number=gold.row_number,
+            gold_line_range=_format_range(gold.line_start, gold.line_end),
+            gold_text=gold.gold_text,
+            found_line_range="",
+            found_text="",
+            match_type="missed",
+            match_score=0.0,
+            counted=False,
+            reason="По этому проекту и критерию не найдено подходящей ошибки с совпадающей строкой или текстом.",
+        )
+    return CorpusEvaluationMatch(
+        project=gold.matched_project,
+        project_id=gold.project_id,
+        criterion=gold.criterion,
+        label=_criterion_label(gold.criterion),
+        gold_row_number=gold.row_number,
+        gold_line_range=_format_range(gold.line_start, gold.line_end),
+        gold_text=gold.gold_text,
+        found_finding_id=prediction.finding_id,
+        found_checker=prediction.checker_name,
+        found_line_range=_format_prediction_range(prediction),
+        found_text=prediction.found_text,
+        match_type=candidate.match_type,
+        match_score=candidate.score,
+        counted=counted,
+        reason=candidate.reason if counted else f"{candidate.reason} Найденная ошибка показана для разбора, но не засчитана.",
+    )
+
+
+def _line_relation(
+    gold_start: int | None,
+    gold_end: int | None,
+    pred_start: int | None,
+    pred_end: int | None,
+) -> str:
+    """Определяет отношение диапазонов строк."""
+
+    if gold_start is None or pred_start is None:
+        return "none"
+    gold_end = gold_end or gold_start
+    pred_end = pred_end or pred_start
+    if gold_start <= pred_end and pred_start <= gold_end:
+        return "overlap"
+    distance = min(abs(gold_start - pred_end), abs(pred_start - gold_end))
+    return "near" if distance <= 2 else "far"
+
+
+def _text_match_score(gold_text: str, found_text: str) -> float:
+    """Считает похожесть текста эталона и найденной ошибки."""
+
+    gold = _normalize_match_text(gold_text)
+    found = _normalize_match_text(found_text)
+    if not gold or not found:
+        return 0.0
+    if gold in found or found in gold:
+        return 0.95
+    gold_tokens = set(gold.split())
+    found_tokens = set(found.split())
+    overlap = len(gold_tokens & found_tokens)
+    token_score = overlap / max(min(len(gold_tokens), len(found_tokens)), 1)
+    sequence_score = SequenceMatcher(a=gold, b=found).ratio()
+    return round(max(token_score, sequence_score), 4)
+
+
+def _same_missing_artifact_signal(gold_text: str, found_text: str) -> bool:
+    """Сопоставляет формулировки об отсутствующем маркере внутри артефакта."""
+
+    gold = _normalize_match_text(gold_text)
+    found = _normalize_match_text(found_text)
+    if not gold or not found:
+        return False
+    shared_commands = _artifact_command_markers(gold) & _artifact_command_markers(found)
+    if not shared_commands:
+        return False
+    return _mentions_artifact(gold) and _mentions_artifact(found) and _mentions_absence(gold) and _mentions_absence(found)
+
+
+def _artifact_command_markers(text: str) -> set[str]:
+    """Находит командные маркеры, важные для сравнения ошибок по артефактам."""
+
+    commands = {"whoami", "id", "uname", "ls", "hostname", "ifconfig", "ipconfig", "tcpdump", "tshark"}
+    return {command for command in commands if re.search(rf"(?<![\w-]){re.escape(command)}(?![\w-])", text)}
+
+
+def _mentions_artifact(text: str) -> bool:
+    """Проверяет, что формулировка говорит об артефакте, дампе или захвате."""
+
+    return bool(re.search(r"\b(pcap|pcapng|dump|capture|trace|log)\b|дамп|захват|артефакт", text))
+
+
+def _mentions_absence(text: str) -> bool:
+    """Проверяет отрицание или отсутствие в формулировке дефекта."""
+
+    return bool(re.search(r"\bнет\b|не найден|не содержит|отсутств|missing|not found|without", text))
+
+
+def _normalize_match_text(value: str) -> str:
+    """Нормализует текст для сравнения эталона с находкой."""
+
+    text = str(value or "").lower()
+    text = re.sub(r"https?:[/\\]+", " ", text)
+    text = re.sub(r"[`*_\"'«»()\[\]{}:;,.!?/\\|]+", " ", text)
+    text = re.sub(r"\s+", " ", text)
+    return text.strip()
+
+
+def _format_range(start: int | None, end: int | None) -> str:
+    """Форматирует диапазон строк для отчёта."""
+
+    if start is None:
+        return ""
+    if end is None or end == start:
+        return str(start)
+    return f"{start}-{end}"
+
+
+def _format_prediction_range(item: PredictedCorpusItem) -> str:
+    """Форматирует файл и строку найденной ошибки."""
+
+    line_range = _format_range(item.line_start, item.line_end)
+    if item.file_path and line_range:
+        return f"{item.file_path}:{line_range}"
+    return item.file_path or line_range
+
+
+def _per_criterion_detail_metrics(
+    gold_cases: list[GoldCorpusCase],
+    predicted_items: list[PredictedCorpusItem],
+    matches: list[CorpusEvaluationMatch],
+) -> list[CriterionMetrics]:
+    """Считает основную метрику по критериям на уровне атомарных ошибок."""
+
+    criteria = sorted({item.criterion for item in gold_cases} | {item.criterion for item in predicted_items})
+    matched_prediction_ids = {item.found_finding_id for item in matches if item.counted and item.found_finding_id}
+    metrics: list[CriterionMetrics] = []
+    for criterion in criteria:
+        gold = [item for item in gold_cases if item.criterion == criterion]
+        predicted = [item for item in predicted_items if item.criterion == criterion]
+        tp = sum(1 for item in matches if item.criterion == criterion and item.counted)
+        matched_predicted = [item for item in predicted if item.finding_id in matched_prediction_ids]
+        fp = len(predicted) - len(matched_predicted)
+        fn = len(gold) - tp
+        metrics.append(
+            CriterionMetrics(
+                criterion=criterion,
+                label=_criterion_label(criterion),
+                gold_total=len(gold),
+                predicted_total=len(predicted),
+                true_positive=tp,
+                false_positive=fp,
+                false_negative=fn,
+                precision=_safe_ratio(tp, tp + fp),
+                recall=_safe_ratio(tp, tp + fn),
+                f1_score=_f1(tp, fp, fn),
+            )
+        )
+    return metrics
 
 
 def _project_candidates_from_report(report: AuditReport) -> list[_ProjectCandidate]:
@@ -400,7 +1061,7 @@ def _per_criterion_metrics(
 
 
 def _write_metrics_csv(summary: CorpusEvaluationSummary, output_path: Path) -> None:
-    """Пишет метрики по критериям в CSV."""
+    """Пишет основные детальные метрики по критериям в CSV."""
 
     with output_path.open("w", encoding="utf-8-sig", newline="") as handle:
         writer = csv.DictWriter(
@@ -421,6 +1082,110 @@ def _write_metrics_csv(summary: CorpusEvaluationSummary, output_path: Path) -> N
         writer.writeheader()
         for item in summary.per_criterion:
             writer.writerow(item.model_dump(mode="json"))
+
+
+def _write_overview_metrics_csv(summary: CorpusEvaluationSummary, output_path: Path) -> None:
+    """Пишет старую обзорную метрику проект × критерий в отдельный CSV."""
+
+    with output_path.open("w", encoding="utf-8-sig", newline="") as handle:
+        writer = csv.DictWriter(
+            handle,
+            fieldnames=[
+                "criterion",
+                "label",
+                "gold_total",
+                "predicted_total",
+                "true_positive",
+                "false_positive",
+                "false_negative",
+                "precision",
+                "recall",
+                "f1_score",
+            ],
+        )
+        writer.writeheader()
+        for item in summary.overview_per_criterion:
+            writer.writerow(item.model_dump(mode="json"))
+
+
+def _write_matches_csv(items: list[CorpusEvaluationMatch], output_path: Path) -> None:
+    """Пишет главную таблицу построчного сопоставления."""
+
+    with output_path.open("w", encoding="utf-8-sig", newline="") as handle:
+        writer = csv.DictWriter(
+            handle,
+            fieldnames=[
+                "проект",
+                "project_id",
+                "критерий",
+                "критерий_код",
+                "строка/диапазон",
+                "строка_excel",
+                "текст эталонной ошибки",
+                "найденная ошибка",
+                "найденная строка/диапазон",
+                "finding_id",
+                "checker",
+                "тип совпадения",
+                "засчитано",
+                "score",
+                "причина, почему засчитали",
+            ],
+        )
+        writer.writeheader()
+        for item in items:
+            writer.writerow(
+                {
+                    "проект": item.project,
+                    "project_id": item.project_id,
+                    "критерий": item.label,
+                    "критерий_код": item.criterion,
+                    "строка/диапазон": item.gold_line_range,
+                    "строка_excel": item.gold_row_number,
+                    "текст эталонной ошибки": item.gold_text,
+                    "найденная ошибка": item.found_text,
+                    "найденная строка/диапазон": item.found_line_range,
+                    "finding_id": item.found_finding_id or "",
+                    "checker": item.found_checker or "",
+                    "тип совпадения": item.match_type,
+                    "засчитано": "да" if item.counted else "нет",
+                    "score": item.match_score,
+                    "причина, почему засчитали": item.reason,
+                }
+            )
+
+
+def _write_detailed_false_positive_csv(items: list[PredictedCorpusItem], output_path: Path) -> None:
+    """Пишет детальные ложные срабатывания, которые не сопоставились с эталоном."""
+
+    with output_path.open("w", encoding="utf-8-sig", newline="") as handle:
+        writer = csv.DictWriter(
+            handle,
+            fieldnames=[
+                "проект",
+                "project_id",
+                "критерий",
+                "критерий_код",
+                "найденная строка/диапазон",
+                "найденная ошибка",
+                "finding_id",
+                "checker",
+            ],
+        )
+        writer.writeheader()
+        for item in items:
+            writer.writerow(
+                {
+                    "проект": item.project,
+                    "project_id": item.project_id,
+                    "критерий": _criterion_label(item.criterion),
+                    "критерий_код": item.criterion,
+                    "найденная строка/диапазон": _format_prediction_range(item),
+                    "найденная ошибка": item.found_text,
+                    "finding_id": item.finding_id,
+                    "checker": item.checker_name,
+                }
+            )
 
 
 def _write_items_csv(items: list[CorpusEvaluationKey], output_path: Path) -> None:

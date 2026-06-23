@@ -16,11 +16,13 @@ SEVERITY_RANK = {
 }
 MODEL_ONLY_CHECKERS = {"model_rubric_checker"}
 MODEL_CHECKERS = {
+    "curriculum_relevance_checker",
     "dependency_freshness_checker",
     "fact_checker_perplexity",
     "model_rubric_checker",
     "readability_checker",
     "rights_originality_checker",
+    "spelling_wording_checker",
     "tech_freshness_checker",
 }
 LANGUAGE_SUFFIX_RE = re.compile(r"(?i)([_-](?:rus|ru|eng|en|uzb|uz))(?=\.[^.\\/]+$)")

@@ -90,20 +90,26 @@ def _find_gold_xlsx(metrics_dir: Path) -> Path:
 def _print_summary(summary, output_dir: Path) -> None:
     """Печатает короткие итоговые метрики."""
 
-    print(f"Gold: {summary.gold_total}")
-    print(f"Predicted: {summary.predicted_total}")
+    print("Main detailed metric:")
+    print(f"Gold cases: {summary.gold_total}")
+    print(f"Predicted cases in gold scope: {summary.predicted_total}")
     print(f"TP/FP/FN: {summary.true_positive}/{summary.false_positive}/{summary.false_negative}")
     print(f"Precision: {summary.precision}")
     print(f"Recall: {summary.recall}")
     print(f"F1-score: {summary.f1_score}")
     print(f"Macro precision/recall/F1: {summary.macro_precision}/{summary.macro_recall}/{summary.macro_f1_score}")
+    print("Overview project × criterion metric:")
     print(
-        "Gold-scope precision/recall/F1: "
-        f"{summary.gold_scope_precision}/{summary.gold_scope_recall}/{summary.gold_scope_f1_score}"
+        f"Gold/predicted: {summary.overview_gold_total}/{summary.overview_predicted_total}; "
+        f"TP/FP/FN: {summary.overview_true_positive}/{summary.overview_false_positive}/{summary.overview_false_negative}"
     )
     print(
-        "Gold-scope macro precision/recall/F1: "
-        f"{summary.gold_scope_macro_precision}/{summary.gold_scope_macro_recall}/{summary.gold_scope_macro_f1_score}"
+        "Precision/recall/F1: "
+        f"{summary.overview_precision}/{summary.overview_recall}/{summary.overview_f1_score}"
+    )
+    print(
+        "Macro precision/recall/F1: "
+        f"{summary.overview_macro_precision}/{summary.overview_macro_recall}/{summary.overview_macro_f1_score}"
     )
     print(f"Отчёты: {output_dir}")
 

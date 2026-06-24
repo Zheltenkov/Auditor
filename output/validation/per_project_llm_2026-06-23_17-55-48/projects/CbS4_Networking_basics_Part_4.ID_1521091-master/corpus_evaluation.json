@@ -1,0 +1,259 @@
+{
+  "evaluated_criteria": [
+    "checklist_alignment"
+  ],
+  "gold_total": 1,
+  "predicted_total": 4,
+  "true_positive": 1,
+  "false_positive": 3,
+  "false_negative": 0,
+  "precision": 0.25,
+  "recall": 1.0,
+  "f1_score": 0.4,
+  "macro_precision": 0.25,
+  "macro_recall": 1.0,
+  "macro_f1_score": 0.4,
+  "overview_gold_total": 1,
+  "overview_predicted_total": 4,
+  "overview_true_positive": 1,
+  "overview_false_positive": 3,
+  "overview_false_negative": 0,
+  "overview_precision": 0.25,
+  "overview_recall": 1.0,
+  "overview_f1_score": 0.4,
+  "overview_macro_precision": 0.25,
+  "overview_macro_recall": 0.25,
+  "overview_macro_f1_score": 0.25,
+  "gold_scope_predicted_total": 4,
+  "gold_scope_true_positive": 1,
+  "gold_scope_false_positive": 3,
+  "gold_scope_false_negative": 0,
+  "gold_scope_precision": 0.25,
+  "gold_scope_recall": 1.0,
+  "gold_scope_f1_score": 0.4,
+  "gold_scope_macro_precision": 0.25,
+  "gold_scope_macro_recall": 1.0,
+  "gold_scope_macro_f1_score": 0.4,
+  "per_criterion": [
+    {
+      "criterion": "checklist_alignment",
+      "label": "Соответствие заданий проекта чек-листу",
+      "gold_total": 1,
+      "predicted_total": 4,
+      "true_positive": 1,
+      "false_positive": 3,
+      "false_negative": 0,
+      "precision": 0.25,
+      "recall": 1.0,
+      "f1_score": 0.4
+    }
+  ],
+  "overview_per_criterion": [
+    {
+      "criterion": "actuality",
+      "label": "Актуальность",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "checklist_alignment",
+      "label": "Соответствие заданий проекта чек-листу",
+      "gold_total": 1,
+      "predicted_total": 1,
+      "true_positive": 1,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0
+    },
+    {
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "readability",
+      "label": "Грамотность и читаемость текста",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    }
+  ],
+  "checker_metrics": [
+    {
+      "slice_name": "checklist_checker",
+      "label": "checklist_checker",
+      "predicted_total": 4,
+      "true_positive": 1,
+      "false_positive": 3,
+      "precision": 0.25,
+      "false_positive_share": 1.0
+    }
+  ],
+  "checker_group_metrics": [
+    {
+      "slice_name": "checklist_and_artifacts",
+      "label": "Чек-лист и артефакты",
+      "predicted_total": 4,
+      "true_positive": 1,
+      "false_positive": 3,
+      "precision": 0.25,
+      "false_positive_share": 1.0
+    }
+  ],
+  "actionable_metrics": {
+    "slice_name": "actionable",
+    "label": "Действенные находки",
+    "predicted_total": 4,
+    "true_positive": 1,
+    "false_positive": 3,
+    "precision": 0.25,
+    "false_positive_share": 1.0
+  },
+  "cost_quality": {
+    "model_calls": 12,
+    "cache_hits": 3,
+    "total_tokens": 17069,
+    "cost_usd": 0.049755,
+    "cost_per_gold_true_positive": 0.049755,
+    "cost_per_prediction": 0.002488,
+    "cost_per_actionable_true_positive": 0.049755
+  },
+  "false_negative_reason_counts": {},
+  "false_negative_analysis": [],
+  "gold_items": [
+    {
+      "row_number": 2,
+      "raw_project": "CbS4_Networking_basics_Part 4.",
+      "matched_project": "CbS4_Networking_basics_Part_4.ID_1521091-master",
+      "project_id": "cbs4_networking_basics_part_4_id_1521091_master__2829d3ee",
+      "raw_problem": "ошибка в чек-листе",
+      "details": "Следов выполнения команды whoami через Reverse Shell в прилагаемом к заданию 2 проекта CbS4_Networking_basics_Part 4 файле дампа (pcapng) просто нет. В качестве подтверждения присылаю скрины по разбору TCP потока из WireShark. Не очень хочется, чтобы последующим пирам снижали оценку за несуществующие ошибки выполнения\n\n Предложение по решению: \nУбрать из чек-листа задания 2 проекта CbS4 указание на команду whoami\n Аргументы и исследования на тему: \nСкрины с последовательным  разбором файла дампа в треде",
+      "criteria": [
+        "checklist_alignment"
+      ]
+    }
+  ],
+  "gold_cases": [
+    {
+      "case_id": "gold_2_checklist_alignment_1",
+      "row_number": 2,
+      "raw_project": "CbS4_Networking_basics_Part 4.",
+      "matched_project": "CbS4_Networking_basics_Part_4.ID_1521091-master",
+      "project_id": "cbs4_networking_basics_part_4_id_1521091_master__2829d3ee",
+      "criterion": "checklist_alignment",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "Следов выполнения команды whoami через Reverse Shell в прилагаемом к заданию 2 проекта CbS4_Networking_basics_Part 4 файле дампа (pcapng) просто нет. В качестве подтверждения присылаю скрины по разбору TCP потока из WireShark. Не очень хочется, чтобы последующим пирам снижали оценку за несуществующие ошибки выполнения"
+    }
+  ],
+  "matches": [
+    {
+      "project": "CbS4_Networking_basics_Part_4.ID_1521091-master",
+      "project_id": "cbs4_networking_basics_part_4_id_1521091_master__2829d3ee",
+      "criterion": "checklist_alignment",
+      "label": "Соответствие заданий проекта чек-листу",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "Следов выполнения команды whoami через Reverse Shell в прилагаемом к заданию 2 проекта CbS4_Networking_basics_Part 4 файле дампа (pcapng) просто нет. В качестве подтверждения присылаю скрины по разбору TCP потока из WireShark. Не очень хочется, чтобы последующим пирам снижали оценку за несуществующие ошибки выполнения",
+      "found_finding_id": "fnd_801ead50e36e",
+      "found_checker": "checklist_checker",
+      "found_line_range": "check-list.yml",
+      "found_text": "вывод whoami, вывод id не найден в src/task_2/some_troubled_traffic.pcapng | Чек-лист ожидает маркер или команду внутри приложенного артефакта, но быстрый анализ содержимого этого маркера не нашёл. | Проверить приложенный артефакт: если маркер действительно отсутствует, убрать это требование из чек-листа или заменить артефакт. | artifact_missing_expected_text",
+      "match_type": "artifact_missing_signal",
+      "match_score": 0.78,
+      "counted": true,
+      "reason": "Совпали проект, критерий, ожидаемый маркер, тип артефакта и факт отсутствия маркера."
+    }
+  ],
+  "detailed_false_positive_items": [
+    {
+      "finding_id": "fnd_40604d0f69fe",
+      "project_id": "cbs4_networking_basics_part_4_id_1521091_master__2829d3ee",
+      "project": "CbS4_Networking_basics_Part_4.ID_1521091-master",
+      "criterion": "checklist_alignment",
+      "checker_name": "checklist_checker",
+      "line_start": null,
+      "line_end": null,
+      "file_path": "check-list.yml",
+      "severity": "major",
+      "verdict": "warning",
+      "confidence": 0.84,
+      "issue_type": "ungrounded_command",
+      "found_text": "uname | Чек-лист проверяет команду или артефакт выполнения, которого нет в соответствующем задании README. | Либо описать эту команду в README, либо убрать её из проверок чек-листа. | ungrounded_command"
+    },
+    {
+      "finding_id": "fnd_ae61d880c8ca",
+      "project_id": "cbs4_networking_basics_part_4_id_1521091_master__2829d3ee",
+      "project": "CbS4_Networking_basics_Part_4.ID_1521091-master",
+      "criterion": "checklist_alignment",
+      "checker_name": "checklist_checker",
+      "line_start": null,
+      "line_end": null,
+      "file_path": "check-list.yml",
+      "severity": "major",
+      "verdict": "warning",
+      "confidence": 0.84,
+      "issue_type": "ungrounded_command",
+      "found_text": "ls | Чек-лист проверяет команду или артефакт выполнения, которого нет в соответствующем задании README. | Либо описать эту команду в README, либо убрать её из проверок чек-листа. | ungrounded_command"
+    },
+    {
+      "finding_id": "fnd_e11dd0200f62",
+      "project_id": "cbs4_networking_basics_part_4_id_1521091_master__2829d3ee",
+      "project": "CbS4_Networking_basics_Part_4.ID_1521091-master",
+      "criterion": "checklist_alignment",
+      "checker_name": "checklist_checker",
+      "line_start": null,
+      "line_end": null,
+      "file_path": "check-list.yml",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.72,
+      "issue_type": "",
+      "found_text": "Сильных совпадений: 3 из 3; слабых совпадений: 0 из 3; не сопоставлено: 0 из 3. Развёрнутых описаний: 2 из 3. Недостаточно описаны: Задание 1. Исследование сетевых пакетов. | Доработать пункты без критериев приёмки, ожидаемых артефактов или примеров."
+    }
+  ],
+  "false_positive_items": [
+    {
+      "project_id": "cbs4_networking_basics_part_4_id_1521091_master__2829d3ee",
+      "criterion": "actuality"
+    },
+    {
+      "project_id": "cbs4_networking_basics_part_4_id_1521091_master__2829d3ee",
+      "criterion": "correctness"
+    },
+    {
+      "project_id": "cbs4_networking_basics_part_4_id_1521091_master__2829d3ee",
+      "criterion": "readability"
+    }
+  ],
+  "false_negative_items": [],
+  "project_mapping": {
+    "CbS4_Networking_basics_Part 4.": "CbS4_Networking_basics_Part_4.ID_1521091-master"
+  },
+  "notes": [
+    "Основное сравнение выполняется на уровне атомарных ошибок: проект, критерий, строка/диапазон и текст.",
+    "В строгую метрику не входят диагностические строки: низкоуверенные unknown, непроверенные ссылки и общие ресурсные предупреждения без имени файла.",
+    "Старая метрика проект × критерий сохранена только как обзорная в overview_* полях.",
+    "Excel-разметка нормализуется эвристически из колонок 'Проблема' и 'Детали'."
+  ]
+}

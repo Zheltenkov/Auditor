@@ -1,0 +1,4 @@
+﻿slice_name,label,predicted_total,true_positive,false_positive,precision,false_positive_share
+checklist_and_artifacts,Чек-лист и артефакты,11,0,11,0.0,0.3438
+editorial_rules,Редакторские правила,11,1,10,0.0909,0.3125
+links_and_resources,Ссылки и ресурсы,11,0,11,0.0,0.3438

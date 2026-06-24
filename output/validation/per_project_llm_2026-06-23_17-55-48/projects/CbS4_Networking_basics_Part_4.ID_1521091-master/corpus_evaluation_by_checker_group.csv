@@ -1,0 +1,2 @@
+﻿slice_name,label,predicted_total,true_positive,false_positive,precision,false_positive_share
+checklist_and_artifacts,Чек-лист и артефакты,4,1,3,0.25,1.0

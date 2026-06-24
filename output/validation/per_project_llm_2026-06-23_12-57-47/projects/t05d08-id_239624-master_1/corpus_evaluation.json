@@ -1,0 +1,362 @@
+{
+  "evaluated_criteria": [
+    "correctness"
+  ],
+  "gold_total": 5,
+  "predicted_total": 2,
+  "true_positive": 0,
+  "false_positive": 2,
+  "false_negative": 5,
+  "precision": 0.0,
+  "recall": 0.0,
+  "f1_score": 0.0,
+  "macro_precision": 0.0,
+  "macro_recall": 0.0,
+  "macro_f1_score": 0.0,
+  "overview_gold_total": 1,
+  "overview_predicted_total": 7,
+  "overview_true_positive": 1,
+  "overview_false_positive": 6,
+  "overview_false_negative": 0,
+  "overview_precision": 0.1429,
+  "overview_recall": 1.0,
+  "overview_f1_score": 0.2501,
+  "overview_macro_precision": 0.1429,
+  "overview_macro_recall": 0.1429,
+  "overview_macro_f1_score": 0.1429,
+  "gold_scope_predicted_total": 2,
+  "gold_scope_true_positive": 0,
+  "gold_scope_false_positive": 2,
+  "gold_scope_false_negative": 5,
+  "gold_scope_precision": 0.0,
+  "gold_scope_recall": 0.0,
+  "gold_scope_f1_score": 0.0,
+  "gold_scope_macro_precision": 0.0,
+  "gold_scope_macro_recall": 0.0,
+  "gold_scope_macro_f1_score": 0.0,
+  "per_criterion": [
+    {
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_total": 5,
+      "predicted_total": 2,
+      "true_positive": 0,
+      "false_positive": 2,
+      "false_negative": 5,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    }
+  ],
+  "overview_per_criterion": [
+    {
+      "criterion": "actuality",
+      "label": "Актуальность",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "checklist_alignment",
+      "label": "Соответствие заданий проекта чек-листу",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_total": 1,
+      "predicted_total": 1,
+      "true_positive": 1,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0
+    },
+    {
+      "criterion": "image_quality",
+      "label": "Качество изображений",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "market_fit",
+      "label": "Соответствие рынку",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "readability",
+      "label": "Грамотность и читаемость текста",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "rights",
+      "label": "Оригинальность и права использования ресурсов",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    }
+  ],
+  "gold_items": [
+    {
+      "row_number": 2,
+      "raw_project": "T05D08",
+      "matched_project": "t05d08-id_239624-master",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "raw_problem": "ошибка в задании",
+      "details": "\"*[Quest 4]: Противоречие, написано в задаче: \"\"Функции должны быть компактными и простыми, и занимать не более 20-30 строк кода.==\"\", а в принципах структурного программирования 40-50 строк.\n*[Общее]: Можно добавить информацию о передачи аргументов в функцию по ссылки или значению в list.\n*[Общее]: Упор при знакомстве с указателями и массивами лучше делать на операции с ними такие как извлечению и получению данных и на простых алгоритмах, меньше математических функций. Указатели сложная тема для понимания.\n*[Общее]: Задача разбора потока данных является стандартной, но не в том виде, в котором представлены примеры. \n*[Общее]: Нет упоминание, что такое define и include и что такое препроцессинг.\"",
+      "criteria": [
+        "correctness"
+      ]
+    }
+  ],
+  "gold_cases": [
+    {
+      "case_id": "gold_2_correctness_1",
+      "row_number": 2,
+      "raw_project": "T05D08",
+      "matched_project": "t05d08-id_239624-master",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "correctness",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "[Quest 4]: Противоречие, написано в задаче: \"\"Функции должны быть компактными и простыми, и занимать не более 20-30 строк кода.==\"\", а в принципах структурного программирования 40-50 строк."
+    },
+    {
+      "case_id": "gold_2_correctness_2",
+      "row_number": 2,
+      "raw_project": "T05D08",
+      "matched_project": "t05d08-id_239624-master",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "correctness",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "[Общее]: Можно добавить информацию о передачи аргументов в функцию по ссылки или значению в list."
+    },
+    {
+      "case_id": "gold_2_correctness_3",
+      "row_number": 2,
+      "raw_project": "T05D08",
+      "matched_project": "t05d08-id_239624-master",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "correctness",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "[Общее]: Упор при знакомстве с указателями и массивами лучше делать на операции с ними такие как извлечению и получению данных и на простых алгоритмах, меньше математических функций. Указатели сложная тема для понимания."
+    },
+    {
+      "case_id": "gold_2_correctness_4",
+      "row_number": 2,
+      "raw_project": "T05D08",
+      "matched_project": "t05d08-id_239624-master",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "correctness",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "[Общее]: Задача разбора потока данных является стандартной, но не в том виде, в котором представлены примеры."
+    },
+    {
+      "case_id": "gold_2_correctness_5",
+      "row_number": 2,
+      "raw_project": "T05D08",
+      "matched_project": "t05d08-id_239624-master",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "correctness",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "[Общее]: Нет упоминание, что такое define и include и что такое препроцессинг."
+    }
+  ],
+  "matches": [
+    {
+      "project": "t05d08-id_239624-master",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "[Quest 4]: Противоречие, написано в задаче: \"\"Функции должны быть компактными и простыми, и занимать не более 20-30 строк кода.==\"\", а в принципах структурного программирования 40-50 строк.",
+      "found_finding_id": "fnd_cdfd86cb6b28",
+      "found_checker": "fact_checker_perplexity",
+      "found_line_range": "README.md:186",
+      "found_text": "All your programs are tested for the style norm and memory leaks. | Текст утверждения говорит, что «все ваши программы» автоматически тестируются на стиль и утечки памяти, что подразумевает универсально включённый контроль. На практике корректное обнаружение утечек памяти обычно требует специальной настройки (Valgrind, AddressSanitizer, кастомная инструментация в тестах и т.п.) и не работает «из коробки» для любого произвольного кода. Также стиль кода чаще проверяют отдельными линтерами/форматтерами, которые тоже нужно явно подключить (например, в CI‑пайплайне). В поисковых результатах описаны именно такие ручные или настраиваемые подходы, а не волшебное глобальное тестирование «всех программ» без конфигурации. | Переформулируйте утверждение, чтобы оно честно отражало реальную практику: например, «наши программы последовательно проверяются статическим анализом, линтерами и инструментами для поиска утечек памяти (Valgrind, AddressSanitizer и др.), настроенных в CI», либо укажите конкретные инструменты и сценарии, в которых действительно «все программы» проверяются. Если автоматического запуска этих проверок на всех билдах сейчас нет, явно ограничьте фразу охватом («некоторые программы» или «программы, включённые в CI‑пайплайн»).",
+      "match_type": "criterion_only",
+      "match_score": 0.2083,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    },
+    {
+      "project": "t05d08-id_239624-master",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "[Общее]: Можно добавить информацию о передачи аргументов в функцию по ссылки или значению в list.",
+      "found_finding_id": "fnd_760350eea5da",
+      "found_checker": "curriculum_relevance_checker",
+      "found_line_range": "materials/instructions_for_testing_uz.md:16",
+      "found_text": "Google Style: https://google.github.io/styleguide/cppguide.html | Рекомендован C++ style guide, хотя проект относится к C. | Заменить рекомендацию на стиль и материалы для фактического языка проекта. | language_material_conflict",
+      "match_type": "criterion_only",
+      "match_score": 0.15,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    },
+    {
+      "project": "t05d08-id_239624-master",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "[Общее]: Упор при знакомстве с указателями и массивами лучше делать на операции с ними такие как извлечению и получению данных и на простых алгоритмах, меньше математических функций. Указатели сложная тема для понимания.",
+      "found_finding_id": "fnd_760350eea5da",
+      "found_checker": "curriculum_relevance_checker",
+      "found_line_range": "materials/instructions_for_testing_uz.md:16",
+      "found_text": "Google Style: https://google.github.io/styleguide/cppguide.html | Рекомендован C++ style guide, хотя проект относится к C. | Заменить рекомендацию на стиль и материалы для фактического языка проекта. | language_material_conflict",
+      "match_type": "criterion_only",
+      "match_score": 0.15,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    },
+    {
+      "project": "t05d08-id_239624-master",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "[Общее]: Задача разбора потока данных является стандартной, но не в том виде, в котором представлены примеры.",
+      "found_finding_id": "fnd_760350eea5da",
+      "found_checker": "curriculum_relevance_checker",
+      "found_line_range": "materials/instructions_for_testing_uz.md:16",
+      "found_text": "Google Style: https://google.github.io/styleguide/cppguide.html | Рекомендован C++ style guide, хотя проект относится к C. | Заменить рекомендацию на стиль и материалы для фактического языка проекта. | language_material_conflict",
+      "match_type": "criterion_only",
+      "match_score": 0.15,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    },
+    {
+      "project": "t05d08-id_239624-master",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "[Общее]: Нет упоминание, что такое define и include и что такое препроцессинг.",
+      "found_finding_id": "fnd_cdfd86cb6b28",
+      "found_checker": "fact_checker_perplexity",
+      "found_line_range": "README.md:186",
+      "found_text": "All your programs are tested for the style norm and memory leaks. | Текст утверждения говорит, что «все ваши программы» автоматически тестируются на стиль и утечки памяти, что подразумевает универсально включённый контроль. На практике корректное обнаружение утечек памяти обычно требует специальной настройки (Valgrind, AddressSanitizer, кастомная инструментация в тестах и т.п.) и не работает «из коробки» для любого произвольного кода. Также стиль кода чаще проверяют отдельными линтерами/форматтерами, которые тоже нужно явно подключить (например, в CI‑пайплайне). В поисковых результатах описаны именно такие ручные или настраиваемые подходы, а не волшебное глобальное тестирование «всех программ» без конфигурации. | Переформулируйте утверждение, чтобы оно честно отражало реальную практику: например, «наши программы последовательно проверяются статическим анализом, линтерами и инструментами для поиска утечек памяти (Valgrind, AddressSanitizer и др.), настроенных в CI», либо укажите конкретные инструменты и сценарии, в которых действительно «все программы» проверяются. Если автоматического запуска этих проверок на всех билдах сейчас нет, явно ограничьте фразу охватом («некоторые программы» или «программы, включённые в CI‑пайплайн»).",
+      "match_type": "criterion_only",
+      "match_score": 0.3333,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    }
+  ],
+  "detailed_false_positive_items": [
+    {
+      "finding_id": "fnd_760350eea5da",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "project": "t05d08-id_239624-master",
+      "criterion": "correctness",
+      "checker_name": "curriculum_relevance_checker",
+      "line_start": 16,
+      "line_end": 16,
+      "file_path": "materials/instructions_for_testing_uz.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.86,
+      "issue_type": "language_material_conflict",
+      "found_text": "Google Style: https://google.github.io/styleguide/cppguide.html | Рекомендован C++ style guide, хотя проект относится к C. | Заменить рекомендацию на стиль и материалы для фактического языка проекта. | language_material_conflict"
+    },
+    {
+      "finding_id": "fnd_cdfd86cb6b28",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "project": "t05d08-id_239624-master",
+      "criterion": "correctness",
+      "checker_name": "fact_checker_perplexity",
+      "line_start": 186,
+      "line_end": 186,
+      "file_path": "README.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.7,
+      "issue_type": "",
+      "found_text": "All your programs are tested for the style norm and memory leaks. | Текст утверждения говорит, что «все ваши программы» автоматически тестируются на стиль и утечки памяти, что подразумевает универсально включённый контроль. На практике корректное обнаружение утечек памяти обычно требует специальной настройки (Valgrind, AddressSanitizer, кастомная инструментация в тестах и т.п.) и не работает «из коробки» для любого произвольного кода. Также стиль кода чаще проверяют отдельными линтерами/форматтерами, которые тоже нужно явно подключить (например, в CI‑пайплайне). В поисковых результатах описаны именно такие ручные или настраиваемые подходы, а не волшебное глобальное тестирование «всех программ» без конфигурации. | Переформулируйте утверждение, чтобы оно честно отражало реальную практику: например, «наши программы последовательно проверяются статическим анализом, линтерами и инструментами для поиска утечек памяти (Valgrind, AddressSanitizer и др.), настроенных в CI», либо укажите конкретные инструменты и сценарии, в которых действительно «все программы» проверяются. Если автоматического запуска этих проверок на всех билдах сейчас нет, явно ограничьте фразу охватом («некоторые программы» или «программы, включённые в CI‑пайплайн»)."
+    }
+  ],
+  "false_positive_items": [
+    {
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "actuality"
+    },
+    {
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "checklist_alignment"
+    },
+    {
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "image_quality"
+    },
+    {
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "market_fit"
+    },
+    {
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "readability"
+    },
+    {
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "rights"
+    }
+  ],
+  "false_negative_items": [],
+  "project_mapping": {
+    "T05D08": "t05d08-id_239624-master"
+  },
+  "notes": [
+    "Основное сравнение выполняется на уровне атомарных ошибок: проект, критерий, строка/диапазон и текст.",
+    "В строгую метрику не входят диагностические строки: низкоуверенные unknown, непроверенные ссылки и общие ресурсные предупреждения без имени файла.",
+    "Старая метрика проект × критерий сохранена только как обзорная в overview_* полях.",
+    "Excel-разметка нормализуется эвристически из колонок 'Проблема' и 'Детали'."
+  ]
+}

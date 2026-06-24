@@ -1,0 +1,106 @@
+{
+  "started_at": "2026-06-23T13:10:01.846916Z",
+  "finished_at": "2026-06-23T13:15:09.499633Z",
+  "input_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\per_project_llm_metrics_2026-06-23_12-57-47\\C2_SimpleBashUtils.ID_353513-master_1",
+  "units_total": 1,
+  "files_total": 25,
+  "findings_total": 65,
+  "affected_units_total": 1,
+  "by_severity": {
+    "info": 3,
+    "minor": 60,
+    "major": 2
+  },
+  "by_criterion": {
+    "actuality": 5,
+    "readability": 52,
+    "correctness": 6,
+    "rights": 1,
+    "checklist_alignment": 1
+  },
+  "by_branch": {
+    "C2_SimpleBashUtils.ID_353513-master (1)": 65
+  },
+  "by_unit": {
+    "c2_simplebashutils_id_353513_master__1794aa11": 65
+  },
+  "model_usage": {
+    "calls_total": 30,
+    "cache_hits": 4,
+    "prompt_tokens": 30115,
+    "completion_tokens": 9134,
+    "total_tokens": 39249,
+    "cost_usd": 0.08451159,
+    "by_model": {
+      "openai/gpt-5.4-mini": {
+        "calls_total": 14,
+        "prompt_tokens": 22515,
+        "completion_tokens": 5494,
+        "total_tokens": 28009,
+        "cost_usd": 0.04160925
+      },
+      "qwen/qwen3-coder": {
+        "calls_total": 9,
+        "prompt_tokens": 5523,
+        "completion_tokens": 1984,
+        "total_tokens": 7507,
+        "cost_usd": 0.00417234
+      },
+      "perplexity/sonar": {
+        "calls_total": 7,
+        "prompt_tokens": 2077,
+        "completion_tokens": 1656,
+        "total_tokens": 3733,
+        "cost_usd": 0.03873
+      }
+    }
+  },
+  "prompt_versions": {
+    "spelling_wording_checker": "spelling_wording_checker:v1",
+    "tech_freshness_checker": "tech_freshness_checker:v1",
+    "fact_checker_perplexity": "fact_checker_perplexity:v1",
+    "curriculum_relevance_checker": "curriculum_relevance_checker:v1",
+    "model_rubric_checker": "model_rubric_checker:v1"
+  },
+  "steps": [
+    {
+      "name": "Загрузка файлов",
+      "status": "ok",
+      "started_at": "2026-06-23T13:10:01.846919Z",
+      "finished_at": "2026-06-23T13:10:01.913451Z",
+      "duration_ms": 66,
+      "detail": "Единиц: 1"
+    },
+    {
+      "name": "Подготовка проверок",
+      "status": "ok",
+      "started_at": "2026-06-23T13:10:01.913475Z",
+      "finished_at": "2026-06-23T13:10:01.968145Z",
+      "duration_ms": 54,
+      "detail": "Модулей: 22, совпадений кода: 0"
+    },
+    {
+      "name": "Извлечение и проверки",
+      "status": "ok",
+      "started_at": "2026-06-23T13:10:01.968175Z",
+      "finished_at": "2026-06-23T13:15:09.494290Z",
+      "duration_ms": 307526,
+      "detail": "Сущностей: 186"
+    },
+    {
+      "name": "Сборка отчёта",
+      "status": "ok",
+      "started_at": "2026-06-23T13:15:09.494312Z",
+      "finished_at": "2026-06-23T13:15:09.499533Z",
+      "duration_ms": 5,
+      "detail": "Случаев: 65"
+    }
+  ],
+  "model_used": true,
+  "network_used": true,
+  "warnings": [
+    "Постобработка: 1 служебных ошибок внешних проверок перенесены из таблицы в предупреждения. Не удалось получить JSON от OpenRouter: Extra data: line 1 column 8193 (char 8192)",
+    "Постобработка: 1 пустых модельных результатов без уверенности удалены из таблицы.",
+    "Постобработка: 4 языковых дублей схлопнуты в базовые строки."
+  ]
+}

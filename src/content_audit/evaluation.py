@@ -29,6 +29,11 @@ class EvaluationItem(BaseModel):
             return (*base, self.severity or "")
         return base
 
+    def scope_key(self) -> tuple[str, str]:
+        """Базовая область сравнения: одна единица и один критерий."""
+
+        return (self.unit_id, self.criterion)
+
 
 class EvaluationSummary(BaseModel):
     """Метрики приёмки для текущего отчёта."""
@@ -50,27 +55,105 @@ def evaluate_report(report: AuditReport, gold_path: Path) -> EvaluationSummary:
 
     gold_items = _load_gold_items(gold_path)
     predicted_items = _items_from_report(report)
-    gold_keys = {item.key() for item in gold_items}
-    predicted_keys = {item.key() for item in predicted_items}
-
-    true_positive = len(gold_keys & predicted_keys)
-    false_positive = len(predicted_keys - gold_keys)
-    false_negative = len(gold_keys - predicted_keys)
-    critical_gold = {item.key() for item in gold_items if item.severity == Severity.CRITICAL.value}
-    critical_found = len(critical_gold & predicted_keys)
+    matches = _match_items(gold_items, predicted_items)
+    matched_gold = {gold_index for gold_index, _ in matches}
+    matched_predicted = {predicted_index for _, predicted_index in matches}
+    true_positive = len(matches)
+    false_positive = len(predicted_items) - len(matched_predicted)
+    false_negative = len(gold_items) - len(matched_gold)
+    critical_gold = {index for index, item in enumerate(gold_items) if item.severity == Severity.CRITICAL.value}
+    critical_found = len(critical_gold & matched_gold)
 
     return EvaluationSummary(
-        gold_total=len(gold_keys),
-        predicted_total=len(predicted_keys),
+        gold_total=len(gold_items),
+        predicted_total=len(predicted_items),
         true_positive=true_positive,
         false_positive=false_positive,
         false_negative=false_negative,
         precision=_safe_ratio(true_positive, true_positive + false_positive),
         recall=_safe_ratio(true_positive, true_positive + false_negative),
         critical_recall=_safe_ratio(critical_found, len(critical_gold)),
-        false_positive_rate=_safe_ratio(false_positive, len(predicted_keys)),
-        notes=["Метрики считаются по ключу unit_id + criterion + file_path + line_start."],
+        false_positive_rate=_safe_ratio(false_positive, len(predicted_items)),
+        notes=[
+            "Метрики считаются через мягкое сопоставление unit_id + criterion.",
+            "Файл учитывается только если он заполнен в эталоне; пустой файл в gold не штрафует находку.",
+            "Строка засчитывается при точном совпадении или отклонении до двух строк; пустая строка в gold игнорируется.",
+        ],
     )
+
+
+def _match_items(gold_items: list[EvaluationItem], predicted_items: list[EvaluationItem]) -> list[tuple[int, int]]:
+    """Сопоставляет эталонные и найденные ошибки один-к-одному."""
+
+    candidates: list[tuple[float, int, int]] = []
+    for gold_index, gold in enumerate(gold_items):
+        for predicted_index, predicted in enumerate(predicted_items):
+            score = _match_score(gold, predicted)
+            if score > 0:
+                candidates.append((score, gold_index, predicted_index))
+
+    matched_gold: set[int] = set()
+    matched_predicted: set[int] = set()
+    matches: list[tuple[int, int]] = []
+    for score, gold_index, predicted_index in sorted(candidates, reverse=True):
+        if gold_index in matched_gold or predicted_index in matched_predicted:
+            continue
+        matched_gold.add(gold_index)
+        matched_predicted.add(predicted_index)
+        matches.append((gold_index, predicted_index))
+    return matches
+
+
+def _match_score(gold: EvaluationItem, predicted: EvaluationItem) -> float:
+    """Возвращает score совпадения или 0, если пару нельзя засчитать."""
+
+    if gold.scope_key() != predicted.scope_key():
+        return 0.0
+    file_score = _file_match_score(gold.file_path, predicted.file_path)
+    if file_score == 0.0:
+        return 0.0
+    line_score = _line_match_score(gold.line_start, predicted.line_start)
+    if line_score == 0.0:
+        return 0.0
+    return round(0.6 + file_score * 0.2 + line_score * 0.2, 4)
+
+
+def _file_match_score(gold_file: str | None, predicted_file: str | None) -> float:
+    """Сравнивает файлы с учётом неполной ручной разметки."""
+
+    if not gold_file:
+        return 0.8
+    if not predicted_file:
+        return 0.0
+    gold_normalized = _normalise_file_for_match(gold_file)
+    predicted_normalized = _normalise_file_for_match(predicted_file)
+    if gold_normalized == predicted_normalized:
+        return 1.0
+    return 0.0
+
+
+def _line_match_score(gold_line: int | None, predicted_line: int | None) -> float:
+    """Сравнивает строки с небольшим допуском для ручной разметки."""
+
+    if gold_line is None:
+        return 0.8
+    if predicted_line is None:
+        return 0.0
+    distance = abs(gold_line - predicted_line)
+    if distance == 0:
+        return 1.0
+    if distance <= 2:
+        return 0.75
+    return 0.0
+
+
+def _normalise_file_for_match(value: str) -> str:
+    """Нормализует имя файла и схлопывает языковые варианты README."""
+
+    file_name = Path(value.replace("\\", "/")).name.lower()
+    if file_name.startswith("readme"):
+        return "readme"
+    return file_name
 
 
 def write_evaluation(report: AuditReport, gold_path: Path, output_path: Path) -> EvaluationSummary:

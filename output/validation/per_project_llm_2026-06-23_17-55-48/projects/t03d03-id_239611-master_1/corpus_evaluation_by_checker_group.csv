@@ -1,0 +1,2 @@
+﻿slice_name,label,predicted_total,true_positive,false_positive,precision,false_positive_share
+factcheck,Фактчек и актуальность,11,0,11,0.0,1.0

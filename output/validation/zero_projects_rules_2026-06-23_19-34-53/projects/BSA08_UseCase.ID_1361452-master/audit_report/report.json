@@ -1,0 +1,1073 @@
+{
+  "summary": {
+    "started_at": "2026-06-23T19:34:55.074814Z",
+    "finished_at": "2026-06-23T19:34:55.513570Z",
+    "input_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-34-53\\BSA08_UseCase.ID_1361452-master",
+    "units_total": 1,
+    "files_total": 8,
+    "findings_total": 19,
+    "affected_units_total": 1,
+    "by_severity": {
+      "info": 2,
+      "minor": 11,
+      "major": 6
+    },
+    "by_criterion": {
+      "actuality": 2,
+      "readability": 8,
+      "checklist_alignment": 7,
+      "rights": 1,
+      "market_fit": 1
+    },
+    "by_branch": {
+      "BSA08_UseCase.ID_1361452-master": 19
+    },
+    "by_unit": {
+      "bsa08_usecase_id_1361452_master__79f98ef4": 19
+    },
+    "model_usage": {
+      "calls_total": 0,
+      "cache_hits": 0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "by_model": {}
+    },
+    "prompt_versions": {},
+    "steps": [
+      {
+        "name": "Загрузка файлов",
+        "status": "ok",
+        "started_at": "2026-06-23T19:34:55.074818Z",
+        "finished_at": "2026-06-23T19:34:55.091462Z",
+        "duration_ms": 16,
+        "detail": "Единиц: 1"
+      },
+      {
+        "name": "Подготовка проверок",
+        "status": "ok",
+        "started_at": "2026-06-23T19:34:55.091504Z",
+        "finished_at": "2026-06-23T19:34:55.099763Z",
+        "duration_ms": 8,
+        "detail": "Модулей: 19, совпадений кода: 0"
+      },
+      {
+        "name": "Извлечение и проверки",
+        "status": "ok",
+        "started_at": "2026-06-23T19:34:55.099819Z",
+        "finished_at": "2026-06-23T19:34:55.506953Z",
+        "duration_ms": 407,
+        "detail": "Сущностей: 11"
+      },
+      {
+        "name": "Сборка отчёта",
+        "status": "ok",
+        "started_at": "2026-06-23T19:34:55.506990Z",
+        "finished_at": "2026-06-23T19:34:55.513508Z",
+        "duration_ms": 6,
+        "detail": "Случаев: 19"
+      }
+    ],
+    "model_used": false,
+    "network_used": false,
+    "warnings": [
+      "Постобработка: 1 языковых дублей схлопнуты в базовые строки."
+    ]
+  },
+  "units": [
+    {
+      "unit_id": "bsa08_usecase_id_1361452_master__79f98ef4",
+      "name": "BSA08_UseCase.ID_1361452-master",
+      "root_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-34-53\\BSA08_UseCase.ID_1361452-master\\BSA08_UseCase.ID_1361452-master\\BSA08_UseCase.ID_1361452-master",
+      "relative_path": "BSA08_UseCase.ID_1361452-master/BSA08_UseCase.ID_1361452-master",
+      "branch": "BSA08_UseCase.ID_1361452-master",
+      "files": [
+        {
+          "relative_path": "CHANGELOG",
+          "absolute_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-34-53\\BSA08_UseCase.ID_1361452-master\\BSA08_UseCase.ID_1361452-master\\BSA08_UseCase.ID_1361452-master\\CHANGELOG",
+          "kind": "text",
+          "text": "",
+          "size_bytes": 0
+        },
+        {
+          "relative_path": "check-list.yml",
+          "absolute_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-34-53\\BSA08_UseCase.ID_1361452-master\\BSA08_UseCase.ID_1361452-master\\BSA08_UseCase.ID_1361452-master\\check-list.yml",
+          "kind": "checklist",
+          "text": "introduction: >\n   - The School 21 methodology can lead to high eduse caseational results only if peer-to-peer assessment is done as responsibly as possible. Please read the instruse casetions carefully before starting the check.\n\n   - Be friendly and polite. Be respectful of the other person and the work they have done. Be construse casetive when giving feedback.\n\n   - When reviewing the work, notice for yourself any incorrect or possibly controversial moments. Discuss them with the author of the solution.\n\n   - Try to be open to a different opinion or way of interpreting the task. It is possible that both your approach and the approach of another may be correct.    \n  \n   - If you haven't finished the project yourself, be sure to read it completely before reviewing it.\n\nguidelines: >\n  - Evaluate only the files that are in the GIT repository of the student or group.\n\n  -\tStart reviewing a group project only when all team members are present.\n\n  -\tUse the special flags in the end of the checklist, for example, \"EMPTY_WORK\", if the repository does not contain the student's (or group's) work in the src directory of the develop branch, or \"CHEAT\" in the case of plagiarism or if the student (or anyone from the group being reviewed) cannot explain their decision at any time during the review. Also, the \"CHEAT\" flag is applicable if the following two points are not fulfilled. If one of the flags at the end of the checklist applies, the project will be considered a failure. However, except for a case of cheating, you are encouraged to continue reviewing the project and try to work with another student to figure out the problem that led to the failed solution.  \n  \n  -\tDoublecheck that the GIT repository is the one corresponding to the student or the group. \n  \n  -\tMeticulously check that nothing malicious has been used to mislead you.\n  \n  -\tIn controversial cases, keep in mind that the checklist only defines the general order of the review. The final decision remains with the reviewer.\n\nquick_actions:\n  - EMPTY_WORK\n  - CHEAT\n\nlanguage: en\ncomment: \"\"\nname: BSA08_UseCase\nsections:\n  - kind: \"1\"\n    name: Main part\n    description: \"\"\n    questions:\n      - name: Exercise 00 — Description of Use Cases\n        description: |-\n          For task 1, the interaction with the system is described in the use case form, the purpose of which is to keep the system up-to-date with the master service schedule, without regard to free and occupied slots.\n          - In case of uncertainty in the task conditions, an additional condition is added, specified in the \"Assumptions\" section.\n          - The main actor (whose business goal the system in use case is intended to solve and who is the initiator of the interaction with the system) is identified.\n          - The purpose of the use case is specified: the business goal that the system will fulfil with the use case, the business need of the main actor.\n          - The unique identifier of the use case is specified.\n          - The name of the use case is specified (a short unique title describing the main action or purpose of the action in the format: <verb> + <noun> + <complement>).\n          - The role of the Actor interacting with the system within the use case is defined and its interest (need) is specified.\n          - At least 2 other stakeholders for whom the result of the use case is important are specified. Their interests are specified too.\n          - A precondition of the use case is specified: one or more conditions that must be true before the use case is executed. If there is no precondition, its absence is explicitly stated.\n          - The use case trigger is specified: the event that triggers the use case (action, temporary event, change of state).\n          - Postconditions (conditions that must be true when the use case terminates) are specified:\n            - minimum guarantees: conditions that must be true at any completion of the use case;\n            - success guarantees: conditions that must be true upon successful completion of the use case.\n          - The answers are in the file `ex00_<produse caset prefix>_use case.docx`.\n\n        rating: \"6\"\n\n      - name: Exercise 01 — Description of Use Case Flows\n        description: |-\n          For task 1, a functional interaction is described in the form of a use case that provides an up-to-date schedule of master services in the system, without taking into account occupied and free slots (use case described in ex.00).\n          - Simple short sentences in the format:\n            - <participant or system> <action to be performed> <conditions and/or constraints>\n            - (subject - predicate - complements).\n          - Business (subject area concepts) rather than technical concepts have been applied in describing steps.\n          - Data transferred in a single time interval from one source in one direction is transferred in a single step.\n          - Use case level is maintained throughout the description up to the 5th level of nesting. If further nesting is necessary, it is moved to a new use case.\n          - Branching is minimised in the description: \"The system confirms...\" rather than \"The system checks...\" is used. (To avoid writing \"If... then...\").\n          - Complex interactions are reduced to 4 transaction steps, e.g.:\n            - Stakeholder enters request, transmits data;\n            - The system confirms the correctness of the input;\n            - The system modifies the ....;\n            - The system outputs the result ...\n          - If there are additional materials (description of user interface, prototypes, business rules, other), they are placed separately from the use case. They are indicated in the use case by a link in the Additional field.\n          - An end-to-end numerical numbering of the steps of the main scenario is used.\n          - The alternative scenario is numbered with a letter in reference to the step of the main scenario.\n          - Alternative scenario steps are numbered indicating:\n            - the step number of the main scenario;\n            - the letter of the branch from the main scenario step (alternative scenario letter);\n            - the number of the step within the alternative scenario.\n          - The answers are in the file `ex00_<product prefix>_use case.docx`.\n\n\n        rating: \"6\"\n\n      - name: Exercise 02 — Description  of Use Cases\n        description: |-\n          For task 1, the use case describes the interaction with the system in the part of client's selection of master services and booking of selected slots.\n          - Use cases are described in accordance with requirements 1-11 ex.00.\n          - A separate use Case(s) is identified with an include or extend relationship.\n          - The relationship type(s) for each identified use case are specified.\n          - The answers are in the file `ex02_<product prefix>_use case.docx`\n\n        rating: \"6\"\n\n      - name: Exercise 03 — Description of Use Case Flows\n        description: |-\n          For task 1, the basic and alternative flows of functional interaction between the client and the system for service selection and slot booking are described.\n          - The use case flows are described in accordance with requirements 1-11 of ex.01.\n          - The identified use case flows are described.\n          - The answers are in the file `ex02_<product prefix>_use case.docx`\n\n        rating: \"6\"\n\n      - name: Exercise 04 — Description of Use Cases\n        description: |-\n          For task 1, the use case describes the interaction of a master with the system in the part of viewing the schedule, services booked by clients and clients' feedback on the performed works.\n          - The use cases are described in accordance with requirements 1-11 ex.00.\n          - A separate use case(s) is Identified with an include or extend relationship.\n          - The relationship type(s) for each identified use case are specified.\n          - The answers are in the file `ex04_<product prefix>_use case.docx`\n\n        rating: \"6\"\n\n      - name: Exercise 05 — Description of Use Case Flows\n        description: |-\n          For task 1, the basic and alternative flows of functional interaction between the wizard and the system are described for viewing the services booked by clients of their schedule and client feedback on the work performed.\n          - The use case flows for requirements 1-11 ex.01 are described.\n          - The flows of the identified use case(s) are described.\n          - The answers are in the file `ex04_<product prefix>_use case.docx`\n\n        rating: \"6\"\n",
+          "size_bytes": 8646
+        },
+        {
+          "relative_path": "LICENSE",
+          "absolute_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-34-53\\BSA08_UseCase.ID_1361452-master\\BSA08_UseCase.ID_1361452-master\\BSA08_UseCase.ID_1361452-master\\LICENSE",
+          "kind": "text",
+          "text": "# School 21 License",
+          "size_bytes": 19
+        },
+        {
+          "relative_path": "materials/topics-list.md",
+          "absolute_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-34-53\\BSA08_UseCase.ID_1361452-master\\BSA08_UseCase.ID_1361452-master\\BSA08_UseCase.ID_1361452-master\\materials\\topics-list.md",
+          "kind": "material",
+          "text": "Hello, School21 student! 😉\n\nTo help you navigate through the material, we have prepared a list of topics that you will learn in this project.\n\nWe will learn:\n- UseCase;\n- Recommendations for writing UC;\n- Connection types.\n\nNow that you know what to expect in this project, you can slowly begin to study the topics listed above. 😇\n\nWe have also prepared a list of recommended software:\n- Microsoft Office (Microsoft Word).\n\nOr you can use its analog, for example, LibreOffice Writer and Google Docs.",
+          "size_bytes": 505
+        },
+        {
+          "relative_path": "materials/topics-list_RUS.md",
+          "absolute_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-34-53\\BSA08_UseCase.ID_1361452-master\\BSA08_UseCase.ID_1361452-master\\BSA08_UseCase.ID_1361452-master\\materials\\topics-list_RUS.md",
+          "kind": "material",
+          "text": "Привет, участник «Школы 21»! 😉\n\nЧтобы тебе было проще, мы подготовили список тем, на которые следует обратить особое внимание при выполнении данного проекта:\n- Сценарии и варианты использования;\n- Рекомендации к написанию UC;\n- Связи вариантов использования.\n\nТеперь, когда тебе известен список тем, знания которых потребуются в проекте, можешь приступать к изучению. 😇\n\nА также прикладываем список рекомендованного ПО:\n- Microsoft Office (Microsoft Word).\n\nИли же можно использовать его аналог, например, LibreOffice Writer и Google Docs.\n",
+          "size_bytes": 922
+        },
+        {
+          "relative_path": "README.md",
+          "absolute_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-34-53\\BSA08_UseCase.ID_1361452-master\\BSA08_UseCase.ID_1361452-master\\BSA08_UseCase.ID_1361452-master\\README.md",
+          "kind": "readme",
+          "text": "# Use Cases\n\nSummary:\nIn this project, we'll discuss use cases, a common way of describing requirements for systems that contain models of software system behavior or ways for users to interact with the system.\n\n💡 [Tap here](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624) **to leave your feedback on the project**. It's anonymous and will help our team make your educational experience better. We recommend completing the survey immediately after the project.\n\n## Contents\n\n1. [Chapter I](#chapter-i) \\\n   1.1. [Preamble](#11)\n2. [Chapter II](#chapter-ii) \\\n   2.1. [General Rules](#21)\n3. [Chapter III](#chapter-iii) \\\n   3.1. [Use Cases](#31) \\\n   3.2. [Recommendations](#32) \\\n   3.3. [Use Cases Links](#33)\n4. [Chapter IV](#chapter-iv) \\\n   4.1. [Task 1. Haircut Appointment](#41) \\\n   4.2. [Task 2. Delivery of Orders](#42) \\\n   4.3. [Task 3. Warehouse Storage](#43)\n5. [Chapter V](#chapter-v) \\\n   5.1. [Exercise 00 — Description of Use Cases](#51) \\\n   5.2. [Exercise 01 — Description of Use Case Flows](#52) \\\n   5.3. [Exercise 02 — Description of Use Cases](#53) \\\n   5.4. [Exercise 03 — Description of Use Case Flows](#54) \\\n   5.5. [Exercise 04 — Description of Use Cases](#55) \\\n   5.6. [Exercise 05 — Description of Use Case Flows](#56)\n\n## Instructions \n\nHow to learn at “School 21”:\n\n- Here, you’ll find a unique learning experience with a lot of freedom. You’re given a task and left to find your own way to solve it, using whatever resources work best for you — whether that’s the Internet or AI tools like GigaChat. Just be mindful of information quality: verify, think critically, analyze, and compare.\n- Peer-to-peer (P2P) learning is the exchange of knowledge and experience with peers, where everyone acts as both mentor and student. This approach allows you to gain a deeper understanding of the material by learning from one another.\n- Feel free to ask for help: around you are peers who are also navigating this path for the first time. Share your own experience and ideas with others.  Join Rocket.Chat to stay updated with the latest community announcements. \n- Your learning is meaningless if you just copy someone else’s solutions. When receiving help from others, always make sure you fully understand the “why”, “how”, and “purpose” behind the solution. Don’t be afraid to make mistakes. \n- Does the task seem impossible? Take a break, get some fresh air and clear your mind — this has helped many people. Maybe after that, the solution will come to you naturally.\n- The learning process is just as important as the result. It’s not just about completing the task — it’s about understanding HOW to solve it.\n\n## Chapter I <div id=\"chapter-i\"></div>\n\n![](misc/images/Illustration_08.jpg)\n\n### Preamble <div id=\"11\"></div>\n\nThe use case shows the agreements of the participants in the system about its behavior in response to the requests of the actors under different conditions. At the same time, the use case is aimed at achieving the goal of the main actor and satisfying the interests of other participants in the process.\n\n### Literature:\n\n1. Alistair Coburn \"Writing Effective Use Cases\".\n2. Martin Fowler \"UML Distilled\", Third Edition.\n3. Karl Wiegers, Joy Beatty, \"Software Requirements\" 3rd edition, amplified.\n4. BABOK v3 \"A Guide to the Business Analysis Body of Knowledge\" IIBA.\n5. Dean Leffingwell, Don Widrig \"Managing Software Requirements\".\n\n## Chapter II <div id=\"chapter-ii\"></div>\n\n### General Rules <div id=\"21\"></div>\n\nBefore starting, clone the project from GitLab into a repository with the same name.\n\n1. Along the way, you may feel a sense of uncertainty and a severe lack of information: that's OK. Remember, the information in the repository and on Google is always with you. So are your peers and RocketChat. Communicate. Search. Use common sense. Don't be afraid to make mistakes.\n2. Pay attention to sources of information. Check. Think. Analyse. Compare. \n3. Look at the text of each assignment. Read it several times. \n4. Read the examples carefully. There may be something in them that is not explicitly stated in the task itself.\n5. You may find inconsistencies where something new in the terms of the task or examples conflicts with something you already know. If you come across such an inconsistency, try to work it out. If not, write it down as an open question and find out as you work. Do not leave open questions unanswered. \n6. If a task seems confusing or impossible, it only seems that way. Try to break it down. It is likely that some parts will become clear. \n7. There will be several tasks. Those marked with an asterisk (\\*) are for the more meticulous students. These tasks are more difficult and are not compulsory. But doing them will give you extra experience and knowledge.\n8. Don't try to fool the system or the people around you. You will fool yourself first.\n9. Got a question? Ask your neighbour to the right. If that doesn't help, ask your neighbour on the left.\n10. When you use help, you should always understand why and how. Otherwise the help is useless.\n11. Always push only to the _develop_ branch! The master branch will be ignored. Work in the _src_ directory.\n12. There should be no files in your directory other than those specified in the tasks.\n\n## Chapter III <div id=\"chapter-iii\"></div>\n\n### 1. Use Cases <div id=\"31\"></div>\n\n**Use Case** is a description of how stakeholders interact with the system. \n\nThe main thing to understand is not WHAT one wants to do when interacting with the system, but WHY, with WHAT PURPOSE. \n\nUse case allows you to discuss and agree on the behavior of the system during the interaction. It can be represented as:\n\n- narrative textual description;\n- structured text;\n- a table of a certain structure;\n- use case diagram.\n\nUse case is a description of a case, a branch of interaction.  Use cases are a set of scenarios under different conditions.\n\n***Use Case Description***\\\n*Header:*\\\nThe header should have a unique title. Usually a verb (indicating the action to be performed by the participant) + a noun (describing what is being done) or the purpose of the action.\n\n*Actors*\n\n- *An Actor*: an external party that interacts with the system. An actor can be a generalized person, a group of people (a role), or another system. Some approaches discourage the use of systems as actors.\n- *Primary actor*: a stakeholder who derives business value from the interaction and is the initiator of the interaction. Does not necessarily participate in the interaction themselves. \n- *Stakeholder*: anyone with an interest in interacting with the system. The use case should take into account the interests of the stakeholders.\nYou can read more about the participants and primary actors in Chapter 4 \"Stakeholders and Actors\" of Alistair Coburn's book \"Writing Effective Use Cases\".\n\n*Goal*\\\nBusiness need of the primary actor. A brief description of the use case's outcome from the primary actor's point of view in domain terms, not technical terms.\n\n*Scope*\\\nCan be seen as:\n\n- black box — only external human and system actions are described;\n- semi-transparent box — it is generally clear what happens inside the system when interacting, but without technical details;\n- transparent box — the details of what happens inside the system when interacting are clear.\n\n*Preconditions*\\\nOne or more conditions that must be true before the use case is executed. The precondition is checked before the use case starts, it is not part of the use case.\n\n*Trigger*\\\nThe event which triggers the use case. It can be an action of a participant, a time event, a change of state of an object, etc. The trigger can be the first step of the use case or can precede the use case.\n\n*Postconditions (guarantees)*\\\nA condition that must be true at the end of a use case. The postcondition must be true for both base and alternative flows. The use case can describe postconditions separately for each flow. \n\n*Minimal Guarantees* describe conditions that must be true for both successful and unsuccessful completion of a use case (even if the primary actor's goal is not achieved). \n\n*Success Guarantees* describe the postconditions for a successful outcome.\n\nMore details about the stakeholders and primary actors can be found in Chapter 6 \"Preconditions, Triggers, Guarantees\" of Alistair Coburn's book \"Writing Effective Use Cases\".\n\n*Event Flow*\n\nA sequence of steps taken by an actor and a decision made during the execution of a use case. There are basic, alternative, and exception flows.\n\nThe *basic flow* (main, successful, primary scenario) is the shortest or easiest way to achieve the primary actor's goal. The steps of the main flow should be numbered in a single sequential numbering. \n\nThe *alternative flow* describes other possible paths that may or may not allow the actor to successfully achieve the use case goal. The steps of each alternative flow should be numbered in a single numbering, branching from the corresponding step of the base flow. \n\nThe *exception flow* describes the behavior of the system when the goal is unattainable and the use case cannot be successfully completed. The exception steps should also be numbered similarly to the alternative flow steps.\n\n*Additional parameters*\n\nReferences to other descriptions: user interface, business rules, data processing algorithms, non-functional requirements, etc.  \n\nYou can read more about event flows and use case steps in Chapter 7 \"Scenarios and Steps\" of Alistair Coburn's book \"Writing Effective Use Cases\".\n\n### 2. Recommendations <div id=\"32\"></div>\n\nThere is no universal format for use cases. Typically, teams choose one or another best practice that reduces errors. Here are some common recommendations.\n\n1. ***Use case is a description of functional interaction.*** Describe the use case in business terms, without technical details.\n2. Limit the boundaries of use case to achieve the goal, but don't fragment it. Use case is not a single step. \n3. Use ***simple sentences***. For each step, indicate ***who performs the action:*** the stakeholder (role) or the system. Example sentence structure: <subject> <causative> <indirect complement> <prepositional phrase>, for example: The system authenticates the name and password.\n4. Collect in one step **all data transmitted in one direction**. For example, transmit full name and other personal information in one step.\n5. Apply \"The system confirms...\" instead of \"The system checks...\".  \n6. Reduce complex ***interactions to a 4-step*** transaction, e.g: \n   1) Stakeholder enters a request and submits data;\n   2) The system checks (confirms) ....;\n   3) The system modifies ...;\n   4) The system produces a result. \n7. When numbering steps, follow the rules:\n   1) the steps of the basic flow should be numbered in simple numbering;\n   2) the steps of the alternative flow should be numbered in their simple numbering, but with reference to the step of the basic flow from which there is a deviation. It is convenient to use numeric-letter numbering. An example is given below.\n8. It is recommended that user interface, non-functional requirements, business rules should not be written directly in the use case, but described separately and referenced in the use case in the Extras field.\n9. Keep the use case at the same level throughout its description, do not overload it with unnecessary details.\n\n**Example**: *Use Case \"Buy stocks over the web\"*.\n\n*Precondition:* User already has PAF open.\n\n*Trigger:* User selects stocks.\n\n*Main scenario:*\n\n1. User selects to buy stocks over the web.\n2. PAF gets name of web site to use (Schwab, etc.) from user.\n3. PAF opens web connection to the site, retaining control.\n4. User browses and buys stock from the web site.\n5. PAF intercepts responses from the web site, and updates the user's portfolio.\n6. PAF shows the user the new portfolio standing.\n\n*Result* (success guarantee): The user bought the securities.\n\n*Alternative scenario:*\n\n1. Network failure of any kind while connected to the site:\n   1. System reports failure to user with advice, backs up to previous step;\n   2. User either backs out of this use case, or tries again.\n\n### 3. Use Case Relationships <div id=\"33\"></div>\n\nSometimes some common functionality is needed by multiple use cases or to identify a complex part. For example, pricing and risk analysis use the same value calculation. In this case, it is better to describe the common part of the use case separately and include it in each use case where it is applied. This relationship is called *include*. The included use case does not need to be complete in itself, unless it is directly initiated by the actor. \n\nAnother type of relationship, *extend*, allows you to add a description of additional functionality to a use case. The extending use case must itself be fully functional. Its successful execution should not depend on the extending use case. An alternative scenario can be shown with an extension.\n\n## Chapter IV <div id=\"chapter-iv\"></div>\n\n### Description of tasks\n\n### Task 1. Haircut Appointment <div id=\"41\"></div>\n\nThe management of a chain of barbershops decided to implement an online booking system. The main objective is to develop the business by expanding the customer base through the possibility of online registration, as well as to reduce employee labour costs and manual labour by automatically informing customers through communication channels. \n\nBoth registered and unregistered visitors can book an appointment on the website. When making an appointment, they can select the type of service: hairdressing or cosmetology, as well as the service itself, the master and the time from the available intervals. The system should provide automatic sending of reminders to clients through the communication channel chosen by the client (Telegram, WhatsApp, VK, SMS) according to the schedule set by the manager. After receiving a service, the system offers the client to evaluate the service and write suggestions on how to improve the work.\n\nThe schedule of masters and the services provided by each master should be entered by the manager, who may be more than one person. This person is also responsible for keeping the schedule up to date and adjusting it if necessary, communicating with customers manually, marking the service, charging and accepting payment, sending the payment data to the accounting department. The manager can also receive reports on completed services and view customer feedback.\n\nEach master has the ability to view the schedule and appointments for their services, as well as customer reviews. \n\n### Task 2. Delivery of Orders <div id=\"42\"></div>\n\nDuring the lockdown, many grocery stores and food companies dramatically increased their online sales and the need for quick delivery of small quantities to individual customers increased. \n\nA group of students got together and decided to create a delivery service startup. The idea is to quickly receive information about orders, pickup location and time, delivery location, desired delivery dates, and distribute this information to couriers who will pick up the order at the pickup location and deliver it to the delivery location. They decided to develop an online system where orders could be collected and quickly sorted for delivery by couriers.\n\nThe first step was to collect orders from stores and caterers in any way possible and have the operator enter them into the system in a consistent format, as well as developing a mobile application for the courier. The courier should be able to view order information, select an order from those available, book it, pick it up at the collection point and deliver it to the customer. The result of the courier's actions should be immediately reflected in the system via a mobile application. The system should also include a dispatcher who controls the couriers and reassigns orders if necessary. Information on received orders should be sent to the accounting department (to another IT system) to calculate delivery charges with order suppliers. Order delivery information should also be sent to the accounting department to calculate payment to couriers. Accrued payment should be transferred to the system and displayed in the courier's personal account. And there should also be an administrator's workstation, where couriers are registered and access rights are assigned to all of them.\n\n### Task 3. Warehouse Storage <div id=\"43\"></div>\n\nA logistics company engaged in cargo transportation has decided to expand its business and organize the lease of warehouses for temporary or permanent storage of things and goods for individuals and legal entities. It is planned to rent and build warehouses in different parts of the city. The first: \"Kamorka\" — a system in the company, which provides accounting of rent of individual boxes of size from 3 to 15 square meters by individuals for storage of personal belongings, furniture, sports equipment.\n\nThe management of the company (customer) decided to introduce a centralized rental accounting of boxes, occupied and vacant, payment, access control and cleaning after vacating. Access to the warehouse itself is provided by a third party security company, which needs to be informed about new or dropped customers. The security company issues an electronic pass to the storage area for the specified period of time, extends or stops the validity of the pass in case of renewal or early termination of the lease agreement. The boxes are cleaned by the cleaning company after their use and before they are handed over to a new client. The purpose of the system implementation is to reduce manual work and personnel costs, reduce overhead costs, optimize box filling (minimize idle time of empty boxes), operational accounting of cash flow.\n\nThe client (individual) contacts the logistics company and through the manager concludes a contract for renting a box of the required size. To do this, the manager must have up-to-date information about available and soon-to-be vacant boxes. The client does not interact directly with the system, all information is provided by the manager. When the contract expires, the manager warns the client of the need to renew or terminate the contract and vacate the box. The manager is also responsible for organizing the cleaning of the boxes by a third-party company after they are vacated, as well as for organizing the client's access to the storage area, which is provided by a security company. After signing the contract, the manager informs the storekeeper about the allocation of a particular vacant box. The storekeeper checks the availability of the box (release of the previous tenant's belongings and cleaning), hands over the key to the box to the client, controls the release and cleaning of the boxes.\n\nThe team has an accountant. He/she calculates payments and controls income, payments to clients, payments for cleaning of boxes and security of the warehouse. The accountant receives information about new contracts and their changes from the manager. The payment for the cleaning of the boxes is calculated monthly on the basis of the area, the payment for the security — also monthly on the basis of the number of clients of the logistics company.\n\n## Chapter V <div id=\"chapter-v\"></div>\n\n### Exercise 00 — Description of Use Cases <div id=\"51\"></div>\n\nFor Task 1, use the Use Case form to describe the interaction with the system to ensure that the system contains the actual schedule of master services without taking into account occupied and free slots. \n\n1. Apply the conditions of the task. In case of uncertainty, it is acceptable to add an additional condition by specifying it in the \"Assumptions\" section.\n2. Identify the main actor whose business goal the system is supposed to solve in the use case and who is the initiator of the interaction with the system. \n3. Describe the purpose of the use case: the business need of the main actor, the business goal to be solved by the system using the use case.  \n4. Provide a unique identifier for the use case.\n5. Provide the name of the use case, a short unique title that describes the main action or purpose of the action in the format: <verb> + <noun> + <complement>. \n6. Identify the role of the Actor interacting with the system within the use case and their interest (need).\n7. Identify at least 2 other stakeholders for whom the outcome of the use case is important. Identify their interests.\n8. Specify the precondition of the use case: one or more conditions that must be true before the use case is executed. If there is no precondition, specify its absence.\n9. Specify the use case trigger: the event that triggers the use case (action, temporary event, state change).\n10. Specify the postconditions (conditions that must be true when the use case is completed):\n    1. minimal guarantees: conditions that must be true at each end of the use case;\n    2. success guarantees: conditions that must be true when a use case succeeds. \n11. Indicate your answers in the file `ex00_<product prefix>_US.docx`.\n\n### Exercise 01 — Description of Use Case Flows <div id=\"52\"></div>\n\nFor Task 1, use the Use Case form to describe the functional interaction for providing the actual schedule of master services in the system (without taking into account occupied and free slots) (Use Case described in ex.00).\n\n1. When describing flows, use simple short sentences in the format: <*stakeholder or system*> <action to be performed> <conditions and/or constraints> *(subject — predicate — complements)*.\n2. Use business rather than technical terms to describe steps.\n3. All data transferred in a single time interval from a single source in a single direction should be transferred in a single step. \n4. Maintain the use case level in all its description up to the 5th level of nesting or implement an extension — another use case.\n5. Minimize branching: use \"The system confirms...\" instead of \"The system checks...\". (To avoid writing \"If... then...\").\n6. Reduce complex interactions to e.g. 4 transaction steps:\n   1. The stakeholder enters the request, transfers the data;\n   2. The system confirms the correctness of the input;\n   3. The system modifies ....;\n   4. The system outputs the result ...\n7. If there are additional materials (user interface descriptions, prototypes, business rules, etc.) — place them separately from the use case, specify them with a link in the Additional field.\n8. Describe the main scenario of the use case, using a numerical numbering of steps.\n9. Number alternative scenarios with letters in relation to the step of the main scenario.\n10. Alternate scenario steps should be numbered with:\n    1. the step number of the main scenario;\n    2. the letter of the branch from the main scenario step (alternate scenario letter);\n    3. the step number within the alternate scenario.\n11. Indicate your answers in the file `ex01_<product prefix>_US.docx`.\n\n### Exercise 02 — Description of Use Cases <div id=\"53\"></div>\n\nFor Task 1, use the Use Case form to describe how the client interacts with the system to select master services and book the selected slots.\n\n1. Describe the use cases as required in 1-11 ex.00.\nIdentify one or more separate use case(s) with an \"include\" or \"extend\" relationship.  \n3. Specify the type of relationship for each identified use case.\n4. Indicate your answers in the file e`x02_<product prefix>_US.docx`.\n\n### Exercise 03 — Description of Use Case Flows <div id=\"54\"></div>\n\nFor Task 1, describe the basic flow and alternative flows of functional interaction between the client and the system to select a service and book a slot. \n\n1. Describe the flows of the use case(s) as required in 1-11 ex.01.\n2. Describe the flows of the identified use case(s).  \n3. Indicate your answers in the file `ex03_<product prefix>_US.docx`.\n\n### Exercise 04 — Description of Use Cases <div id=\"55\"></div>\n\nFor Task 1, use the Use Case form to describe the Master's interaction with the system in terms of viewing clients' booked services, their schedules, and clients' feedback on the work. \n\n1. Describe the use cases as required in 1-11 ex.00.\n2. Identify a separate use case(s), with an \"include\" or \"extend\" relationship. \n3. Specify the type of relationship for each identified use case.\n4. Indicate your answers in the file `ex04_<product prefix>_US.docx`.\n\n### Exercise 05 — Description of Use Case Flows <div id=\"56\"></div>\n\nFor Task 1, describe the basic flow and alternative flows of functional interaction between the master and the system to view services booked by clients and client feedback on the work. \n\n1. Describe the flows of the use case(s) as required in 1-11 ex.01.\n2. Describe the flows of the identified use case(s). \n3. Indicate your answers in the file `ex05_<product prefix>_US.docx`.\n",
+          "size_bytes": 24910
+        },
+        {
+          "relative_path": "README_RUS.md",
+          "absolute_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-34-53\\BSA08_UseCase.ID_1361452-master\\BSA08_UseCase.ID_1361452-master\\BSA08_UseCase.ID_1361452-master\\README_RUS.md",
+          "kind": "readme",
+          "text": "# Сценарии использования \n\nРезюме:\nВ текущем проекте мы рассмотрим UseCase (сценарии и варианты использования) — распространенный способ описания требований к системам, содержащий модели поведения программным систем или способы взаимодействия пользователей и системы.\n\n💡 [Нажми сюда](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624), **чтобы поделиться с нами обратной связью на этот проект**. Это анонимно и поможет нашей команде сделать обучение лучше. Рекомендуем заполнить опрос сразу после выполнения проекта.\n\n## Contents\n\n1. [Chapter I](#chapter-i) \\\n    1.1. [Preamble](#11)\n2. [Chapter II](#chapter-ii) \\\n    2.1. [General Rules](#21)\n3. [Chapter III](#chapter-iii) \\\n    3.1. [Сценарии и варианты использования (UseCase)](#31) \\\n    3.2. [Рекомендации](#32) \\\n    3.3. [Связи вариантов использования](#33)\n4. [Chapter IV](#chapter-iv) \\\n    4.1. [Задача 1. Запись на стрижку (Sign up for a haircut)](#41) \\\n    4.2. [Задача 2. Доставка заказов (Delivery of orders)](#42) \\\n    4.3. [Задача 3. Складское хранение (warehouse storage)](#43)\n5. [Chapter V](#chapter-v) \\\n    5.1. [Exercise 00 — Описание вариантов использования (Description Use Cases)](#51) \\\n    5.2. [Exercise 01 — Описание потоков вариантов использования (Description of use case flows)](#52) \\\n    5.3. [Exercise 02 — Описание вариантов использования (Description Use Cases)](#53) \\\n    5.4. [Exercise 03 — Описание потоков вариантов использования (Description of use case flows)](#54) \\\n    5.5. [Exercise 04 — Описание вариантов использования (Description Use Cases)](#55) \\\n    5.6. [Exercise 05 — Описание потоков вариантов использования (Description of use case flows)](#56)\n\n## Инструкции\n\nКак учиться в «Школе 21»:\n\n- Здесь тебя ждет уникальный образовательный опыт с большим количеством свободы. Ты получаешь задачу и самостоятельно ищешь пути решения, используя любые удобные способы поиска информации — ресурсы Интернета или нейросети (например, GigaChat). Но внимательно относись к качеству информации: проверяй, думай, анализируй, сравнивай.\n- Взаимообучение (Peer-to-Peer, P2P) — это обмен знаниями и опытом с другими пирами, где каждый выступает и учителем, и учеником. Такой подход позволяет глубже понять материал, учась друг у друга.\n- Чувствуй себя свободно и проси о помощи — вокруг тебя те, кто тоже впервые проходят этот путь. Делись своим опытом и идеями с другими. Присоединяйся к Rocket.Chat, чтобы быть в курсе всех новостей от нашего сообщества.\n- Твое обучение не будет иметь никакого смысла, если ты будешь копировать чужие решения. Если пользуешься помощью других — всегда разбирайся до конца, почему, как и зачем. Не бойся ошибиться.\n- Кажется, что задача невыполнима? Сделай перерыв, проветрись, перезагрузи голову — это помогало многим. Возможно, после этого решение придет само собой.\n- Важен не только результат обучения, но и сам процесс. Нужно не просто решить задачу, а понять, КАК ее решить.\n\n## Chapter I <div id=\"chapter-i\"></div>\n\n![](misc/images/Illustration_08.jpg)\n\n### Preamble <div id=\"11\"></div>\n\nВариант использования (Use Case) показывает договоренности участников системы о ее поведении в ответ на запросы действующих лиц в различных условиях. При этом UC направлен на достижение цели основного действующего лица и удовлетворение интересов других участников процесса.\n\n### Литература:\n\n1. Алистер Коберн «Современные методы описания функциональных требований к системам».\n2. Мартин Фаулер «UML Основы. Третье издание».\n3. Карл Вигерс, Джой Битти, «Разработка требований к программному обеспечению» издание третье, дополненное.\n4. BABOK v3 «Руководство к своду знаний по бизнес-анализу» IIBA.\n5. Дин Леффингуэлл, Дон Уидриг «Принципы работы с требованиями к программному обеспечению».\n\n## Chapter II <div id=\"chapter-ii\"></div>\n\n### General Rules <div id=\"21\"></div>\n\nПеред выполнением проект необходимо склонировать с GitLab в одноименный репозиторий.\n\n1. На протяжении всего курса тебя будет сопровождать чувство неопределенности и острого дефицита информации — это нормально. Не забывай, что информация в репозитории и Google всегда с тобой. Как и пиры, и Rocket.Chat. Общайся. Ищи. Опирайся на здравый смысл. Не бойся ошибиться.\n2. Будь внимателен к источникам информации. Проверяй. Думай. Анализируй. Сравнивай. \n3. Внимательно читай задания. Перечитай несколько раз. \n4. Читать примеры тоже лучше внимательно. В них может быть что-то, что не указано в явном виде в самом задании.\n5. Тебе могут встретиться несоответствия, когда что-то новое в условиях задачи или примере противоречит уже известному. Если встретилось такое — попробуй разобраться. Если не получилось — запиши вопрос в открытые вопросы и выясни в процессе работы. Не оставляй открытые вопросы неразрешенными. \n6. Если задание кажется непонятным или невыполнимым — так только кажется. Попробуй его декомпозировать. Скорее всего, отдельные части станут понятными. \n7. На пути тебе встретятся самые разные задания. Те, что помечены звездочкой (\\*) — подходят для более дотошных. Они повышенной сложности и необязательны к выполнению. Но если ты их сделаешь, то получишь дополнительный опыт и знания.\n8. Не пытайся обмануть систему и окружающих. В первую очередь ты обманешь себя.\n9. Есть вопрос? Спроси своего соседа справа. Если это не помогло — соседа слева.\n10. Когда пользуешься помощью — всегда разбирайся до конца: почему, как и зачем. Иначе помощь не будет иметь смысла.\n11. Всегда делай push только в ветку _develop_! Ветка master будет проигнорирована. Работай в директории _src_.\n12. В твоей директории не должно быть иных файлов, кроме тех, что обозначены в заданиях.\n\n## Chapter III <div id=\"chapter-iii\"></div>\n\n### 1. Сценарии и варианты использования (UseCase) <div id=\"31\"></div>\n\n**Сценарии и варианты использования** (UseCase, UC) — описание взаимодействия участников с системой. \n\nГлавное, в чем следует разобраться: не то, ЧТО человек хочет делать при взаимодействии с системой, а ЗАЧЕМ, с КАКОЙ ЦЕЛЬЮ. \n\nUC позволяет обсудить и согласовать поведение системы при взаимодействии. Может быть представлено как:\n- повествовательное текстовое описание;\n- структурированный текст;\n- таблица определенной структуры;\n- диаграмма — схема вариантов использования.\n\nСценарий использования — описание одного кейса, одной ветки взаимодействия. Варианты использования — совокупность сценариев при разных условиях.\n\n***Описание UC***\\\n*Заголовок:* должен иметь уникальное название. Обычно это глагол (указывающий действие, выполняемое участником) + существительное (описывающее, что делается) или цель действия.\n\n*Действующие лица*\n\n- *Действующее лицо (Актор, Действующая сторона, Actor)* — внешний участник процесса, взаимодействующий с системой. Действующее лицо может быть обобщенным, группой лиц (ролью) или другой системой. Некоторые подходы не рекомендуют использовать системы в качестве действующих лиц.\n- *Основное (главное) действующее лицо (Главный актор, Primery actor)* — заинтересованная сторона, получающая бизнес-ценность от взаимодействия. Является инициатором взаимодействия. Не обязательно сам участвует во взаимодействии.\n- *Участник (Заинтересованная сторона)* — все, кто заинтересован во взаимодействии с системой. UC должен учитывать интересы участников.\nБолее подробно об участниках и основных действующих лицах можно прочитать в главе 4 «Участники и действующие лица» книги Алистера Коберна «Современные методы описания функциональных требований к системам». \n\n*Цель, назначение*\\\nБизнес-потребность основного действующего лица. Краткое описание успешного результата UC с точки зрения основного действующего лица в понятиях предметной области, нетехнических понятиях.\n\n*Область действия (Scope)* — рамки.\\\nМожет быть рассмотрено как:\n- черный ящик — описаны только внешние действия человека и системы;\n- полупрозрачный ящик — в целом понятно, что происходит внутри системы при взаимодействии, но без технических деталей;\n- прозрачный ящик — понятны детали того, что происходит внутри системы при взаимодействии.\n\n*Предусловия*\\\nОдно или несколько условий, которые должны быть истинными перед выполнением UC. Предусловие проверяется до старта UC, не входит в состав UC. Необязательный элемент.\n\n*Триггер*\\\nСобытие, запускающее UC. Может быть действием участника, событием по времени, изменением состояния какого-то объекта и пр. Триггер может быть первым шагом UC или предшествовать UC.\n\n*Постусловия (гарантии)*\\\nУсловие, которое должно быть истинным при завершении UC. Постусловие должно быть истинным и для успешного, и для альтернативного потоков. UC может описывать отдельно постусловия для успешного и альтернативного потоков. \n\n*Минимальные гарантии* описывают условия, которые должны быть истинными как для успешного, так и для неуспешного завершения UC (даже если цель основного действующего лица не достигается). \n\n*Гарантии успеха* описывают постусловия успешного результата.\n\nБолее подробно об участниках и основных действующих лицах можно прочитать в главе 6 «Предусловия, триггеры и гарантии» книги Алистера Коберна «Современные методы описания функциональных требований к системам».\n\n*Поток событий*\\\nПоследовательность шагов, выполняемых действующим лицом и решением в ходе выполнения UC. Выделяют основные, альтернативные потоки и потоки исключений.\n\n*Основной поток* (главный, успешный, базовый, первичный сценарий) представляет собой самый короткий или самый простой путь достижения цели основного действующего лица. Шаги основного потока должны быть пронумерованы единой сквозной нумерацией. \n\n*Альтернативный поток* описывает другие возможные пути, позволяющие действующему лицу успешно достичь цели UC или не достичь. Шаги каждого альтернативного потока должны быть пронумерованы единой нумерацией, с ответвлением от соответствующего шага основного потока.   \n\n*Поток исключений* описывает поведение системы, когда цель недостижима и UC не может быть успешно завершен. Шаги исключения также должны быть пронумерованы аналогично шагам альтернативного потока.\n\n*Дополнительные параметры*\n\nСсылки на другие описания: пользовательский интерфейс, бизнес-правила, алгоритмы обработки данных, нефункциональные требования и пр.  \n\nБолее подробно о потоках событий и шагах UC можно прочитать в главе 7 «Сценарии и шаги» книги Алистера Коберна «Современные методы описания функциональных требований к системам».\n\n### 2. Рекомендации <div id=\"32\"></div>\n\nНе существует жесткого универсального формата UC. Обычно команды выбирают те или иные наработанные практики, уменьшающие ошибки. Ниже — часто применимые рекомендации.\n\n1. ***UC — описание функционального взаимодействия.*** Описывай UC в бизнесовых понятиях, без технических подробностей.\n2. Ограничивай границы UC достижением цели, но не дроби. UC — не один шаг. \n3. Используй ***простые предложения***. На каждом шаге указывай, ***кто выполняет действие:*** участник (роль) или система. Примерная структура предложения: <подлежащее> <сказуемое> <прямое дополнение> <предложный оборот>, например: Система подтверждает подлинность имени и пароля.\n4. Собирай в один шаг **все данные, передаваемые в одном направлении**. Например, ФИО и другие личные данные передавай за один шаг.\n5. Применяй «Система подтверждает…» вместо «Система проверяет…».  \n6. Сложные ***взаимодействия своди к 4 шагам*** транзакции, например: \n   1) Участник вводит запрос и передает данные;\n   2) Система проверяет (подтверждает)…;\n   3) Система изменяет…;\n   4) Система выдает результат. \n7. При нумерации шагов применяй правила:\n   1) шаги основного потока должны быть пронумерованы в единой нумерации;\n   2) шаги альтернативного потока должны быть пронумерованы в своей единой нумерации, но с привязкой к шагу основного потока, от которого идет отклонение. Удобно применять цифро-буквенную нумерацию. Пример ниже.\n8. Пользовательский интерфейс, нефункциональные требования, бизнес-правила рекомендуем не вписывать напрямую в UC, а описывать отдельно, и в UC приводить ссылку в поле «Дополнительно».\n9. Выдерживай уровень UC во всем его описании, не перегружай излишними деталями.\n\n**Пример**: *UC «Купить ценные бумаги через интернет»*\n\n*Предусловие:* программа PAF открыта у пользователя.\n\n*Триггер:* пользователь выбрал «покупку ценных бумаг».\n\n*Основной сценарий:*\n\n1. Пользователь решил купить ценные бумаги через Сеть.\n2. PAF получает от пользователя название нужного сайта (Schwab и др.)\n3. PAF подключается к сайту, сохраняя управление процессом.\n4. Покупатель выбирает и покупает ценные бумаги на этом сайте.\n5. PAF перехватывает ответы веб-сайта, и обновляет портфель покупателя.\n6. PAF показывает покупателю новое состояние портфеля.\n\n*Результат* (гарантия успеха): Покупатель купил ценные бумаги.\n\n*Альтернативный сценарий:*\n\n1. Отказ Сети любого рода во время подключения к сайту:\n   1. Система сообщает пользователю о неудаче, дает совет и возвращается на предыдущий шаг;\n   2. Пользователь либо отказывается продолжать этот вариант использования, либо пробует снова.\n\n### 3. Связи вариантов использования <div id=\"33\"></div>\n\nИногда некоторая общая функциональность нужна нескольким UC либо для выделения сложной части. Например, при расчете цены и анализе рисков применяется один и тот же расчет ценности. В этом случае общую часть UC лучше описать отдельно и включать в каждый UC, где он применяется. Такая связь называется *включение (include).* Включаемый UC не обязан быть полным сам по себе, если он не инициируется напрямую действующим лицом. \n\nДругой вид связи *расширение (extend)* позволяет вставлять в UC описание дополнительной функциональности. Расширяемый UC должен быть сам по себе полностью функциональным. Его успешное выполнение не должно зависеть от расширяющего UC. Расширением можно показать альтернативный сценарий.\n\n## Chapter IV <div id=\"chapter-iv\"></div>\n\n### Description of tasks\n\n### Задача 1. Запись на стрижку (Sign up for a haircut) <div id=\"41\"></div>\n\nРуководство сети барбершопов приняло решение о внедрении системы, обеспечивающей онлайн-запись на прием. Основная цель — развитие бизнеса путем расширения клиентской базы за счет возможности онлайн-записи, а также снижение трудозатрат сотрудников и уменьшение ручного труда за счет автоматического информирования клиентов по каналам связи. \n\nЗапись может осуществлять как зарегистрированный, так и незарегистрированный посетитель сайта. При записи можно выбрать тип услуги: парикмахерские или косметологические, а также саму услугу, мастера и время из свободных интервалов. Система должна обеспечивать автоматическую отправку напоминаний клиентам через выбранный клиентом канал связи (Telegram, WhatsApp, VK, СМС) по настроенному менеджером расписанию. После получения услуги система предлагает клиенту оценить услугу и написать предложения по улучшению работы.\n\nРасписание мастеров и выполняемые каждым мастером услуги должен вводить менеджер, возможно, это будет не один человек. Он же отвечает за актуальность расписания и при необходимости корректирует его, осуществляет связь с клиентами в ручном режиме, проставляет отметку о выполнении услуги, начисляет и принимает оплату, передает данные об оплате в бухгалтерию. Также менеджер может получать отчеты о выполненных услугах и просматривать отзывы клиентов.\n\nЛюбой мастер имеет возможность посмотреть расписание и запись на свои услуги, отзывы клиентов. \n\n### Задача 2. Доставка заказов (Delivery of orders) <div id=\"42\"></div>\n\nВ локдаун многие продуктовые магазины и предприятия питания резко увеличили объемы онлайн-продаж, и возросла потребность в быстрой доставке мелких партий товаров индивидуальным клиентам. \n\nКомпания студентов собрались и решила создать стартап службы доставки. \n\nИдея состоит в том, чтобы оперативно получать информацию о заказах, месте и сроке комплектации, месте доставки, желаемых сроках доставки и раздавать инфо курьерам, которые будут получать заказ в месте комплектации и доставлять в место доставки. Решили развернуть онлайн-систему, куда стекаются заказы и откуда курьеры оперативно разбирают заказы для выполнения. На первом этапе решили собирать заказы от магазинов и предприятий питания любым доступным способом и вводить в систему в едином формате силами оператора, но разработать мобильное приложение для курьеров. \n\nКурьер должен иметь возможность просматривать информацию о заказах, выбирать заказ из свободных, бронировать его, забирать в точке выдачи и доставлять клиенту. Результат своих действий курьер должен оперативно отражать в системе через мобильное приложение. Также в системе должен работать диспетчер, который контролирует курьеров и при необходимости переназначает заказы. Информация о поступивших заказах должна направляться в бухгалтерию (в другую ИТ-систему) для расчета с поставщиками заказов за доставку. Также в бухгалтерию должна направляться информация о доставке заказа, где будет производиться расчет оплаты курьеров. Начисленная оплата должна передаваться в систему и отражаться в личном кабинете курьера. И еще запланировано рабочее место администратора, регистрирующего курьеров и назначающего всем права доступа.\n\n### Задача 3. Складское хранение (warehouse storage) <div id=\"43\"></div>\n\nЛогистическая компания, занимающаяся перевозкой грузов, решила расширить бизнес и организовать сдачу в аренду складских помещений для временного или постоянного хранения вещей и товаров для физических и юридических лиц. Запланирована аренда складских помещений и постройка складов в разных частях города. Первая очередь: «Каморка» — система в компании, обеспечивающая учет аренды индивидуальных боксов размером от 3 до 15 кв.м  физическими лицами для хранения личных вещей, мебели, спортинвентаря.\n\nРуководство компании (заказчик) приняло решение ввести централизованный учет аренды боксов, занятых и свободных, оплаты, контроля доступа к ним и очистки после освобождения. Доступ на саму территорию склада обеспечивается сторонней охранной компанией, которой нужно передать информацию о новых или выбывших клиентах. Охранная компания выдает электронный пропуск на территорию склада на указанный период, продлевает или останавливает действие пропуска в случае пролонгации или досрочного прекращения договора аренды. Клининг (очистка) боксов после их использования и перед предоставлением новому клиенту осуществляется клининговой компанией. Цель внедрения системы — сокращение ручного труда и затрат на персонал, сокращение накладных расходов, оптимизация заполнения боксов (минимизация простоя незанятых боксов), оперативный учет движения денежных средств.\n\nКлиент (физическое лицо) обращается в логистическую компанию и через менеджера заключает договор на аренду бокса нужного ему размера. Для этого у менеджера должна быть актуальная информация о свободных и высвобождаемых в ближайшее время боксах. Клиент напрямую не взаимодействует с системой, всю информацию предоставляет менеджер. При приближении срока окончания договора менеджер предупреждает клиента о необходимости пролонгации или расторжения договора и освобождения бокса. Также менеджер отвечает за организацию уборки боксов силами сторонней компании после их высвобождения и за предоставление доступа клиентов на территорию склада, который обеспечивает охранная компания. После заключения договора менеджер передает кладовщику информацию о выделении конкретного свободного бокса. Кладовщик проверяет готовность бокса (высвобождение от вещей предыдущего арендатора и уборку) и передает ключ от бокса клиенту, контролирует высвобождение и очистку боксов.\n\nВ работе команды участвует бухгалтер. В его функции входит начисление оплаты и контроль за поступлением, расчеты с клиентами, оплата клининга боксов и охраны склада. Информацию о новых договорах и изменении в них бухгалтер получает от менеджера. Оплата очистки боксов рассчитывается помесячно — исходя из площади, оплата охраны – также помесячно, исходя из количества клиентов логистической компании. \n\n## Chapter V <div id=\"chapter-v\"></div>\n\n### Exercise 00 — Описание вариантов использования (Description Use Cases) <div id=\"51\"></div>\n\nДля задачи 1 опиши в форме UC взаимодействие с системой, нацеленное на то, чтобы в системе содержалось актуальное расписание услуг мастеров, без учета занятых и свободных слотов. \n\n1. Примени условия задачи. В случае неопределенности допустимо добавить дополнительное условие, указав в разделе «Предположения».\n2. Определи основное действующее лицо, чью бизнес-цель призвана решить система в UC и кто является инициатором взаимодействия с системой.\n3. Опиши цель (назначение) UC: бизнес-потребность основного действующего лица, бизнес-цель, которую будет решать система с помощью UC.  \n4. Укажи уникальный идентификатор UC.\n5. Укажи название UC, краткий уникальный заголовок, описывающий основное действие или цель действия в формате: <глагол> + <существительное> + <дополнение>. \n6. Определи роль действующего лица (Actor), взаимодействующего с системой в рамках UC и его интерес (потребность).\n7. Укажи не менее 2 других заинтересованных сторон, для которых важен результат UC. Распиши их интересы.\n8. Укажи предусловие UC: одно или несколько условий, которые должны быть истинными перед выполнением UC. В случае отсутствия предусловия — укажи его отсутствие.\n9. Обозначь триггер UC: событие, запускающее UC (действие, временное событие, изменение состояния).\n10. Укажи постусловия (условия, которые должны быть истинными при завершении UC):\n    1. минимальные гарантии: условия, которые должны быть истинными при любом завершении UC;\n    2. гарантии успеха: условия, которые должны быть истинными при успешном завершении UC. \n11. Распиши свои ответы в файле ex00\\_<префикс продукта>\\_UC.docx.\n\n### Exercise 01 — Описание потоков вариантов использования (Description of use case flows) <div id=\"52\"></div>\n\nДля задачи 1 опиши в форме UC функциональное взаимодействие для обеспечения в системе актуального расписания услуг мастеров (без учета занятых и свободных слотов) (UC, описанный в ex.00).\n\n1. При описании потоков применяй простые краткие предложения в формате: <*участник или система*> <выполняемое действие> <условия и/или ограничения> *(подлежащее — сказуемое — дополнения)*.\n2. При описании шагов применяй бизнесовые, а не технические понятия.\n3. Все данные, передаваемые в единый отрезок времени из одного источника в одном направлении, передавай в одном шаге. \n4. Выдерживай уровень UC во всем его описании до 5-го уровня вложенности или реализовывай расширением — другим UC.\n5. Минимизируй разветвления: применяй «Система подтверждает…» вместо «Система проверяет…». (Чтобы не писать «если… то…»).\n6. Сложные взаимодействия своди к 4 шагам транзакции, например:\n   1. Участник вводит запрос, передает данные;\n   2. Система подтверждает правильность ввода;\n   3. Система изменяет…;\n   4. Система выдает результат…\n7. При наличии дополнительных материалов (описаний пользовательского интерфейса, прототипов, бизнес-правил, другого) — размещай отдельно от UC, указывай ссылкой в поле «Дополнительно».\n8. Опиши основной сценарий UC, применяя сквозную цифровую нумерацию шагов.\n9. Альтернативные сценарии нумеруй буквами в привязке к шагу основного сценария.\n10. Шаги альтернативного сценария нумеруй с указанием:\n    1. номер шага основного сценария;\n    2. буква ответвления от шага основного сценария (буква альтернативного сценария);\n    3. номер шага внутри альтернативного сценария.\n11. Укажи свои ответы в файле ex01\\_<префикс продукта>\\_UC.docx.\n\n### Exercise 02 — Описание вариантов использования (Description Use Cases) <div id=\"53\"></div>\n\nОпиши в форме UC для задачи 1 взаимодействие с системой в части выбора клиентом услуг мастеров и бронирования выбранных слотов. \n\n1. Опиши варианты использования в соответствии с требованиями 1-11 ex.00.\n2. Выдели отдельный (-ые) UC со связью «включение» (include) или «расширение» (extend). \n3. Укажи тип связи для каждого выделенного UC.\n4. Распиши свои ответы в файле ex02\\_<префикс продукта>\\_UC.docx.\n\n### Exercise 03 — Описание потоков вариантов использования (Description of use case flows) <div id=\"54\"></div>\n\nОпиши для задачи 1 основной и альтернативные потоки функционального взаимодействия клиента с системой для выбора услуги и бронирования слота. \n\n1. Опиши потоки вариантов использования в соответствии с требованиями 1-11 ex.01.\n2. Опиши потоки выделенного(-ых) UC.  \n3. Укажи свои ответы в файле ex03\\_<префикс продукта>\\_UC.docx.\n\n### Exercise 04 — Описание вариантов использования (Description Use Cases) <div id=\"55\"></div>\n\nОпиши в форме UC для задачи 1 взаимодействие мастера с системой в части просмотра забронированных клиентами услуг своего расписания и отзывов клиентов о выполненных работах. \n\n1. Опиши варианты использования в соответствии с требованиями 1-11 ex.00.\n2. Выдели отдельный (-ые) UC, со связью «включение» (include) или «расширение» (extend). \n3. Укажи тип связи для каждого выделенного UC.\n4. Распиши свои ответы в файле ex04\\_<префикс продукта>\\_UC.docx.\n\n### Exercise 05 — Описание потоков вариантов использования (Description of use case flows) <div id=\"56\"></div>\n\nОпиши для задачи 1 основной и альтернативные потоки функционального взаимодействия мастера с системой для просмотра забронированных клиентами услуг своего расписания и отзывов клиентов о выполненных работах. \n\n1. Опиши потоки вариантов использования в соответствии с требованиями 1-11 ex.01.\n2. Опиши потоки выделенного(-ых) UC. \n3. Укажи свои ответы в файле ex05\\_<префикс продукта>\\_UC.docx.\n",
+          "size_bytes": 44023
+        },
+        {
+          "relative_path": "TAGS_FILES.txt",
+          "absolute_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-34-53\\BSA08_UseCase.ID_1361452-master\\BSA08_UseCase.ID_1361452-master\\BSA08_UseCase.ID_1361452-master\\TAGS_FILES.txt",
+          "kind": "text",
+          "text": "0:\n\n\n*********************************************************************\n\n1:\n\n\n*********************************************************************\n\n2:\n\n\n*********************************************************************\n\n3:\n\n\n*********************************************************************\n\n4:\n\n\n*********************************************************************\n\n5:\n\n\n*********************************************************************\n\n6:\n\n\n*********************************************************************\n\n7:\n\n\n*********************************************************************\n\n8:\n\n\n*********************************************************************\n\n",
+          "size_bytes": 684
+        }
+      ]
+    }
+  ],
+  "entities": [
+    {
+      "entity_id": "ent_dab887f1c7dd",
+      "entity_type": "link",
+      "value": "https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624",
+      "quote": "💡 [Tap here](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624) **to leave your feedback on the project**. It's anonymous and will help our team make your educational experience better. We recommend completing the survey immediately after the project.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 6,
+        "line_end": 6
+      },
+      "context": "# Use Cases\n\nSummary:\nIn this project, we'll discuss use cases, a common way of describing requirements for systems that contain models of software system behavior or ways for users to interact with the system.\n\n💡 [Tap here](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624) **to leave your feedback on the project**. It's anonymous and will help our team make your educational experience better. We recommend completing the survey immediately after the project.\n\n## Contents\n\n1. [Chapter I](#chapter-i) \\\n   1.1. [Preamble](#11)\n2. [Chapter II](#chapter-ii) \\\n   2.1. [General Rules](#21)\n3. [Chapter III](#chapter-iii) \\\n   3.1. [Use Cases](#31) \\\n   3.2. [Recommendations](#32) \\\n   3.3. [Use Cases Links](#33)\n4. [Chapter IV](#chapter-iv) \\\n   4.1. [Task 1. Haircut App"
+    },
+    {
+      "entity_id": "ent_e93d3a1d01f4",
+      "entity_type": "image",
+      "value": "misc/images/Illustration_08.jpg",
+      "quote": "![](misc/images/Illustration_08.jpg)",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 43,
+        "line_end": 43
+      },
+      "context": "from others, always make sure you fully understand the “why”, “how”, and “purpose” behind the solution. Don’t be afraid to make mistakes. \n- Does the task seem impossible? Take a break, get some fresh air and clear your mind — this has helped many people. Maybe after that, the solution will come to you naturally.\n- The learning process is just as important as the result. It’s not just about completing the task — it’s about understanding HOW to solve it.\n\n## Chapter I <div id=\"chapter-i\"></div>\n\n![](misc/images/Illustration_08.jpg)\n\n### Preamble <div id=\"11\"></div>\n\nThe use case shows the agreements of the participants in the system about its behavior in response to the requests of the actors under different conditions. At the same time, the use case is aimed at achieving the goal of the main actor and satisfying the interests of other participants in the process.\n\n### Literature:\n\n1. Alistair Coburn \"Writing Effective Use Cases\".\n2. Martin Fowler \"UML Distilled\", Third Edition.\n3. Karl Wiegers, Joy Beatty, \"Software Requ"
+    },
+    {
+      "entity_id": "ent_677d09091b8a",
+      "entity_type": "technology",
+      "value": "GigaChat",
+      "quote": "- Here, you’ll find a unique learning experience with a lot of freedom. You’re given a task and left to find your own way to solve it, using whatever resources work best for you — whether that’s the Internet or AI tools like GigaChat. Just be mindful of information quality: verify, think critically, analyze, and compa…",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 34,
+        "line_end": 34
+      },
+      "context": ". [Exercise 02 — Description of Use Cases](#53) \\\n   5.4. [Exercise 03 — Description of Use Case Flows](#54) \\\n   5.5. [Exercise 04 — Description of Use Cases](#55) \\\n   5.6. [Exercise 05 — Description of Use Case Flows](#56)\n\n## Instructions \n\nHow to learn at “School 21”:\n\n- Here, you’ll find a unique learning experience with a lot of freedom. You’re given a task and left to find your own way to solve it, using whatever resources work best for you — whether that’s the Internet or AI tools like GigaChat. Just be mindful of information quality: verify, think critically, analyze, and compare.\n- Peer-to-peer (P2P) learning is the exchange of knowledge and experience with peers, where everyone acts as both mentor and student. This approach allows you to gain a deeper understanding of the material by learning from one another.\n- Feel free to ask for help: around you are peers who are also navigating this path for the first time. Share your own experience and ideas with others.  Join Rocket.Chat to"
+    },
+    {
+      "entity_id": "ent_2eb8897fdf18",
+      "entity_type": "technology",
+      "value": "Rocket.Chat",
+      "quote": "- Feel free to ask for help: around you are peers who are also navigating this path for the first time. Share your own experience and ideas with others. Join Rocket.Chat to stay updated with the latest community announcements.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 36,
+        "line_end": 36
+      },
+      "context": "s like GigaChat. Just be mindful of information quality: verify, think critically, analyze, and compare.\n- Peer-to-peer (P2P) learning is the exchange of knowledge and experience with peers, where everyone acts as both mentor and student. This approach allows you to gain a deeper understanding of the material by learning from one another.\n- Feel free to ask for help: around you are peers who are also navigating this path for the first time. Share your own experience and ideas with others.  Join Rocket.Chat to stay updated with the latest community announcements. \n- Your learning is meaningless if you just copy someone else’s solutions. When receiving help from others, always make sure you fully understand the “why”, “how”, and “purpose” behind the solution. Don’t be afraid to make mistakes. \n- Does the task seem impossible? Take a break, get some fresh air and clear your mind — this has helped many people. Maybe after that, the solution will come to you naturally.\n- The learning process is just a"
+    },
+    {
+      "entity_id": "ent_9138f7800df9",
+      "entity_type": "technology",
+      "value": "GitLab",
+      "quote": "Before starting, clone the project from GitLab into a repository with the same name.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 61,
+        "line_end": 61
+      },
+      "context": "terests of other participants in the process.\n\n### Literature:\n\n1. Alistair Coburn \"Writing Effective Use Cases\".\n2. Martin Fowler \"UML Distilled\", Third Edition.\n3. Karl Wiegers, Joy Beatty, \"Software Requirements\" 3rd edition, amplified.\n4. BABOK v3 \"A Guide to the Business Analysis Body of Knowledge\" IIBA.\n5. Dean Leffingwell, Don Widrig \"Managing Software Requirements\".\n\n## Chapter II <div id=\"chapter-ii\"></div>\n\n### General Rules <div id=\"21\"></div>\n\nBefore starting, clone the project from GitLab into a repository with the same name.\n\n1. Along the way, you may feel a sense of uncertainty and a severe lack of information: that's OK. Remember, the information in the repository and on Google is always with you. So are your peers and RocketChat. Communicate. Search. Use common sense. Don't be afraid to make mistakes.\n2. Pay attention to sources of information. Check. Think. Analyse. Compare. \n3. Look at the text of each assignment. Read it several times. \n4. Read the examples carefully. The"
+    },
+    {
+      "entity_id": "ent_a5a1cbe1fcf5",
+      "entity_type": "link",
+      "value": "https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624",
+      "quote": "💡 [Нажми сюда](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624), **чтобы поделиться с нами обратной связью на этот проект**. Это анонимно и поможет нашей команде сделать обучение лучше. Рекомендуем заполнить опрос сразу после выполнения проекта.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 6,
+        "line_end": 6
+      },
+      "context": "# Сценарии использования \n\nРезюме:\nВ текущем проекте мы рассмотрим UseCase (сценарии и варианты использования) — распространенный способ описания требований к системам, содержащий модели поведения программным систем или способы взаимодействия пользователей и системы.\n\n💡 [Нажми сюда](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624), **чтобы поделиться с нами обратной связью на этот проект**. Это анонимно и поможет нашей команде сделать обучение лучше. Рекомендуем заполнить опрос сразу после выполнения проекта.\n\n## Contents\n\n1. [Chapter I](#chapter-i) \\\n    1.1. [Preamble](#11)\n2. [Chapter II](#chapter-ii) \\\n    2.1. [General Rules](#21)\n3. [Chapter III](#chapter-iii) \\\n    3.1. [Сценарии и варианты использования (UseCase)](#31) \\\n    3.2. [Рекомендации](#32) \\\n    3.3. [Связи вариантов использования](#33)\n4. [Chapter IV]"
+    },
+    {
+      "entity_id": "ent_3f05f607bac7",
+      "entity_type": "image",
+      "value": "misc/images/Illustration_08.jpg",
+      "quote": "![](misc/images/Illustration_08.jpg)",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 43,
+        "line_end": 43
+      },
+      "context": "- Твое обучение не будет иметь никакого смысла, если ты будешь копировать чужие решения. Если пользуешься помощью других — всегда разбирайся до конца, почему, как и зачем. Не бойся ошибиться.\n- Кажется, что задача невыполнима? Сделай перерыв, проветрись, перезагрузи голову — это помогало многим. Возможно, после этого решение придет само собой.\n- Важен не только результат обучения, но и сам процесс. Нужно не просто решить задачу, а понять, КАК ее решить.\n\n## Chapter I <div id=\"chapter-i\"></div>\n\n![](misc/images/Illustration_08.jpg)\n\n### Preamble <div id=\"11\"></div>\n\nВариант использования (Use Case) показывает договоренности участников системы о ее поведении в ответ на запросы действующих лиц в различных условиях. При этом UC направлен на достижение цели основного действующего лица и удовлетворение интересов других участников процесса.\n\n### Литература:\n\n1. Алистер Коберн «Современные методы описания функциональных требований к системам».\n2. Мартин Фаулер «UML Основы. Третье издание».\n3. Карл Вигерс, Джой Битти, «Разработка"
+    },
+    {
+      "entity_id": "ent_26f302d6f6ff",
+      "entity_type": "technology",
+      "value": "GigaChat",
+      "quote": "- Здесь тебя ждет уникальный образовательный опыт с большим количеством свободы. Ты получаешь задачу и самостоятельно ищешь пути решения, используя любые удобные способы поиска информации — ресурсы Интернета или нейросети (например, GigaChat). Но внимательно относись к качеству информации: проверяй, думай, анализируй,…",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 34,
+        "line_end": 34
+      },
+      "context": "tion of use case flows)](#54) \\\n    5.5. [Exercise 04 — Описание вариантов использования (Description Use Cases)](#55) \\\n    5.6. [Exercise 05 — Описание потоков вариантов использования (Description of use case flows)](#56)\n\n## Инструкции\n\nКак учиться в «Школе 21»:\n\n- Здесь тебя ждет уникальный образовательный опыт с большим количеством свободы. Ты получаешь задачу и самостоятельно ищешь пути решения, используя любые удобные способы поиска информации — ресурсы Интернета или нейросети (например, GigaChat). Но внимательно относись к качеству информации: проверяй, думай, анализируй, сравнивай.\n- Взаимообучение (Peer-to-Peer, P2P) — это обмен знаниями и опытом с другими пирами, где каждый выступает и учителем, и учеником. Такой подход позволяет глубже понять материал, учась друг у друга.\n- Чувствуй себя свободно и проси о помощи — вокруг тебя те, кто тоже впервые проходят этот путь. Делись своим опытом и идеями с другими. Присоединяйся к Rocket.Chat, чтобы быть в курсе всех новостей от нашего сооб"
+    },
+    {
+      "entity_id": "ent_1a8ffb2c2868",
+      "entity_type": "technology",
+      "value": "Rocket.Chat",
+      "quote": "- Чувствуй себя свободно и проси о помощи — вокруг тебя те, кто тоже впервые проходят этот путь. Делись своим опытом и идеями с другими. Присоединяйся к Rocket.Chat, чтобы быть в курсе всех новостей от нашего сообщества.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 36,
+        "line_end": 36
+      },
+      "context": "рмации — ресурсы Интернета или нейросети (например, GigaChat). Но внимательно относись к качеству информации: проверяй, думай, анализируй, сравнивай.\n- Взаимообучение (Peer-to-Peer, P2P) — это обмен знаниями и опытом с другими пирами, где каждый выступает и учителем, и учеником. Такой подход позволяет глубже понять материал, учась друг у друга.\n- Чувствуй себя свободно и проси о помощи — вокруг тебя те, кто тоже впервые проходят этот путь. Делись своим опытом и идеями с другими. Присоединяйся к Rocket.Chat, чтобы быть в курсе всех новостей от нашего сообщества.\n- Твое обучение не будет иметь никакого смысла, если ты будешь копировать чужие решения. Если пользуешься помощью других — всегда разбирайся до конца, почему, как и зачем. Не бойся ошибиться.\n- Кажется, что задача невыполнима? Сделай перерыв, проветрись, перезагрузи голову — это помогало многим. Возможно, после этого решение придет само собой.\n- Важен не только результат обучения, но и сам процесс. Нужно не просто решить задачу, а понять,"
+    },
+    {
+      "entity_id": "ent_b029fb65b39f",
+      "entity_type": "technology",
+      "value": "GitLab",
+      "quote": "Перед выполнением проект необходимо склонировать с GitLab в одноименный репозиторий.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 61,
+        "line_end": 61
+      },
+      "context": "етоды описания функциональных требований к системам».\n2. Мартин Фаулер «UML Основы. Третье издание».\n3. Карл Вигерс, Джой Битти, «Разработка требований к программному обеспечению» издание третье, дополненное.\n4. BABOK v3 «Руководство к своду знаний по бизнес-анализу» IIBA.\n5. Дин Леффингуэлл, Дон Уидриг «Принципы работы с требованиями к программному обеспечению».\n\n## Chapter II <div id=\"chapter-ii\"></div>\n\n### General Rules <div id=\"21\"></div>\n\nПеред выполнением проект необходимо склонировать с GitLab в одноименный репозиторий.\n\n1. На протяжении всего курса тебя будет сопровождать чувство неопределенности и острого дефицита информации — это нормально. Не забывай, что информация в репозитории и Google всегда с тобой. Как и пиры, и Rocket.Chat. Общайся. Ищи. Опирайся на здравый смысл. Не бойся ошибиться.\n2. Будь внимателен к источникам информации. Проверяй. Думай. Анализируй. Сравнивай. \n3. Внимательно читай задания. Перечитай несколько раз. \n4. Читать примеры тоже лучше внимательно. В них мож"
+    },
+    {
+      "entity_id": "ent_ef30dbc5a37c",
+      "entity_type": "technology",
+      "value": "Rocket.Chat",
+      "quote": "1. На протяжении всего курса тебя будет сопровождать чувство неопределенности и острого дефицита информации — это нормально. Не забывай, что информация в репозитории и Google всегда с тобой. Как и пиры, и Rocket.Chat. Общайся. Ищи. Опирайся на здравый смысл. Не бойся ошибиться.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 63,
+        "line_end": 63
+      },
+      "context": "у знаний по бизнес-анализу» IIBA.\n5. Дин Леффингуэлл, Дон Уидриг «Принципы работы с требованиями к программному обеспечению».\n\n## Chapter II <div id=\"chapter-ii\"></div>\n\n### General Rules <div id=\"21\"></div>\n\nПеред выполнением проект необходимо склонировать с GitLab в одноименный репозиторий.\n\n1. На протяжении всего курса тебя будет сопровождать чувство неопределенности и острого дефицита информации — это нормально. Не забывай, что информация в репозитории и Google всегда с тобой. Как и пиры, и Rocket.Chat. Общайся. Ищи. Опирайся на здравый смысл. Не бойся ошибиться.\n2. Будь внимателен к источникам информации. Проверяй. Думай. Анализируй. Сравнивай. \n3. Внимательно читай задания. Перечитай несколько раз. \n4. Читать примеры тоже лучше внимательно. В них может быть что-то, что не указано в явном виде в самом задании.\n5. Тебе могут встретиться несоответствия, когда что-то новое в условиях задачи или примере противоречит уже известному. Если встретилось такое — попробуй разобраться. Если не получилос"
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "fnd_01a7e5adf2ca",
+      "unit_id": "bsa08_usecase_id_1361452_master__79f98ef4",
+      "branch": "BSA08_UseCase.ID_1361452-master",
+      "criterion": "actuality",
+      "severity": "info",
+      "verdict": "unknown",
+      "confidence": 0.55,
+      "quote": null,
+      "location": null,
+      "evidence": [
+        {
+          "title": "Кандидаты на проверку",
+          "detail": "Найдено 1 сущностей: GitLab",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": "не проверялось",
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Включить модельный контур, чтобы получить источник, статус поддержки и рекомендуемую версию.",
+      "needs_human_review": true,
+      "checker_name": "tech_freshness_checker",
+      "extra": {
+        "candidate_count": 1,
+        "sample_values": [
+          "GitLab"
+        ]
+      }
+    },
+    {
+      "finding_id": "fnd_198209125151",
+      "unit_id": "bsa08_usecase_id_1361452_master__79f98ef4",
+      "branch": "BSA08_UseCase.ID_1361452-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.88,
+      "quote": "1. minimal guarantees: conditions that must be true at each end of the use case;",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 242,
+        "line_end": 242
+      },
+      "evidence": [
+        {
+          "title": "Структура Markdown",
+          "detail": "После пункта 10) на строке 241 идёт пункт 1), ожидается 11).",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Исправить ручную нумерацию списка, чтобы номера шли последовательно внутри одного блока.",
+      "needs_human_review": false,
+      "checker_name": "markdown_structure_checker",
+      "extra": {
+        "issue_type": "numbered_list_reset",
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_26823b269eda",
+      "unit_id": "bsa08_usecase_id_1361452_master__79f98ef4",
+      "branch": "BSA08_UseCase.ID_1361452-master",
+      "criterion": "checklist_alignment",
+      "severity": "major",
+      "verdict": "warning",
+      "confidence": 0.84,
+      "quote": "ex04_<product prefix>_use case.docx vs ex04_<product prefix>_US.docx",
+      "location": {
+        "file_path": "check-list.yml",
+        "line_start": null,
+        "line_end": null
+      },
+      "evidence": [
+        {
+          "title": "Проверяемое требование чек-листа",
+          "detail": "Чек-лист ожидает файл с именем, которое похоже на ресурс из README или вложений, но не совпадает с ним буквально.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Привести имя ожидаемого файла в README и чек-листе к одному варианту.",
+      "needs_human_review": false,
+      "checker_name": "checklist_checker",
+      "extra": {
+        "issue_type": "expected_file_name_mismatch",
+        "question_name": "Exercise 04 — Description of Use Cases",
+        "grounding_evidence": "ex04_<product prefix>_use case.docx vs ex04_<product prefix>_US.docx",
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_26823b269eda",
+      "unit_id": "bsa08_usecase_id_1361452_master__79f98ef4",
+      "branch": "BSA08_UseCase.ID_1361452-master",
+      "criterion": "checklist_alignment",
+      "severity": "major",
+      "verdict": "warning",
+      "confidence": 0.84,
+      "quote": "ex04_<product prefix>_use case.docx vs ex04_<product prefix>_US.docx",
+      "location": {
+        "file_path": "check-list.yml",
+        "line_start": null,
+        "line_end": null
+      },
+      "evidence": [
+        {
+          "title": "Проверяемое требование чек-листа",
+          "detail": "Чек-лист ожидает файл с именем, которое похоже на ресурс из README или вложений, но не совпадает с ним буквально.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Привести имя ожидаемого файла в README и чек-листе к одному варианту.",
+      "needs_human_review": false,
+      "checker_name": "checklist_checker",
+      "extra": {
+        "issue_type": "expected_file_name_mismatch",
+        "question_name": "Exercise 05 — Description of Use Case Flows",
+        "grounding_evidence": "ex04_<product prefix>_use case.docx vs ex04_<product prefix>_US.docx",
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_2b40728d241d",
+      "unit_id": "bsa08_usecase_id_1361452_master__79f98ef4",
+      "branch": "BSA08_UseCase.ID_1361452-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.88,
+      "quote": "1. минимальные гарантии: условия, которые должны быть истинными при любом завершении UC;",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 240,
+        "line_end": 240
+      },
+      "evidence": [
+        {
+          "title": "Структура Markdown",
+          "detail": "После пункта 10) на строке 239 идёт пункт 1), ожидается 11).",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Исправить ручную нумерацию списка, чтобы номера шли последовательно внутри одного блока.",
+      "needs_human_review": false,
+      "checker_name": "markdown_structure_checker",
+      "extra": {
+        "issue_type": "numbered_list_reset",
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_364f5fbd72ac",
+      "unit_id": "bsa08_usecase_id_1361452_master__79f98ef4",
+      "branch": "BSA08_UseCase.ID_1361452-master",
+      "criterion": "checklist_alignment",
+      "severity": "major",
+      "verdict": "warning",
+      "confidence": 0.84,
+      "quote": "ex00_<produse caset prefix>_use case.docx vs ex00_<product prefix>_US.docx",
+      "location": {
+        "file_path": "check-list.yml",
+        "line_start": null,
+        "line_end": null
+      },
+      "evidence": [
+        {
+          "title": "Проверяемое требование чек-листа",
+          "detail": "Чек-лист ожидает файл с именем, которое похоже на ресурс из README или вложений, но не совпадает с ним буквально.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Привести имя ожидаемого файла в README и чек-листе к одному варианту.",
+      "needs_human_review": false,
+      "checker_name": "checklist_checker",
+      "extra": {
+        "issue_type": "expected_file_name_mismatch",
+        "question_name": "Exercise 00 — Description of Use Cases",
+        "grounding_evidence": "ex00_<produse caset prefix>_use case.docx vs ex00_<product prefix>_US.docx",
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_3b69ee1d5bb8",
+      "unit_id": "bsa08_usecase_id_1361452_master__79f98ef4",
+      "branch": "BSA08_UseCase.ID_1361452-master",
+      "criterion": "rights",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.65,
+      "quote": "![](misc/images/Illustration_08.jpg)",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 43,
+        "line_end": 43
+      },
+      "evidence": [
+        {
+          "title": "Изображение без подтверждённых прав",
+          "detail": "У значимого изображения нет локальных метаданных об авторе/лицензии: misc/images/Illustration_08.jpg",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Добавить источник, автора и лицензию изображения или подтвердить права вручную.",
+      "needs_human_review": true,
+      "checker_name": "rights_originality_checker",
+      "extra": {
+        "kind": "image_provenance",
+        "risk": "no_source",
+        "deterministic": true
+      }
+    },
+    {
+      "finding_id": "fnd_3e03a114a44e",
+      "unit_id": "bsa08_usecase_id_1361452_master__79f98ef4",
+      "branch": "BSA08_UseCase.ID_1361452-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.88,
+      "quote": "1) Участник вводит запрос и передает данные;",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 151,
+        "line_end": 151
+      },
+      "evidence": [
+        {
+          "title": "Структура Markdown",
+          "detail": "После пункта 6) на строке 150 идёт пункт 1), ожидается 7).",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Исправить ручную нумерацию списка, чтобы номера шли последовательно внутри одного блока.",
+      "needs_human_review": false,
+      "checker_name": "markdown_structure_checker",
+      "extra": {
+        "issue_type": "numbered_list_reset",
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_41716bc89933",
+      "unit_id": "bsa08_usecase_id_1361452_master__79f98ef4",
+      "branch": "BSA08_UseCase.ID_1361452-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.88,
+      "quote": "1) Stakeholder enters a request and submits data;",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 155,
+        "line_end": 155
+      },
+      "evidence": [
+        {
+          "title": "Структура Markdown",
+          "detail": "После пункта 6) на строке 154 идёт пункт 1), ожидается 7).",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Исправить ручную нумерацию списка, чтобы номера шли последовательно внутри одного блока.",
+      "needs_human_review": false,
+      "checker_name": "markdown_structure_checker",
+      "extra": {
+        "issue_type": "numbered_list_reset",
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_43bff84b07af",
+      "unit_id": "bsa08_usecase_id_1361452_master__79f98ef4",
+      "branch": "BSA08_UseCase.ID_1361452-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.88,
+      "quote": "1. Система сообщает пользователю о неудаче, дает совет и возвращается на предыдущий шаг;",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 181,
+        "line_end": 181
+      },
+      "evidence": [
+        {
+          "title": "Структура Markdown",
+          "detail": "После пункта 1) на строке 180 идёт пункт 1), ожидается 2).",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Исправить ручную нумерацию списка, чтобы номера шли последовательно внутри одного блока.",
+      "needs_human_review": false,
+      "checker_name": "markdown_structure_checker",
+      "extra": {
+        "issue_type": "numbered_list_reset",
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_4cd588a718ab",
+      "unit_id": "bsa08_usecase_id_1361452_master__79f98ef4",
+      "branch": "BSA08_UseCase.ID_1361452-master",
+      "criterion": "checklist_alignment",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.72,
+      "quote": null,
+      "location": {
+        "file_path": "check-list.yml",
+        "line_start": null,
+        "line_end": null
+      },
+      "evidence": [
+        {
+          "title": "Связность README и чек-листа",
+          "detail": "Сильных совпадений: 6 из 6; слабых совпадений: 0 из 6; не сопоставлено: 0 из 6. Развёрнутых описаний: 2 из 6. Недостаточно описаны: Exercise 02 — Description  of Use Cases, Exercise 03 — Description of Use Case Flows, Exercise 04 — Description of Use Cases, Exercise 05 — Description of Use Case Flows.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Доработать пункты без критериев приёмки, ожидаемых артефактов или примеров.",
+      "needs_human_review": false,
+      "checker_name": "checklist_checker",
+      "extra": {
+        "matched_ratio": 1.0,
+        "strong_matched": 6,
+        "weak_matched": 0,
+        "strong_matched_questions": [
+          "Exercise 00 — Description of Use Cases",
+          "Exercise 01 — Description of Use Case Flows",
+          "Exercise 02 — Description  of Use Cases",
+          "Exercise 03 — Description of Use Case Flows",
+          "Exercise 04 — Description of Use Cases",
+          "Exercise 05 — Description of Use Case Flows"
+        ],
+        "weak_matched_questions": [],
+        "unmatched_questions": [],
+        "description_ratio": 0.3333333333333333,
+        "complete_description_questions": [
+          "Exercise 00 — Description of Use Cases",
+          "Exercise 01 — Description of Use Case Flows"
+        ],
+        "incomplete_questions": [
+          "Exercise 02 — Description  of Use Cases",
+          "Exercise 03 — Description of Use Case Flows",
+          "Exercise 04 — Description of Use Cases",
+          "Exercise 05 — Description of Use Case Flows"
+        ],
+        "grounding_issues": [
+          {
+            "question_name": "Exercise 00 — Description of Use Cases",
+            "issue_type": "expected_file_name_mismatch",
+            "detail": "Чек-лист ожидает файл с именем, которое похоже на ресурс из README или вложений, но не совпадает с ним буквально.",
+            "evidence": "ex00_<produse caset prefix>_use case.docx vs ex00_<product prefix>_US.docx",
+            "severity": "major"
+          },
+          {
+            "question_name": "Exercise 01 — Description of Use Case Flows",
+            "issue_type": "expected_file_name_mismatch",
+            "detail": "Чек-лист ожидает файл с именем, которое похоже на ресурс из README или вложений, но не совпадает с ним буквально.",
+            "evidence": "ex00_<product prefix>_use case.docx vs ex00_<product prefix>_US.docx",
+            "severity": "major"
+          },
+          {
+            "question_name": "Exercise 02 — Description  of Use Cases",
+            "issue_type": "ungrounded_resource",
+            "detail": "Чек-лист ссылается на ресурс или файл, который не упомянут в README и не найден среди файлов проекта.",
+            "evidence": "ex02_<product prefix>_use case.docx",
+            "severity": "major"
+          },
+          {
+            "question_name": "Exercise 03 — Description of Use Case Flows",
+            "issue_type": "ungrounded_resource",
+            "detail": "Чек-лист ссылается на ресурс или файл, который не упомянут в README и не найден среди файлов проекта.",
+            "evidence": "ex02_<product prefix>_use case.docx",
+            "severity": "major"
+          },
+          {
+            "question_name": "Exercise 04 — Description of Use Cases",
+            "issue_type": "expected_file_name_mismatch",
+            "detail": "Чек-лист ожидает файл с именем, которое похоже на ресурс из README или вложений, но не совпадает с ним буквально.",
+            "evidence": "ex04_<product prefix>_use case.docx vs ex04_<product prefix>_US.docx",
+            "severity": "major"
+          },
+          {
+            "question_name": "Exercise 05 — Description of Use Case Flows",
+            "issue_type": "expected_file_name_mismatch",
+            "detail": "Чек-лист ожидает файл с именем, которое похоже на ресурс из README или вложений, но не совпадает с ним буквально.",
+            "evidence": "ex04_<product prefix>_use case.docx vs ex04_<product prefix>_US.docx",
+            "severity": "major"
+          }
+        ],
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_5cfbb2c5602f",
+      "unit_id": "bsa08_usecase_id_1361452_master__79f98ef4",
+      "branch": "BSA08_UseCase.ID_1361452-master",
+      "criterion": "checklist_alignment",
+      "severity": "major",
+      "verdict": "warning",
+      "confidence": 0.84,
+      "quote": "ex00_<product prefix>_use case.docx vs ex00_<product prefix>_US.docx",
+      "location": {
+        "file_path": "check-list.yml",
+        "line_start": null,
+        "line_end": null
+      },
+      "evidence": [
+        {
+          "title": "Проверяемое требование чек-листа",
+          "detail": "Чек-лист ожидает файл с именем, которое похоже на ресурс из README или вложений, но не совпадает с ним буквально.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Привести имя ожидаемого файла в README и чек-листе к одному варианту.",
+      "needs_human_review": false,
+      "checker_name": "checklist_checker",
+      "extra": {
+        "issue_type": "expected_file_name_mismatch",
+        "question_name": "Exercise 01 — Description of Use Case Flows",
+        "grounding_evidence": "ex00_<product prefix>_use case.docx vs ex00_<product prefix>_US.docx",
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_62cbb40bce98",
+      "unit_id": "bsa08_usecase_id_1361452_master__79f98ef4",
+      "branch": "BSA08_UseCase.ID_1361452-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.88,
+      "quote": "1. System reports failure to user with advice, backs up to previous step;",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 185,
+        "line_end": 185
+      },
+      "evidence": [
+        {
+          "title": "Структура Markdown",
+          "detail": "После пункта 1) на строке 184 идёт пункт 1), ожидается 2).",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Исправить ручную нумерацию списка, чтобы номера шли последовательно внутри одного блока.",
+      "needs_human_review": false,
+      "checker_name": "markdown_structure_checker",
+      "extra": {
+        "issue_type": "numbered_list_reset",
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_a068a589ed9a",
+      "unit_id": "bsa08_usecase_id_1361452_master__79f98ef4",
+      "branch": "BSA08_UseCase.ID_1361452-master",
+      "criterion": "market_fit",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.75,
+      "quote": null,
+      "location": {
+        "file_path": "README.md",
+        "line_start": 24,
+        "line_end": 24
+      },
+      "evidence": [
+        {
+          "title": "Проверка соответствия рынку",
+          "detail": "Работа с реальными данными: нет; Бизнес-контекст: есть (README.md:24: 5.2. [Exercise 01 — Description of Use Case Flows](#52) \\); Бизнес-метрики или требования: нет",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Усилить прикладной контекст: добавить датасет или ссылку на реальные данные; зафиксировать бизнес-метрики, ограничения или требования к результату.",
+      "needs_human_review": false,
+      "checker_name": "market_fit_checker",
+      "extra": {
+        "market_fit_score": 1,
+        "sub_checks": {
+          "real_data": {
+            "present": false,
+            "matches": [],
+            "source": "rules"
+          },
+          "business_context": {
+            "present": true,
+            "matches": [
+              {
+                "file_path": "README.md",
+                "line_start": 24,
+                "text": "5.2. [Exercise 01 — Description of Use Case Flows](#52) \\"
+              }
+            ],
+            "source": "rules"
+          },
+          "success_metrics": {
+            "present": false,
+            "matches": [],
+            "source": "rules"
+          }
+        },
+        "model_refined": false,
+        "cache_hit": false,
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_abb8585cb806",
+      "unit_id": "bsa08_usecase_id_1361452_master__79f98ef4",
+      "branch": "BSA08_UseCase.ID_1361452-master",
+      "criterion": "checklist_alignment",
+      "severity": "major",
+      "verdict": "warning",
+      "confidence": 0.84,
+      "quote": "ex02_<product prefix>_use case.docx",
+      "location": {
+        "file_path": "check-list.yml",
+        "line_start": null,
+        "line_end": null
+      },
+      "evidence": [
+        {
+          "title": "Проверяемое требование чек-листа",
+          "detail": "Чек-лист ссылается на ресурс или файл, который не упомянут в README и не найден среди файлов проекта.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Приложить ресурс к проекту или убрать его из чек-листа.",
+      "needs_human_review": false,
+      "checker_name": "checklist_checker",
+      "extra": {
+        "issue_type": "ungrounded_resource",
+        "question_name": "Exercise 02 — Description  of Use Cases",
+        "grounding_evidence": "ex02_<product prefix>_use case.docx",
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_abb8585cb806",
+      "unit_id": "bsa08_usecase_id_1361452_master__79f98ef4",
+      "branch": "BSA08_UseCase.ID_1361452-master",
+      "criterion": "checklist_alignment",
+      "severity": "major",
+      "verdict": "warning",
+      "confidence": 0.84,
+      "quote": "ex02_<product prefix>_use case.docx",
+      "location": {
+        "file_path": "check-list.yml",
+        "line_start": null,
+        "line_end": null
+      },
+      "evidence": [
+        {
+          "title": "Проверяемое требование чек-листа",
+          "detail": "Чек-лист ссылается на ресурс или файл, который не упомянут в README и не найден среди файлов проекта.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Приложить ресурс к проекту или убрать его из чек-листа.",
+      "needs_human_review": false,
+      "checker_name": "checklist_checker",
+      "extra": {
+        "issue_type": "ungrounded_resource",
+        "question_name": "Exercise 03 — Description of Use Case Flows",
+        "grounding_evidence": "ex02_<product prefix>_use case.docx",
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_b17fae096073",
+      "unit_id": "bsa08_usecase_id_1361452_master__79f98ef4",
+      "branch": "BSA08_UseCase.ID_1361452-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.88,
+      "quote": "1. Участник вводит запрос, передает данные;",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 254,
+        "line_end": 254
+      },
+      "evidence": [
+        {
+          "title": "Структура Markdown",
+          "detail": "После пункта 6) на строке 253 идёт пункт 1), ожидается 7).",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Исправить ручную нумерацию списка, чтобы номера шли последовательно внутри одного блока.",
+      "needs_human_review": false,
+      "checker_name": "markdown_structure_checker",
+      "extra": {
+        "issue_type": "numbered_list_reset",
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_caf9a55fd887",
+      "unit_id": "bsa08_usecase_id_1361452_master__79f98ef4",
+      "branch": "BSA08_UseCase.ID_1361452-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.88,
+      "quote": "1. The stakeholder enters the request, transfers the data;",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 256,
+        "line_end": 256
+      },
+      "evidence": [
+        {
+          "title": "Структура Markdown",
+          "detail": "После пункта 6) на строке 255 идёт пункт 1), ожидается 7).",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Исправить ручную нумерацию списка, чтобы номера шли последовательно внутри одного блока.",
+      "needs_human_review": false,
+      "checker_name": "markdown_structure_checker",
+      "extra": {
+        "issue_type": "numbered_list_reset",
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_f764cff0d131",
+      "unit_id": "bsa08_usecase_id_1361452_master__79f98ef4",
+      "branch": "BSA08_UseCase.ID_1361452-master",
+      "criterion": "actuality",
+      "severity": "info",
+      "verdict": "unknown",
+      "confidence": 0.5,
+      "quote": "💡 [Tap here](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624) **to leave your feedback on the project**. It's anonymous and will help our team make your educational experience better. We recommend completing the survey immediately after the project.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 6,
+        "line_end": 6
+      },
+      "evidence": [
+        {
+          "title": "Сеть отключена",
+          "detail": "Ссылка не проверялась: https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624",
+          "url": "https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624"
+        },
+        {
+          "title": "Языковые дубли",
+          "detail": "Схлопнуто 2 строк: README.md, README_RUS.md.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Запустить проверку с доступом к сети, чтобы подтвердить доступность ссылки.",
+      "needs_human_review": true,
+      "checker_name": "link_checker",
+      "extra": {
+        "merged_language_duplicates": 1,
+        "affected_files": [
+          "README.md",
+          "README_RUS.md"
+        ]
+      }
+    }
+  ]
+}

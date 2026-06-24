@@ -1,0 +1,297 @@
+{
+  "evaluated_criteria": [
+    "correctness"
+  ],
+  "gold_total": 3,
+  "predicted_total": 0,
+  "true_positive": 0,
+  "false_positive": 0,
+  "false_negative": 3,
+  "precision": 0.0,
+  "recall": 0.0,
+  "f1_score": 0.0,
+  "macro_precision": 0.0,
+  "macro_recall": 0.0,
+  "macro_f1_score": 0.0,
+  "overview_gold_total": 1,
+  "overview_predicted_total": 4,
+  "overview_true_positive": 1,
+  "overview_false_positive": 3,
+  "overview_false_negative": 0,
+  "overview_precision": 0.25,
+  "overview_recall": 1.0,
+  "overview_f1_score": 0.4,
+  "overview_macro_precision": 0.25,
+  "overview_macro_recall": 0.25,
+  "overview_macro_f1_score": 0.25,
+  "gold_scope_predicted_total": 0,
+  "gold_scope_true_positive": 0,
+  "gold_scope_false_positive": 0,
+  "gold_scope_false_negative": 3,
+  "gold_scope_precision": 0.0,
+  "gold_scope_recall": 0.0,
+  "gold_scope_f1_score": 0.0,
+  "gold_scope_macro_precision": 0.0,
+  "gold_scope_macro_recall": 0.0,
+  "gold_scope_macro_f1_score": 0.0,
+  "per_criterion": [
+    {
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_total": 3,
+      "predicted_total": 0,
+      "true_positive": 0,
+      "false_positive": 0,
+      "false_negative": 3,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    }
+  ],
+  "overview_per_criterion": [
+    {
+      "criterion": "actuality",
+      "label": "Актуальность",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "checklist_alignment",
+      "label": "Соответствие заданий проекта чек-листу",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_total": 1,
+      "predicted_total": 1,
+      "true_positive": 1,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0
+    },
+    {
+      "criterion": "readability",
+      "label": "Грамотность и читаемость текста",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    }
+  ],
+  "checker_metrics": [],
+  "checker_group_metrics": [],
+  "actionable_metrics": {
+    "slice_name": "actionable",
+    "label": "Действенные находки",
+    "predicted_total": 0,
+    "true_positive": 0,
+    "false_positive": 0,
+    "precision": 0.0,
+    "false_positive_share": 0.0
+  },
+  "cost_quality": {
+    "model_calls": 0,
+    "cache_hits": 0,
+    "total_tokens": 0,
+    "cost_usd": 0.0,
+    "cost_per_gold_true_positive": null,
+    "cost_per_prediction": 0.0,
+    "cost_per_actionable_true_positive": null
+  },
+  "false_negative_reason_counts": {
+    "model_possible": 3
+  },
+  "false_negative_analysis": [
+    {
+      "project": "FEB1_JS.ID_883439-master",
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_line_range": "",
+      "gold_text": "в задание 7 приведна таблица вывода где написано что возвращается объект со всеми купюраками (и теми что 0 и теми что имеют какое-то значение)",
+      "nearest_finding_id": null,
+      "nearest_checker": null,
+      "nearest_match_type": "missed",
+      "nearest_score": 0.0,
+      "reason_code": "model_possible",
+      "reason_label": "Нужен смысловой анализ",
+      "next_step": "Добавить модельный/семантический слой с проверяемым JSON-контрактом и примерами."
+    },
+    {
+      "project": "FEB1_JS.ID_883439-master",
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_line_range": "",
+      "gold_text": "но уже в файле для задания (atm.js) написано что выводится только те которые имеют какое либо число, отличное от 0",
+      "nearest_finding_id": null,
+      "nearest_checker": null,
+      "nearest_match_type": "missed",
+      "nearest_score": 0.0,
+      "reason_code": "model_possible",
+      "reason_label": "Нужен смысловой анализ",
+      "next_step": "Добавить модельный/семантический слой с проверяемым JSON-контрактом и примерами."
+    },
+    {
+      "project": "FEB1_JS.ID_883439-master",
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_line_range": "",
+      "gold_text": "как-то нало это между собой состыковать",
+      "nearest_finding_id": null,
+      "nearest_checker": null,
+      "nearest_match_type": "missed",
+      "nearest_score": 0.0,
+      "reason_code": "model_possible",
+      "reason_label": "Нужен смысловой анализ",
+      "next_step": "Добавить модельный/семантический слой с проверяемым JSON-контрактом и примерами."
+    }
+  ],
+  "gold_items": [
+    {
+      "row_number": 2,
+      "raw_project": "FEB1_js",
+      "matched_project": "FEB1_JS.ID_883439-master",
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "raw_problem": "нарушение логики в задании",
+      "details": "в задание 7 приведна таблица вывода где написано что возвращается объект со всеми купюраками (и теми что 0 и теми что имеют какое-то значение)\nно уже в файле для задания (atm.js) написано что выводится только те которые имеют какое либо число, отличное от 0\nкак-то нало это между собой состыковать",
+      "criteria": [
+        "correctness"
+      ]
+    }
+  ],
+  "gold_cases": [
+    {
+      "case_id": "gold_2_correctness_1",
+      "row_number": 2,
+      "raw_project": "FEB1_js",
+      "matched_project": "FEB1_JS.ID_883439-master",
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "criterion": "correctness",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "в задание 7 приведна таблица вывода где написано что возвращается объект со всеми купюраками (и теми что 0 и теми что имеют какое-то значение)"
+    },
+    {
+      "case_id": "gold_2_correctness_2",
+      "row_number": 2,
+      "raw_project": "FEB1_js",
+      "matched_project": "FEB1_JS.ID_883439-master",
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "criterion": "correctness",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "но уже в файле для задания (atm.js) написано что выводится только те которые имеют какое либо число, отличное от 0"
+    },
+    {
+      "case_id": "gold_2_correctness_3",
+      "row_number": 2,
+      "raw_project": "FEB1_js",
+      "matched_project": "FEB1_JS.ID_883439-master",
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "criterion": "correctness",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "как-то нало это между собой состыковать"
+    }
+  ],
+  "matches": [
+    {
+      "project": "FEB1_JS.ID_883439-master",
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "в задание 7 приведна таблица вывода где написано что возвращается объект со всеми купюраками (и теми что 0 и теми что имеют какое-то значение)",
+      "found_finding_id": null,
+      "found_checker": null,
+      "found_line_range": "",
+      "found_text": "",
+      "match_type": "missed",
+      "match_score": 0.0,
+      "counted": false,
+      "reason": "По этому проекту и критерию не найдено подходящей ошибки с совпадающей строкой или текстом."
+    },
+    {
+      "project": "FEB1_JS.ID_883439-master",
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "но уже в файле для задания (atm.js) написано что выводится только те которые имеют какое либо число, отличное от 0",
+      "found_finding_id": null,
+      "found_checker": null,
+      "found_line_range": "",
+      "found_text": "",
+      "match_type": "missed",
+      "match_score": 0.0,
+      "counted": false,
+      "reason": "По этому проекту и критерию не найдено подходящей ошибки с совпадающей строкой или текстом."
+    },
+    {
+      "project": "FEB1_JS.ID_883439-master",
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "как-то нало это между собой состыковать",
+      "found_finding_id": null,
+      "found_checker": null,
+      "found_line_range": "",
+      "found_text": "",
+      "match_type": "missed",
+      "match_score": 0.0,
+      "counted": false,
+      "reason": "По этому проекту и критерию не найдено подходящей ошибки с совпадающей строкой или текстом."
+    }
+  ],
+  "detailed_false_positive_items": [],
+  "false_positive_items": [
+    {
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "criterion": "actuality"
+    },
+    {
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "criterion": "checklist_alignment"
+    },
+    {
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "criterion": "readability"
+    }
+  ],
+  "false_negative_items": [],
+  "project_mapping": {
+    "FEB1_js": "FEB1_JS.ID_883439-master"
+  },
+  "notes": [
+    "Основное сравнение выполняется на уровне атомарных ошибок: проект, критерий, строка/диапазон и текст.",
+    "В строгую метрику не входят диагностические строки: низкоуверенные unknown, непроверенные ссылки и общие ресурсные предупреждения без имени файла.",
+    "Старая метрика проект × критерий сохранена только как обзорная в overview_* полях.",
+    "Excel-разметка нормализуется эвристически из колонок 'Проблема' и 'Детали'."
+  ]
+}

@@ -1,0 +1,432 @@
+{
+  "evaluated_criteria": [
+    "correctness"
+  ],
+  "gold_total": 3,
+  "predicted_total": 7,
+  "true_positive": 0,
+  "false_positive": 7,
+  "false_negative": 3,
+  "precision": 0.0,
+  "recall": 0.0,
+  "f1_score": 0.0,
+  "macro_precision": 0.0,
+  "macro_recall": 0.0,
+  "macro_f1_score": 0.0,
+  "overview_gold_total": 1,
+  "overview_predicted_total": 4,
+  "overview_true_positive": 1,
+  "overview_false_positive": 3,
+  "overview_false_negative": 0,
+  "overview_precision": 0.25,
+  "overview_recall": 1.0,
+  "overview_f1_score": 0.4,
+  "overview_macro_precision": 0.25,
+  "overview_macro_recall": 0.25,
+  "overview_macro_f1_score": 0.25,
+  "gold_scope_predicted_total": 7,
+  "gold_scope_true_positive": 0,
+  "gold_scope_false_positive": 7,
+  "gold_scope_false_negative": 3,
+  "gold_scope_precision": 0.0,
+  "gold_scope_recall": 0.0,
+  "gold_scope_f1_score": 0.0,
+  "gold_scope_macro_precision": 0.0,
+  "gold_scope_macro_recall": 0.0,
+  "gold_scope_macro_f1_score": 0.0,
+  "per_criterion": [
+    {
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_total": 3,
+      "predicted_total": 7,
+      "true_positive": 0,
+      "false_positive": 7,
+      "false_negative": 3,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    }
+  ],
+  "overview_per_criterion": [
+    {
+      "criterion": "actuality",
+      "label": "Актуальность",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "checklist_alignment",
+      "label": "Соответствие заданий проекта чек-листу",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_total": 1,
+      "predicted_total": 1,
+      "true_positive": 1,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0
+    },
+    {
+      "criterion": "readability",
+      "label": "Грамотность и читаемость текста",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    }
+  ],
+  "checker_metrics": [
+    {
+      "slice_name": "fact_checker_perplexity",
+      "label": "fact_checker_perplexity",
+      "predicted_total": 4,
+      "true_positive": 0,
+      "false_positive": 4,
+      "precision": 0.0,
+      "false_positive_share": 0.5714
+    },
+    {
+      "slice_name": "readme_fact_actuality_checker",
+      "label": "readme_fact_actuality_checker",
+      "predicted_total": 3,
+      "true_positive": 0,
+      "false_positive": 3,
+      "precision": 0.0,
+      "false_positive_share": 0.4286
+    }
+  ],
+  "checker_group_metrics": [
+    {
+      "slice_name": "factcheck",
+      "label": "Фактчек и актуальность",
+      "predicted_total": 7,
+      "true_positive": 0,
+      "false_positive": 7,
+      "precision": 0.0,
+      "false_positive_share": 1.0
+    }
+  ],
+  "actionable_metrics": {
+    "slice_name": "actionable",
+    "label": "Действенные находки",
+    "predicted_total": 2,
+    "true_positive": 0,
+    "false_positive": 2,
+    "precision": 0.0,
+    "false_positive_share": 0.2857
+  },
+  "cost_quality": {
+    "model_calls": 21,
+    "cache_hits": 1,
+    "total_tokens": 26155,
+    "cost_usd": 0.078166,
+    "cost_per_gold_true_positive": null,
+    "cost_per_prediction": 0.001737,
+    "cost_per_actionable_true_positive": null
+  },
+  "false_negative_reason_counts": {
+    "model_possible": 3
+  },
+  "false_negative_analysis": [
+    {
+      "project": "FEB1_JS.ID_883439-master",
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_line_range": "",
+      "gold_text": "в задание 7 приведна таблица вывода где написано что возвращается объект со всеми купюраками (и теми что 0 и теми что имеют какое-то значение)",
+      "nearest_finding_id": "fnd_0f56dcff00f3",
+      "nearest_checker": "readme_fact_actuality_checker",
+      "nearest_match_type": "criterion_only",
+      "nearest_score": 0.2,
+      "reason_code": "model_possible",
+      "reason_label": "Нужен смысловой анализ",
+      "next_step": "Добавить модельный/семантический слой с проверяемым JSON-контрактом и примерами."
+    },
+    {
+      "project": "FEB1_JS.ID_883439-master",
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_line_range": "",
+      "gold_text": "но уже в файле для задания (atm.js) написано что выводится только те которые имеют какое либо число, отличное от 0",
+      "nearest_finding_id": "fnd_936f4b33d21d",
+      "nearest_checker": "fact_checker_perplexity",
+      "nearest_match_type": "criterion_only",
+      "nearest_score": 0.2857,
+      "reason_code": "model_possible",
+      "reason_label": "Нужен смысловой анализ",
+      "next_step": "Добавить модельный/семантический слой с проверяемым JSON-контрактом и примерами."
+    },
+    {
+      "project": "FEB1_JS.ID_883439-master",
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_line_range": "",
+      "gold_text": "как-то нало это между собой состыковать",
+      "nearest_finding_id": "fnd_0f56dcff00f3",
+      "nearest_checker": "readme_fact_actuality_checker",
+      "nearest_match_type": "criterion_only",
+      "nearest_score": 0.1667,
+      "reason_code": "model_possible",
+      "reason_label": "Нужен смысловой анализ",
+      "next_step": "Добавить модельный/семантический слой с проверяемым JSON-контрактом и примерами."
+    }
+  ],
+  "gold_items": [
+    {
+      "row_number": 2,
+      "raw_project": "FEB1_js",
+      "matched_project": "FEB1_JS.ID_883439-master",
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "raw_problem": "нарушение логики в задании",
+      "details": "в задание 7 приведна таблица вывода где написано что возвращается объект со всеми купюраками (и теми что 0 и теми что имеют какое-то значение)\nно уже в файле для задания (atm.js) написано что выводится только те которые имеют какое либо число, отличное от 0\nкак-то нало это между собой состыковать",
+      "criteria": [
+        "correctness"
+      ]
+    }
+  ],
+  "gold_cases": [
+    {
+      "case_id": "gold_2_correctness_1",
+      "row_number": 2,
+      "raw_project": "FEB1_js",
+      "matched_project": "FEB1_JS.ID_883439-master",
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "criterion": "correctness",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "в задание 7 приведна таблица вывода где написано что возвращается объект со всеми купюраками (и теми что 0 и теми что имеют какое-то значение)"
+    },
+    {
+      "case_id": "gold_2_correctness_2",
+      "row_number": 2,
+      "raw_project": "FEB1_js",
+      "matched_project": "FEB1_JS.ID_883439-master",
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "criterion": "correctness",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "но уже в файле для задания (atm.js) написано что выводится только те которые имеют какое либо число, отличное от 0"
+    },
+    {
+      "case_id": "gold_2_correctness_3",
+      "row_number": 2,
+      "raw_project": "FEB1_js",
+      "matched_project": "FEB1_JS.ID_883439-master",
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "criterion": "correctness",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "как-то нало это между собой состыковать"
+    }
+  ],
+  "matches": [
+    {
+      "project": "FEB1_JS.ID_883439-master",
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "в задание 7 приведна таблица вывода где написано что возвращается объект со всеми купюраками (и теми что 0 и теми что имеют какое-то значение)",
+      "found_finding_id": "fnd_0f56dcff00f3",
+      "found_checker": "readme_fact_actuality_checker",
+      "found_line_range": "README.md:65",
+      "found_text": "Такие уведомления приходят со специального Comet-сервера, который постоянно поддерживает соединение с браузером. | Современные push‑уведомления не требуют «специального Comet‑сервера» и не основываются на постоянном Comet‑соединении; они используют push‑серверы (например, сервисы Firebase Cloud Messaging, Web Push Service и др.) через стандарты Push API и W3C Web Push, а не Comet. | Убрать отождествление push‑уведомлений с Comet‑сервером и либо удалить это утверждение, либо добавить пояснение, что Comet — это старый подход, не используемый в современных web push‑уведомлениях.",
+      "match_type": "criterion_only",
+      "match_score": 0.2,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    },
+    {
+      "project": "FEB1_JS.ID_883439-master",
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "но уже в файле для задания (atm.js) написано что выводится только те которые имеют какое либо число, отличное от 0",
+      "found_finding_id": "fnd_936f4b33d21d",
+      "found_checker": "fact_checker_perplexity",
+      "found_line_range": "README.md:64",
+      "found_text": "На JS работают, например, запросы AJAX (asynchronous javascript and XML), которые отправляются на сервер в фоновом режиме без перезагрузки веб-страницы, и push-уведомления — всплывающие сообщения в браузере, которые реализуются с помощью технологии Comet. | Часть про AJAX подтверждена: это технология JS для асинхронного обмена данными с сервером без перезагрузки страницы; используется в основном через объект XMLHttpRequest или современные API (fetch). Однако утверждение, что \"push-уведомления в браузере реализуются с помощью технологии Comet\", требует уточнения: сегодня push-уведомления в браузере реализуются в основном через Web Push API и Service Workers, а не через Comet (подход с длинными/вистящими HTTP‑запросами и HTTP streaming). Comet в учебной практике сейчас скорее упоминается как исторический предшественник WebSockets и современных push-механизмов. | Уточните формулировку про push-уведомления: вместо «реализуются с помощью технологии Comet» напишите, например, «реализуются с помощью технологии Comet (исторически) или современных средств вроде Web Push API и Service Workers», либо разнесите эти два аспекта: Comet — как подход к бесконечным/длинным запросам, а push-уведомления — через Web Push API.",
+      "match_type": "criterion_only",
+      "match_score": 0.2857,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    },
+    {
+      "project": "FEB1_JS.ID_883439-master",
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "как-то нало это между собой состыковать",
+      "found_finding_id": "fnd_0f56dcff00f3",
+      "found_checker": "readme_fact_actuality_checker",
+      "found_line_range": "README.md:65",
+      "found_text": "Такие уведомления приходят со специального Comet-сервера, который постоянно поддерживает соединение с браузером. | Современные push‑уведомления не требуют «специального Comet‑сервера» и не основываются на постоянном Comet‑соединении; они используют push‑серверы (например, сервисы Firebase Cloud Messaging, Web Push Service и др.) через стандарты Push API и W3C Web Push, а не Comet. | Убрать отождествление push‑уведомлений с Comet‑сервером и либо удалить это утверждение, либо добавить пояснение, что Comet — это старый подход, не используемый в современных web push‑уведомлениях.",
+      "match_type": "criterion_only",
+      "match_score": 0.1667,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    }
+  ],
+  "detailed_false_positive_items": [
+    {
+      "finding_id": "fnd_1fa79743f69d",
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "project": "FEB1_JS.ID_883439-master",
+      "criterion": "correctness",
+      "checker_name": "readme_fact_actuality_checker",
+      "line_start": 64,
+      "line_end": 64,
+      "file_path": "README.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.8,
+      "issue_type": "",
+      "found_text": "На JS работают, например, запросы AJAX (asynchronous javascript and XML), которые отправляются на сервер в фоновом режиме без перезагрузки веб-страницы | AJAX исторически связан с XMLHttpRequest и асинхронными запросами, но в современном JS чаще используют fetch API; формулировка не ошибочна, но устаревает и не отражает текущий стандартный подход. | Дополнить утверждение, что сегодня запросы чаще выполняют через fetch API, а AJAX рассматривают как общее понятие асинхронных веб‑запросов."
+    },
+    {
+      "finding_id": "fnd_936f4b33d21d",
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "project": "FEB1_JS.ID_883439-master",
+      "criterion": "correctness",
+      "checker_name": "fact_checker_perplexity",
+      "line_start": 64,
+      "line_end": 64,
+      "file_path": "README.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.9,
+      "issue_type": "",
+      "found_text": "На JS работают, например, запросы AJAX (asynchronous javascript and XML), которые отправляются на сервер в фоновом режиме без перезагрузки веб-страницы, и push-уведомления — всплывающие сообщения в браузере, которые реализуются с помощью технологии Comet. | Часть про AJAX подтверждена: это технология JS для асинхронного обмена данными с сервером без перезагрузки страницы; используется в основном через объект XMLHttpRequest или современные API (fetch). Однако утверждение, что \"push-уведомления в браузере реализуются с помощью технологии Comet\", требует уточнения: сегодня push-уведомления в браузере реализуются в основном через Web Push API и Service Workers, а не через Comet (подход с длинными/вистящими HTTP‑запросами и HTTP streaming). Comet в учебной практике сейчас скорее упоминается как исторический предшественник WebSockets и современных push-механизмов. | Уточните формулировку про push-уведомления: вместо «реализуются с помощью технологии Comet» напишите, например, «реализуются с помощью технологии Comet (исторически) или современных средств вроде Web Push API и Service Workers», либо разнесите эти два аспекта: Comet — как подход к бесконечным/длинным запросам, а push-уведомления — через Web Push API."
+    },
+    {
+      "finding_id": "fnd_9c4a667aeaba",
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "project": "FEB1_JS.ID_883439-master",
+      "criterion": "correctness",
+      "checker_name": "fact_checker_perplexity",
+      "line_start": 64,
+      "line_end": 64,
+      "file_path": "README.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.8,
+      "issue_type": "",
+      "found_text": "Серверный код пишут на платформе Node.js. | Платформа Node.js действительно используется для написания серверного кода на JavaScript, что подтверждается описанием, где Node.js называют средой выполнения JavaScript для сервера, позволяющей писать серверный код для веб-приложений и API. Однако исходное утверждение «Серверный код пишут на платформе Node.js» слишком обобщённо и может быть воспринято как единственный способ написания серверного кода, опуская альтернативы (PHP, Java, Python, Go и др.). | Уточните формулировку, например: «Серверный код можно писать на платформе Node.js», чтобы не создавать впечатления, что Node.js — единственный вариант."
+    },
+    {
+      "finding_id": "fnd_b9e0ba946bfd",
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "project": "FEB1_JS.ID_883439-master",
+      "criterion": "correctness",
+      "checker_name": "readme_fact_actuality_checker",
+      "line_start": 64,
+      "line_end": 64,
+      "file_path": "README.md",
+      "severity": "major",
+      "verdict": "fail",
+      "confidence": 0.9,
+      "issue_type": "",
+      "found_text": "push-уведомления — всплывающие сообщения в браузере, которые реализуются с помощью технологии Comet. | Современные push‑уведомления в браузере реализуются через Push API и Service Workers (стандарты W3C), а не через устаревшую модель Comet; Comet связана с HTTP‑длинными опросами и веб‑сокетами, но не является основой для текущих web push‑уведомлений. | Заменить формулировку: вместо «реализуются с помощью технологии Comet» указать, что push‑уведомления в браузере основаны на Push API и Service Workers, а Comet рассматривать как исторически ранний подход к реализации постоянно открытых соединений."
+    },
+    {
+      "finding_id": "fnd_0f56dcff00f3",
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "project": "FEB1_JS.ID_883439-master",
+      "criterion": "correctness",
+      "checker_name": "readme_fact_actuality_checker",
+      "line_start": 65,
+      "line_end": 65,
+      "file_path": "README.md",
+      "severity": "major",
+      "verdict": "fail",
+      "confidence": 0.9,
+      "issue_type": "",
+      "found_text": "Такие уведомления приходят со специального Comet-сервера, который постоянно поддерживает соединение с браузером. | Современные push‑уведомления не требуют «специального Comet‑сервера» и не основываются на постоянном Comet‑соединении; они используют push‑серверы (например, сервисы Firebase Cloud Messaging, Web Push Service и др.) через стандарты Push API и W3C Web Push, а не Comet. | Убрать отождествление push‑уведомлений с Comet‑сервером и либо удалить это утверждение, либо добавить пояснение, что Comet — это старый подход, не используемый в современных web push‑уведомлениях."
+    },
+    {
+      "finding_id": "fnd_3670bacd41d5",
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "project": "FEB1_JS.ID_883439-master",
+      "criterion": "correctness",
+      "checker_name": "fact_checker_perplexity",
+      "line_start": 74,
+      "line_end": 74,
+      "file_path": "README.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.8,
+      "issue_type": "",
+      "found_text": "_В JavaScript есть 8 основных типов данных_ | Большинство современных источников по JavaScript (MDN, современные учебники, курсы) указывают наличие 8 типов данных: number, string, boolean, null, undefined, symbol, bigint и object. Однако ряд устаревших или менее точных материалов (в т.ч. часть русскоязычных описаний и видео) до сих пор говорит о 6 или 7 типах, пропуская bigint или считая null/undefined особыми, а не полноценными типами. В ECMAScript (стандарт) типов данных 8, поэтому, технически формулировка «есть 8 основных типов данных» актуальна, но требует уточнения: какие именно типы и что bigint появился в ES2020. | Обновите формулировку в README.md, явно перечислив 8 типов: number, string, boolean, null, undefined, symbol, bigint и object, и уточните, что bigint добавлен в ES2020 и что все, кроме object, являются примитивами. Это устранит путаницу для читателей, знакомых с устаревшими источниками."
+    },
+    {
+      "finding_id": "fnd_e88182381a43",
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "project": "FEB1_JS.ID_883439-master",
+      "criterion": "correctness",
+      "checker_name": "fact_checker_perplexity",
+      "line_start": 81,
+      "line_end": 81,
+      "file_path": "README.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.98,
+      "issue_type": "",
+      "found_text": "*JavaScript является слабо типизированным или динамическим языком**. | JavaScript чаще всего характегеризуется как язык с *и* динамической, *и* слабой типизацией одновременно, а не как *либо* слабо типизированный, *либо* динамический. Утверждение из материалов частично корректно, но формулировка «слабо типизированным *или* динамическим» может быть введена в заблуждение: на практике используются оба описания; динамическая типизация касается выяснения типа во время выполнения, а слабая — свободного преобразования типов (coercion). Кроме того, «слабо типизированный язык» и «динамический язык» — разные, хотя и часто используемые в связке понятия. | Измените формулировку на что-то вроде: «JavaScript является языком с динамической и слабой типизацией. Это значит, что не нужно определять тип переменной заранее; тип определяется автоматически во время выполнения, а операции могут включать неявное преобразование типов». Это уточнит, что оба признака (динамичность и слабость типизации) присутствуют одновременно."
+    }
+  ],
+  "false_positive_items": [
+    {
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "criterion": "actuality"
+    },
+    {
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "criterion": "checklist_alignment"
+    },
+    {
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "criterion": "readability"
+    }
+  ],
+  "false_negative_items": [],
+  "project_mapping": {
+    "FEB1_js": "FEB1_JS.ID_883439-master"
+  },
+  "notes": [
+    "Основное сравнение выполняется на уровне атомарных ошибок: проект, критерий, строка/диапазон и текст.",
+    "В строгую метрику не входят диагностические строки: низкоуверенные unknown, непроверенные ссылки и общие ресурсные предупреждения без имени файла.",
+    "Старая метрика проект × критерий сохранена только как обзорная в overview_* полях.",
+    "Excel-разметка нормализуется эвристически из колонок 'Проблема' и 'Детали'."
+  ]
+}

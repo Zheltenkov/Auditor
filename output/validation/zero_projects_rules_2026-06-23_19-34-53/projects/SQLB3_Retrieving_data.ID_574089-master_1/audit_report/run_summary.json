@@ -1,0 +1,76 @@
+{
+  "started_at": "2026-06-23T19:35:00.704432Z",
+  "finished_at": "2026-06-23T19:35:01.103706Z",
+  "input_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-34-53\\SQLB3_Retrieving_data.ID_574089-master_1",
+  "units_total": 1,
+  "files_total": 7,
+  "findings_total": 19,
+  "affected_units_total": 1,
+  "by_severity": {
+    "minor": 4,
+    "major": 13,
+    "info": 2
+  },
+  "by_criterion": {
+    "rights": 2,
+    "correctness": 11,
+    "actuality": 2,
+    "image_quality": 2,
+    "checklist_alignment": 2
+  },
+  "by_branch": {
+    "SQLB3_Retrieving_data.ID_574089-master (1)": 19
+  },
+  "by_unit": {
+    "sqlb3_retrieving_data_id_574089_master__366810d2": 19
+  },
+  "model_usage": {
+    "calls_total": 0,
+    "cache_hits": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "total_tokens": 0,
+    "cost_usd": 0.0,
+    "by_model": {}
+  },
+  "prompt_versions": {},
+  "steps": [
+    {
+      "name": "Загрузка файлов",
+      "status": "ok",
+      "started_at": "2026-06-23T19:35:00.704437Z",
+      "finished_at": "2026-06-23T19:35:00.716236Z",
+      "duration_ms": 11,
+      "detail": "Единиц: 1"
+    },
+    {
+      "name": "Подготовка проверок",
+      "status": "ok",
+      "started_at": "2026-06-23T19:35:00.716284Z",
+      "finished_at": "2026-06-23T19:35:00.721614Z",
+      "duration_ms": 5,
+      "detail": "Модулей: 19, совпадений кода: 0"
+    },
+    {
+      "name": "Извлечение и проверки",
+      "status": "ok",
+      "started_at": "2026-06-23T19:35:00.721666Z",
+      "finished_at": "2026-06-23T19:35:01.099992Z",
+      "duration_ms": 378,
+      "detail": "Сущностей: 106"
+    },
+    {
+      "name": "Сборка отчёта",
+      "status": "ok",
+      "started_at": "2026-06-23T19:35:01.100040Z",
+      "finished_at": "2026-06-23T19:35:01.103622Z",
+      "duration_ms": 3,
+      "detail": "Случаев: 19"
+    }
+  ],
+  "model_used": false,
+  "network_used": false,
+  "warnings": [
+    "Постобработка: 52 языковых дублей схлопнуты в базовые строки."
+  ]
+}

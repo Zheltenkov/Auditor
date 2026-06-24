@@ -1,0 +1,515 @@
+{
+  "evaluated_criteria": [
+    "correctness"
+  ],
+  "gold_total": 5,
+  "predicted_total": 3,
+  "true_positive": 0,
+  "false_positive": 3,
+  "false_negative": 5,
+  "precision": 0.0,
+  "recall": 0.0,
+  "f1_score": 0.0,
+  "macro_precision": 0.0,
+  "macro_recall": 0.0,
+  "macro_f1_score": 0.0,
+  "overview_gold_total": 1,
+  "overview_predicted_total": 7,
+  "overview_true_positive": 1,
+  "overview_false_positive": 6,
+  "overview_false_negative": 0,
+  "overview_precision": 0.1429,
+  "overview_recall": 1.0,
+  "overview_f1_score": 0.2501,
+  "overview_macro_precision": 0.1429,
+  "overview_macro_recall": 0.1429,
+  "overview_macro_f1_score": 0.1429,
+  "gold_scope_predicted_total": 3,
+  "gold_scope_true_positive": 0,
+  "gold_scope_false_positive": 3,
+  "gold_scope_false_negative": 5,
+  "gold_scope_precision": 0.0,
+  "gold_scope_recall": 0.0,
+  "gold_scope_f1_score": 0.0,
+  "gold_scope_macro_precision": 0.0,
+  "gold_scope_macro_recall": 0.0,
+  "gold_scope_macro_f1_score": 0.0,
+  "per_criterion": [
+    {
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_total": 5,
+      "predicted_total": 3,
+      "true_positive": 0,
+      "false_positive": 3,
+      "false_negative": 5,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    }
+  ],
+  "overview_per_criterion": [
+    {
+      "criterion": "actuality",
+      "label": "Актуальность",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "checklist_alignment",
+      "label": "Соответствие заданий проекта чек-листу",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_total": 1,
+      "predicted_total": 1,
+      "true_positive": 1,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0
+    },
+    {
+      "criterion": "image_quality",
+      "label": "Качество изображений",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "market_fit",
+      "label": "Соответствие рынку",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "readability",
+      "label": "Грамотность и читаемость текста",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "rights",
+      "label": "Оригинальность и права использования ресурсов",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    }
+  ],
+  "checker_metrics": [
+    {
+      "slice_name": "curriculum_relevance_checker",
+      "label": "curriculum_relevance_checker",
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "precision": 0.0,
+      "false_positive_share": 0.3333
+    },
+    {
+      "slice_name": "fact_checker_perplexity",
+      "label": "fact_checker_perplexity",
+      "predicted_total": 2,
+      "true_positive": 0,
+      "false_positive": 2,
+      "precision": 0.0,
+      "false_positive_share": 0.6667
+    }
+  ],
+  "checker_group_metrics": [
+    {
+      "slice_name": "factcheck",
+      "label": "Фактчек и актуальность",
+      "predicted_total": 2,
+      "true_positive": 0,
+      "false_positive": 2,
+      "precision": 0.0,
+      "false_positive_share": 0.6667
+    },
+    {
+      "slice_name": "methodology",
+      "label": "Методические критерии",
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "precision": 0.0,
+      "false_positive_share": 0.3333
+    }
+  ],
+  "actionable_metrics": {
+    "slice_name": "actionable",
+    "label": "Действенные находки",
+    "predicted_total": 0,
+    "true_positive": 0,
+    "false_positive": 0,
+    "precision": 0.0,
+    "false_positive_share": 0.0
+  },
+  "cost_quality": {
+    "model_calls": 27,
+    "cache_hits": 0,
+    "total_tokens": 37221,
+    "cost_usd": 0.092189,
+    "cost_per_gold_true_positive": null,
+    "cost_per_prediction": 0.001418,
+    "cost_per_actionable_true_positive": null
+  },
+  "false_negative_reason_counts": {
+    "model_possible": 5
+  },
+  "false_negative_analysis": [
+    {
+      "project": "t05d08-id_239624-master",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_line_range": "",
+      "gold_text": "[Quest 4]: Противоречие, написано в задаче: \"\"Функции должны быть компактными и простыми, и занимать не более 20-30 строк кода.==\"\", а в принципах структурного программирования 40-50 строк.",
+      "nearest_finding_id": "fnd_038883be3181",
+      "nearest_checker": "fact_checker_perplexity",
+      "nearest_match_type": "criterion_only",
+      "nearest_score": 0.15,
+      "reason_code": "model_possible",
+      "reason_label": "Нужен смысловой анализ",
+      "next_step": "Добавить модельный/семантический слой с проверяемым JSON-контрактом и примерами."
+    },
+    {
+      "project": "t05d08-id_239624-master",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_line_range": "",
+      "gold_text": "[Общее]: Можно добавить информацию о передачи аргументов в функцию по ссылки или значению в list.",
+      "nearest_finding_id": "fnd_e5c1aa6b2324",
+      "nearest_checker": "curriculum_relevance_checker",
+      "nearest_match_type": "criterion_only",
+      "nearest_score": 0.2143,
+      "reason_code": "model_possible",
+      "reason_label": "Нужен смысловой анализ",
+      "next_step": "Добавить модельный/семантический слой с проверяемым JSON-контрактом и примерами."
+    },
+    {
+      "project": "t05d08-id_239624-master",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_line_range": "",
+      "gold_text": "[Общее]: Упор при знакомстве с указателями и массивами лучше делать на операции с ними такие как извлечению и получению данных и на простых алгоритмах, меньше математических функций. Указатели сложная тема для понимания.",
+      "nearest_finding_id": "fnd_e5c1aa6b2324",
+      "nearest_checker": "curriculum_relevance_checker",
+      "nearest_match_type": "criterion_only",
+      "nearest_score": 0.2143,
+      "reason_code": "model_possible",
+      "reason_label": "Нужен смысловой анализ",
+      "next_step": "Добавить модельный/семантический слой с проверяемым JSON-контрактом и примерами."
+    },
+    {
+      "project": "t05d08-id_239624-master",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_line_range": "",
+      "gold_text": "[Общее]: Задача разбора потока данных является стандартной, но не в том виде, в котором представлены примеры.",
+      "nearest_finding_id": "fnd_e5c1aa6b2324",
+      "nearest_checker": "curriculum_relevance_checker",
+      "nearest_match_type": "criterion_only",
+      "nearest_score": 0.2,
+      "reason_code": "model_possible",
+      "reason_label": "Нужен смысловой анализ",
+      "next_step": "Добавить модельный/семантический слой с проверяемым JSON-контрактом и примерами."
+    },
+    {
+      "project": "t05d08-id_239624-master",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_line_range": "",
+      "gold_text": "[Общее]: Нет упоминание, что такое define и include и что такое препроцессинг.",
+      "nearest_finding_id": "fnd_e5c1aa6b2324",
+      "nearest_checker": "curriculum_relevance_checker",
+      "nearest_match_type": "criterion_only",
+      "nearest_score": 0.2222,
+      "reason_code": "model_possible",
+      "reason_label": "Нужен смысловой анализ",
+      "next_step": "Добавить модельный/семантический слой с проверяемым JSON-контрактом и примерами."
+    }
+  ],
+  "gold_items": [
+    {
+      "row_number": 2,
+      "raw_project": "T05D08",
+      "matched_project": "t05d08-id_239624-master",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "raw_problem": "ошибка в задании",
+      "details": "\"*[Quest 4]: Противоречие, написано в задаче: \"\"Функции должны быть компактными и простыми, и занимать не более 20-30 строк кода.==\"\", а в принципах структурного программирования 40-50 строк.\n*[Общее]: Можно добавить информацию о передачи аргументов в функцию по ссылки или значению в list.\n*[Общее]: Упор при знакомстве с указателями и массивами лучше делать на операции с ними такие как извлечению и получению данных и на простых алгоритмах, меньше математических функций. Указатели сложная тема для понимания.\n*[Общее]: Задача разбора потока данных является стандартной, но не в том виде, в котором представлены примеры. \n*[Общее]: Нет упоминание, что такое define и include и что такое препроцессинг.\"",
+      "criteria": [
+        "correctness"
+      ]
+    }
+  ],
+  "gold_cases": [
+    {
+      "case_id": "gold_2_correctness_1",
+      "row_number": 2,
+      "raw_project": "T05D08",
+      "matched_project": "t05d08-id_239624-master",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "correctness",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "[Quest 4]: Противоречие, написано в задаче: \"\"Функции должны быть компактными и простыми, и занимать не более 20-30 строк кода.==\"\", а в принципах структурного программирования 40-50 строк."
+    },
+    {
+      "case_id": "gold_2_correctness_2",
+      "row_number": 2,
+      "raw_project": "T05D08",
+      "matched_project": "t05d08-id_239624-master",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "correctness",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "[Общее]: Можно добавить информацию о передачи аргументов в функцию по ссылки или значению в list."
+    },
+    {
+      "case_id": "gold_2_correctness_3",
+      "row_number": 2,
+      "raw_project": "T05D08",
+      "matched_project": "t05d08-id_239624-master",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "correctness",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "[Общее]: Упор при знакомстве с указателями и массивами лучше делать на операции с ними такие как извлечению и получению данных и на простых алгоритмах, меньше математических функций. Указатели сложная тема для понимания."
+    },
+    {
+      "case_id": "gold_2_correctness_4",
+      "row_number": 2,
+      "raw_project": "T05D08",
+      "matched_project": "t05d08-id_239624-master",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "correctness",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "[Общее]: Задача разбора потока данных является стандартной, но не в том виде, в котором представлены примеры."
+    },
+    {
+      "case_id": "gold_2_correctness_5",
+      "row_number": 2,
+      "raw_project": "T05D08",
+      "matched_project": "t05d08-id_239624-master",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "correctness",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "[Общее]: Нет упоминание, что такое define и include и что такое препроцессинг."
+    }
+  ],
+  "matches": [
+    {
+      "project": "t05d08-id_239624-master",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "[Quest 4]: Противоречие, написано в задаче: \"\"Функции должны быть компактными и простыми, и занимать не более 20-30 строк кода.==\"\", а в принципах структурного программирования 40-50 строк.",
+      "found_finding_id": "fnd_038883be3181",
+      "found_checker": "fact_checker_perplexity",
+      "found_line_range": "README.md:74",
+      "found_text": ">In 1955, Soviet computer scientist Kateryna Yushchenko invented the Address programming language that made possible indirect addressing and addresses of the highest rank – analogous to pointers. | Kateryna Yushchenko indeed created the Address programming language (Адресна мова програмування) around 1954–1955, and it did feature indirect addressing and high‑rank address operations that are conceptually analogous to modern pointers. Multiple sources (Wikipedia, ICFCST, NAS Ukraine, and the Open University) state that she developed the Address language in 1955, and that it introduced indirect addressing and high‑rank addresses, which are described as precursors to pointers. However, the phrasing 'invented the Address programming language in 1955' is slightly imprecise: sources indicate that the concept and formal language were developed in 1954, and the practical language/work was carried out in 1955, often in collaboration with Vladimir Korolyuk. Thus the claim is essentially correct in spirit but slightly oversimplified in attribution and dating. | Use wording that acknowledges the collaborative and incremental nature of the development, e.g.: 'In 1954–1955, Ukrainian (Soviet) computer scientist Kateryna Yushchenko, together with Vladimir Korolyuk, developed the Address programming language, which introduced indirect addressing and high‑rank addresses analogous to modern pointers.' This improves historical accuracy while keeping the core point clear.",
+      "match_type": "criterion_only",
+      "match_score": 0.15,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    },
+    {
+      "project": "t05d08-id_239624-master",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "[Общее]: Можно добавить информацию о передачи аргументов в функцию по ссылки или значению в list.",
+      "found_finding_id": "fnd_e5c1aa6b2324",
+      "found_checker": "curriculum_relevance_checker",
+      "found_line_range": "README.md:54",
+      "found_text": "The terminal shows a single line: Segmentation fault, and a blinking cursor. | Проект явно строится вокруг отладки падения программы и работы с указателями, но в представленном фрагменте нет явного учебного акцента на том, как диагностировать причину segfault (например, через отладчик, просмотр стека/адресов, пошаговое выполнение). Для новичка это может быть ключевой недостающей темой. | Добавить в вводную часть краткий учебный блок о базовой диагностике segfault: запуск под отладчиком, получение backtrace, проверка указателей и мест записи/чтения памяти. | missing_key_topic",
+      "match_type": "criterion_only",
+      "match_score": 0.2143,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    },
+    {
+      "project": "t05d08-id_239624-master",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "[Общее]: Упор при знакомстве с указателями и массивами лучше делать на операции с ними такие как извлечению и получению данных и на простых алгоритмах, меньше математических функций. Указатели сложная тема для понимания.",
+      "found_finding_id": "fnd_e5c1aa6b2324",
+      "found_checker": "curriculum_relevance_checker",
+      "found_line_range": "README.md:54",
+      "found_text": "The terminal shows a single line: Segmentation fault, and a blinking cursor. | Проект явно строится вокруг отладки падения программы и работы с указателями, но в представленном фрагменте нет явного учебного акцента на том, как диагностировать причину segfault (например, через отладчик, просмотр стека/адресов, пошаговое выполнение). Для новичка это может быть ключевой недостающей темой. | Добавить в вводную часть краткий учебный блок о базовой диагностике segfault: запуск под отладчиком, получение backtrace, проверка указателей и мест записи/чтения памяти. | missing_key_topic",
+      "match_type": "criterion_only",
+      "match_score": 0.2143,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    },
+    {
+      "project": "t05d08-id_239624-master",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "[Общее]: Задача разбора потока данных является стандартной, но не в том виде, в котором представлены примеры.",
+      "found_finding_id": "fnd_e5c1aa6b2324",
+      "found_checker": "curriculum_relevance_checker",
+      "found_line_range": "README.md:54",
+      "found_text": "The terminal shows a single line: Segmentation fault, and a blinking cursor. | Проект явно строится вокруг отладки падения программы и работы с указателями, но в представленном фрагменте нет явного учебного акцента на том, как диагностировать причину segfault (например, через отладчик, просмотр стека/адресов, пошаговое выполнение). Для новичка это может быть ключевой недостающей темой. | Добавить в вводную часть краткий учебный блок о базовой диагностике segfault: запуск под отладчиком, получение backtrace, проверка указателей и мест записи/чтения памяти. | missing_key_topic",
+      "match_type": "criterion_only",
+      "match_score": 0.2,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    },
+    {
+      "project": "t05d08-id_239624-master",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "[Общее]: Нет упоминание, что такое define и include и что такое препроцессинг.",
+      "found_finding_id": "fnd_e5c1aa6b2324",
+      "found_checker": "curriculum_relevance_checker",
+      "found_line_range": "README.md:54",
+      "found_text": "The terminal shows a single line: Segmentation fault, and a blinking cursor. | Проект явно строится вокруг отладки падения программы и работы с указателями, но в представленном фрагменте нет явного учебного акцента на том, как диагностировать причину segfault (например, через отладчик, просмотр стека/адресов, пошаговое выполнение). Для новичка это может быть ключевой недостающей темой. | Добавить в вводную часть краткий учебный блок о базовой диагностике segfault: запуск под отладчиком, получение backtrace, проверка указателей и мест записи/чтения памяти. | missing_key_topic",
+      "match_type": "criterion_only",
+      "match_score": 0.2222,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    }
+  ],
+  "detailed_false_positive_items": [
+    {
+      "finding_id": "fnd_679888ad7b0c",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "project": "t05d08-id_239624-master",
+      "criterion": "correctness",
+      "checker_name": "fact_checker_perplexity",
+      "line_start": 21,
+      "line_end": 21,
+      "file_path": "materials/from_developers.txt",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.85,
+      "issue_type": "",
+      "found_text": "Remember that each task undergoes a series of checks: code style check, static analyzer check, check for correct work with memory, check with a set of autotests, check with a checklist. | Many modern software development workflows do include a sequence of automated checks (style, static analysis, memory‑related issues, tests, and manual checklist‑based reviews), which aligns with the general idea in the statement. Tools such as linters, static analyzers (e.g., SonarQube, Clang analyzer, Cppcheck), unit/integration testing frameworks, and checklists are commonly combined to gate code changes. However, the phrase ‘each task undergoes a series of checks: code style check, static analyzer check, check for correct work with memory, check with a set of autotests, check with a checklist’ sounds prescriptive and implies a fixed, universal pipeline rather than a team‑ or project‑specific practice. In reality, the exact set and order of checks depends on the project, language, and tooling, and not all teams explicitly separate ‘check for correct work with memory’ as a distinct phase; it may be covered within static analysis or runtime tools instead. Thus, the statement is broadly reasonable but overgeneralized. | Clarify that this is a typical or recommended set of checks for your project, not a universal rule for all tasks. You could rephrase to something like: ‘Remember that, in our process, each task undergoes a series of checks: a code style check, a static analyzer check, a check for correct memory usage, verification with a set of autotests, and review against a code review checklist. Be careful.’"
+    },
+    {
+      "finding_id": "fnd_e5c1aa6b2324",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "project": "t05d08-id_239624-master",
+      "criterion": "correctness",
+      "checker_name": "curriculum_relevance_checker",
+      "line_start": 54,
+      "line_end": 54,
+      "file_path": "README.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.95,
+      "issue_type": "missing_key_topic",
+      "found_text": "The terminal shows a single line: Segmentation fault, and a blinking cursor. | Проект явно строится вокруг отладки падения программы и работы с указателями, но в представленном фрагменте нет явного учебного акцента на том, как диагностировать причину segfault (например, через отладчик, просмотр стека/адресов, пошаговое выполнение). Для новичка это может быть ключевой недостающей темой. | Добавить в вводную часть краткий учебный блок о базовой диагностике segfault: запуск под отладчиком, получение backtrace, проверка указателей и мест записи/чтения памяти. | missing_key_topic"
+    },
+    {
+      "finding_id": "fnd_038883be3181",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "project": "t05d08-id_239624-master",
+      "criterion": "correctness",
+      "checker_name": "fact_checker_perplexity",
+      "line_start": 74,
+      "line_end": 74,
+      "file_path": "README.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.9,
+      "issue_type": "",
+      "found_text": ">In 1955, Soviet computer scientist Kateryna Yushchenko invented the Address programming language that made possible indirect addressing and addresses of the highest rank – analogous to pointers. | Kateryna Yushchenko indeed created the Address programming language (Адресна мова програмування) around 1954–1955, and it did feature indirect addressing and high‑rank address operations that are conceptually analogous to modern pointers. Multiple sources (Wikipedia, ICFCST, NAS Ukraine, and the Open University) state that she developed the Address language in 1955, and that it introduced indirect addressing and high‑rank addresses, which are described as precursors to pointers. However, the phrasing 'invented the Address programming language in 1955' is slightly imprecise: sources indicate that the concept and formal language were developed in 1954, and the practical language/work was carried out in 1955, often in collaboration with Vladimir Korolyuk. Thus the claim is essentially correct in spirit but slightly oversimplified in attribution and dating. | Use wording that acknowledges the collaborative and incremental nature of the development, e.g.: 'In 1954–1955, Ukrainian (Soviet) computer scientist Kateryna Yushchenko, together with Vladimir Korolyuk, developed the Address programming language, which introduced indirect addressing and high‑rank addresses analogous to modern pointers.' This improves historical accuracy while keeping the core point clear."
+    }
+  ],
+  "false_positive_items": [
+    {
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "actuality"
+    },
+    {
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "checklist_alignment"
+    },
+    {
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "image_quality"
+    },
+    {
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "market_fit"
+    },
+    {
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "readability"
+    },
+    {
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "rights"
+    }
+  ],
+  "false_negative_items": [],
+  "project_mapping": {
+    "T05D08": "t05d08-id_239624-master"
+  },
+  "notes": [
+    "Основное сравнение выполняется на уровне атомарных ошибок: проект, критерий, строка/диапазон и текст.",
+    "В строгую метрику не входят диагностические строки: низкоуверенные unknown, непроверенные ссылки и общие ресурсные предупреждения без имени файла.",
+    "Старая метрика проект × критерий сохранена только как обзорная в overview_* полях.",
+    "Excel-разметка нормализуется эвристически из колонок 'Проблема' и 'Детали'."
+  ]
+}

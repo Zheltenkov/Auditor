@@ -1,0 +1,3 @@
+﻿criterion,label,gold_total,predicted_total,true_positive,false_positive,false_negative,precision,recall,f1_score
+correctness,Точность и корректность,1,1,0,1,1,0.0,0.0,0.0
+readability,Грамотность и читаемость текста,2,1,0,1,2,0.0,0.0,0.0

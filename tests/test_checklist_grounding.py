@@ -38,6 +38,27 @@ ORDER BY 1, 2, 3
     assert issues[0].evidence == "p1.id > p2.id"
 
 
+def test_grounding_flags_use_case_filename_variant_with_markdown_escaped_readme() -> None:
+    readme = r"""
+## Exercise 00
+
+The answers must be in the file ex00\_<product prefix>\_UC.docx.
+"""
+    questions = [
+        ChecklistQuestion(
+            name="Exercise 00 — Description of Use Cases",
+            description_text="The answers are in the file `ex00_<product prefix>_use case.docx`.",
+        )
+    ]
+
+    issues = assess_checklist_grounding(questions, readme)
+
+    assert len(issues) == 1
+    assert issues[0].issue_type == "expected_file_name_mismatch"
+    assert "use case.docx" in issues[0].evidence
+    assert "UC.docx" in issues[0].evidence
+
+
 def test_grounding_does_not_flag_self_join_order_when_readme_mentions_it() -> None:
     readme = """
 ## Exercise 10
@@ -119,6 +140,27 @@ Prepare the use case document `xxx_usecase.dox`.
     assert len(issues) == 1
     assert issues[0].issue_type == "expected_file_name_mismatch"
     assert issues[0].evidence == "xxx_UC.dox vs xxx_usecase.dox"
+
+
+def test_grounding_reads_cyrillic_placeholder_file_refs() -> None:
+    readme = """
+## Exercise 00
+
+Распиши свои ответы в файле ex00\\_<префикс продукта>\\_UC.docx.
+"""
+    questions = [
+        ChecklistQuestion(
+            name="Exercise 00",
+            description_text="The answers are in the file `ex00_<product prefix>_use case.docx`.",
+        )
+    ]
+
+    issues = assess_checklist_grounding(questions, readme)
+
+    assert len(issues) == 1
+    assert issues[0].issue_type == "expected_file_name_mismatch"
+    assert issues[0].evidence == "ex00_<product prefix>_use case.docx vs ex00_<префикс продукта>_UC.docx"
+
 
 
 def test_grounding_does_not_flag_attached_resource() -> None:

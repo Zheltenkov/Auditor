@@ -1,0 +1,101 @@
+{
+  "started_at": "2026-06-23T18:08:04.395060Z",
+  "finished_at": "2026-06-23T18:09:38.868506Z",
+  "input_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\per_project_llm_metrics_2026-06-23_17-55-48\\BSA13_RequirementsManagements.ID_1361460-master",
+  "units_total": 1,
+  "files_total": 8,
+  "findings_total": 45,
+  "affected_units_total": 1,
+  "by_severity": {
+    "info": 1,
+    "minor": 43,
+    "major": 1
+  },
+  "by_criterion": {
+    "correctness": 2,
+    "readability": 37,
+    "image_quality": 2,
+    "market_fit": 1,
+    "rights": 1,
+    "actuality": 1,
+    "checklist_alignment": 1
+  },
+  "by_branch": {
+    "BSA13_RequirementsManagements.ID_1361460-master": 45
+  },
+  "by_unit": {
+    "bsa13_requirementsmanagements_id_1361460_master__a41877f1": 45
+  },
+  "model_usage": {
+    "calls_total": 17,
+    "cache_hits": 2,
+    "prompt_tokens": 24389,
+    "completion_tokens": 4661,
+    "total_tokens": 29050,
+    "cost_usd": 0.0477135,
+    "by_model": {
+      "openai/gpt-5.4-mini": {
+        "calls_total": 15,
+        "prompt_tokens": 23522,
+        "completion_tokens": 4156,
+        "total_tokens": 27678,
+        "cost_usd": 0.0363435
+      },
+      "perplexity/sonar": {
+        "calls_total": 2,
+        "prompt_tokens": 867,
+        "completion_tokens": 505,
+        "total_tokens": 1372,
+        "cost_usd": 0.01137
+      }
+    }
+  },
+  "prompt_versions": {
+    "spelling_wording_checker": "spelling_wording_checker:v1",
+    "market_fit_checker": "market_fit_checker:v1",
+    "tech_freshness_checker": "tech_freshness_checker:v1",
+    "readme_fact_actuality_checker": "readme_fact_actuality_checker:v1",
+    "fact_checker_perplexity": "fact_checker_perplexity:v1",
+    "curriculum_relevance_checker": "curriculum_relevance_checker:v1",
+    "model_rubric_checker": "model_rubric_checker:v1"
+  },
+  "steps": [
+    {
+      "name": "Загрузка файлов",
+      "status": "ok",
+      "started_at": "2026-06-23T18:08:04.395063Z",
+      "finished_at": "2026-06-23T18:08:04.402883Z",
+      "duration_ms": 7,
+      "detail": "Единиц: 1"
+    },
+    {
+      "name": "Подготовка проверок",
+      "status": "ok",
+      "started_at": "2026-06-23T18:08:04.402905Z",
+      "finished_at": "2026-06-23T18:08:04.412717Z",
+      "duration_ms": 9,
+      "detail": "Модулей: 22, совпадений кода: 0"
+    },
+    {
+      "name": "Извлечение и проверки",
+      "status": "ok",
+      "started_at": "2026-06-23T18:08:04.412759Z",
+      "finished_at": "2026-06-23T18:09:38.862646Z",
+      "duration_ms": 94449,
+      "detail": "Сущностей: 24"
+    },
+    {
+      "name": "Сборка отчёта",
+      "status": "ok",
+      "started_at": "2026-06-23T18:09:38.862661Z",
+      "finished_at": "2026-06-23T18:09:38.868414Z",
+      "duration_ms": 5,
+      "detail": "Случаев: 45"
+    }
+  ],
+  "model_used": true,
+  "network_used": true,
+  "warnings": [
+    "Постобработка: 5 языковых дублей схлопнуты в базовые строки."
+  ]
+}

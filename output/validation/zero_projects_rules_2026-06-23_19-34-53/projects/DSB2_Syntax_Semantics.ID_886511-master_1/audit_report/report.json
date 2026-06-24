@@ -1,0 +1,1380 @@
+{
+  "summary": {
+    "started_at": "2026-06-23T19:34:57.874922Z",
+    "finished_at": "2026-06-23T19:34:58.180997Z",
+    "input_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-34-53\\DSB2_Syntax_Semantics.ID_886511-master_1",
+    "units_total": 1,
+    "files_total": 7,
+    "findings_total": 11,
+    "affected_units_total": 1,
+    "by_severity": {
+      "major": 3,
+      "minor": 4,
+      "info": 4
+    },
+    "by_criterion": {
+      "correctness": 3,
+      "market_fit": 1,
+      "actuality": 4,
+      "readability": 1,
+      "checklist_alignment": 1,
+      "rights": 1
+    },
+    "by_branch": {
+      "DSB2_Syntax_Semantics.ID_886511-master (1)": 11
+    },
+    "by_unit": {
+      "dsb2_syntax_semantics_id_886511_master__c68318a6": 11
+    },
+    "model_usage": {
+      "calls_total": 0,
+      "cache_hits": 0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "by_model": {}
+    },
+    "prompt_versions": {},
+    "steps": [
+      {
+        "name": "Загрузка файлов",
+        "status": "ok",
+        "started_at": "2026-06-23T19:34:57.874925Z",
+        "finished_at": "2026-06-23T19:34:57.885742Z",
+        "duration_ms": 10,
+        "detail": "Единиц: 1"
+      },
+      {
+        "name": "Подготовка проверок",
+        "status": "ok",
+        "started_at": "2026-06-23T19:34:57.885771Z",
+        "finished_at": "2026-06-23T19:34:57.893122Z",
+        "duration_ms": 7,
+        "detail": "Модулей: 19, совпадений кода: 0"
+      },
+      {
+        "name": "Извлечение и проверки",
+        "status": "ok",
+        "started_at": "2026-06-23T19:34:57.893165Z",
+        "finished_at": "2026-06-23T19:34:58.178744Z",
+        "duration_ms": 285,
+        "detail": "Сущностей: 62"
+      },
+      {
+        "name": "Сборка отчёта",
+        "status": "ok",
+        "started_at": "2026-06-23T19:34:58.178784Z",
+        "finished_at": "2026-06-23T19:34:58.180942Z",
+        "duration_ms": 2,
+        "detail": "Случаев: 11"
+      }
+    ],
+    "model_used": false,
+    "network_used": false,
+    "warnings": [
+      "Постобработка: 5 языковых дублей схлопнуты в базовые строки."
+    ]
+  },
+  "units": [
+    {
+      "unit_id": "dsb2_syntax_semantics_id_886511_master__c68318a6",
+      "name": "DSB2_Syntax_Semantics.ID_886511-master",
+      "root_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-34-53\\DSB2_Syntax_Semantics.ID_886511-master_1\\DSB2_Syntax_Semantics.ID_886511-master (1)\\DSB2_Syntax_Semantics.ID_886511-master",
+      "relative_path": "DSB2_Syntax_Semantics.ID_886511-master (1)/DSB2_Syntax_Semantics.ID_886511-master",
+      "branch": "DSB2_Syntax_Semantics.ID_886511-master (1)",
+      "files": [
+        {
+          "relative_path": "CHANGELOG",
+          "absolute_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-34-53\\DSB2_Syntax_Semantics.ID_886511-master_1\\DSB2_Syntax_Semantics.ID_886511-master (1)\\DSB2_Syntax_Semantics.ID_886511-master\\CHANGELOG",
+          "kind": "text",
+          "text": "",
+          "size_bytes": 0
+        },
+        {
+          "relative_path": "check-list.yml",
+          "absolute_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-34-53\\DSB2_Syntax_Semantics.ID_886511-master_1\\DSB2_Syntax_Semantics.ID_886511-master (1)\\DSB2_Syntax_Semantics.ID_886511-master\\check-list.yml",
+          "kind": "checklist",
+          "text": "introduction: >\n  - School 21 methodology only makes sense if peer-to-peer reviews are taken seriously. Please read all the guidelines carefully before starting the review.\n\n  - Please remain courteous, polite, respectful, and constructive in all communications during this review.\n\n  - Point out possible flaws in the person's work and take the time to discuss and debate them.\n\n  - Keep in mind that sometimes there may be differences in interpretation of tasks and scope of functionality. Please remain open to each other's vision.\nguidelines: >\n  - Evaluate only the files located in the src folder of the student's or group's GIT repository.\n\n  - If you have not finished the project yet, it is compulsory to read the entire instruction before starting the review. \n\n  - Ensure to start reviewing a group project only when the team is present in full.\n\n  - Use special flags in the checklist to report, for example, \"empty work\" if the repository does not contain the student's (or group's) work in the src folder of the develop branch, or \"cheat\" in the case of cheating, or if the student (or group) is unable to explain their work at any time during the review, or if any of the items below are not met. However, except in cases of cheating, you are encouraged to continue reviewing the project to identify the problems that caused the situation so that they can be avoided in the next review.\n\n  - Double check that the GIT repository is the one corresponding to the student or group.\n\n  - Carefully check that nothing malicious has been used to fool you.\n\n  - In controversial cases, remember that the checklist determines only the general order of the check. The final decision on project evaluation remains with the reviewer.\n\nquick_actions:\n  - EMPTY_WORK\n  - CHEAT\nlanguage: en\nname: Day01\ncomment: \"\"\nsections:\n\n  - kind: \"1\"\n    name: Main part\n    description: \"\"\n    questions:\n      - name: Exercise 00. Data types\n        description: >\n          - Does the file `data_types.py` exist in the repository directory?\n\n          - Is the output strictly identical to the subject?\n\n          - Is the output not explicitly written in the code?\n\n          - In all other cases, the test is failed.\n\n        rating: \"6\"\n\n      - name: Exercise 01. Working with files\n        description: >\n          - Does the file `read_and_write.py` exist in the repository directory?\n\n          - Run the script on the attached file `ds.csv`. Does the output have a delimiter \"\\t\" other than a comma?\n\n          - Ask to add a line to the file with a value containing a comma. Does the script skip it for replacement?\n\n          - Is the output not explicitly written in the code?\n\n        rating: \"6\"\n\n      - name: Exercise 02. Search by key\n        description: >\n          - Does the file `stock_prices.py` exist in the repository directory?\n\n          - If no argument is given, does the program show nothing and exit properly?\n\n          - If an empty string is given as an argument, does the program show \"Unknown company\"?\n\n          - If an invalid string is given as an argument (e.g., \"lolo\"), does the program show \"Unknown company\"?\n\n          - Does the program show the correct stock price when a valid company name is given?\n\n          - Try doing the same with lowercase and uppercase letters.\n\n          - Nothing except the authorized function is used to produce the result.\n\n          - Is the output not explicitly written in the code?\n\n        rating: \"6\"\n\n      - name: Exercise 03. Search by value and by key\n        description: >\n          - Does the file `ticker_symbol.py` exist in the repository directory?\n\n          - If no argument is given, does the program show nothing and exit properly?\n\n          - If an empty string is given as an argument, does the program show \"Unknown ticker\"?\n\n          - Does the program show \"Unknown ticker\" when an invalid string is given as an argument (e.g., \"pepe\")?\n\n          - Does the program show the correct company name and stock price when a valid ticker name is given?\n\n          - Try doing the same with lowercase and uppercase letters.\n\n          - Nothing except the authorized function is used to produce the result.\n\n          - Is the output not explicitly written in the code? \n\n        rating: \"6\"\n\n      - name: Exercise 04. Dictionaries\n        description: >\n          - Does the file `to_dictionary.py` exist in the repository directory?\n\n          - Does the script transform the list into a dictionary?\n\n          - Does the output conform to the expected format?\n\n          - Is the output not explicitly written in the code?\n\n          - In all other cases, the test is failed.\n\n          - Ask why the dictionary order is not necessarily identical to the example.\n\n          - The answer does not affect the validation of the exercise.\n\n        rating: \"6\"\n        \n      - name: Exercise 05. Search by value or by key\n        description: >\n          - Does the file `all_stocks.py` exist in the repository directory?\n\n          - If no argument is given, does the program show nothing and exit properly?\n\n          - If an invalid string is given (e.g., \"pepe\"), does the program show \"pepe is an unknown company or an unknown ticker symbol\"?\n\n          - If a valid ticker or company name is given, does the program show the correct company name or stock price (\"is a ticker symbol for\" or \"stock price is\")?\n\n          - Does the program behave correctly when given a valid ticker name, a valid company name, an invalid name, two commas in a row, or white space everywhere?\n\n          - Nothing except the authorized function is used to produce the result.\n\n          - Is the output not explicitly written in the code?\n\n        rating: \"6\"\n        \n      - name: Exercise 06. Sorting a dictionary\n        description: >\n          - Does the file `dict_sorter.py` exist in the repository directory?\n\n          - Does the program display the country names in the correct order by descending numbers?\n\n          - When the numbers are equal, are the country names shown in alphabetical order?\n\n          - Are the country names displayed one by one without numbers?\n\n          - If you change several country names and numbers in the dictionary, does it still show the correct output?\n\n          - Is the output not explicitly written in the code?\n\n        rating: \"6\"\n        \n      - name: Exercise 07. Sets\n        description: >\n          - Does the file `marketing.py` exist in the repository directory?\n\n          - Does the function `call_center` return the following: ['ted@mosby.com', 'bill_gates@live.com', 'mark@facebook.com', 'elon@paypal.com', 'jessica@gmail.com']?\n\n          - Does the function `potential_clients` return the following: ['walter@heisenberg.com', 'vasily@mail.ru', 'pinkman@yo.org', 'mr@robot.gov', and 'eleven@yahoo.com']?\n\n          - Does the function `loyalty_program` return the following: ['andrew@gmail.com', 'ted@mosby.com', 'john@snow.is', 'bill_gates@live.com', 'mark@facebook.com']?\n\n          - If the wrong name of the argument is given, is an exception raised?\n\n        rating: \"6\"\n        \n      - name: Exercise 08. Working with strings as lists\n        description: >\n          - Do the files `names_extractor.py` and letter_starter.py exist in the repository directory?\n\n          - Does `Names_extractor.py` create a file with the correct header and fields? Is the delimiter tab?\n\n          - Does `Letter_starter.py` create a text file with the correct person's name from the file?\n\n          - Does the script use f-strings instead of string.format()?\n\n        rating: \"6\"\n        \n      - name: Exercise 09. Caesar cipher\n        description: >\n          - Does the file `caesar.py` exist in the repository directory?\n\n          - Does the encoder correctly encode a given string and shift?\n\n          - Does the decoder correctly decode a given string and shift?\n\n          - Are numbers and special symbols not processed by the shift?\n\n          - Nothing except the authorized function is used to produce the result.\n\n          - When inputting strings with and without quotes, does the result still have quotes?\n\n          - When an incorrect number of arguments is given, does the program show an exception?\n\n          - Is the output not explicitly written in the code?\n\n        rating: \"6\"\n\n",
+          "size_bytes": 8348
+        },
+        {
+          "relative_path": "check-list_RUS.yml",
+          "absolute_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-34-53\\DSB2_Syntax_Semantics.ID_886511-master_1\\DSB2_Syntax_Semantics.ID_886511-master (1)\\DSB2_Syntax_Semantics.ID_886511-master\\check-list_RUS.yml",
+          "kind": "checklist",
+          "text": "introduction: >\n  - Методология «Школы 21» способна приводить к высоким образовательным результатам, только если peer-to-peer оценка производится максимально ответственно. Этот документ призван помочь тебе в этом. Пожалуйста, прочитай его внимательно.\n\n  - Будь доброжелательным, вежливым. Относись с уважением к другому человеку и проделанной им работе. Будь конструктивен, давая обратную связь.\n\n  - Проверяя работу другого, отмечай для себя спорные и потенциально неверные моменты. Обсуди их с автором решения. Возможно, неправ ты, а не он.\n\n  - Старайся быть открытым к другому мнению или способу интерпретировать задание.  Возможно, и твой подход, и подход другого — оба имеют право на жизнь.\nguidelines: >\n  - Подлежат оцениванию только те файлы, которые учащийся или группа выложили в GIT-репозиторий.\n\n  - Если ты ещё не закончил этот проект сам, перед проверкой обязательно перечитай всю инструкцию.\n\n  - Начинай проверку группового проекта только при полном составе команды.\n\n  - Ниже ты найдешь специальные теги для разных случаев: отсутствие решения, неработающее решение, плагиат. В этих случаях участник получает 0 баллов. В случае отсутствия плагиата мы призываем все равно продолжить проверку и попытаться вместе с другим учащимся выяснить проблему,приведшую к неработающему решению.\n\n  - Дважды проверь, что перед тобой именно репозиторий нужного учащегося или группы.\n\n  - Убедись, что тебя точно не пытались ввести в заблуждение каким бы то ни было способом.\n\n  - В спорных ситуациях помни: чек-лист задаёт лишь общий порядок проверки.  Итоговое решение по оценке остаётся за ревьюером.\nquick_actions:\n  - EMPTY_WORK\n  - CHEAT\nlanguage: ru\nname: Day01\ncomment: \"\"\nsections:\n  - kind: \"1\"\n    name: Основная часть\n    description: \"\"\n    questions:\n      - name: Упражнение 00. Типы данных\n        description: >\n          - Присутствует ли в каталоге репозитория файл data_types.py?\n\n          - Строго ли совпадает вывод с образцом из задания?\n\n          - Не прописан ли вывод явно в коде?\n\n          - Во всех остальных случаях тест считается проваленным.\n\n        rating: \"6\"\n\n      - name: Упражнение 01. Работа с файлами\n        description: >\n          - Присутствует ли в каталоге репозитория файл read_and_write.py?\n\n          - Запусти скрипт на приложенном файле ds.csv. Используется ли в выводе разделитель \"\\t\" вместо запятой?\n\n          - Попроси добавить в файл строку со значением, содержащим запятую. Пропускает ли скрипт такую запятую при замене (т.е. не портит данные)?\n\n          - Не прописан ли вывод явно в коде?\n\n        rating: \"6\"\n\n      - name: Упражнение 02. Поиск по ключу\n        description: >\n          - Присутствует ли в каталоге репозитория файл stock_prices.py?\n\n          - Если аргумент не передан, ничего ли программа не выводит и корректно ли завершается?\n\n          - Если передана пустая строка, выводит ли программа Unknown company?\n\n          - Если передана некорректная строка (например, lolo), выводит ли программа Unknown company?\n\n          - Выводит ли программа корректную цену акции при валидном названии компании?\n\n          - Проверь то же самое в разных регистрах (lowercase/UPPERCASE).\n\n          - Для получения результата не используется ничего, кроме разрешённых импорта/функций?\n\n          - Не прописан ли вывод явно в коде?\n\n        rating: \"6\"\n\n      - name: Упражнение 03. Поиск по значению и по ключу\n        description: >\n          - Присутствует ли в каталоге репозитория файл ticker_symbols.py?\n\n          - Если аргумент не передан, ничего ли программа не выводит и корректно ли завершается?\n\n          - Если передана пустая строка, выводит ли программа Unknown ticker?\n\n          - Если передана некорректная строка (например, pepe), выводит ли программа Unknown ticker?\n\n          - Выводит ли программа корректное название компании и цену акции при валидном тикере?\n\n          - Проверь то же самое в разных регистрах (lowercase/UPPERCASE).\n\n          - Для получения результата не используется ничего, кроме разрешённых импорта/функций?\n\n          - Не прописан ли вывод явно в коде?\n\n        rating: \"6\"\n\n      - name: Упражнение 04. Словари\n        description: >\n          - Присутствует ли в каталоге репозитория файл to_dictionary.py?\n\n          - Преобразует ли скрипт список в словарь?\n\n          - Соответствует ли вывод ожидаемому формату?\n\n          - Не прописан ли вывод явно в коде?\n\n          - Во всех остальных случаях тест считается проваленным.\n\n          - Спроси, почему порядок сортировки словаря не обязательно совпадает с примером. (Ответ не влияет на оценку)\n\n        rating: \"6\"\n\n      - name: Упражнение 05. Поиск по значению или по ключу\n        description: >\n          - Присутствует ли в каталоге репозитория файл all_stocks.py?\n\n          - Если аргумент не передан, ничего ли программа не выводит и корректно ли завершается?\n\n          - Если передана некорректная строка (например, pepe), выводит ли программа\n          pepe is an unknown company or an unknown ticker symbol?\n\n          - Если передан валидный тикер или название компании, показывает ли программа корректно\n          название компании или цену акции (строки вида is a ticker symbol for или stock price is)?\n\n          - Корректно ли программа ведёт себя в случаях: валидный тикер, валидное название компании, невалидное имя, две запятые подряд, везде только пробелы?\n\n          - Для получения результата не используется ничего, кроме разрешённых импорта/функций?\n\n          - Не прописан ли вывод явно в коде?\n\n        rating: \"6\"\n\n      - name: Упражнение 06. Сортировка словаря\n        description: >\n          - Присутствует ли в каталоге репозитория файл dict_sorter.py?\n\n          - Выводит ли программа названия стран в верном порядке по убыванию чисел?\n\n          - При равных числах показаны ли названия стран в алфавитном порядке?\n\n          - Выводятся ли названия стран по одному в строке, без чисел?\n\n          - Если изменить несколько названий стран и чисел в словаре, остаётся ли вывод корректным?\n\n          - Не прописан ли вывод явно в коде?\n\n        rating: \"6\"\n\n      - name: Упражнение 07. Множества\n        description: >\n          - Присутствует ли в каталоге репозитория файл marketing.py?\n\n          - Возвращает ли функция call_center следующий список: ['ted@mosby.com', 'bill_gates@live.com', 'mark@facebook.com', 'elon@paypal.com', 'jessica@gmail.com']?\n\n          - Возвращает ли функция potential_clients следующий список: ['walter@heisenberg.com', 'vasily@mail.ru', 'pinkman@yo.org', 'mr@robot.gov', 'eleven@yahoo.com']?\n\n          - Возвращает ли функция loyalty_program следующий список: ['andrew@gmail.com', 'ted@mosby.com', 'john@snow.is', 'bill_gates@live.com', 'mark@facebook.com']?\n\n          - Если передано неверное название аргумента, выбрасывается ли исключение?\n\n        rating: \"6\"\n\n      - name: Упражнение 08. Работа со строками как со списками\n        description: >\n          - Присутствуют ли в каталоге репозитория файлы names_extractor.py и letter_starter.py?\n\n          - Создаёт ли names_extractor.py файл с корректными заголовком и полями? Используется ли в качестве разделителя табуляция?\n\n          - Создаёт ли letter_starter.py текстовый файл с правильным именем адресата из файла?\n\n          - Использует ли скрипт f-строки вместо string.format()?\n\n        rating: \"6\"\n\n      - name: Упражнение 09. Шифр Цезаря\n        description: >\n          - Присутствует ли в каталоге репозитория файл caesar.py?\n\n          - Корректно ли кодировщик шифрует заданную строку при указанном сдвиге?\n\n          - Корректно ли декодировщик расшифровывает заданную строку при указанном сдвиге?\n\n          - Не подвергаются ли сдвигу цифры и специальные символы?\n\n          - Для получения результата не используется ничего, кроме разрешённых импорта/функций?\n\n          - При вводе строк с кавычками и без кавычек — сохраняются ли кавычки в результате?\n\n          - При некорректном количестве аргументов показывает ли программа исключение?\n\n          - Не прописан ли вывод явно в коде?\n\n        rating: \"6\"\n",
+          "size_bytes": 12694
+        },
+        {
+          "relative_path": "LICENSE",
+          "absolute_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-34-53\\DSB2_Syntax_Semantics.ID_886511-master_1\\DSB2_Syntax_Semantics.ID_886511-master (1)\\DSB2_Syntax_Semantics.ID_886511-master\\LICENSE",
+          "kind": "text",
+          "text": "# School 21 License",
+          "size_bytes": 19
+        },
+        {
+          "relative_path": "README.md",
+          "absolute_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-34-53\\DSB2_Syntax_Semantics.ID_886511-master_1\\DSB2_Syntax_Semantics.ID_886511-master (1)\\DSB2_Syntax_Semantics.ID_886511-master\\README.md",
+          "kind": "readme",
+          "text": "# Intro to Python: Syntax and Semantics\n\nSummary: Today we will help you acquire basic knowledge of the syntax and semantics of Python.\n\n💡 [Tap here](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624) **to leave your feedback on the project**. It's anonymous and will help our team make your educational experience better. We recommend completing the survey immediately after the project.\n\n## Contents\n\n1. [Chapter I](#chapter-i) \\\n    1.1. [Foreword](#foreword)\n2. [Chapter II](#chapter-ii) \\\n    2.1. [Instructions](#instructions)\n3. [Chapter III](#chapter-iii) \\\n    3.1. [Specific instructions of the day](#specific-instructions-of-the-day)\n4. [Chapter IV](#chapter-iv) \\\n    4.1. [Exercise 00. Data types](#exercise-00-data-types)\n5. [Chapter V](#chapter-v) \\\n    5.1. [Exercise 01. Working with files](#exercise-01-working-with-files)\n6. [Chapter VI](#chapter-vi) \\\n    6.1. [Exercise 02. Search by key](#exercise-02-search-by-key)\n7. [Chapter VII](#chapter-vii) \\\n    7.1. [Exercise 03. Search by value and by key](#exercise-03-search-by-value-and-by-key)\n8. [Chapter VIII](#chapter-viii) \\\n    8.1. [Exercise 04. Dictionaries](#exercise-04-dictionaries)\n9. [Chapter IX](#chapter-ix) \\\n    9.1. [Exercise 05. Search by value or by key](#exercise-05-search-by-value-or-by-key)\n10. [Chapter X](#chapter-x) \\\n    10.1. [Exercise 06. Sorting a dictionary](#exercise-06-sorting-a-dictionary)\n11. [Chapter XI](#chapter-xi) \\\n    11.1. [Exercise 07. Sets](#exercise-07-sets)\n12. [Chapter XII](#chapter-xii) \\\n    12.1. [Exercise 08. Working with strings as lists](#exercise-08-working-with-strings-as-lists)\n13. [Chapter XIII](#chapter-xiii) \\\n    13.1. [Exercise 09. Caesar cipher](#exercise-09-caesar-cipher)\n    \n   \n## Chapter I\n\n### Foreword\n\nPython is the most popular programming language for data science. What makes it so well-suited for this type of task? Python is an interpreted language. This allows you to easily interact with different pieces of code and quickly obtain results. This is exactly what we need when analyzing data from different angles or trying different hyperparameters for a machine learning model. Additionally, Python has many libraries suitable for scientific tasks, including data science. Add to that its simple syntax, and you have the most popular programming language for data science tasks.\n\nFor fun, take a look at these 19 beautiful guiding principles that influenced the design of Python:\n\n* Beautiful is better than ugly.\n* Explicit is better than implicit.\n* Simple is better than complex.\n* Complex is better than complicated.\n* Flat is better than nested.\n* Sparse is better than dense.\n* Readability counts.\n* Special cases aren’t special enough to break the rules.\n* Although practicality beats purity.\n* Errors should never pass silently.\n* Unless explicitly silenced.\n* In the face of ambiguity, refuse the temptation to guess.\n* There should be one — and preferably only one — obvious way to do it.\n* Although that way may not be obvious at first unless you’re Dutch.\n* Now is better than never.\n* Although never is often better than *right* now.\n* If the implementation is hard to explain, it’s a bad idea.\n* If the implementation is easy to explain, it may be a good idea.\n* Namespaces are one honking great idea — let’s do more of those!\n\nIf you forget any of them, just write \"import this\" in Python, and they will quickly appear.\n\n## Chapter II\n\n### Instructions\n\nHow to learn at “School 21”:\n\n- Here, you’ll find a unique learning experience with a lot of freedom. You’re given a task and left to find your own way to solve it, using whatever resources work best for you — whether that’s the Internet or AI tools like GigaChat. Just be mindful of information quality: verify, think critically, analyze, and compare.\n- Peer-to-peer (P2P) learning is the exchange of knowledge and experience with peers, where everyone acts as both mentor and student. This approach allows you to gain a deeper understanding of the material by learning from one another.\n- Feel free to ask for help: around you are peers who are also navigating this path for the first time. Share your own experience and ideas with others.  Join Rocket.Chat to stay updated with the latest community announcements. \n- Your learning is meaningless if you just copy someone else’s solutions. When receiving help from others, always make sure you fully understand the “why”, “how”, and “purpose” behind the solution. Don’t be afraid to make mistakes. \n- Does the task seem impossible? Take a break, get some fresh air and clear your mind — this has helped many people. Maybe after that, the solution will come to you naturally.\n- The learning process is just as important as the result. It’s not just about completing the task — it’s about understanding HOW to solve it. \n\nHow to work with the project:\n\n* Use this page as your only reference. Do not pay attention to rumors or speculation about how to prepare your solution.\n* Here and throughout, we use Python 3 as the only correct version of Python.\n* The python files for python exercises (module01, module02, module03) must have the following block at the end: `if __name__ == ‘__main__’`.\n* Pay attention to the permissions of your files and directories.\n* To be assessed your solution must be in your GIT repository.\n* Your solutions will be evaluated by your peers in the bootcamp.\n* You should not leave any other files in your directory other than those explicitly specified in the exercise instructions. It is recommended that you modify your .gitignore to avoid any accidents.\n* Your solution must be in your GIT repository for evaluation. Always push only to the develop branch! The master branch will be ignored. Work in the src directory.\n* When you need to get precise output in your programs, it is forbidden to display a precalculated output instead of performing the exercise correctly.\n* Have a question? Ask your neighbor on the right. If that fails, try your neighbor on the left.\n* Your reference materials are your peers, the internet, and Google.\n* Read the examples carefully. They may require information that is not specified elsewhere in the subject.\n* May the Force be with you!\n\n## Chapter III\n\n### Specific instructions of the day\n\n* No code should be in the global scope. Use functions!\n* Each file must end with a function call in a condition similar to the following: `if __name__ == '__main__': your_function(whatever parameter is required)`.\n* You may place error handling in this same condition.\n* No imports are allowed except those mentioned in the \"Authorized Functions\" section of the title block of each exercise.\n* You can use any built-in function unless it is prohibited in an exercise.\n* The exceptions raised by the open() function are not to be handled.\n* The interpreter to be used is Python 3.\n\n## Chapter IV\n\n### Exercise 00. Data types\n\n- Turn-in directory: `ex00/`.\n- Files to turn in: `data_types.py`.\n- Allowed functions: any import is restricted.\n\nLike any other language, Python has several built-in data types. In this exercise, you will become familiar with the most popular and useful ones.\n\n1. Create a script called `data_types.py` and define a `data_types()` function. In this function, declare 8 variables with different types and print their types to the standard output.\n2. You must reproduce the following output exactly:\n    \n        > python3 data_types.py\n        [int, str, float, bool, list, dict, tuple, set]\n\n3. Do not write the data types explicitly in your print. Remember to call your function at the end of your script, as explained in today's instructions:\n    \n        if __name__ == '__main__':\n            data_types()\n    \n4. Put your file in the `ex00` folder in the `src` directory of your repository.\n\n## Chapter V\n\n### Exercise 01. Working with files\n\n- Turn-in directory: `ex01/`.\n- Files to turn in: `read_and_write.py`.\n- Allowed functions: any import is restricted.\n\nFor this exercise, feel free to define as many functions as you need and name them whatever you like. In the attached file `ds.csv`, which you may recognize from the previous day, there are several columns separated by commas containing different data about vacancies.\n\n1. Design a Python script called `read_and_write.py` that opens the file [ds.csv](https://drive.google.com/file/d/1tDEDTytYaUrfJsXD5z5QvJSb5VNlL-eZ/view), reads the data it contains, replaces all the comma delimiters with \"\\t\", and saves the data to a new file `ds.tsv`. Be careful, your data may contain commas. If you replace them, you will corrupt the data.\n2. Put your script in the `ex01` folder in the `src` directory of your repository.\n\n## Chapter VI\n\n### Exercise 02. Search by key\n\n- Turn-in directory: `ex02/`.\n- Files to turn in: `stock_prices.py`.\n- Allowed functions: `import sys`.\n\n1. You have the following dictionaries to copy to one of your functions:\n\n        COMPANIES = {\n        'Apple': 'AAPL',\n        'Microsoft': 'MSFT',\n        'Netflix': 'NFLX',\n        'Tesla': 'TSLA',\n        'Nokia': 'NOK'\n        }\n\n        STOCKS = {\n        'AAPL': 287.73,\n        'MSFT': 173.79,\n        'NFLX': 416.90,\n        'TSLA': 724.88,\n        'NOK': 3.37\n        }\n\n2. Write a program that takes the name of a company (e.g., Apple) as an argument and displays its stock price (e.g., 287.73) on the standard output. If the program is given a company name that is not in the dictionary, it should display \"Unknown company.\" If no arguments are provided, or if too many arguments are provided, your program should do nothing and quit.\n\n        $> python3 stock_prices.py tesla\n        724.88\n        $> python3 stock_prices.py Facebook\n        Unknown company\n        $> python3 stock_prices.py Tesla Apple\n\n## Chapter VII\n\n### Exercise 03. Search by value and by key\n\n- Turn-in directory: `ex03/`.\n- Files to turn in: `ticker_symbols.py`.\n- Allowed functions: `import sys`.\n\n1. You will use the same two dictionaries as in the previous exercise. Copy them again using one of the functions in your script.\n2. Create a program that takes a ticker symbol (e.g., AAPL) and displays the company name and stock price, using a space as the delimiter. The program's behavior should be identical to that of the previous exercise.\n\n        $> python3 ticker_symbols.py tsla\n        Tesla 724.88\n        $> python3 ticker_symbols.py FB\n        Unknown ticker\n        $> python3 ticker_symbols.py TSLA AAPL\n\n## Chapter VIII\n\n### Exercise 04. Dictionaries\n\n- Turn-in directory: `ex04/`.\n- Files to turn in: `to_dictionary.py`.\n- Allowed functions: any import is restricted.\n\n1. Create a script named `to_dictionary.py` in one of the functions and for this function copy the following list of tuples as is:\n\n        list_of_tuples = [\n        ('Russia', '25'),\n        ('France', '132'),\n        ('Germany', '132'),\n        ('Spain', '178'),\n        ('Italy', '162'),\n        ('Portugal', '17'),\n        ('Finland', '3'),\n        ('Hungary', '2'),\n        ('The Netherlands', '28'),\n        ('The USA', '610'),\n        ('The United Kingdom', '95'),\n        ('China', '83'),\n        ('Iran', '76'),\n        ('Turkey', '65'),\n        ('Belgium', '34'),\n        ('Canada', '28'),\n        ('Switzerland', '26'),\n        ('Brazil', '25'),\n        ('Austria', '14'),\n        ('Israel', '12')\n        ]\n\n2. Your script should transform this variable into a dictionary, with the number as the key and the country as the value. As you can see, the same key may have several values. The script must display the dictionary's contents on standard output according to this precise formatting:\n\n        '132' : 'France'\n        '132' : 'Germany'\n        '178' : 'Spain'\n        ...\n\n3. Think about why the order is not necessarily identical to that of the example.\n\n## Chapter IX\n\n### Exercise 05. Search by value or by key\n\n- Turn-in directory: `ex05/`.\n- Files to turn in: `all_stocks.py`.\n- Allowed functions: `import sys`.\n\n1. You still have those two dictionaries from `ex02`. And you should still copy them into one of your functions in the script.\n2. Write a program that exhibits the following behavior:\n    - The program should take a string containing many expressions separated by commas as an argument.\n    - For each expression in the string, the program should detect whether it is a company name, a ticker symbol, or neither.\n    - The program should not be case-sensitive, but it should be able to work with whitespaces.\n    - If there are no arguments or too many arguments, the program should display nothing.\n    - When there are two commas in a row in the string, the program should not display anything.\n    - The program must display the results separated by line breaks and use the following formatting:\n\n          $ python3 all_stocks.py 'TSLA , aPPle, Facebook'\n          TSLA is a ticker symbol for Tesla\n          Apple stock price is 287.73\n          Facebook is an unknown company or an unknown ticker symbol\n          $ python3 all_stocks.py 'TSLA,, apple'\n          $ python3 all_stocks.py 'TSLA, , apple'\n          $ python3 all_stocks.py TSLA AAPL\n\n## Chapter X\n\n### Exercise 06. Sorting a dictionary\n\n- Turn-in directory: `ex06/`.\n- Files to turn in: `dict_sorter.py`.\n- Allowed functions: any import is restricted.\n\n1. For this exercise, take the list of tuples from `ex04` containing countries and numbers, and create a dictionary where the countries are the keys and the numbers are the values. Copy it into one of your functions in the script.\n2. Write a program that displays the country names first in descending order by number and then in alphabetical order by name if the numbers are equal. Display one per line without the numbers:\n\n       The USA\n       Spain\n       Italy\n       France\n       Germany\n       ...\n\n## Chapter XI\n\n### Exercise 07. Sets\n\n- Turn-in directory: `ex07/`.\n- Files to turn in: `marketing.py`.\n- Allowed functions: `import sys`.\n\nFor this exercise, imagine that you work in a marketing department. You will work with two different lists of email accounts. The first list contains the email accounts of your clients. The second list contains the email accounts of participants in your most recent event, some of whom were your clients. The third list contains the email accounts of clients who viewed your most recent promotional email.\n\nIn business terms, you need to:\n1. Create a list of clients who have not seen your promotional email yet. This list will be sent to the call center to contact these individuals.\n2. Create a list of participants who are not your clients. Send them an introductory email about your products.\n3. Create a list of clients who did not participate in the event. Send them a link to the event video and slides.\n\nTechnical details:\n- Create different functions that convert your lists to sets. Use the set operators necessary to perform the aforementioned business tasks and return the required lists of email accounts.\n- Arrange your code in a script. The script takes the name of the task to be performed as an argument: `call_center`, `potential_clients`, or `loyalty_program`. If the wrong name is given, raise an exception.\n- For this exercise, use the following three lists:\n\n      clients = ['andrew@gmail.com', 'jessica@gmail.com', 'ted@mosby.com',\n      'john@snow.is', 'bill_gates@live.com', 'mark@facebook.com',\n      'elon@paypal.com', 'jessica@gmail.com']\n      participants = ['walter@heisenberg.com', 'vasily@mail.ru',\n      'pinkman@yo.org', 'jessica@gmail.com', 'elon@paypal.com',\n      'pinkman@yo.org', 'mr@robot.gov', 'eleven@yahoo.com']\n      recipients = ['andrew@gmail.com', 'jessica@gmail.com', 'john@snow.is']\n\n## Chapter XII\n\n### Exercise 08. Working with strings as lists\n\n- Turn-in directory: `ex08/`.\n- Files to turn in: `names_extractor.py`, `letter_starter.py`.\n- Allowed functions: `import sys`.\n\nImagine working in a corporation where all email accounts follow the same template: name.surname@corp.com.\n\n1. Create a script that uses the path to a file containing these email addresses as an argument. All emails in the file are delimited by '\\n'. The script should return a table with the following fields: Name, Surname, and Email, all of which are delimited by \"\\t\". The name and surname values should start with a capital letter. The table should be stored in the file `employees.tsv`.\n\nExample:\n![1](misc/images/1.png)\n\n2. Create another script that takes an email address, searches for the corresponding name in the file created by the first script, and returns the first paragraph of a letter:\n    _Dear Ivan, welcome to our team! We are sure that it will be a pleasure to work with you. That’s a precondition for the professionals that our company hires._\n3. Using the structure `'la-la {0}'.format(text)` is prohibited. Please use f-strings instead. They are faster and more readable.\n\n## Chapter XIII\n\n### Exercise 09. Caesar cipher\n\n- Turn-in directory: `ex09/`.\n- Files to turn in: `caesar.py`.\n- Allowed functions: `import sys`.\n\nThere is a method called the [Caesar cipher](https://en.wikipedia.org/wiki/Caesar_cipher) that helps to encode text by shifting the alphabetical order. For example, the encoded version of \"hello\" might be \"tqxxa\" if we use a shift of 12.\n\n1. Write a program that will encode or decode any string using a given shift according to the argument provided:\n\n       $ python3 caesar.py encode 'ssh -i private.key user@school21.ru' 12\n       eet -u bduhmfq.wqk geqd@eotaax21.dg\n       $ python3 caesar.py decode 'eet -u bduhmfq.wqk geqd@eotaax21.dg' 12\n       ssh -i private.key user@school21.ru\n\n2. If the scripts are given a string containing Cyrillic symbols, for example, the scripts should raise the exception: \"The script does not support your language yet.\" If an incorrect number of arguments is given, raise an exception.\n",
+          "size_bytes": 17849
+        },
+        {
+          "relative_path": "README_RUS.md",
+          "absolute_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-34-53\\DSB2_Syntax_Semantics.ID_886511-master_1\\DSB2_Syntax_Semantics.ID_886511-master (1)\\DSB2_Syntax_Semantics.ID_886511-master\\README_RUS.md",
+          "kind": "readme",
+          "text": "# Введение в Python: синтаксис и семантика\n\nРезюме: Сегодня ты получишь базовые знания о синтаксисе и семантике Python.\n\n💡 [Нажми сюда](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624) **чтобы поделиться с нами обратной связью на этот проект**. Это анонимно и поможет нашей команде сделать обучение лучше. Рекомендуем заполнить опрос сразу после выполнения проекта.\n\n## Содержание\n\n1. [Глава I](#глава-i) \\\n    1.1. [Предисловие](#предисловие)\n2. [Глава II](#глава-ii) \\\n    2.1. [Инструкция](#инструкция)\n3. [Глава III](#глава-iii) \\\n    3.1. [Дополнительные инструкции на сегодня](#дополнительные-инструкции-на-сегодня)\n4. [Глава IV](#глава-iv) \\\n    4.1. [Упражнение 00. Типы данных](#упражнение-00-типы-данных)\n5. [Глава V](#глава-v) \\\n    5.1. [Упражнение 01. Работа с файлами](#упражнение-01-работа-с-файлами)\n6. [Глава VI](#глава-vi) \\\n    6.1. [Упражнение 02. Поиск по ключу](#упражнение-02-поиск-по-ключу)\n7. [Глава VII](#глава-vii) \\\n    7.1. [Упражнение 03. Поиск по значению и по ключу](#упражнение-03-поиск-по-значению-и-по-ключу)\n8. [Глава VIII](#глава-viii) \\\n    8.1. [Упражнение 04. Словари](#упражнение-04-словари)\n9. [Глава IX](#глава-ix) \\\n    9.1. [Упражнение 05. Поиск по значению или по ключу](#упражнение-05-поиск-по-значению-или-по-ключу)\n10. [Глава X](#глава-x) \\\n    10.1. [Упражнение 06. Сортировка словаря](#упражнение-06-сортировка-словаря)\n11. [Глава XI](#глава-xi) \\\n    11.1. [Упражнение 07. Множества](#упражнение-07-множества)\n12. [Глава XII](#глава-xii) \\\n    12.1. [Упражнение 08. Работа со строками как со списками](#упражнение-08-работа-со-строками-как-со-списками)\n13. [Глава XIII](#глава-xiii) \\\n    13.1. [Упражнение 09. Шифр Цезаря](#упражнение-09-шифр-цезаря)\n    \n   \n## Глава I\n\n### Предисловие\n\nPython - самый популярный язык программирования в области анализа данных. Благодаря чему он так хорошо подходит для этих задач? Прежде всего, это интерпретируемый язык. Это свойство позволяет пользователю легко взаимодействовать с отдельными блоками кода и мгновенно получать результат - именно то, что нужно, когда анализируешь данные под разными углами или подбираешь гиперпараметры для модели машинного обучения. Добавьте к этому богатый набор библиотек для научных задач, включая Data Science, и простой, лаконичный синтаксис - вот вам и готовая формула языка №1 для работы с данными.\n\nПредлагаю вам ознакомиться с 19 изящными принципами, которые повлияли на дизайн Python (они известны как The Zen of Python):\n\n* Красивое лучше, чем уродливое.\n* Явное лучше, чем неявное.\n* Простое лучше, чем сложное.\n* Сложное лучше, чем запутанное.\n* Плоское лучше, чем вложенное.\n* Разреженное лучше, чем плотное.\n* Читаемость имеет значение.\n* Особые случаи не настолько особые, чтобы нарушать правила.\n* При этом практичность важнее безупречности.\n* Ошибки не должны проходить незамеченными.\n* Если они не были явно подавленными.\n* Встретив двусмысленность, отбрось искушение угадать.\n* Должен существовать один и, желательно, только один очевидный способ сделать это.\n* Хотя он поначалу может быть и не очевиден, если вы не голландец.\n* Сейчас лучше, чем никогда.\n* Хотя никогда зачастую лучше, чем прямо сейчас.\n* Если реализацию сложно объяснить - идея плоха.\n* Если реализацию легко объяснить - идея, возможно, хороша.\n* Пространства имён - отличная штука! Будем делать их больше!\n\nЕсли вы забудете какой-либо из этих принципов, просто выполните в Python команду import this - и они сразу появятся.\n\n## Глава II\n\n### Инструкция\n\nКак учиться в «Школе 21»:\n\n- Здесь тебя ждет уникальный образовательный опыт с большим количеством свободы. Ты получаешь задачу и самостоятельно ищешь пути решения, используя любые удобные способы поиска информации — ресурсы Интернета или нейросети (например, GigaChat). Но внимательно относись к качеству информации: проверяй, думай, анализируй, сравнивай.\n- Взаимообучение (Peer-to-Peer, P2P) — это обмен знаниями и опытом с другими пирами, где каждый выступает и учителем, и учеником. Такой подход позволяет глубже понять материал, учась друг у друга.\n- Чувствуй себя свободно и проси о помощи — вокруг тебя те, кто тоже впервые проходят этот путь. Делись своим опытом и идеями с другими. Присоединяйся к Rocket.Chat, чтобы быть в курсе всех новостей от нашего сообщества.\n- Твое обучение не будет иметь никакого смысла, если ты будешь копировать чужие решения. Если пользуешься помощью других — всегда разбирайся до конца, почему, как и зачем. Не бойся ошибиться.\n- Кажется, что задача невыполнима? Сделай перерыв, проветрись, перезагрузи голову — это помогало многим. Возможно, после этого решение придет само собой.\n- Важен не только результат обучения, но и сам процесс. Нужно не просто решить задачу, а понять, КАК ее решить.\n\nКак работать с проектом:\n\n* Не обращай внимание на слухи, подсказки и догадки. Если сомневаешься, как выполнять задание - обращайся к этой инструкции, и только к ней.\n* Здесь и далее (в заданиях, где используется Python) единственной допустимой версией Python является Python 3.\n* Если ты выполняешь задания на Python (module01, module02, module03), в каждом python-файле в конце добавляй служебный блок `if __name__ == '__main__'`.\n* Перепроверь настройки прав доступа к файлам и каталогам.\n* Чтобы твоё решение приняли к оценке, оно должно лежать в твоём GIT-репозитории.\n* Оценивание выполняют твои пиры по интенсиву.\n* В твоей директории не должно быть иных файлов, кроме тех, что обозначены в заданиях. Настрой .gitignore, чтобы исключить случайные файлы и папки из проверки.\n* Чтобы твоё решение приняли к оценке, оно должно лежать в твоём GIT-репозитории. Всегда делай push только в ветку develop! Ветка master будет проигнорирована. Работай в директории src.\n* Если требуется точный вывод, запрещено подменять результат заранее подготовленным выводом - твое решение должно реально выполнять задачу.\n* Есть вопрос? Спроси соседа справа. Если это не помогло - соседа слева.\n* Не забывай, что информация в интернете всегда с тобой. Как и пиры. Общайся. Ищи.\n* Внимательно читай примеры. В них может быть что-то, что не указано в явном виде в самом задании.\n* Да пребудет с тобой Сила!\n\n## Глава III\n\n### Дополнительные инструкции на сегодня\n\n* Никакого кода в глобальной области видимости. Используй функции!\n* В конце каждого файла должен быть вызов функции внутри условия вида: `if __name__ == '__main__': your_function(whatever parameter is required)`.\n* Обработку ошибок можно разместить в этом же условии.\n* Импорты запрещены, кроме тех, что указаны в разделе «Разрешённые импорты/функции» в шапке каждого упражнения.\n* Разрешены любые встроенные функции, если в упражнении не указано иное.\n* Исключения, выбрасываемые open(), не нужно обрабатывать.\n* Используемый интерпретатор: Python 3.\n\n## Глава IV\n\n### Упражнение 00. Типы данных\n\n- Turn-in directory: `ex00/`.\n- Files to turn in: `data_types.py`.\n- Allowed functions: любой импорт запрещён.\n\nКак и в любом другом языке, в Python есть несколько встроенных типов данных. В этом упражнении ты познакомишься с самыми популярными и полезными.\n\n1. Создай скрипт data_types.py и определи функцию data_types(). В этой функции объяви 8 переменных разных типов и выведи их типы в стандартный поток вывода.\n2. Тебе нужно **в точности** воспроизвести следующий вывод:\n    \n        > python3 data_types.py\n        [int, str, float, bool, list, dict, tuple, set]\n\n3. Не вписывай названия типов вручную в print. Не забудь вызвать свою функцию в конце скрипта, как указано в сегодняшних инструкциях:\n    \n        if __name__ == '__main__':\n            data_types()\n    \n4. Помести файл в каталог ex00 внутри каталога src твоего репозитория.\n\n## Глава V\n\n### Упражнение 01. Работа с файлами\n\n- Turn-in directory: `ex01/`.\n- Files to turn in: `read_and_write.py`.\n- Allowed functions: любой импорт запрещён.\n\nВ этом упражнении ты можешь определить столько функций, сколько потребуется, и назвать их как угодно. В прикреплённом файле [ds.csv](https://drive.google.com/file/d/1tDEDTytYaUrfJsXD5z5QvJSb5VNlL-eZ/view) (вспомни предыдущий день) есть несколько столбцов, разделённых запятыми, с разными данными о вакансиях.\n\n1. Разработай скрипт на Python read_and_write.py, который открывает файл ds.csv, считывает содержащиеся в нём данные, заменяет все разделители-запятые на \"\\t\" и сохраняет данные в новый файл ds.tsv. Будь внимателен: в данных могут встречаться запятые. Если ты заменишь их, данные будут повреждены.\n2. Помести скрипт в каталог ex01 внутри каталога src твоего репозитория.\n\n## Глава VI\n\n### Упражнение 02. Поиск по ключу\n\n- Turn-in directory: `ex02/`.\n- Files to turn in: `stock_prices.py`.\n- Allowed functions: `import sys`.\n\n1. У тебя есть следующие словари, скопируй их в одну из своих функций:\n\n        COMPANIES = {\n        'Apple': 'AAPL',\n        'Microsoft': 'MSFT',\n        'Netflix': 'NFLX',\n        'Tesla': 'TSLA',\n        'Nokia': 'NOK'\n        }\n\n        STOCKS = {\n        'AAPL': 287.73,\n        'MSFT': 173.79,\n        'NFLX': 416.90,\n        'TSLA': 724.88,\n        'NOK': 3.37\n        }\n\n2. Напиши программу, которая принимает в качестве аргумента название компании (например, Apple) и выводит в стандартный поток её цену акции (например, 287.73). Если программе передано название компании, которой нет в словаре, она должна вывести \"Unknown company\". Если аргументы не переданы или их слишком много, программа не должна делать ничего и должна завершиться.\n\n        $> python3 stock_prices.py tesla\n        724.88\n        $> python3 stock_prices.py Facebook\n        Unknown company\n        $> python3 stock_prices.py Tesla Apple\n\n## Глава VII\n\n### Упражнение 03. Поиск по значению и по ключу\n\n- Turn-in directory: `ex03/`.\n- Files to turn in: `ticker_symbols.py`.\n- Allowed functions: `import sys`.\n\n1. Используй те же два словаря, что и в предыдущем упражнении. Ещё раз скопируй их, используя одну из функций в твоём скрипте.\n2. Создай программу, которая принимает тикер (например, AAPL) и выводит название компании и цену акции, разделённые пробелом. Поведение программы должно быть идентично предыдущему упражнению.\n\n        $> python3 ticker_symbols.py tsla\n        Tesla 724.88\n        $> python3 ticker_symbols.py FB\n        Unknown ticker\n        $> python3 ticker_symbols.py TSLA AAPL\n\n## Глава VIII\n\n### Упражнение 04. Словари\n\n- Turn-in directory: `ex04/`.\n- Files to turn in: `to_dictionary.py`.\n- Allowed functions: любой импорт запрещён.\n\n1. Создай скрипт с именем to_dictionary.py. В одной из функций скопируй следующий список кортежей как есть:\n\n        list_of_tuples = [\n        ('Russia', '25'),\n        ('France', '132'),\n        ('Germany', '132'),\n        ('Spain', '178'),\n        ('Italy', '162'),\n        ('Portugal', '17'),\n        ('Finland', '3'),\n        ('Hungary', '2'),\n        ('The Netherlands', '28'),\n        ('The USA', '610'),\n        ('The United Kingdom', '95'),\n        ('China', '83'),\n        ('Iran', '76'),\n        ('Turkey', '65'),\n        ('Belgium', '34'),\n        ('Canada', '28'),\n        ('Switzerland', '26'),\n        ('Brazil', '25'),\n        ('Austria', '14'),\n        ('Israel', '12')\n        ]\n\n2. Твой скрипт должен преобразовать эту переменную в словарь, где ключ - число, а значение - страна. Как видишь, у одного и того же ключа может быть несколько значений. Скрипт должен вывести содержимое словаря в стандартный поток вывода **строго** в следующем формате:\n\n        '132' : 'France'\n        '132' : 'Germany'\n        '178' : 'Spain'\n        ...\n\n3. Подумай, почему порядок не обязательно совпадает с порядком в примере.\n\n## Глава IX\n\n### Упражнение 05. Поиск по значению или по ключу\n\n- Turn-in directory: `ex05/`.\n- Files to turn in: `all_stocks.py`.\n- Allowed functions: `import sys`.\n\n1. У тебя есть два словаря из ex02. Скопируй их снова в одну из функций твоего скрипта.\n2. Напиши программу со следующим поведением:\n    - Программа должна принимать в качестве аргумента строку, содержащую множество выражений, разделённых запятыми.\n    - Для каждого выражения в строке программа должна определять, является ли оно названием компании, тикером или не тем и не другим.\n    - Программа не должна зависеть от регистра, но должна корректно работать с пробелами.\n    - Если аргументы отсутствуют или их слишком много, программа не должна ничего выводить.\n    - Если в строке встречаются две запятые подряд, программа не должна ничего выводить.\n    - Программа должна выводить результаты, разделённые переводами строки, и использовать следующий формат:\n\n          $ python3 all_stocks.py 'TSLA , aPPle, Facebook'\n          TSLA is a ticker symbol for Tesla\n          Apple stock price is 287.73\n          Facebook is an unknown company or an unknown ticker symbol\n          $ python3 all_stocks.py 'TSLA,, apple'\n          $ python3 all_stocks.py 'TSLA, , apple'\n          $ python3 all_stocks.py TSLA AAPL\n\n## Глава X\n\n### Упражнение 06. Сортировка словаря\n\n- Turn-in directory: `ex06/`.\n- Files to turn in: `dict_sorter.py`.\n- Allowed functions: любой импорт запрещён.\n\n1. Для этого упражнения возьми список кортежей из ex04, содержащий страны и числа, и создай словарь, где ключами будут страны, а значениями - числа. Скопируй его в одну из функций в скрипте.\n2. Напиши программу, которая выводит названия стран в порядке убывания по числу, а при равенстве чисел - в алфавитном порядке по названию. Выводи по одному на строке, без чисел:\n\n       The USA\n       Spain\n       Italy\n       France\n       Germany\n       ...\n\n## Глава XI\n\n### Упражнение 07. Множества\n\n- Turn-in directory: `ex07/`.\n- Files to turn in: `marketing.py`.\n- Allowed functions: `import sys`.\n\nВ этом упражнении представь, что ты работаешь в отделе маркетинга. Ты будешь работать с двумя разными списками почтовых адресов. Первый список содержит адреса твоих клиентов. Второй список содержит адреса участников последнего мероприятия, среди них есть и твои клиенты. Третий список содержит адреса клиентов, которые просмотрели твоё последнее рекламное письмо.\n\nТебе нужно сделать следующее:\n\n1. Составить список клиентов, которые ещё не видели рекламное письмо. Этот список будет передан в колл-центр для последующей связи с этими людьми.\n1. Составить список участников, которые не являются твоими клиентами. Отправь им вводное письмо, в котором содержится информация о твоих продуктах продуктах.\n1. Составить список клиентов, которые не участвовали в мероприятии. Отправь им ссылку на видео и слайды презентации с мероприятия.\n\nТехнические детали:\n- Создай отдельные функции, которые преобразуют твои списки в множества. Используй операции над множествами, необходимые для выполнения перечисленных бизнес-задач, и возвращай требуемые списки почтовых адресов.\n- Оформи код в виде скрипта. Скрипт принимает в качестве аргумента название выполняемой задачи: `call_center`, `potential_clients` или `loyalty_program`. Если передано неверное название, выбрось исключение.\n- Для этого упражнения используй следующие три списка:\n\n      clients = ['andrew@gmail.com', 'jessica@gmail.com', 'ted@mosby.com',\n      'john@snow.is', 'bill_gates@live.com', 'mark@facebook.com',\n      'elon@paypal.com', 'jessica@gmail.com']\n      participants = ['walter@heisenberg.com', 'vasily@mail.ru',\n      'pinkman@yo.org', 'jessica@gmail.com', 'elon@paypal.com',\n      'pinkman@yo.org', 'mr@robot.gov', 'eleven@yahoo.com']\n      recipients = ['andrew@gmail.com', 'jessica@gmail.com', 'john@snow.is']\n\n## Глава XII\n\n### Упражнение 08. Работа со строками как со списками\n\n- Turn-in directory: `ex08/`.\n- Files to turn in: `names_extractor.py`, `letter_starter.py`.\n- Allowed functions: `import sys`.\n\nПредставь, что ты работаешь в корпорации, где все почтовые адреса имеют единый шаблон: <name.surname@corp.com>.\n\n1. Создай скрипт, который принимает путь к файлу с этими адресами в качестве аргумента. Все адреса в файле разделены символом '\\n'. Скрипт должен вернуть таблицу со следующими полями: **Name**, **Surname** и **Email**, разделёнными \"\\t\". Значения Name и Surname должны начинаться с заглавной буквы. Таблицу нужно сохранить в файл employees.tsv.\n\nПример:\n![1](misc/images/1.png)\n\n2. Создай другой скрипт, который принимает адрес электронной почты, ищет соответствующее имя в файле, созданном первым скриптом, и возвращает первый абзац письма:\n    _Иван, добро пожаловать в нашу команду! Мы уверены, что работать вместе с тобой будет очень приятно. Для нас это важно - мы стремимся, чтобы в компании работались именно такие люди._\n3. Использовать конструкцию `'la-la {0}'.format(text)` запрещено. Пожалуйста, используй f-строки. Они быстрее и читается лучше.\n\n## Глава XIII\n\n### Упражнение 09. Шифр Цезаря\n\n- Turn-in directory: `ex09/`.\n- Files to turn in: `caesar.py`.\n- Allowed functions: `import sys`.\n\nСуществует метод под названием [Caesar cipher](https://en.wikipedia.org/wiki/Caesar_cipher) (Шифр Цезаря), который кодирует текст сдвигом по алфавиту. Например, «hello» при сдвиге 12 может превратиться в «tqxxa».\n\n1. Напиши программу, которая будет кодировать или декодировать произвольную строку, используя заданный сдвиг, в соответствии с переданным аргументом:\n\n       $ python3 caesar.py encode 'ssh -i private.key user@school21.ru' 12\n       eet -u bduhmfq.wqk geqd@eotaax21.dg\n       $ python3 caesar.py decode 'eet -u bduhmfq.wqk geqd@eotaax21.dg' 12\n       ssh -i private.key user@school21.ru\n\n2. Если скрипту передана строка с кириллическими символами, скрипт должен выбросить исключение со строкой: \"The script does not support your language yet.\" Если передано некорректное количество аргументов, выбрось исключение.\n",
+          "size_bytes": 27330
+        },
+        {
+          "relative_path": "TAGS_FILES.txt",
+          "absolute_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-34-53\\DSB2_Syntax_Semantics.ID_886511-master_1\\DSB2_Syntax_Semantics.ID_886511-master (1)\\DSB2_Syntax_Semantics.ID_886511-master\\TAGS_FILES.txt",
+          "kind": "text",
+          "text": "0:\n\n\n*********************************************************************\n\n1:\n\n\n*********************************************************************\n\n10:\n\n\n*********************************************************************\n\n11:\n\n\n*********************************************************************\n\n2:\n\n\n*********************************************************************\n\n3:\n\n\n*********************************************************************\n\n4:\n\n\n*********************************************************************\n\n5:\n\n\n*********************************************************************\n\n6:\n\n\n*********************************************************************\n\n7:\n\n\n*********************************************************************\n\n8:\n\n\n*********************************************************************\n\n9:\n\n\n*********************************************************************\n\n",
+          "size_bytes": 914
+        }
+      ]
+    }
+  ],
+  "entities": [
+    {
+      "entity_id": "ent_f11f5501d41a",
+      "entity_type": "link",
+      "value": "https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624",
+      "quote": "💡 [Tap here](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624) **to leave your feedback on the project**. It's anonymous and will help our team make your educational experience better. We recommend completing the survey immediately after the project.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 5,
+        "line_end": 5
+      },
+      "context": "# Intro to Python: Syntax and Semantics\n\nSummary: Today we will help you acquire basic knowledge of the syntax and semantics of Python.\n\n💡 [Tap here](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624) **to leave your feedback on the project**. It's anonymous and will help our team make your educational experience better. We recommend completing the survey immediately after the project.\n\n## Contents\n\n1. [Chapter I](#chapter-i) \\\n    1.1. [Foreword](#foreword)\n2. [Chapter II](#chapter-ii) \\\n    2.1. [Instructions](#instructions)\n3. [Chapter III](#chapter-iii) \\\n    3.1. [Specific instructions of the day](#specific-instructions-of-the-day)\n4. [Chapter IV](#chapter-iv) \\\n    4.1. [Exercise 00."
+    },
+    {
+      "entity_id": "ent_354bce5624e4",
+      "entity_type": "link",
+      "value": "https://drive.google.com/file/d/1tDEDTytYaUrfJsXD5z5QvJSb5VNlL-eZ/view",
+      "quote": "1. Design a Python script called `read_and_write.py` that opens the file [ds.csv](https://drive.google.com/file/d/1tDEDTytYaUrfJsXD5z5QvJSb5VNlL-eZ/view), reads the data it contains, replaces all the comma delimiters with \"\\t\", and saves the data to a new file `ds.tsv`. Be careful, your data may contain commas. If you…",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 141,
+        "line_end": 141
+      },
+      "context": "cise 01. Working with files\n\n- Turn-in directory: `ex01/`.\n- Files to turn in: `read_and_write.py`.\n- Allowed functions: any import is restricted.\n\nFor this exercise, feel free to define as many functions as you need and name them whatever you like. In the attached file `ds.csv`, which you may recognize from the previous day, there are several columns separated by commas containing different data about vacancies.\n\n1. Design a Python script called `read_and_write.py` that opens the file [ds.csv](https://drive.google.com/file/d/1tDEDTytYaUrfJsXD5z5QvJSb5VNlL-eZ/view), reads the data it contains, replaces all the comma delimiters with \"\\t\", and saves the data to a new file `ds.tsv`. Be careful, your data may contain commas. If you replace them, you will corrupt the data.\n2. Put your script in the `ex01` folder in the `src` directory of your repository.\n\n## Chapter VI\n\n### Exercise 02. Search by key\n\n- Turn-in directory: `ex02/`.\n- Files to turn in: `stock_prices.py`.\n- Allowed functions: `import sys`.\n\n1. You have the following dictionaries to copy to one o"
+    },
+    {
+      "entity_id": "ent_f6e8979dcba0",
+      "entity_type": "link",
+      "value": "https://en.wikipedia.org/wiki/Caesar_cipher",
+      "quote": "There is a method called the [Caesar cipher](https://en.wikipedia.org/wiki/Caesar_cipher) that helps to encode text by shifting the alphabetical order. For example, the encoded version of \"hello\" might be \"tqxxa\" if we use a shift of 12.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 335,
+        "line_end": 335
+      },
+      "context": "of a letter:\n    _Dear Ivan, welcome to our team! We are sure that it will be a pleasure to work with you. That’s a precondition for the professionals that our company hires._\n3. Using the structure `'la-la {0}'.format(text)` is prohibited. Please use f-strings instead. They are faster and more readable.\n\n## Chapter XIII\n\n### Exercise 09. Caesar cipher\n\n- Turn-in directory: `ex09/`.\n- Files to turn in: `caesar.py`.\n- Allowed functions: `import sys`.\n\nThere is a method called the [Caesar cipher](https://en.wikipedia.org/wiki/Caesar_cipher) that helps to encode text by shifting the alphabetical order. For example, the encoded version of \"hello\" might be \"tqxxa\" if we use a shift of 12.\n\n1. Write a program that will encode or decode any string using a given shift according to the argument provided:\n\n       $ python3 caesar.py encode 'ssh -i private.key user@school21.ru' 12\n       eet -u bduhmfq.wqk geqd@eotaax21.dg\n       $ python3 caesar.py decode 'eet -u bduhmfq.wqk geqd@eotaax21.dg' 12\n       ssh -i private.key user@school21.ru"
+    },
+    {
+      "entity_id": "ent_c4e8227738f9",
+      "entity_type": "image",
+      "value": "misc/images/1.png",
+      "quote": "![1](misc/images/1.png)",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 321,
+        "line_end": 321
+      },
+      "context": "gine working in a corporation where all email accounts follow the same template: name.surname@corp.com.\n\n1. Create a script that uses the path to a file containing these email addresses as an argument. All emails in the file are delimited by '\\n'. The script should return a table with the following fields: Name, Surname, and Email, all of which are delimited by \"\\t\". The name and surname values should start with a capital letter. The table should be stored in the file `employees.tsv`.\n\nExample:\n![1](misc/images/1.png)\n\n2. Create another script that takes an email address, searches for the corresponding name in the file created by the first script, and returns the first paragraph of a letter:\n    _Dear Ivan, welcome to our team! We are sure that it will be a pleasure to work with you. That’s a precondition for the professionals that our company hires._\n3. Using the structure `'la-la {0}'.format(text)` is prohibited. Please use f-strings instead. They are faster and more readable.\n\n## Chapter XIII\n\n### Exercis"
+    },
+    {
+      "entity_id": "ent_e9226350e29c",
+      "entity_type": "version",
+      "value": "Python 3",
+      "quote": "* Here and throughout, we use Python 3 as the only correct version of Python.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 83,
+        "line_end": 83
+      },
+      "context": "es the task seem impossible? Take a break, get some fresh air and clear your mind — this has helped many people. Maybe after that, the solution will come to you naturally.\n- The learning process is just as important as the result. It’s not just about completing the task — it’s about understanding HOW to solve it. \n\nHow to work with the project:\n\n* Use this page as your only reference. Do not pay attention to rumors or speculation about how to prepare your solution.\n* Here and throughout, we use Python 3 as the only correct version of Python.\n* The python files for python exercises (module01, module02, module03) must have the following block at the end: `if __name__ == ‘__main__’`.\n* Pay attention to the permissions of your files and directories.\n* To be assessed your solution must be in your GIT repository.\n* Your solutions will be evaluated by your peers in the bootcamp.\n* You should not leave any other files in your directory other than those explicitly specified in the exercise instructions"
+    },
+    {
+      "entity_id": "ent_906926c90add",
+      "entity_type": "version",
+      "value": "Python 3",
+      "quote": "* The interpreter to be used is Python 3.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 106,
+        "line_end": 106
+      },
+      "context": "t end with a function call in a condition similar to the following: `if __name__ == '__main__': your_function(whatever parameter is required)`.\n* You may place error handling in this same condition.\n* No imports are allowed except those mentioned in the \"Authorized Functions\" section of the title block of each exercise.\n* You can use any built-in function unless it is prohibited in an exercise.\n* The exceptions raised by the open() function are not to be handled.\n* The interpreter to be used is Python 3.\n\n## Chapter IV\n\n### Exercise 00. Data types\n\n- Turn-in directory: `ex00/`.\n- Files to turn in: `data_types.py`.\n- Allowed functions: any import is restricted.\n\nLike any other language, Python has several built-in data types. In this exercise, you will become familiar with the most popular and useful ones.\n\n1. Create a script called `data_types.py` and define a `data_types()` function. In this function, declare 8 variables with different types and print their types to the standard output.\n2. Yo"
+    },
+    {
+      "entity_id": "ent_096524c6b7e4",
+      "entity_type": "version",
+      "value": "python3",
+      "quote": "> python3 data_types.py",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 121,
+        "line_end": 121
+      },
+      "context": "tory: `ex00/`.\n- Files to turn in: `data_types.py`.\n- Allowed functions: any import is restricted.\n\nLike any other language, Python has several built-in data types. In this exercise, you will become familiar with the most popular and useful ones.\n\n1. Create a script called `data_types.py` and define a `data_types()` function. In this function, declare 8 variables with different types and print their types to the standard output.\n2. You must reproduce the following output exactly:\n    \n        > python3 data_types.py\n        [int, str, float, bool, list, dict, tuple, set]\n\n3. Do not write the data types explicitly in your print. Remember to call your function at the end of your script, as explained in today's instructions:\n    \n        if __name__ == '__main__':\n            data_types()\n    \n4. Put your file in the `ex00` folder in the `src` directory of your repository.\n\n## Chapter V\n\n### Exercise 01. Working with files\n\n- Turn-in directory: `ex01/`.\n- Files to turn in: `read_and_write.py`.\n-"
+    },
+    {
+      "entity_id": "ent_877c0e217ff5",
+      "entity_type": "version",
+      "value": "python3",
+      "quote": "$> python3 stock_prices.py tesla",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 172,
+        "line_end": 172
+      },
+      "context": "'AAPL': 287.73,\n        'MSFT': 173.79,\n        'NFLX': 416.90,\n        'TSLA': 724.88,\n        'NOK': 3.37\n        }\n\n2. Write a program that takes the name of a company (e.g., Apple) as an argument and displays its stock price (e.g., 287.73) on the standard output. If the program is given a company name that is not in the dictionary, it should display \"Unknown company.\" If no arguments are provided, or if too many arguments are provided, your program should do nothing and quit.\n\n        $> python3 stock_prices.py tesla\n        724.88\n        $> python3 stock_prices.py Facebook\n        Unknown company\n        $> python3 stock_prices.py Tesla Apple\n\n## Chapter VII\n\n### Exercise 03. Search by value and by key\n\n- Turn-in directory: `ex03/`.\n- Files to turn in: `ticker_symbols.py`.\n- Allowed functions: `import sys`.\n\n1. You will use the same two dictionaries as in the previous exercise. Copy them again using one of the functions in your script.\n2. Create a program that takes a ticker symbol ("
+    },
+    {
+      "entity_id": "ent_ee05975be19c",
+      "entity_type": "version",
+      "value": "python3",
+      "quote": "$> python3 stock_prices.py Facebook",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 174,
+        "line_end": 174
+      },
+      "context": "': 416.90,\n        'TSLA': 724.88,\n        'NOK': 3.37\n        }\n\n2. Write a program that takes the name of a company (e.g., Apple) as an argument and displays its stock price (e.g., 287.73) on the standard output. If the program is given a company name that is not in the dictionary, it should display \"Unknown company.\" If no arguments are provided, or if too many arguments are provided, your program should do nothing and quit.\n\n        $> python3 stock_prices.py tesla\n        724.88\n        $> python3 stock_prices.py Facebook\n        Unknown company\n        $> python3 stock_prices.py Tesla Apple\n\n## Chapter VII\n\n### Exercise 03. Search by value and by key\n\n- Turn-in directory: `ex03/`.\n- Files to turn in: `ticker_symbols.py`.\n- Allowed functions: `import sys`.\n\n1. You will use the same two dictionaries as in the previous exercise. Copy them again using one of the functions in your script.\n2. Create a program that takes a ticker symbol (e.g., AAPL) and displays the company name and stock pric"
+    },
+    {
+      "entity_id": "ent_b916f3d4e9a5",
+      "entity_type": "version",
+      "value": "python3",
+      "quote": "$> python3 stock_prices.py Tesla Apple",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 176,
+        "line_end": 176
+      },
+      "context": "Write a program that takes the name of a company (e.g., Apple) as an argument and displays its stock price (e.g., 287.73) on the standard output. If the program is given a company name that is not in the dictionary, it should display \"Unknown company.\" If no arguments are provided, or if too many arguments are provided, your program should do nothing and quit.\n\n        $> python3 stock_prices.py tesla\n        724.88\n        $> python3 stock_prices.py Facebook\n        Unknown company\n        $> python3 stock_prices.py Tesla Apple\n\n## Chapter VII\n\n### Exercise 03. Search by value and by key\n\n- Turn-in directory: `ex03/`.\n- Files to turn in: `ticker_symbols.py`.\n- Allowed functions: `import sys`.\n\n1. You will use the same two dictionaries as in the previous exercise. Copy them again using one of the functions in your script.\n2. Create a program that takes a ticker symbol (e.g., AAPL) and displays the company name and stock price, using a space as the delimiter. The program's behavior should be"
+    },
+    {
+      "entity_id": "ent_6d8ab040bc02",
+      "entity_type": "version",
+      "value": "python3",
+      "quote": "$> python3 ticker_symbols.py tsla",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 189,
+        "line_end": 189
+      },
+      "context": "se 03. Search by value and by key\n\n- Turn-in directory: `ex03/`.\n- Files to turn in: `ticker_symbols.py`.\n- Allowed functions: `import sys`.\n\n1. You will use the same two dictionaries as in the previous exercise. Copy them again using one of the functions in your script.\n2. Create a program that takes a ticker symbol (e.g., AAPL) and displays the company name and stock price, using a space as the delimiter. The program's behavior should be identical to that of the previous exercise.\n\n        $> python3 ticker_symbols.py tsla\n        Tesla 724.88\n        $> python3 ticker_symbols.py FB\n        Unknown ticker\n        $> python3 ticker_symbols.py TSLA AAPL\n\n## Chapter VIII\n\n### Exercise 04. Dictionaries\n\n- Turn-in directory: `ex04/`.\n- Files to turn in: `to_dictionary.py`.\n- Allowed functions: any import is restricted.\n\n1. Create a script named `to_dictionary.py` in one of the functions and for this function copy the following list of tuples as is:\n\n        list_of_tuples = [\n        ('Russia',"
+    },
+    {
+      "entity_id": "ent_8c994e28e594",
+      "entity_type": "version",
+      "value": "python3",
+      "quote": "$> python3 ticker_symbols.py FB",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 191,
+        "line_end": 191
+      },
+      "context": ".\n- Files to turn in: `ticker_symbols.py`.\n- Allowed functions: `import sys`.\n\n1. You will use the same two dictionaries as in the previous exercise. Copy them again using one of the functions in your script.\n2. Create a program that takes a ticker symbol (e.g., AAPL) and displays the company name and stock price, using a space as the delimiter. The program's behavior should be identical to that of the previous exercise.\n\n        $> python3 ticker_symbols.py tsla\n        Tesla 724.88\n        $> python3 ticker_symbols.py FB\n        Unknown ticker\n        $> python3 ticker_symbols.py TSLA AAPL\n\n## Chapter VIII\n\n### Exercise 04. Dictionaries\n\n- Turn-in directory: `ex04/`.\n- Files to turn in: `to_dictionary.py`.\n- Allowed functions: any import is restricted.\n\n1. Create a script named `to_dictionary.py` in one of the functions and for this function copy the following list of tuples as is:\n\n        list_of_tuples = [\n        ('Russia', '25'),\n        ('France', '132'),\n        ('Germany', '132'),"
+    },
+    {
+      "entity_id": "ent_9a091f487a14",
+      "entity_type": "version",
+      "value": "python3",
+      "quote": "$> python3 ticker_symbols.py TSLA AAPL",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 193,
+        "line_end": 193
+      },
+      "context": "`import sys`.\n\n1. You will use the same two dictionaries as in the previous exercise. Copy them again using one of the functions in your script.\n2. Create a program that takes a ticker symbol (e.g., AAPL) and displays the company name and stock price, using a space as the delimiter. The program's behavior should be identical to that of the previous exercise.\n\n        $> python3 ticker_symbols.py tsla\n        Tesla 724.88\n        $> python3 ticker_symbols.py FB\n        Unknown ticker\n        $> python3 ticker_symbols.py TSLA AAPL\n\n## Chapter VIII\n\n### Exercise 04. Dictionaries\n\n- Turn-in directory: `ex04/`.\n- Files to turn in: `to_dictionary.py`.\n- Allowed functions: any import is restricted.\n\n1. Create a script named `to_dictionary.py` in one of the functions and for this function copy the following list of tuples as is:\n\n        list_of_tuples = [\n        ('Russia', '25'),\n        ('France', '132'),\n        ('Germany', '132'),\n        ('Spain', '178'),\n        ('Italy', '162'),\n        ('Po"
+    },
+    {
+      "entity_id": "ent_c7ce615de74b",
+      "entity_type": "version",
+      "value": "python3",
+      "quote": "$ python3 all_stocks.py 'TSLA , aPPle, Facebook'",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 254,
+        "line_end": 254
+      },
+      "context": "in the string, the program should detect whether it is a company name, a ticker symbol, or neither.\n    - The program should not be case-sensitive, but it should be able to work with whitespaces.\n    - If there are no arguments or too many arguments, the program should display nothing.\n    - When there are two commas in a row in the string, the program should not display anything.\n    - The program must display the results separated by line breaks and use the following formatting:\n\n          $ python3 all_stocks.py 'TSLA , aPPle, Facebook'\n          TSLA is a ticker symbol for Tesla\n          Apple stock price is 287.73\n          Facebook is an unknown company or an unknown ticker symbol\n          $ python3 all_stocks.py 'TSLA,, apple'\n          $ python3 all_stocks.py 'TSLA, , apple'\n          $ python3 all_stocks.py TSLA AAPL\n\n## Chapter X\n\n### Exercise 06. Sorting a dictionary\n\n- Turn-in directory: `ex06/`.\n- Files to turn in: `dict_sorter.py`.\n- Allowed functions: any import is restricte"
+    },
+    {
+      "entity_id": "ent_172e63f30bca",
+      "entity_type": "version",
+      "value": "python3",
+      "quote": "$ python3 all_stocks.py 'TSLA,, apple'",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 258,
+        "line_end": 258
+      },
+      "context": "e are no arguments or too many arguments, the program should display nothing.\n    - When there are two commas in a row in the string, the program should not display anything.\n    - The program must display the results separated by line breaks and use the following formatting:\n\n          $ python3 all_stocks.py 'TSLA , aPPle, Facebook'\n          TSLA is a ticker symbol for Tesla\n          Apple stock price is 287.73\n          Facebook is an unknown company or an unknown ticker symbol\n          $ python3 all_stocks.py 'TSLA,, apple'\n          $ python3 all_stocks.py 'TSLA, , apple'\n          $ python3 all_stocks.py TSLA AAPL\n\n## Chapter X\n\n### Exercise 06. Sorting a dictionary\n\n- Turn-in directory: `ex06/`.\n- Files to turn in: `dict_sorter.py`.\n- Allowed functions: any import is restricted.\n\n1. For this exercise, take the list of tuples from `ex04` containing countries and numbers, and create a dictionary where the countries are the keys and the numbers are the values. Copy it into one of your"
+    },
+    {
+      "entity_id": "ent_7342ae8145a7",
+      "entity_type": "version",
+      "value": "python3",
+      "quote": "$ python3 all_stocks.py 'TSLA, , apple'",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 259,
+        "line_end": 259
+      },
+      "context": "gram should display nothing.\n    - When there are two commas in a row in the string, the program should not display anything.\n    - The program must display the results separated by line breaks and use the following formatting:\n\n          $ python3 all_stocks.py 'TSLA , aPPle, Facebook'\n          TSLA is a ticker symbol for Tesla\n          Apple stock price is 287.73\n          Facebook is an unknown company or an unknown ticker symbol\n          $ python3 all_stocks.py 'TSLA,, apple'\n          $ python3 all_stocks.py 'TSLA, , apple'\n          $ python3 all_stocks.py TSLA AAPL\n\n## Chapter X\n\n### Exercise 06. Sorting a dictionary\n\n- Turn-in directory: `ex06/`.\n- Files to turn in: `dict_sorter.py`.\n- Allowed functions: any import is restricted.\n\n1. For this exercise, take the list of tuples from `ex04` containing countries and numbers, and create a dictionary where the countries are the keys and the numbers are the values. Copy it into one of your functions in the script.\n2. Write a program that"
+    },
+    {
+      "entity_id": "ent_e76895353e3b",
+      "entity_type": "version",
+      "value": "python3",
+      "quote": "$ python3 all_stocks.py TSLA AAPL",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 260,
+        "line_end": 260
+      },
+      "context": "two commas in a row in the string, the program should not display anything.\n    - The program must display the results separated by line breaks and use the following formatting:\n\n          $ python3 all_stocks.py 'TSLA , aPPle, Facebook'\n          TSLA is a ticker symbol for Tesla\n          Apple stock price is 287.73\n          Facebook is an unknown company or an unknown ticker symbol\n          $ python3 all_stocks.py 'TSLA,, apple'\n          $ python3 all_stocks.py 'TSLA, , apple'\n          $ python3 all_stocks.py TSLA AAPL\n\n## Chapter X\n\n### Exercise 06. Sorting a dictionary\n\n- Turn-in directory: `ex06/`.\n- Files to turn in: `dict_sorter.py`.\n- Allowed functions: any import is restricted.\n\n1. For this exercise, take the list of tuples from `ex04` containing countries and numbers, and create a dictionary where the countries are the keys and the numbers are the values. Copy it into one of your functions in the script.\n2. Write a program that displays the country names first in descending ord"
+    },
+    {
+      "entity_id": "ent_3320176195d4",
+      "entity_type": "version",
+      "value": "python3",
+      "quote": "$ python3 caesar.py encode 'ssh -i private.key user@school21.ru' 12",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 339,
+        "line_end": 339
+      },
+      "context": "XIII\n\n### Exercise 09. Caesar cipher\n\n- Turn-in directory: `ex09/`.\n- Files to turn in: `caesar.py`.\n- Allowed functions: `import sys`.\n\nThere is a method called the [Caesar cipher](https://en.wikipedia.org/wiki/Caesar_cipher) that helps to encode text by shifting the alphabetical order. For example, the encoded version of \"hello\" might be \"tqxxa\" if we use a shift of 12.\n\n1. Write a program that will encode or decode any string using a given shift according to the argument provided:\n\n       $ python3 caesar.py encode 'ssh -i private.key user@school21.ru' 12\n       eet -u bduhmfq.wqk geqd@eotaax21.dg\n       $ python3 caesar.py decode 'eet -u bduhmfq.wqk geqd@eotaax21.dg' 12\n       ssh -i private.key user@school21.ru\n\n2. If the scripts are given a string containing Cyrillic symbols, for example, the scripts should raise the exception: \"The script does not support your language yet.\" If an incorrect number of arguments is given, raise an exception."
+    },
+    {
+      "entity_id": "ent_722e00bfe36f",
+      "entity_type": "version",
+      "value": "python3",
+      "quote": "$ python3 caesar.py decode 'eet -u bduhmfq.wqk geqd@eotaax21.dg' 12",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 341,
+        "line_end": 341
+      },
+      "context": "ons: `import sys`.\n\nThere is a method called the [Caesar cipher](https://en.wikipedia.org/wiki/Caesar_cipher) that helps to encode text by shifting the alphabetical order. For example, the encoded version of \"hello\" might be \"tqxxa\" if we use a shift of 12.\n\n1. Write a program that will encode or decode any string using a given shift according to the argument provided:\n\n       $ python3 caesar.py encode 'ssh -i private.key user@school21.ru' 12\n       eet -u bduhmfq.wqk geqd@eotaax21.dg\n       $ python3 caesar.py decode 'eet -u bduhmfq.wqk geqd@eotaax21.dg' 12\n       ssh -i private.key user@school21.ru\n\n2. If the scripts are given a string containing Cyrillic symbols, for example, the scripts should raise the exception: \"The script does not support your language yet.\" If an incorrect number of arguments is given, raise an exception."
+    },
+    {
+      "entity_id": "ent_7b88668fe450",
+      "entity_type": "technology",
+      "value": "Python",
+      "quote": "# Intro to Python: Syntax and Semantics",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 1,
+        "line_end": 1
+      },
+      "context": "# Intro to Python: Syntax and Semantics\n\nSummary: Today we will help you acquire basic knowledge of the syntax and semantics of Python.\n\n💡 [Tap here](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624) **to leave your feedback on the project**. It's anonymous and will help our team make your educational experience better. We recommend completing the survey immediately after the project.\n\n## Contents\n\n1. [Chapter I](#chapter-i) \\\n    1.1. [Foreword](#foreword)\n2. [Chapter II](#chapter-ii) \\\n    2.1. [Inst"
+    },
+    {
+      "entity_id": "ent_9cdc45915f15",
+      "entity_type": "technology",
+      "value": "Python",
+      "quote": "Summary: Today we will help you acquire basic knowledge of the syntax and semantics of Python.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 3,
+        "line_end": 3
+      },
+      "context": "# Intro to Python: Syntax and Semantics\n\nSummary: Today we will help you acquire basic knowledge of the syntax and semantics of Python.\n\n💡 [Tap here](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624) **to leave your feedback on the project**. It's anonymous and will help our team make your educational experience better. We recommend completing the survey immediately after the project.\n\n## Contents\n\n1. [Chapter I](#chapter-i) \\\n    1.1. [Foreword](#foreword)\n2. [Chapter II](#chapter-ii) \\\n    2.1. [Instructions](#instructions)\n3. [Chapter III](#chapter-iii) \\\n    3.1. [Specific instructions of the day](#specific-instr"
+    },
+    {
+      "entity_id": "ent_6c4b271da2c2",
+      "entity_type": "technology",
+      "value": "Python",
+      "quote": "Python is the most popular programming language for data science. What makes it so well-suited for this type of task? Python is an interpreted language. This allows you to easily interact with different pieces of code and quickly obtain results. This is exactly what we need when analyzing data from different angles or…",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 41,
+        "line_end": 41
+      },
+      "context": "cise-05-search-by-value-or-by-key)\n10. [Chapter X](#chapter-x) \\\n    10.1. [Exercise 06. Sorting a dictionary](#exercise-06-sorting-a-dictionary)\n11. [Chapter XI](#chapter-xi) \\\n    11.1. [Exercise 07. Sets](#exercise-07-sets)\n12. [Chapter XII](#chapter-xii) \\\n    12.1. [Exercise 08. Working with strings as lists](#exercise-08-working-with-strings-as-lists)\n13. [Chapter XIII](#chapter-xiii) \\\n    13.1. [Exercise 09. Caesar cipher](#exercise-09-caesar-cipher)\n    \n   \n## Chapter I\n\n### Foreword\n\nPython is the most popular programming language for data science. What makes it so well-suited for this type of task? Python is an interpreted language. This allows you to easily interact with different pieces of code and quickly obtain results. This is exactly what we need when analyzing data from different angles or trying different hyperparameters for a machine learning model. Additionally, Python has many libraries suitable for scientific tasks, including data science. Add to that its simple synta"
+    },
+    {
+      "entity_id": "ent_4bde21237ccf",
+      "entity_type": "technology",
+      "value": "Python",
+      "quote": "For fun, take a look at these 19 beautiful guiding principles that influenced the design of Python:",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 43,
+        "line_end": 43
+      },
+      "context": "y interact with different pieces of code and quickly obtain results. This is exactly what we need when analyzing data from different angles or trying different hyperparameters for a machine learning model. Additionally, Python has many libraries suitable for scientific tasks, including data science. Add to that its simple syntax, and you have the most popular programming language for data science tasks.\n\nFor fun, take a look at these 19 beautiful guiding principles that influenced the design of Python:\n\n* Beautiful is better than ugly.\n* Explicit is better than implicit.\n* Simple is better than complex.\n* Complex is better than complicated.\n* Flat is better than nested.\n* Sparse is better than dense.\n* Readability counts.\n* Special cases aren’t special enough to break the rules.\n* Although practicality beats purity.\n* Errors should never pass silently.\n* Unless explicitly silenced.\n* In the face of ambiguity, refuse the temptation to guess.\n* There should be one — and preferably only one — o"
+    },
+    {
+      "entity_id": "ent_2c994b982165",
+      "entity_type": "technology",
+      "value": "Python",
+      "quote": "If you forget any of them, just write \"import this\" in Python, and they will quickly appear.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 65,
+        "line_end": 65
+      },
+      "context": "fuse the temptation to guess.\n* There should be one — and preferably only one — obvious way to do it.\n* Although that way may not be obvious at first unless you’re Dutch.\n* Now is better than never.\n* Although never is often better than *right* now.\n* If the implementation is hard to explain, it’s a bad idea.\n* If the implementation is easy to explain, it may be a good idea.\n* Namespaces are one honking great idea — let’s do more of those!\n\nIf you forget any of them, just write \"import this\" in Python, and they will quickly appear.\n\n## Chapter II\n\n### Instructions\n\nHow to learn at “School 21”:\n\n- Here, you’ll find a unique learning experience with a lot of freedom. You’re given a task and left to find your own way to solve it, using whatever resources work best for you — whether that’s the Internet or AI tools like GigaChat. Just be mindful of information quality: verify, think critically, analyze, and compare.\n- Peer-to-peer (P2P) learning is the exchange of knowledge and experience with pe"
+    },
+    {
+      "entity_id": "ent_7149ffa7e0a9",
+      "entity_type": "technology",
+      "value": "GigaChat",
+      "quote": "- Here, you’ll find a unique learning experience with a lot of freedom. You’re given a task and left to find your own way to solve it, using whatever resources work best for you — whether that’s the Internet or AI tools like GigaChat. Just be mindful of information quality: verify, think critically, analyze, and compa…",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 73,
+        "line_end": 73
+      },
+      "context": "ntation is easy to explain, it may be a good idea.\n* Namespaces are one honking great idea — let’s do more of those!\n\nIf you forget any of them, just write \"import this\" in Python, and they will quickly appear.\n\n## Chapter II\n\n### Instructions\n\nHow to learn at “School 21”:\n\n- Here, you’ll find a unique learning experience with a lot of freedom. You’re given a task and left to find your own way to solve it, using whatever resources work best for you — whether that’s the Internet or AI tools like GigaChat. Just be mindful of information quality: verify, think critically, analyze, and compare.\n- Peer-to-peer (P2P) learning is the exchange of knowledge and experience with peers, where everyone acts as both mentor and student. This approach allows you to gain a deeper understanding of the material by learning from one another.\n- Feel free to ask for help: around you are peers who are also navigating this path for the first time. Share your own experience and ideas with others.  Join Rocket.Chat to"
+    },
+    {
+      "entity_id": "ent_d5aa43f97c03",
+      "entity_type": "technology",
+      "value": "Rocket.Chat",
+      "quote": "- Feel free to ask for help: around you are peers who are also navigating this path for the first time. Share your own experience and ideas with others. Join Rocket.Chat to stay updated with the latest community announcements.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 75,
+        "line_end": 75
+      },
+      "context": "s like GigaChat. Just be mindful of information quality: verify, think critically, analyze, and compare.\n- Peer-to-peer (P2P) learning is the exchange of knowledge and experience with peers, where everyone acts as both mentor and student. This approach allows you to gain a deeper understanding of the material by learning from one another.\n- Feel free to ask for help: around you are peers who are also navigating this path for the first time. Share your own experience and ideas with others.  Join Rocket.Chat to stay updated with the latest community announcements. \n- Your learning is meaningless if you just copy someone else’s solutions. When receiving help from others, always make sure you fully understand the “why”, “how”, and “purpose” behind the solution. Don’t be afraid to make mistakes. \n- Does the task seem impossible? Take a break, get some fresh air and clear your mind — this has helped many people. Maybe after that, the solution will come to you naturally.\n- The learning process is just a"
+    },
+    {
+      "entity_id": "ent_b9426386f3c1",
+      "entity_type": "technology",
+      "value": "Python",
+      "quote": "* Here and throughout, we use Python 3 as the only correct version of Python.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 83,
+        "line_end": 83
+      },
+      "context": "es the task seem impossible? Take a break, get some fresh air and clear your mind — this has helped many people. Maybe after that, the solution will come to you naturally.\n- The learning process is just as important as the result. It’s not just about completing the task — it’s about understanding HOW to solve it. \n\nHow to work with the project:\n\n* Use this page as your only reference. Do not pay attention to rumors or speculation about how to prepare your solution.\n* Here and throughout, we use Python 3 as the only correct version of Python.\n* The python files for python exercises (module01, module02, module03) must have the following block at the end: `if __name__ == ‘__main__’`.\n* Pay attention to the permissions of your files and directories.\n* To be assessed your solution must be in your GIT repository.\n* Your solutions will be evaluated by your peers in the bootcamp.\n* You should not leave any other files in your directory other than those explicitly specified in the exercise instructio"
+    },
+    {
+      "entity_id": "ent_9f0c02199d0b",
+      "entity_type": "technology",
+      "value": "python",
+      "quote": "* The python files for python exercises (module01, module02, module03) must have the following block at the end: `if __name__ == ‘__main__’`.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 84,
+        "line_end": 84
+      },
+      "context": "esh air and clear your mind — this has helped many people. Maybe after that, the solution will come to you naturally.\n- The learning process is just as important as the result. It’s not just about completing the task — it’s about understanding HOW to solve it. \n\nHow to work with the project:\n\n* Use this page as your only reference. Do not pay attention to rumors or speculation about how to prepare your solution.\n* Here and throughout, we use Python 3 as the only correct version of Python.\n* The python files for python exercises (module01, module02, module03) must have the following block at the end: `if __name__ == ‘__main__’`.\n* Pay attention to the permissions of your files and directories.\n* To be assessed your solution must be in your GIT repository.\n* Your solutions will be evaluated by your peers in the bootcamp.\n* You should not leave any other files in your directory other than those explicitly specified in the exercise instructions. It is recommended that you modify your .gitignore"
+    },
+    {
+      "entity_id": "ent_f9448a6852a1",
+      "entity_type": "technology",
+      "value": "Python",
+      "quote": "* The interpreter to be used is Python 3.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 106,
+        "line_end": 106
+      },
+      "context": "t end with a function call in a condition similar to the following: `if __name__ == '__main__': your_function(whatever parameter is required)`.\n* You may place error handling in this same condition.\n* No imports are allowed except those mentioned in the \"Authorized Functions\" section of the title block of each exercise.\n* You can use any built-in function unless it is prohibited in an exercise.\n* The exceptions raised by the open() function are not to be handled.\n* The interpreter to be used is Python 3.\n\n## Chapter IV\n\n### Exercise 00. Data types\n\n- Turn-in directory: `ex00/`.\n- Files to turn in: `data_types.py`.\n- Allowed functions: any import is restricted.\n\nLike any other language, Python has several built-in data types. In this exercise, you will become familiar with the most popular and useful ones.\n\n1. Create a script called `data_types.py` and define a `data_types()` function. In this function, declare 8 variables with different types and print their types to the standard output.\n2."
+    },
+    {
+      "entity_id": "ent_19c7563b0576",
+      "entity_type": "technology",
+      "value": "Python",
+      "quote": "Like any other language, Python has several built-in data types. In this exercise, you will become familiar with the most popular and useful ones.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 116,
+        "line_end": 116
+      },
+      "context": "on.\n* No imports are allowed except those mentioned in the \"Authorized Functions\" section of the title block of each exercise.\n* You can use any built-in function unless it is prohibited in an exercise.\n* The exceptions raised by the open() function are not to be handled.\n* The interpreter to be used is Python 3.\n\n## Chapter IV\n\n### Exercise 00. Data types\n\n- Turn-in directory: `ex00/`.\n- Files to turn in: `data_types.py`.\n- Allowed functions: any import is restricted.\n\nLike any other language, Python has several built-in data types. In this exercise, you will become familiar with the most popular and useful ones.\n\n1. Create a script called `data_types.py` and define a `data_types()` function. In this function, declare 8 variables with different types and print their types to the standard output.\n2. You must reproduce the following output exactly:\n    \n        > python3 data_types.py\n        [int, str, float, bool, list, dict, tuple, set]\n\n3. Do not write the data types explicitly in your pr"
+    },
+    {
+      "entity_id": "ent_698f5d84219e",
+      "entity_type": "technology",
+      "value": "Python",
+      "quote": "1. Design a Python script called `read_and_write.py` that opens the file [ds.csv](https://drive.google.com/file/d/1tDEDTytYaUrfJsXD5z5QvJSb5VNlL-eZ/view), reads the data it contains, replaces all the comma delimiters with \"\\t\", and saves the data to a new file `ds.tsv`. Be careful, your data may contain commas. If you…",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 141,
+        "line_end": 141
+      },
+      "context": "der in the `src` directory of your repository.\n\n## Chapter V\n\n### Exercise 01. Working with files\n\n- Turn-in directory: `ex01/`.\n- Files to turn in: `read_and_write.py`.\n- Allowed functions: any import is restricted.\n\nFor this exercise, feel free to define as many functions as you need and name them whatever you like. In the attached file `ds.csv`, which you may recognize from the previous day, there are several columns separated by commas containing different data about vacancies.\n\n1. Design a Python script called `read_and_write.py` that opens the file [ds.csv](https://drive.google.com/file/d/1tDEDTytYaUrfJsXD5z5QvJSb5VNlL-eZ/view), reads the data it contains, replaces all the comma delimiters with \"\\t\", and saves the data to a new file `ds.tsv`. Be careful, your data may contain commas. If you replace them, you will corrupt the data.\n2. Put your script in the `ex01` folder in the `src` directory of your repository.\n\n## Chapter VI\n\n### Exercise 02. Search by key\n\n- Turn-in directory: `ex02"
+    },
+    {
+      "entity_id": "ent_468c64575317",
+      "entity_type": "link",
+      "value": "https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624",
+      "quote": "💡 [Нажми сюда](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624) **чтобы поделиться с нами обратной связью на этот проект**. Это анонимно и поможет нашей команде сделать обучение лучше. Рекомендуем заполнить опрос сразу после выполнения проекта.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 5,
+        "line_end": 5
+      },
+      "context": "# Введение в Python: синтаксис и семантика\n\nРезюме: Сегодня ты получишь базовые знания о синтаксисе и семантике Python.\n\n💡 [Нажми сюда](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624) **чтобы поделиться с нами обратной связью на этот проект**. Это анонимно и поможет нашей команде сделать обучение лучше. Рекомендуем заполнить опрос сразу после выполнения проекта.\n\n## Содержание\n\n1. [Глава I](#глава-i) \\\n    1.1. [Предисловие](#предисловие)\n2. [Глава II](#глава-ii) \\\n    2.1. [Инструкция](#инструкция)\n3. [Глава III](#глава-iii) \\\n    3.1. [Дополнительные инструкции на сегодня](#дополнительные-инструкции-на-сегодня)\n4. [Глава IV](#глава-iv) \\\n    4.1. [Упражнение 00. Типы данн"
+    },
+    {
+      "entity_id": "ent_f49b75a30db0",
+      "entity_type": "link",
+      "value": "https://drive.google.com/file/d/1tDEDTytYaUrfJsXD5z5QvJSb5VNlL-eZ/view",
+      "quote": "В этом упражнении ты можешь определить столько функций, сколько потребуется, и назвать их как угодно. В прикреплённом файле [ds.csv](https://drive.google.com/file/d/1tDEDTytYaUrfJsXD5z5QvJSb5VNlL-eZ/view) (вспомни предыдущий день) есть несколько столбцов, разделённых запятыми, с разными данными о вакансиях.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 139,
+        "line_end": 139
+      },
+      "context": "цию в конце скрипта, как указано в сегодняшних инструкциях:\n    \n        if __name__ == '__main__':\n            data_types()\n    \n4. Помести файл в каталог ex00 внутри каталога src твоего репозитория.\n\n## Глава V\n\n### Упражнение 01. Работа с файлами\n\n- Turn-in directory: `ex01/`.\n- Files to turn in: `read_and_write.py`.\n- Allowed functions: любой импорт запрещён.\n\nВ этом упражнении ты можешь определить столько функций, сколько потребуется, и назвать их как угодно. В прикреплённом файле [ds.csv](https://drive.google.com/file/d/1tDEDTytYaUrfJsXD5z5QvJSb5VNlL-eZ/view) (вспомни предыдущий день) есть несколько столбцов, разделённых запятыми, с разными данными о вакансиях.\n\n1. Разработай скрипт на Python read_and_write.py, который открывает файл ds.csv, считывает содержащиеся в нём данные, заменяет все разделители-запятые на \"\\t\" и сохраняет данные в новый файл ds.tsv. Будь внимателен: в данных могут встречаться запятые. Если ты заменишь их, данные будут повреждены.\n2. Помести скрипт в каталог ex01 внутри каталога src твоего репозитория.\n\n## Глава VI\n\n### Упра"
+    },
+    {
+      "entity_id": "ent_38011ab76c77",
+      "entity_type": "link",
+      "value": "https://en.wikipedia.org/wiki/Caesar_cipher",
+      "quote": "Существует метод под названием [Caesar cipher](https://en.wikipedia.org/wiki/Caesar_cipher) (Шифр Цезаря), который кодирует текст сдвигом по алфавиту. Например, «hello» при сдвиге 12 может превратиться в «tqxxa».",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 336,
+        "line_end": 336
+      },
+      "context": ", добро пожаловать в нашу команду! Мы уверены, что работать вместе с тобой будет очень приятно. Для нас это важно - мы стремимся, чтобы в компании работались именно такие люди._\n3. Использовать конструкцию `'la-la {0}'.format(text)` запрещено. Пожалуйста, используй f-строки. Они быстрее и читается лучше.\n\n## Глава XIII\n\n### Упражнение 09. Шифр Цезаря\n\n- Turn-in directory: `ex09/`.\n- Files to turn in: `caesar.py`.\n- Allowed functions: `import sys`.\n\nСуществует метод под названием [Caesar cipher](https://en.wikipedia.org/wiki/Caesar_cipher) (Шифр Цезаря), который кодирует текст сдвигом по алфавиту. Например, «hello» при сдвиге 12 может превратиться в «tqxxa».\n\n1. Напиши программу, которая будет кодировать или декодировать произвольную строку, используя заданный сдвиг, в соответствии с переданным аргументом:\n\n       $ python3 caesar.py encode 'ssh -i private.key user@school21.ru' 12\n       eet -u bduhmfq.wqk geqd@eotaax21.dg\n       $ python3 caesar.py decode 'eet -u bduhmfq.wqk geqd@eotaax21.dg' 12\n       ssh -i private.key user@s"
+    },
+    {
+      "entity_id": "ent_cd53ed736746",
+      "entity_type": "image",
+      "value": "misc/images/1.png",
+      "quote": "![1](misc/images/1.png)",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 322,
+        "line_end": 322
+      },
+      "context": "llowed functions: `import sys`.\n\nПредставь, что ты работаешь в корпорации, где все почтовые адреса имеют единый шаблон: <name.surname@corp.com>.\n\n1. Создай скрипт, который принимает путь к файлу с этими адресами в качестве аргумента. Все адреса в файле разделены символом '\\n'. Скрипт должен вернуть таблицу со следующими полями: **Name**, **Surname** и **Email**, разделёнными \"\\t\". Значения Name и Surname должны начинаться с заглавной буквы. Таблицу нужно сохранить в файл employees.tsv.\n\nПример:\n![1](misc/images/1.png)\n\n2. Создай другой скрипт, который принимает адрес электронной почты, ищет соответствующее имя в файле, созданном первым скриптом, и возвращает первый абзац письма:\n    _Иван, добро пожаловать в нашу команду! Мы уверены, что работать вместе с тобой будет очень приятно. Для нас это важно - мы стремимся, чтобы в компании работались именно такие люди._\n3. Использовать конструкцию `'la-la {0}'.format(text)` запрещено. Пожалуйста, используй f-строки. Они быстрее и читается лучше.\n\n## Глава XIII\n\n###"
+    },
+    {
+      "entity_id": "ent_7aae18e9dfef",
+      "entity_type": "version",
+      "value": "Python 3",
+      "quote": "* Здесь и далее (в заданиях, где используется Python) единственной допустимой версией Python является Python 3.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 83,
+        "line_end": 83
+      },
+      "context": "делай перерыв, проветрись, перезагрузи голову — это помогало многим. Возможно, после этого решение придет само собой.\n- Важен не только результат обучения, но и сам процесс. Нужно не просто решить задачу, а понять, КАК ее решить.\n\nКак работать с проектом:\n\n* Не обращай внимание на слухи, подсказки и догадки. Если сомневаешься, как выполнять задание - обращайся к этой инструкции, и только к ней.\n* Здесь и далее (в заданиях, где используется Python) единственной допустимой версией Python является Python 3.\n* Если ты выполняешь задания на Python (module01, module02, module03), в каждом python-файле в конце добавляй служебный блок `if __name__ == '__main__'`.\n* Перепроверь настройки прав доступа к файлам и каталогам.\n* Чтобы твоё решение приняли к оценке, оно должно лежать в твоём GIT-репозитории.\n* Оценивание выполняют твои пиры по интенсиву.\n* В твоей директории не должно быть иных файлов, кроме тех, что обозначены в заданиях. Настрой .gitignore, чтобы исключить случайные файлы и папки из провер"
+    },
+    {
+      "entity_id": "ent_fad8c75df74a",
+      "entity_type": "version",
+      "value": "Python 3",
+      "quote": "* Используемый интерпретатор: Python 3.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 106,
+        "line_end": 106
+      },
+      "context": "сти. Используй функции!\n* В конце каждого файла должен быть вызов функции внутри условия вида: `if __name__ == '__main__': your_function(whatever parameter is required)`.\n* Обработку ошибок можно разместить в этом же условии.\n* Импорты запрещены, кроме тех, что указаны в разделе «Разрешённые импорты/функции» в шапке каждого упражнения.\n* Разрешены любые встроенные функции, если в упражнении не указано иное.\n* Исключения, выбрасываемые open(), не нужно обрабатывать.\n* Используемый интерпретатор: Python 3.\n\n## Глава IV\n\n### Упражнение 00. Типы данных\n\n- Turn-in directory: `ex00/`.\n- Files to turn in: `data_types.py`.\n- Allowed functions: любой импорт запрещён.\n\nКак и в любом другом языке, в Python есть несколько встроенных типов данных. В этом упражнении ты познакомишься с самыми популярными и полезными.\n\n1. Создай скрипт data_types.py и определи функцию data_types(). В этой функции объяви 8 переменных разных типов и выведи их типы в стандартный поток вывода.\n2. Тебе нужно **в точности** воспрои"
+    },
+    {
+      "entity_id": "ent_1c2cc0b2ea82",
+      "entity_type": "version",
+      "value": "python3",
+      "quote": "> python3 data_types.py",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 121,
+        "line_end": 121
+      },
+      "context": "данных\n\n- Turn-in directory: `ex00/`.\n- Files to turn in: `data_types.py`.\n- Allowed functions: любой импорт запрещён.\n\nКак и в любом другом языке, в Python есть несколько встроенных типов данных. В этом упражнении ты познакомишься с самыми популярными и полезными.\n\n1. Создай скрипт data_types.py и определи функцию data_types(). В этой функции объяви 8 переменных разных типов и выведи их типы в стандартный поток вывода.\n2. Тебе нужно **в точности** воспроизвести следующий вывод:\n    \n        > python3 data_types.py\n        [int, str, float, bool, list, dict, tuple, set]\n\n3. Не вписывай названия типов вручную в print. Не забудь вызвать свою функцию в конце скрипта, как указано в сегодняшних инструкциях:\n    \n        if __name__ == '__main__':\n            data_types()\n    \n4. Помести файл в каталог ex00 внутри каталога src твоего репозитория.\n\n## Глава V\n\n### Упражнение 01. Работа с файлами\n\n- Turn-in directory: `ex01/`.\n- Files to turn in: `read_and_write.py`.\n- Allowed functions: любой импор"
+    },
+    {
+      "entity_id": "ent_2f01ccaffbc1",
+      "entity_type": "version",
+      "value": "python3",
+      "quote": "$> python3 stock_prices.py tesla",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 172,
+        "line_end": 172
+      },
+      "context": "'AAPL': 287.73,\n        'MSFT': 173.79,\n        'NFLX': 416.90,\n        'TSLA': 724.88,\n        'NOK': 3.37\n        }\n\n2. Напиши программу, которая принимает в качестве аргумента название компании (например, Apple) и выводит в стандартный поток её цену акции (например, 287.73). Если программе передано название компании, которой нет в словаре, она должна вывести \"Unknown company\". Если аргументы не переданы или их слишком много, программа не должна делать ничего и должна завершиться.\n\n        $> python3 stock_prices.py tesla\n        724.88\n        $> python3 stock_prices.py Facebook\n        Unknown company\n        $> python3 stock_prices.py Tesla Apple\n\n## Глава VII\n\n### Упражнение 03. Поиск по значению и по ключу\n\n- Turn-in directory: `ex03/`.\n- Files to turn in: `ticker_symbols.py`.\n- Allowed functions: `import sys`.\n\n1. Используй те же два словаря, что и в предыдущем упражнении. Ещё раз скопируй их, используя одну из функций в твоём скрипте.\n2. Создай программу, которая принимает тикер (нап"
+    },
+    {
+      "entity_id": "ent_25b3c1fe8af0",
+      "entity_type": "version",
+      "value": "python3",
+      "quote": "$> python3 stock_prices.py Facebook",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 174,
+        "line_end": 174
+      },
+      "context": "416.90,\n        'TSLA': 724.88,\n        'NOK': 3.37\n        }\n\n2. Напиши программу, которая принимает в качестве аргумента название компании (например, Apple) и выводит в стандартный поток её цену акции (например, 287.73). Если программе передано название компании, которой нет в словаре, она должна вывести \"Unknown company\". Если аргументы не переданы или их слишком много, программа не должна делать ничего и должна завершиться.\n\n        $> python3 stock_prices.py tesla\n        724.88\n        $> python3 stock_prices.py Facebook\n        Unknown company\n        $> python3 stock_prices.py Tesla Apple\n\n## Глава VII\n\n### Упражнение 03. Поиск по значению и по ключу\n\n- Turn-in directory: `ex03/`.\n- Files to turn in: `ticker_symbols.py`.\n- Allowed functions: `import sys`.\n\n1. Используй те же два словаря, что и в предыдущем упражнении. Ещё раз скопируй их, используя одну из функций в твоём скрипте.\n2. Создай программу, которая принимает тикер (например, AAPL) и выводит название компании и цену акции, р"
+    },
+    {
+      "entity_id": "ent_1a3cff54f211",
+      "entity_type": "version",
+      "value": "python3",
+      "quote": "$> python3 stock_prices.py Tesla Apple",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 176,
+        "line_end": 176
+      },
+      "context": "пиши программу, которая принимает в качестве аргумента название компании (например, Apple) и выводит в стандартный поток её цену акции (например, 287.73). Если программе передано название компании, которой нет в словаре, она должна вывести \"Unknown company\". Если аргументы не переданы или их слишком много, программа не должна делать ничего и должна завершиться.\n\n        $> python3 stock_prices.py tesla\n        724.88\n        $> python3 stock_prices.py Facebook\n        Unknown company\n        $> python3 stock_prices.py Tesla Apple\n\n## Глава VII\n\n### Упражнение 03. Поиск по значению и по ключу\n\n- Turn-in directory: `ex03/`.\n- Files to turn in: `ticker_symbols.py`.\n- Allowed functions: `import sys`.\n\n1. Используй те же два словаря, что и в предыдущем упражнении. Ещё раз скопируй их, используя одну из функций в твоём скрипте.\n2. Создай программу, которая принимает тикер (например, AAPL) и выводит название компании и цену акции, разделённые пробелом. Поведение программы должно быть идентично преды"
+    },
+    {
+      "entity_id": "ent_d4c1efa40cdb",
+      "entity_type": "version",
+      "value": "python3",
+      "quote": "$> python3 ticker_symbols.py tsla",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 189,
+        "line_end": 189
+      },
+      "context": "# Глава VII\n\n### Упражнение 03. Поиск по значению и по ключу\n\n- Turn-in directory: `ex03/`.\n- Files to turn in: `ticker_symbols.py`.\n- Allowed functions: `import sys`.\n\n1. Используй те же два словаря, что и в предыдущем упражнении. Ещё раз скопируй их, используя одну из функций в твоём скрипте.\n2. Создай программу, которая принимает тикер (например, AAPL) и выводит название компании и цену акции, разделённые пробелом. Поведение программы должно быть идентично предыдущему упражнению.\n\n        $> python3 ticker_symbols.py tsla\n        Tesla 724.88\n        $> python3 ticker_symbols.py FB\n        Unknown ticker\n        $> python3 ticker_symbols.py TSLA AAPL\n\n## Глава VIII\n\n### Упражнение 04. Словари\n\n- Turn-in directory: `ex04/`.\n- Files to turn in: `to_dictionary.py`.\n- Allowed functions: любой импорт запрещён.\n\n1. Создай скрипт с именем to_dictionary.py. В одной из функций скопируй следующий список кортежей как есть:\n\n        list_of_tuples = [\n        ('Russia', '25'),\n        ('France', '132'"
+    },
+    {
+      "entity_id": "ent_cb1cd3c8a60a",
+      "entity_type": "version",
+      "value": "python3",
+      "quote": "$> python3 ticker_symbols.py FB",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 191,
+        "line_end": 191
+      },
+      "context": "Turn-in directory: `ex03/`.\n- Files to turn in: `ticker_symbols.py`.\n- Allowed functions: `import sys`.\n\n1. Используй те же два словаря, что и в предыдущем упражнении. Ещё раз скопируй их, используя одну из функций в твоём скрипте.\n2. Создай программу, которая принимает тикер (например, AAPL) и выводит название компании и цену акции, разделённые пробелом. Поведение программы должно быть идентично предыдущему упражнению.\n\n        $> python3 ticker_symbols.py tsla\n        Tesla 724.88\n        $> python3 ticker_symbols.py FB\n        Unknown ticker\n        $> python3 ticker_symbols.py TSLA AAPL\n\n## Глава VIII\n\n### Упражнение 04. Словари\n\n- Turn-in directory: `ex04/`.\n- Files to turn in: `to_dictionary.py`.\n- Allowed functions: любой импорт запрещён.\n\n1. Создай скрипт с именем to_dictionary.py. В одной из функций скопируй следующий список кортежей как есть:\n\n        list_of_tuples = [\n        ('Russia', '25'),\n        ('France', '132'),\n        ('Germany', '132'),\n        ('Spain', '178'),"
+    },
+    {
+      "entity_id": "ent_38351ae0937e",
+      "entity_type": "version",
+      "value": "python3",
+      "quote": "$> python3 ticker_symbols.py TSLA AAPL",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 193,
+        "line_end": 193
+      },
+      "context": "s.py`.\n- Allowed functions: `import sys`.\n\n1. Используй те же два словаря, что и в предыдущем упражнении. Ещё раз скопируй их, используя одну из функций в твоём скрипте.\n2. Создай программу, которая принимает тикер (например, AAPL) и выводит название компании и цену акции, разделённые пробелом. Поведение программы должно быть идентично предыдущему упражнению.\n\n        $> python3 ticker_symbols.py tsla\n        Tesla 724.88\n        $> python3 ticker_symbols.py FB\n        Unknown ticker\n        $> python3 ticker_symbols.py TSLA AAPL\n\n## Глава VIII\n\n### Упражнение 04. Словари\n\n- Turn-in directory: `ex04/`.\n- Files to turn in: `to_dictionary.py`.\n- Allowed functions: любой импорт запрещён.\n\n1. Создай скрипт с именем to_dictionary.py. В одной из функций скопируй следующий список кортежей как есть:\n\n        list_of_tuples = [\n        ('Russia', '25'),\n        ('France', '132'),\n        ('Germany', '132'),\n        ('Spain', '178'),\n        ('Italy', '162'),\n        ('Portugal', '17'),\n        ('Finla"
+    },
+    {
+      "entity_id": "ent_722f3236dfe8",
+      "entity_type": "version",
+      "value": "python3",
+      "quote": "$ python3 all_stocks.py 'TSLA , aPPle, Facebook'",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 254,
+        "line_end": 254
+      },
+      "context": "я в строке программа должна определять, является ли оно названием компании, тикером или не тем и не другим.\n    - Программа не должна зависеть от регистра, но должна корректно работать с пробелами.\n    - Если аргументы отсутствуют или их слишком много, программа не должна ничего выводить.\n    - Если в строке встречаются две запятые подряд, программа не должна ничего выводить.\n    - Программа должна выводить результаты, разделённые переводами строки, и использовать следующий формат:\n\n          $ python3 all_stocks.py 'TSLA , aPPle, Facebook'\n          TSLA is a ticker symbol for Tesla\n          Apple stock price is 287.73\n          Facebook is an unknown company or an unknown ticker symbol\n          $ python3 all_stocks.py 'TSLA,, apple'\n          $ python3 all_stocks.py 'TSLA, , apple'\n          $ python3 all_stocks.py TSLA AAPL\n\n## Глава X\n\n### Упражнение 06. Сортировка словаря\n\n- Turn-in directory: `ex06/`.\n- Files to turn in: `dict_sorter.py`.\n- Allowed functions: любой импорт запрещён.\n\n1"
+    },
+    {
+      "entity_id": "ent_af6459066584",
+      "entity_type": "version",
+      "value": "python3",
+      "quote": "$ python3 all_stocks.py 'TSLA,, apple'",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 258,
+        "line_end": 258
+      },
+      "context": "ргументы отсутствуют или их слишком много, программа не должна ничего выводить.\n    - Если в строке встречаются две запятые подряд, программа не должна ничего выводить.\n    - Программа должна выводить результаты, разделённые переводами строки, и использовать следующий формат:\n\n          $ python3 all_stocks.py 'TSLA , aPPle, Facebook'\n          TSLA is a ticker symbol for Tesla\n          Apple stock price is 287.73\n          Facebook is an unknown company or an unknown ticker symbol\n          $ python3 all_stocks.py 'TSLA,, apple'\n          $ python3 all_stocks.py 'TSLA, , apple'\n          $ python3 all_stocks.py TSLA AAPL\n\n## Глава X\n\n### Упражнение 06. Сортировка словаря\n\n- Turn-in directory: `ex06/`.\n- Files to turn in: `dict_sorter.py`.\n- Allowed functions: любой импорт запрещён.\n\n1. Для этого упражнения возьми список кортежей из ex04, содержащий страны и числа, и создай словарь, где ключами будут страны, а значениями - числа. Скопируй его в одну из функций в скрипте.\n2. Напиши программу,"
+    },
+    {
+      "entity_id": "ent_5cc89049a77b",
+      "entity_type": "version",
+      "value": "python3",
+      "quote": "$ python3 all_stocks.py 'TSLA, , apple'",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 259,
+        "line_end": 259
+      },
+      "context": "мма не должна ничего выводить.\n    - Если в строке встречаются две запятые подряд, программа не должна ничего выводить.\n    - Программа должна выводить результаты, разделённые переводами строки, и использовать следующий формат:\n\n          $ python3 all_stocks.py 'TSLA , aPPle, Facebook'\n          TSLA is a ticker symbol for Tesla\n          Apple stock price is 287.73\n          Facebook is an unknown company or an unknown ticker symbol\n          $ python3 all_stocks.py 'TSLA,, apple'\n          $ python3 all_stocks.py 'TSLA, , apple'\n          $ python3 all_stocks.py TSLA AAPL\n\n## Глава X\n\n### Упражнение 06. Сортировка словаря\n\n- Turn-in directory: `ex06/`.\n- Files to turn in: `dict_sorter.py`.\n- Allowed functions: любой импорт запрещён.\n\n1. Для этого упражнения возьми список кортежей из ex04, содержащий страны и числа, и создай словарь, где ключами будут страны, а значениями - числа. Скопируй его в одну из функций в скрипте.\n2. Напиши программу, которая выводит названия стран в порядке убывани"
+    },
+    {
+      "entity_id": "ent_36a3073106e9",
+      "entity_type": "version",
+      "value": "python3",
+      "quote": "$ python3 all_stocks.py TSLA AAPL",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 260,
+        "line_end": 260
+      },
+      "context": "встречаются две запятые подряд, программа не должна ничего выводить.\n    - Программа должна выводить результаты, разделённые переводами строки, и использовать следующий формат:\n\n          $ python3 all_stocks.py 'TSLA , aPPle, Facebook'\n          TSLA is a ticker symbol for Tesla\n          Apple stock price is 287.73\n          Facebook is an unknown company or an unknown ticker symbol\n          $ python3 all_stocks.py 'TSLA,, apple'\n          $ python3 all_stocks.py 'TSLA, , apple'\n          $ python3 all_stocks.py TSLA AAPL\n\n## Глава X\n\n### Упражнение 06. Сортировка словаря\n\n- Turn-in directory: `ex06/`.\n- Files to turn in: `dict_sorter.py`.\n- Allowed functions: любой импорт запрещён.\n\n1. Для этого упражнения возьми список кортежей из ex04, содержащий страны и числа, и создай словарь, где ключами будут страны, а значениями - числа. Скопируй его в одну из функций в скрипте.\n2. Напиши программу, которая выводит названия стран в порядке убывания по числу, а при равенстве чисел - в алфавитном п"
+    },
+    {
+      "entity_id": "ent_048333d21721",
+      "entity_type": "version",
+      "value": "python3",
+      "quote": "$ python3 caesar.py encode 'ssh -i private.key user@school21.ru' 12",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 340,
+        "line_end": 340
+      },
+      "context": "пражнение 09. Шифр Цезаря\n\n- Turn-in directory: `ex09/`.\n- Files to turn in: `caesar.py`.\n- Allowed functions: `import sys`.\n\nСуществует метод под названием [Caesar cipher](https://en.wikipedia.org/wiki/Caesar_cipher) (Шифр Цезаря), который кодирует текст сдвигом по алфавиту. Например, «hello» при сдвиге 12 может превратиться в «tqxxa».\n\n1. Напиши программу, которая будет кодировать или декодировать произвольную строку, используя заданный сдвиг, в соответствии с переданным аргументом:\n\n       $ python3 caesar.py encode 'ssh -i private.key user@school21.ru' 12\n       eet -u bduhmfq.wqk geqd@eotaax21.dg\n       $ python3 caesar.py decode 'eet -u bduhmfq.wqk geqd@eotaax21.dg' 12\n       ssh -i private.key user@school21.ru\n\n2. Если скрипту передана строка с кириллическими символами, скрипт должен выбросить исключение со строкой: \"The script does not support your language yet.\" Если передано некорректное количество аргументов, выбрось исключение."
+    },
+    {
+      "entity_id": "ent_6210d151d2e1",
+      "entity_type": "version",
+      "value": "python3",
+      "quote": "$ python3 caesar.py decode 'eet -u bduhmfq.wqk geqd@eotaax21.dg' 12",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 342,
+        "line_end": 342
+      },
+      "context": "sys`.\n\nСуществует метод под названием [Caesar cipher](https://en.wikipedia.org/wiki/Caesar_cipher) (Шифр Цезаря), который кодирует текст сдвигом по алфавиту. Например, «hello» при сдвиге 12 может превратиться в «tqxxa».\n\n1. Напиши программу, которая будет кодировать или декодировать произвольную строку, используя заданный сдвиг, в соответствии с переданным аргументом:\n\n       $ python3 caesar.py encode 'ssh -i private.key user@school21.ru' 12\n       eet -u bduhmfq.wqk geqd@eotaax21.dg\n       $ python3 caesar.py decode 'eet -u bduhmfq.wqk geqd@eotaax21.dg' 12\n       ssh -i private.key user@school21.ru\n\n2. Если скрипту передана строка с кириллическими символами, скрипт должен выбросить исключение со строкой: \"The script does not support your language yet.\" Если передано некорректное количество аргументов, выбрось исключение."
+    },
+    {
+      "entity_id": "ent_9f65c70e92a0",
+      "entity_type": "technology",
+      "value": "Python",
+      "quote": "# Введение в Python: синтаксис и семантика",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 1,
+        "line_end": 1
+      },
+      "context": "# Введение в Python: синтаксис и семантика\n\nРезюме: Сегодня ты получишь базовые знания о синтаксисе и семантике Python.\n\n💡 [Нажми сюда](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624) **чтобы поделиться с нами обратной связью на этот проект**. Это анонимно и поможет нашей команде сделать обучение лучше. Рекомендуем заполнить опрос сразу после выполнения проекта.\n\n## Содержание\n\n1. [Глава I](#глава-i) \\\n    1.1. [Предисловие](#предисловие)\n2. [Глава II](#глава-ii) \\\n    2.1. [Инструкция](#инструкция)\n3."
+    },
+    {
+      "entity_id": "ent_dc1c63de3f16",
+      "entity_type": "technology",
+      "value": "Python",
+      "quote": "Резюме: Сегодня ты получишь базовые знания о синтаксисе и семантике Python.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 3,
+        "line_end": 3
+      },
+      "context": "# Введение в Python: синтаксис и семантика\n\nРезюме: Сегодня ты получишь базовые знания о синтаксисе и семантике Python.\n\n💡 [Нажми сюда](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624) **чтобы поделиться с нами обратной связью на этот проект**. Это анонимно и поможет нашей команде сделать обучение лучше. Рекомендуем заполнить опрос сразу после выполнения проекта.\n\n## Содержание\n\n1. [Глава I](#глава-i) \\\n    1.1. [Предисловие](#предисловие)\n2. [Глава II](#глава-ii) \\\n    2.1. [Инструкция](#инструкция)\n3. [Глава III](#глава-iii) \\\n    3.1. [Дополнительные инструкции на сегодня](#дополнительные-инструкц"
+    },
+    {
+      "entity_id": "ent_391389723110",
+      "entity_type": "technology",
+      "value": "Python",
+      "quote": "Python - самый популярный язык программирования в области анализа данных. Благодаря чему он так хорошо подходит для этих задач? Прежде всего, это интерпретируемый язык. Это свойство позволяет пользователю легко взаимодействовать с отдельными блоками кода и мгновенно получать результат - именно то, что нужно, когда ана…",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 41,
+        "line_end": 41
+      },
+      "context": "начению-или-по-ключу)\n10. [Глава X](#глава-x) \\\n    10.1. [Упражнение 06. Сортировка словаря](#упражнение-06-сортировка-словаря)\n11. [Глава XI](#глава-xi) \\\n    11.1. [Упражнение 07. Множества](#упражнение-07-множества)\n12. [Глава XII](#глава-xii) \\\n    12.1. [Упражнение 08. Работа со строками как со списками](#упражнение-08-работа-со-строками-как-со-списками)\n13. [Глава XIII](#глава-xiii) \\\n    13.1. [Упражнение 09. Шифр Цезаря](#упражнение-09-шифр-цезаря)\n    \n   \n## Глава I\n\n### Предисловие\n\nPython - самый популярный язык программирования в области анализа данных. Благодаря чему он так хорошо подходит для этих задач? Прежде всего, это интерпретируемый язык. Это свойство позволяет пользователю легко взаимодействовать с отдельными блоками кода и мгновенно получать результат - именно то, что нужно, когда анализируешь данные под разными углами или подбираешь гиперпараметры для модели машинного обучения. Добавьте к этому богатый набор библиотек для научных задач, включая Data Science, и просто"
+    },
+    {
+      "entity_id": "ent_423aad9c1286",
+      "entity_type": "technology",
+      "value": "Python",
+      "quote": "Предлагаю вам ознакомиться с 19 изящными принципами, которые повлияли на дизайн Python (они известны как The Zen of Python):",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 43,
+        "line_end": 43
+      },
+      "context": "то свойство позволяет пользователю легко взаимодействовать с отдельными блоками кода и мгновенно получать результат - именно то, что нужно, когда анализируешь данные под разными углами или подбираешь гиперпараметры для модели машинного обучения. Добавьте к этому богатый набор библиотек для научных задач, включая Data Science, и простой, лаконичный синтаксис - вот вам и готовая формула языка №1 для работы с данными.\n\nПредлагаю вам ознакомиться с 19 изящными принципами, которые повлияли на дизайн Python (они известны как The Zen of Python):\n\n* Красивое лучше, чем уродливое.\n* Явное лучше, чем неявное.\n* Простое лучше, чем сложное.\n* Сложное лучше, чем запутанное.\n* Плоское лучше, чем вложенное.\n* Разреженное лучше, чем плотное.\n* Читаемость имеет значение.\n* Особые случаи не настолько особые, чтобы нарушать правила.\n* При этом практичность важнее безупречности.\n* Ошибки не должны проходить незамеченными.\n* Если они не были явно подавленными.\n* Встретив двусмысленность, отбрось искушение угадат"
+    },
+    {
+      "entity_id": "ent_d88835dc0c54",
+      "entity_type": "technology",
+      "value": "Python",
+      "quote": "Если вы забудете какой-либо из этих принципов, просто выполните в Python команду import this - и они сразу появятся.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 65,
+        "line_end": 65
+      },
+      "context": "ость, отбрось искушение угадать.\n* Должен существовать один и, желательно, только один очевидный способ сделать это.\n* Хотя он поначалу может быть и не очевиден, если вы не голландец.\n* Сейчас лучше, чем никогда.\n* Хотя никогда зачастую лучше, чем прямо сейчас.\n* Если реализацию сложно объяснить - идея плоха.\n* Если реализацию легко объяснить - идея, возможно, хороша.\n* Пространства имён - отличная штука! Будем делать их больше!\n\nЕсли вы забудете какой-либо из этих принципов, просто выполните в Python команду import this - и они сразу появятся.\n\n## Глава II\n\n### Инструкция\n\nКак учиться в «Школе 21»:\n\n- Здесь тебя ждет уникальный образовательный опыт с большим количеством свободы. Ты получаешь задачу и самостоятельно ищешь пути решения, используя любые удобные способы поиска информации — ресурсы Интернета или нейросети (например, GigaChat). Но внимательно относись к качеству информации: проверяй, думай, анализируй, сравнивай.\n- Взаимообучение (Peer-to-Peer, P2P) — это обмен знаниями и опытом"
+    },
+    {
+      "entity_id": "ent_c5a63cc4d2dc",
+      "entity_type": "technology",
+      "value": "GigaChat",
+      "quote": "- Здесь тебя ждет уникальный образовательный опыт с большим количеством свободы. Ты получаешь задачу и самостоятельно ищешь пути решения, используя любые удобные способы поиска информации — ресурсы Интернета или нейросети (например, GigaChat). Но внимательно относись к качеству информации: проверяй, думай, анализируй,…",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 73,
+        "line_end": 73
+      },
+      "context": "ить - идея, возможно, хороша.\n* Пространства имён - отличная штука! Будем делать их больше!\n\nЕсли вы забудете какой-либо из этих принципов, просто выполните в Python команду import this - и они сразу появятся.\n\n## Глава II\n\n### Инструкция\n\nКак учиться в «Школе 21»:\n\n- Здесь тебя ждет уникальный образовательный опыт с большим количеством свободы. Ты получаешь задачу и самостоятельно ищешь пути решения, используя любые удобные способы поиска информации — ресурсы Интернета или нейросети (например, GigaChat). Но внимательно относись к качеству информации: проверяй, думай, анализируй, сравнивай.\n- Взаимообучение (Peer-to-Peer, P2P) — это обмен знаниями и опытом с другими пирами, где каждый выступает и учителем, и учеником. Такой подход позволяет глубже понять материал, учась друг у друга.\n- Чувствуй себя свободно и проси о помощи — вокруг тебя те, кто тоже впервые проходят этот путь. Делись своим опытом и идеями с другими. Присоединяйся к Rocket.Chat, чтобы быть в курсе всех новостей от нашего сооб"
+    },
+    {
+      "entity_id": "ent_ff524cdf71eb",
+      "entity_type": "technology",
+      "value": "Rocket.Chat",
+      "quote": "- Чувствуй себя свободно и проси о помощи — вокруг тебя те, кто тоже впервые проходят этот путь. Делись своим опытом и идеями с другими. Присоединяйся к Rocket.Chat, чтобы быть в курсе всех новостей от нашего сообщества.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 75,
+        "line_end": 75
+      },
+      "context": "рмации — ресурсы Интернета или нейросети (например, GigaChat). Но внимательно относись к качеству информации: проверяй, думай, анализируй, сравнивай.\n- Взаимообучение (Peer-to-Peer, P2P) — это обмен знаниями и опытом с другими пирами, где каждый выступает и учителем, и учеником. Такой подход позволяет глубже понять материал, учась друг у друга.\n- Чувствуй себя свободно и проси о помощи — вокруг тебя те, кто тоже впервые проходят этот путь. Делись своим опытом и идеями с другими. Присоединяйся к Rocket.Chat, чтобы быть в курсе всех новостей от нашего сообщества.\n- Твое обучение не будет иметь никакого смысла, если ты будешь копировать чужие решения. Если пользуешься помощью других — всегда разбирайся до конца, почему, как и зачем. Не бойся ошибиться.\n- Кажется, что задача невыполнима? Сделай перерыв, проветрись, перезагрузи голову — это помогало многим. Возможно, после этого решение придет само собой.\n- Важен не только результат обучения, но и сам процесс. Нужно не просто решить задачу, а понять,"
+    },
+    {
+      "entity_id": "ent_56b48d646802",
+      "entity_type": "technology",
+      "value": "Python",
+      "quote": "* Здесь и далее (в заданиях, где используется Python) единственной допустимой версией Python является Python 3.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 83,
+        "line_end": 83
+      },
+      "context": "Не бойся ошибиться.\n- Кажется, что задача невыполнима? Сделай перерыв, проветрись, перезагрузи голову — это помогало многим. Возможно, после этого решение придет само собой.\n- Важен не только результат обучения, но и сам процесс. Нужно не просто решить задачу, а понять, КАК ее решить.\n\nКак работать с проектом:\n\n* Не обращай внимание на слухи, подсказки и догадки. Если сомневаешься, как выполнять задание - обращайся к этой инструкции, и только к ней.\n* Здесь и далее (в заданиях, где используется Python) единственной допустимой версией Python является Python 3.\n* Если ты выполняешь задания на Python (module01, module02, module03), в каждом python-файле в конце добавляй служебный блок `if __name__ == '__main__'`.\n* Перепроверь настройки прав доступа к файлам и каталогам.\n* Чтобы твоё решение приняли к оценке, оно должно лежать в твоём GIT-репозитории.\n* Оценивание выполняют твои пиры по интенсиву.\n* В твоей директории не должно быть иных файлов, кроме тех, что обозначены в заданиях. Настрой .gi"
+    },
+    {
+      "entity_id": "ent_c2ec5e9c3ffc",
+      "entity_type": "technology",
+      "value": "Python",
+      "quote": "* Если ты выполняешь задания на Python (module01, module02, module03), в каждом python-файле в конце добавляй служебный блок `if __name__ == '__main__'`.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 84,
+        "line_end": 84
+      },
+      "context": "ову — это помогало многим. Возможно, после этого решение придет само собой.\n- Важен не только результат обучения, но и сам процесс. Нужно не просто решить задачу, а понять, КАК ее решить.\n\nКак работать с проектом:\n\n* Не обращай внимание на слухи, подсказки и догадки. Если сомневаешься, как выполнять задание - обращайся к этой инструкции, и только к ней.\n* Здесь и далее (в заданиях, где используется Python) единственной допустимой версией Python является Python 3.\n* Если ты выполняешь задания на Python (module01, module02, module03), в каждом python-файле в конце добавляй служебный блок `if __name__ == '__main__'`.\n* Перепроверь настройки прав доступа к файлам и каталогам.\n* Чтобы твоё решение приняли к оценке, оно должно лежать в твоём GIT-репозитории.\n* Оценивание выполняют твои пиры по интенсиву.\n* В твоей директории не должно быть иных файлов, кроме тех, что обозначены в заданиях. Настрой .gitignore, чтобы исключить случайные файлы и папки из проверки.\n* Чтобы твоё решение приняли к оценк"
+    },
+    {
+      "entity_id": "ent_1821be020626",
+      "entity_type": "technology",
+      "value": "Python",
+      "quote": "* Используемый интерпретатор: Python 3.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 106,
+        "line_end": 106
+      },
+      "context": "сти. Используй функции!\n* В конце каждого файла должен быть вызов функции внутри условия вида: `if __name__ == '__main__': your_function(whatever parameter is required)`.\n* Обработку ошибок можно разместить в этом же условии.\n* Импорты запрещены, кроме тех, что указаны в разделе «Разрешённые импорты/функции» в шапке каждого упражнения.\n* Разрешены любые встроенные функции, если в упражнении не указано иное.\n* Исключения, выбрасываемые open(), не нужно обрабатывать.\n* Используемый интерпретатор: Python 3.\n\n## Глава IV\n\n### Упражнение 00. Типы данных\n\n- Turn-in directory: `ex00/`.\n- Files to turn in: `data_types.py`.\n- Allowed functions: любой импорт запрещён.\n\nКак и в любом другом языке, в Python есть несколько встроенных типов данных. В этом упражнении ты познакомишься с самыми популярными и полезными.\n\n1. Создай скрипт data_types.py и определи функцию data_types(). В этой функции объяви 8 переменных разных типов и выведи их типы в стандартный поток вывода.\n2. Тебе нужно **в точности** воспр"
+    },
+    {
+      "entity_id": "ent_a2699c1f2a4e",
+      "entity_type": "technology",
+      "value": "Python",
+      "quote": "Как и в любом другом языке, в Python есть несколько встроенных типов данных. В этом упражнении ты познакомишься с самыми популярными и полезными.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 116,
+        "line_end": 116
+      },
+      "context": "зместить в этом же условии.\n* Импорты запрещены, кроме тех, что указаны в разделе «Разрешённые импорты/функции» в шапке каждого упражнения.\n* Разрешены любые встроенные функции, если в упражнении не указано иное.\n* Исключения, выбрасываемые open(), не нужно обрабатывать.\n* Используемый интерпретатор: Python 3.\n\n## Глава IV\n\n### Упражнение 00. Типы данных\n\n- Turn-in directory: `ex00/`.\n- Files to turn in: `data_types.py`.\n- Allowed functions: любой импорт запрещён.\n\nКак и в любом другом языке, в Python есть несколько встроенных типов данных. В этом упражнении ты познакомишься с самыми популярными и полезными.\n\n1. Создай скрипт data_types.py и определи функцию data_types(). В этой функции объяви 8 переменных разных типов и выведи их типы в стандартный поток вывода.\n2. Тебе нужно **в точности** воспроизвести следующий вывод:\n    \n        > python3 data_types.py\n        [int, str, float, bool, list, dict, tuple, set]\n\n3. Не вписывай названия типов вручную в print. Не забудь вызвать свою функцию"
+    },
+    {
+      "entity_id": "ent_c1100d77017f",
+      "entity_type": "technology",
+      "value": "Python",
+      "quote": "1. Разработай скрипт на Python read_and_write.py, который открывает файл ds.csv, считывает содержащиеся в нём данные, заменяет все разделители-запятые на \"\\t\" и сохраняет данные в новый файл ds.tsv. Будь внимателен: в данных могут встречаться запятые. Если ты заменишь их, данные будут повреждены.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 141,
+        "line_end": 141
+      },
+      "context": "## Глава V\n\n### Упражнение 01. Работа с файлами\n\n- Turn-in directory: `ex01/`.\n- Files to turn in: `read_and_write.py`.\n- Allowed functions: любой импорт запрещён.\n\nВ этом упражнении ты можешь определить столько функций, сколько потребуется, и назвать их как угодно. В прикреплённом файле [ds.csv](https://drive.google.com/file/d/1tDEDTytYaUrfJsXD5z5QvJSb5VNlL-eZ/view) (вспомни предыдущий день) есть несколько столбцов, разделённых запятыми, с разными данными о вакансиях.\n\n1. Разработай скрипт на Python read_and_write.py, который открывает файл ds.csv, считывает содержащиеся в нём данные, заменяет все разделители-запятые на \"\\t\" и сохраняет данные в новый файл ds.tsv. Будь внимателен: в данных могут встречаться запятые. Если ты заменишь их, данные будут повреждены.\n2. Помести скрипт в каталог ex01 внутри каталога src твоего репозитория.\n\n## Глава VI\n\n### Упражнение 02. Поиск по ключу\n\n- Turn-in directory: `ex02/`.\n- Files to turn in: `stock_prices.py`.\n- Allowed functions: `import sys`.\n\n1. У"
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "fnd_066bfd3d79cc",
+      "unit_id": "dsb2_syntax_semantics_id_886511_master__c68318a6",
+      "branch": "DSB2_Syntax_Semantics.ID_886511-master (1)",
+      "criterion": "correctness",
+      "severity": "major",
+      "verdict": "fail",
+      "confidence": 0.9,
+      "quote": "ds.tsv",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 141,
+        "line_end": 141
+      },
+      "evidence": [
+        {
+          "title": "Локальный ресурс",
+          "detail": "В инструкции указан локальный ресурс `ds.tsv`, но среди файлов проекта он не найден.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Добавить ресурс в материалы проекта или указать рабочую ссылку/путь, откуда его получить.",
+      "needs_human_review": false,
+      "checker_name": "resource_availability_checker",
+      "extra": {
+        "issue_type": "missing_local_resource",
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_0c9564e0372a",
+      "unit_id": "dsb2_syntax_semantics_id_886511_master__c68318a6",
+      "branch": "DSB2_Syntax_Semantics.ID_886511-master (1)",
+      "criterion": "market_fit",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.75,
+      "quote": null,
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 297,
+        "line_end": 297
+      },
+      "evidence": [
+        {
+          "title": "Проверка соответствия рынку",
+          "detail": "Работа с реальными данными: нет; Бизнес-контекст: есть (README_RUS.md:297: - Создай отдельные функции, которые преобразуют твои списки в множества. Используй операции над множествами, необходимые для выполнения перечисленных бизнес-задач, и возвращай требуемые списки почтовых адресов.); Бизнес-метрики или требования: нет",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Усилить прикладной контекст: добавить датасет или ссылку на реальные данные; зафиксировать бизнес-метрики, ограничения или требования к результату.",
+      "needs_human_review": false,
+      "checker_name": "market_fit_checker",
+      "extra": {
+        "market_fit_score": 1,
+        "sub_checks": {
+          "real_data": {
+            "present": false,
+            "matches": [],
+            "source": "rules"
+          },
+          "business_context": {
+            "present": true,
+            "matches": [
+              {
+                "file_path": "README_RUS.md",
+                "line_start": 297,
+                "text": "- Создай отдельные функции, которые преобразуют твои списки в множества. Используй операции над множествами, необходимые для выполнения перечисленных бизнес-задач, и возвращай требуемые списки почтовых адресов."
+              }
+            ],
+            "source": "rules"
+          },
+          "success_metrics": {
+            "present": false,
+            "matches": [],
+            "source": "rules"
+          }
+        },
+        "model_refined": false,
+        "cache_hit": false,
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_1bc04225f162",
+      "unit_id": "dsb2_syntax_semantics_id_886511_master__c68318a6",
+      "branch": "DSB2_Syntax_Semantics.ID_886511-master (1)",
+      "criterion": "actuality",
+      "severity": "info",
+      "verdict": "unknown",
+      "confidence": 0.5,
+      "quote": "💡 [Tap here](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624) **to leave your feedback on the project**. It's anonymous and will help our team make your educational experience better. We recommend completing the survey immediately after the project.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 5,
+        "line_end": 5
+      },
+      "evidence": [
+        {
+          "title": "Сеть отключена",
+          "detail": "Ссылка не проверялась: https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624",
+          "url": "https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624"
+        },
+        {
+          "title": "Языковые дубли",
+          "detail": "Схлопнуто 2 строк: README.md, README_RUS.md.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Запустить проверку с доступом к сети, чтобы подтвердить доступность ссылки.",
+      "needs_human_review": true,
+      "checker_name": "link_checker",
+      "extra": {
+        "merged_language_duplicates": 1,
+        "affected_files": [
+          "README.md",
+          "README_RUS.md"
+        ]
+      }
+    },
+    {
+      "finding_id": "fnd_3819514acb7e",
+      "unit_id": "dsb2_syntax_semantics_id_886511_master__c68318a6",
+      "branch": "DSB2_Syntax_Semantics.ID_886511-master (1)",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.88,
+      "quote": "в компании работались",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 325,
+        "line_end": 325
+      },
+      "evidence": [
+        {
+          "title": "Редакторская проверка",
+          "detail": "Ошибка согласования: компания не «работалась», в компании люди «работали».",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Заменить на «в компании работали».",
+      "needs_human_review": false,
+      "checker_name": "spelling_wording_checker",
+      "extra": {
+        "issue_type": "case",
+        "source_kind": "rule",
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_72f48186effa",
+      "unit_id": "dsb2_syntax_semantics_id_886511_master__c68318a6",
+      "branch": "DSB2_Syntax_Semantics.ID_886511-master (1)",
+      "criterion": "actuality",
+      "severity": "info",
+      "verdict": "unknown",
+      "confidence": 0.55,
+      "quote": null,
+      "location": null,
+      "evidence": [
+        {
+          "title": "Кандидаты на проверку",
+          "detail": "Найдено 2 сущностей: Python 3, python3",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": "не проверялось",
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Включить модельный контур, чтобы получить источник, статус поддержки и рекомендуемую версию.",
+      "needs_human_review": true,
+      "checker_name": "tech_freshness_checker",
+      "extra": {
+        "candidate_count": 2,
+        "sample_values": [
+          "Python 3",
+          "python3"
+        ]
+      }
+    },
+    {
+      "finding_id": "fnd_75aa90dbc397",
+      "unit_id": "dsb2_syntax_semantics_id_886511_master__c68318a6",
+      "branch": "DSB2_Syntax_Semantics.ID_886511-master (1)",
+      "criterion": "checklist_alignment",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.72,
+      "quote": null,
+      "location": {
+        "file_path": "check-list_RUS.yml",
+        "line_start": null,
+        "line_end": null
+      },
+      "evidence": [
+        {
+          "title": "Связность README и чек-листа",
+          "detail": "Сильных совпадений: 10 из 10; слабых совпадений: 0 из 10; не сопоставлено: 0 из 10. Развёрнутых описаний: 5 из 10. Недостаточно описаны: Упражнение 00. Типы данных, Упражнение 01. Работа с файлами, Упражнение 06. Сортировка словаря, Упражнение 07. Множества, Упражнение 08. Работа со строками как со списками.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Доработать пункты без критериев приёмки, ожидаемых артефактов или примеров.",
+      "needs_human_review": false,
+      "checker_name": "checklist_checker",
+      "extra": {
+        "matched_ratio": 1.0,
+        "strong_matched": 10,
+        "weak_matched": 0,
+        "strong_matched_questions": [
+          "Упражнение 00. Типы данных",
+          "Упражнение 01. Работа с файлами",
+          "Упражнение 02. Поиск по ключу",
+          "Упражнение 03. Поиск по значению и по ключу",
+          "Упражнение 04. Словари",
+          "Упражнение 05. Поиск по значению или по ключу",
+          "Упражнение 06. Сортировка словаря",
+          "Упражнение 07. Множества",
+          "Упражнение 08. Работа со строками как со списками",
+          "Упражнение 09. Шифр Цезаря"
+        ],
+        "weak_matched_questions": [],
+        "unmatched_questions": [],
+        "description_ratio": 0.5,
+        "complete_description_questions": [
+          "Упражнение 02. Поиск по ключу",
+          "Упражнение 03. Поиск по значению и по ключу",
+          "Упражнение 04. Словари",
+          "Упражнение 05. Поиск по значению или по ключу",
+          "Упражнение 09. Шифр Цезаря"
+        ],
+        "incomplete_questions": [
+          "Упражнение 00. Типы данных",
+          "Упражнение 01. Работа с файлами",
+          "Упражнение 06. Сортировка словаря",
+          "Упражнение 07. Множества",
+          "Упражнение 08. Работа со строками как со списками"
+        ],
+        "grounding_issues": [],
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_890647b22d3a",
+      "unit_id": "dsb2_syntax_semantics_id_886511_master__c68318a6",
+      "branch": "DSB2_Syntax_Semantics.ID_886511-master (1)",
+      "criterion": "actuality",
+      "severity": "info",
+      "verdict": "unknown",
+      "confidence": 0.5,
+      "quote": "There is a method called the [Caesar cipher](https://en.wikipedia.org/wiki/Caesar_cipher) that helps to encode text by shifting the alphabetical order. For example, the encoded version of \"hello\" might be \"tqxxa\" if we use a shift of 12.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 335,
+        "line_end": 335
+      },
+      "evidence": [
+        {
+          "title": "Сеть отключена",
+          "detail": "Ссылка не проверялась: https://en.wikipedia.org/wiki/Caesar_cipher",
+          "url": "https://en.wikipedia.org/wiki/Caesar_cipher"
+        },
+        {
+          "title": "Языковые дубли",
+          "detail": "Схлопнуто 2 строк: README.md, README_RUS.md.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Запустить проверку с доступом к сети, чтобы подтвердить доступность ссылки.",
+      "needs_human_review": true,
+      "checker_name": "link_checker",
+      "extra": {
+        "merged_language_duplicates": 1,
+        "affected_files": [
+          "README.md",
+          "README_RUS.md"
+        ]
+      }
+    },
+    {
+      "finding_id": "fnd_ba3cb569455e",
+      "unit_id": "dsb2_syntax_semantics_id_886511_master__c68318a6",
+      "branch": "DSB2_Syntax_Semantics.ID_886511-master (1)",
+      "criterion": "correctness",
+      "severity": "major",
+      "verdict": "fail",
+      "confidence": 0.9,
+      "quote": "ds.csv",
+      "location": {
+        "file_path": "check-list.yml",
+        "line_start": 52,
+        "line_end": 52
+      },
+      "evidence": [
+        {
+          "title": "Локальный ресурс",
+          "detail": "В инструкции указан локальный ресурс `ds.csv`, но среди файлов проекта он не найден.",
+          "url": null
+        },
+        {
+          "title": "Языковые дубли",
+          "detail": "Схлопнуто 2 строк: check-list.yml, check-list_RUS.yml.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Добавить ресурс в материалы проекта или указать рабочую ссылку/путь, откуда его получить.",
+      "needs_human_review": false,
+      "checker_name": "resource_availability_checker",
+      "extra": {
+        "issue_type": "missing_local_resource",
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля.",
+        "merged_language_duplicates": 1,
+        "affected_files": [
+          "check-list.yml",
+          "check-list_RUS.yml"
+        ]
+      }
+    },
+    {
+      "finding_id": "fnd_daaf3940f1ed",
+      "unit_id": "dsb2_syntax_semantics_id_886511_master__c68318a6",
+      "branch": "DSB2_Syntax_Semantics.ID_886511-master (1)",
+      "criterion": "actuality",
+      "severity": "info",
+      "verdict": "unknown",
+      "confidence": 0.5,
+      "quote": "1. Design a Python script called `read_and_write.py` that opens the file [ds.csv](https://drive.google.com/file/d/1tDEDTytYaUrfJsXD5z5QvJSb5VNlL-eZ/view), reads the data it contains, replaces all the comma delimiters with \"\\t\", and saves the data to a new file `ds.tsv`. Be careful, your data may contain commas. If you…",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 141,
+        "line_end": 141
+      },
+      "evidence": [
+        {
+          "title": "Сеть отключена",
+          "detail": "Ссылка не проверялась: https://drive.google.com/file/d/1tDEDTytYaUrfJsXD5z5QvJSb5VNlL-eZ/view",
+          "url": "https://drive.google.com/file/d/1tDEDTytYaUrfJsXD5z5QvJSb5VNlL-eZ/view"
+        },
+        {
+          "title": "Языковые дубли",
+          "detail": "Схлопнуто 2 строк: README.md, README_RUS.md.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Запустить проверку с доступом к сети, чтобы подтвердить доступность ссылки.",
+      "needs_human_review": true,
+      "checker_name": "link_checker",
+      "extra": {
+        "merged_language_duplicates": 1,
+        "affected_files": [
+          "README.md",
+          "README_RUS.md"
+        ]
+      }
+    },
+    {
+      "finding_id": "fnd_f8e8ef608125",
+      "unit_id": "dsb2_syntax_semantics_id_886511_master__c68318a6",
+      "branch": "DSB2_Syntax_Semantics.ID_886511-master (1)",
+      "criterion": "rights",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.65,
+      "quote": "![1](misc/images/1.png)",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 321,
+        "line_end": 321
+      },
+      "evidence": [
+        {
+          "title": "Изображение без подтверждённых прав",
+          "detail": "У значимого изображения нет локальных метаданных об авторе/лицензии: misc/images/1.png",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Добавить источник, автора и лицензию изображения или подтвердить права вручную.",
+      "needs_human_review": true,
+      "checker_name": "rights_originality_checker",
+      "extra": {
+        "kind": "image_provenance",
+        "risk": "no_source",
+        "deterministic": true
+      }
+    },
+    {
+      "finding_id": "fnd_fb70c14923be",
+      "unit_id": "dsb2_syntax_semantics_id_886511_master__c68318a6",
+      "branch": "DSB2_Syntax_Semantics.ID_886511-master (1)",
+      "criterion": "correctness",
+      "severity": "major",
+      "verdict": "fail",
+      "confidence": 0.9,
+      "quote": "ds.csv",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 139,
+        "line_end": 139
+      },
+      "evidence": [
+        {
+          "title": "Локальный ресурс",
+          "detail": "В инструкции указан локальный ресурс `ds.csv`, но среди файлов проекта он не найден.",
+          "url": null
+        },
+        {
+          "title": "Языковые дубли",
+          "detail": "Схлопнуто 2 строк: README.md, README_RUS.md.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Добавить ресурс в материалы проекта или указать рабочую ссылку/путь, откуда его получить.",
+      "needs_human_review": false,
+      "checker_name": "resource_availability_checker",
+      "extra": {
+        "issue_type": "missing_local_resource",
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля.",
+        "merged_language_duplicates": 1,
+        "affected_files": [
+          "README.md",
+          "README_RUS.md"
+        ]
+      }
+    }
+  ]
+}

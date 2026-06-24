@@ -1,0 +1,274 @@
+{
+  "evaluated_criteria": [
+    "checklist_alignment"
+  ],
+  "gold_total": 3,
+  "predicted_total": 2,
+  "true_positive": 0,
+  "false_positive": 2,
+  "false_negative": 3,
+  "precision": 0.0,
+  "recall": 0.0,
+  "f1_score": 0.0,
+  "macro_precision": 0.0,
+  "macro_recall": 0.0,
+  "macro_f1_score": 0.0,
+  "overview_gold_total": 1,
+  "overview_predicted_total": 5,
+  "overview_true_positive": 1,
+  "overview_false_positive": 4,
+  "overview_false_negative": 0,
+  "overview_precision": 0.2,
+  "overview_recall": 1.0,
+  "overview_f1_score": 0.3333,
+  "overview_macro_precision": 0.2,
+  "overview_macro_recall": 0.2,
+  "overview_macro_f1_score": 0.2,
+  "gold_scope_predicted_total": 2,
+  "gold_scope_true_positive": 0,
+  "gold_scope_false_positive": 2,
+  "gold_scope_false_negative": 3,
+  "gold_scope_precision": 0.0,
+  "gold_scope_recall": 0.0,
+  "gold_scope_f1_score": 0.0,
+  "gold_scope_macro_precision": 0.0,
+  "gold_scope_macro_recall": 0.0,
+  "gold_scope_macro_f1_score": 0.0,
+  "per_criterion": [
+    {
+      "criterion": "checklist_alignment",
+      "label": "Соответствие заданий проекта чек-листу",
+      "gold_total": 3,
+      "predicted_total": 2,
+      "true_positive": 0,
+      "false_positive": 2,
+      "false_negative": 3,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    }
+  ],
+  "overview_per_criterion": [
+    {
+      "criterion": "checklist_alignment",
+      "label": "Соответствие заданий проекта чек-листу",
+      "gold_total": 1,
+      "predicted_total": 1,
+      "true_positive": 1,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0
+    },
+    {
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "image_quality",
+      "label": "Качество изображений",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "readability",
+      "label": "Грамотность и читаемость текста",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "rights",
+      "label": "Оригинальность и права использования ресурсов",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    }
+  ],
+  "gold_items": [
+    {
+      "row_number": 2,
+      "raw_project": "SQLB3",
+      "matched_project": "SQLB3_Retrieving_data.ID_574089-master",
+      "project_id": "sqlb3_retrieving_data_id_574089_master__366810d2",
+      "raw_problem": "несоответствие задания чек-листу",
+      "details": "не прописано условие self-join\n:small_blue_diamond: Description: В SQLB3 в задании 10 требуется найти пары людей, проживающих по одному адресу, и вывести результат в трёх колонках: person_name1, person_name2, common_address. Однако в задании не специфицировано, каким образом выбирать, кто из двух людей попадает в колонку person_name1, а кто — в person_name2.\nВ чеклисте ожидается условие p1.id > p2.id. У пира с решением, например, p1.id < p2.id, вывод будет отличаться от ожидаемого в чеклисте, хотя формально решение проходит по всем условиям задачи, т.к. оба варианта дадут полный набор уникальных пар.",
+      "criteria": [
+        "checklist_alignment"
+      ]
+    }
+  ],
+  "gold_cases": [
+    {
+      "case_id": "gold_2_checklist_alignment_1",
+      "row_number": 2,
+      "raw_project": "SQLB3",
+      "matched_project": "SQLB3_Retrieving_data.ID_574089-master",
+      "project_id": "sqlb3_retrieving_data_id_574089_master__366810d2",
+      "criterion": "checklist_alignment",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "не прописано условие self-join"
+    },
+    {
+      "case_id": "gold_2_checklist_alignment_2",
+      "row_number": 2,
+      "raw_project": "SQLB3",
+      "matched_project": "SQLB3_Retrieving_data.ID_574089-master",
+      "project_id": "sqlb3_retrieving_data_id_574089_master__366810d2",
+      "criterion": "checklist_alignment",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": ":small_blue_diamond: Description: В SQLB3 в задании 10 требуется найти пары людей, проживающих по одному адресу, и вывести результат в трёх колонках: person_name1, person_name2, common_address. Однако в задании не специфицировано, каким образом выбирать, кто из двух людей попадает в колонку person_name1, а кто — в person_name2."
+    },
+    {
+      "case_id": "gold_2_checklist_alignment_3",
+      "row_number": 2,
+      "raw_project": "SQLB3",
+      "matched_project": "SQLB3_Retrieving_data.ID_574089-master",
+      "project_id": "sqlb3_retrieving_data_id_574089_master__366810d2",
+      "criterion": "checklist_alignment",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "В чеклисте ожидается условие p1.id > p2.id. У пира с решением, например, p1.id < p2.id, вывод будет отличаться от ожидаемого в чеклисте, хотя формально решение проходит по всем условиям задачи, т.к. оба варианта дадут полный набор уникальных пар."
+    }
+  ],
+  "matches": [
+    {
+      "project": "SQLB3_Retrieving_data.ID_574089-master",
+      "project_id": "sqlb3_retrieving_data_id_574089_master__366810d2",
+      "criterion": "checklist_alignment",
+      "label": "Соответствие заданий проекта чек-листу",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "не прописано условие self-join",
+      "found_finding_id": "fnd_eb18eb4b678c",
+      "found_checker": "checklist_checker",
+      "found_line_range": "check-list.yml",
+      "found_text": "p.id = pv.pizzeria_id | Чек-лист фиксирует SQL-условие, которое не сформулировано в README. | Схлопнуто 48 строк: check-list.yml, check-list_RUS.yml. | Описать это SQL-условие в задании или убрать его из ожидаемого решения чек-листа. | ungrounded_sql_condition",
+      "match_type": "criterion_only",
+      "match_score": 0.25,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    },
+    {
+      "project": "SQLB3_Retrieving_data.ID_574089-master",
+      "project_id": "sqlb3_retrieving_data_id_574089_master__366810d2",
+      "criterion": "checklist_alignment",
+      "label": "Соответствие заданий проекта чек-листу",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": ":small_blue_diamond: Description: В SQLB3 в задании 10 требуется найти пары людей, проживающих по одному адресу, и вывести результат в трёх колонках: person_name1, person_name2, common_address. Однако в задании не специфицировано, каким образом выбирать, кто из двух людей попадает в колонку person_name1, а кто — в person_name2.",
+      "found_finding_id": "fnd_eb18eb4b678c",
+      "found_checker": "checklist_checker",
+      "found_line_range": "check-list.yml",
+      "found_text": "p.id = pv.pizzeria_id | Чек-лист фиксирует SQL-условие, которое не сформулировано в README. | Схлопнуто 48 строк: check-list.yml, check-list_RUS.yml. | Описать это SQL-условие в задании или убрать его из ожидаемого решения чек-листа. | ungrounded_sql_condition",
+      "match_type": "criterion_only",
+      "match_score": 0.15,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    },
+    {
+      "project": "SQLB3_Retrieving_data.ID_574089-master",
+      "project_id": "sqlb3_retrieving_data_id_574089_master__366810d2",
+      "criterion": "checklist_alignment",
+      "label": "Соответствие заданий проекта чек-листу",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "В чеклисте ожидается условие p1.id > p2.id. У пира с решением, например, p1.id < p2.id, вывод будет отличаться от ожидаемого в чеклисте, хотя формально решение проходит по всем условиям задачи, т.к. оба варианта дадут полный набор уникальных пар.",
+      "found_finding_id": "fnd_fdbcf3e73bae",
+      "found_checker": "checklist_checker",
+      "found_line_range": "check-list.yml",
+      "found_text": "p1.id > p2.id | Чек-лист фиксирует порядок пары через сравнение идентификаторов, но README не описывает это как требование. | Схлопнуто 2 строк: check-list.yml, check-list_RUS.yml. | Явно описать порядок пар в README или убрать это требование из чек-листа. | ungrounded_self_join_order",
+      "match_type": "criterion_only",
+      "match_score": 0.1667,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    }
+  ],
+  "detailed_false_positive_items": [
+    {
+      "finding_id": "fnd_eb18eb4b678c",
+      "project_id": "sqlb3_retrieving_data_id_574089_master__366810d2",
+      "project": "SQLB3_Retrieving_data.ID_574089-master",
+      "criterion": "checklist_alignment",
+      "checker_name": "checklist_checker",
+      "line_start": null,
+      "line_end": null,
+      "file_path": "check-list.yml",
+      "severity": "major",
+      "verdict": "warning",
+      "confidence": 0.84,
+      "issue_type": "ungrounded_sql_condition",
+      "found_text": "p.id = pv.pizzeria_id | Чек-лист фиксирует SQL-условие, которое не сформулировано в README. | Схлопнуто 48 строк: check-list.yml, check-list_RUS.yml. | Описать это SQL-условие в задании или убрать его из ожидаемого решения чек-листа. | ungrounded_sql_condition"
+    },
+    {
+      "finding_id": "fnd_fdbcf3e73bae",
+      "project_id": "sqlb3_retrieving_data_id_574089_master__366810d2",
+      "project": "SQLB3_Retrieving_data.ID_574089-master",
+      "criterion": "checklist_alignment",
+      "checker_name": "checklist_checker",
+      "line_start": null,
+      "line_end": null,
+      "file_path": "check-list.yml",
+      "severity": "major",
+      "verdict": "warning",
+      "confidence": 0.84,
+      "issue_type": "ungrounded_self_join_order",
+      "found_text": "p1.id > p2.id | Чек-лист фиксирует порядок пары через сравнение идентификаторов, но README не описывает это как требование. | Схлопнуто 2 строк: check-list.yml, check-list_RUS.yml. | Явно описать порядок пар в README или убрать это требование из чек-листа. | ungrounded_self_join_order"
+    }
+  ],
+  "false_positive_items": [
+    {
+      "project_id": "sqlb3_retrieving_data_id_574089_master__366810d2",
+      "criterion": "correctness"
+    },
+    {
+      "project_id": "sqlb3_retrieving_data_id_574089_master__366810d2",
+      "criterion": "image_quality"
+    },
+    {
+      "project_id": "sqlb3_retrieving_data_id_574089_master__366810d2",
+      "criterion": "readability"
+    },
+    {
+      "project_id": "sqlb3_retrieving_data_id_574089_master__366810d2",
+      "criterion": "rights"
+    }
+  ],
+  "false_negative_items": [],
+  "project_mapping": {
+    "SQLB3": "SQLB3_Retrieving_data.ID_574089-master"
+  },
+  "notes": [
+    "Основное сравнение выполняется на уровне атомарных ошибок: проект, критерий, строка/диапазон и текст.",
+    "В строгую метрику не входят диагностические строки: низкоуверенные unknown, непроверенные ссылки и общие ресурсные предупреждения без имени файла.",
+    "Старая метрика проект × критерий сохранена только как обзорная в overview_* полях.",
+    "Excel-разметка нормализуется эвристически из колонок 'Проблема' и 'Детали'."
+  ]
+}

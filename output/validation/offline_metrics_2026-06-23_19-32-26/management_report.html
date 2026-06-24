@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Отчёт по метрикам аудитора контента</title>
+  <style>
+    :root {
+      --bg: #f7f4ee;
+      --panel: #ffffff;
+      --ink: #142124;
+      --muted: #66757a;
+      --line: #ddd6ca;
+      --green: #1f9d7a;
+      --green-dark: #11745e;
+      --red: #b94a48;
+      --amber: #b98218;
+      --blue: #2f6fb5;
+      --soft-green: #e5f4ef;
+      --soft-red: #f7e5e2;
+      --soft-amber: #f7edd2;
+      --soft-blue: #e5eef9;
+      --shadow: 0 12px 28px rgba(38, 33, 25, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font: 15px/1.5 Arial, sans-serif;
+    }
+    .wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 32px 24px 56px;
+    }
+    header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: start;
+      padding-bottom: 22px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 24px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 34px;
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+    h2 {
+      margin: 34px 0 14px;
+      font-size: 24px;
+      line-height: 1.2;
+    }
+    h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+    p { margin: 0 0 10px; }
+    .muted { color: var(--muted); }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 30px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: var(--soft-blue);
+      color: var(--blue);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .status {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+    .grid.cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .grid.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+    .metric {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-height: 126px;
+    }
+    .metric .value {
+      font-size: 34px;
+      font-weight: 800;
+      line-height: 1;
+      color: var(--green-dark);
+    }
+    .metric .label {
+      font-weight: 700;
+      color: #34464b;
+    }
+    .metric .note {
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .callout {
+      border-left: 5px solid var(--amber);
+      background: var(--soft-amber);
+      padding: 14px 16px;
+      border-radius: 10px;
+    }
+    .callout strong { color: #6e4c00; }
+    .table-wrap {
+      overflow-x: auto;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 760px;
+    }
+    th, td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: #efe9de;
+      color: #45565c;
+      font-size: 13px;
+      text-transform: none;
+    }
+    tr:last-child td { border-bottom: 0; }
+    .num { text-align: right; font-variant-numeric: tabular-nums; }
+    .pill {
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 12px;
+    }
+    .good { background: var(--soft-green); color: var(--green-dark); }
+    .warn { background: var(--soft-amber); color: var(--amber); }
+    .bad { background: var(--soft-red); color: var(--red); }
+    .neutral { background: #ece8df; color: #5b6468; }
+    .bar {
+      height: 10px;
+      background: #eee8dd;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+    .fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--green-dark), var(--green));
+    }
+    .fill.warn { background: linear-gradient(90deg, #b98218, #d6a447); }
+    .fill.bad { background: linear-gradient(90deg, #b94a48, #d56a60); }
+    ul {
+      margin: 8px 0 0;
+      padding-left: 20px;
+    }
+    li { margin: 6px 0; }
+    .footer {
+      margin-top: 34px;
+      color: var(--muted);
+      font-size: 13px;
+      border-top: 1px solid var(--line);
+      padding-top: 18px;
+    }
+    @media (max-width: 900px) {
+      header { grid-template-columns: 1fr; }
+      .status { justify-content: flex-start; }
+      .grid.cols-4, .grid.cols-3, .grid.cols-2 { grid-template-columns: 1fr; }
+      h1 { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header>
+      <div>
+        <h1>Отчёт по метрикам аудитора контента</h1>
+        <p class="muted">Корпус: 17 тестовых проектов из папки <strong>metrics</strong>. Прогон выполнен 23 июня 2026 года.</p>
+      </div>
+      <div class="status">
+        <span class="badge">режим: офлайн</span>
+        <span class="badge">сеть: выключена</span>
+        <span class="badge">модели: выключены</span>
+      </div>
+    </header>
+
+    <section class="callout">
+      <strong>Важное ограничение:</strong>
+      сетевой прогон с OpenRouter/Perplexity был заблокирован средой безопасности, потому что он отправляет локальные учебные проекты во внешние сервисы. Ниже показан полный безопасный офлайн-прогон: правила, локальные проверки и новая система оценки метрик.
+    </section>
+
+    <h2>Краткий итог</h2>
+    <section class="grid cols-4">
+      <article class="card metric">
+        <div class="value">98</div>
+        <div class="label">эталонных ошибок</div>
+        <div class="note">атомарные случаи из Excel-разметки</div>
+      </article>
+      <article class="card metric">
+        <div class="value">115</div>
+        <div class="label">найденных случаев</div>
+        <div class="note">в рамках критериев, где есть эталон</div>
+      </article>
+      <article class="card metric">
+        <div class="value">14 / 100 / 84</div>
+        <div class="label">TP / FP / FN</div>
+        <div class="note">найдено / лишнее / пропущено</div>
+      </article>
+      <article class="card metric">
+        <div class="value">0.132</div>
+        <div class="label">F1</div>
+        <div class="note">precision 0.123, recall 0.143</div>
+      </article>
+    </section>
+
+    <section class="grid cols-2" style="margin-top:16px">
+      <article class="card">
+        <h3>Что стало лучше</h3>
+        <p>После фильтрации шумных проверок количество предсказаний в строгой оценке снизилось до 115. Редакторский слой стал чище: precision по нему 0.267, при этом он продолжает закрывать 10 из 14 найденных эталонных ошибок вместе с правилами структуры и пунктуации.</p>
+      </article>
+      <article class="card">
+        <h3>Главный риск</h3>
+        <p>Две зоны создают основную нагрузку на проверяющего: чек-лист и локальные ресурсы. На них приходится 68% всех ложных срабатываний офлайн-прогона.</p>
+      </article>
+    </section>
+
+    <h2>Метрики по критериям</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Критерий</th>
+            <th class="num">Gold</th>
+            <th class="num">Найдено</th>
+            <th class="num">TP</th>
+            <th class="num">FP</th>
+            <th class="num">FN</th>
+            <th class="num">Precision</th>
+            <th class="num">Recall</th>
+            <th class="num">F1</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Актуальность</td>
+            <td class="num">25</td>
+            <td class="num">2</td>
+            <td class="num">1</td>
+            <td class="num">1</td>
+            <td class="num">24</td>
+            <td class="num"><span class="pill warn">0.500</span></td>
+            <td class="num">0.040</td>
+            <td class="num">0.074</td>
+          </tr>
+          <tr>
+            <td>Соответствие чек-листу</td>
+            <td class="num">8</td>
+            <td class="num">35</td>
+            <td class="num">1</td>
+            <td class="num">34</td>
+            <td class="num">7</td>
+            <td class="num"><span class="pill bad">0.029</span></td>
+            <td class="num">0.125</td>
+            <td class="num">0.047</td>
+          </tr>
+          <tr>
+            <td>Точность и корректность</td>
+            <td class="num">40</td>
+            <td class="num">35</td>
+            <td class="num">2</td>
+            <td class="num">33</td>
+            <td class="num">38</td>
+            <td class="num"><span class="pill bad">0.057</span></td>
+            <td class="num">0.050</td>
+            <td class="num">0.053</td>
+          </tr>
+          <tr>
+            <td>Грамотность и читаемость</td>
+            <td class="num">25</td>
+            <td class="num">43</td>
+            <td class="num">10</td>
+            <td class="num">32</td>
+            <td class="num">15</td>
+            <td class="num"><span class="pill warn">0.238</span></td>
+            <td class="num">0.400</td>
+            <td class="num">0.299</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Качество по группам проверок</h2>
+    <section class="grid cols-2">
+      <article class="card">
+        <h3>Детерминированные правила</h3>
+        <p><strong>31</strong> находка, <strong>10</strong> подтверждений, precision <strong>0.323</strong>.</p>
+        <div class="bar"><div class="fill" style="width:32.3%"></div></div>
+        <p class="muted">Самый надёжный слой: битые URL-форматы, подписи, локальные противоречия, структура Markdown.</p>
+      </article>
+      <article class="card">
+        <h3>Редакторские правила</h3>
+        <p><strong>15</strong> находок, <strong>4</strong> подтверждения, precision <strong>0.267</strong>.</p>
+        <div class="bar"><div class="fill" style="width:26.7%"></div></div>
+        <p class="muted">Нужна ручная адъюдикация: часть “ложных” срабатываний может быть реальными дефектами вне gold.</p>
+      </article>
+      <article class="card">
+        <h3>Чек-лист и артефакты</h3>
+        <p><strong>35</strong> находок, <strong>1</strong> подтверждение, precision <strong>0.029</strong>.</p>
+        <div class="bar"><div class="fill bad" style="width:2.9%"></div></div>
+        <p class="muted">Главный источник шума. Нужна калибровка смыслового сопоставления и порогов.</p>
+      </article>
+      <article class="card">
+        <h3>Ссылки и ресурсы</h3>
+        <p><strong>34</strong> находки, <strong>0</strong> подтверждений, precision <strong>0.000</strong>.</p>
+        <div class="bar"><div class="fill bad" style="width:0%"></div></div>
+        <p class="muted">Локальный поиск ресурсов слишком агрессивен. Нужен режим “только сильные сигналы”.</p>
+      </article>
+    </section>
+
+    <h2>Проблемные чекеры</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Чекер</th>
+            <th class="num">Найдено</th>
+            <th class="num">TP</th>
+            <th class="num">FP</th>
+            <th class="num">Precision</th>
+            <th>Комментарий</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>checklist_checker</td>
+            <td class="num">35</td>
+            <td class="num">1</td>
+            <td class="num">34</td>
+            <td class="num"><span class="pill bad">0.029</span></td>
+            <td>Нужно снизить число слабых находок и разделить “нет совпадения” и “реальная проблема”.</td>
+          </tr>
+          <tr>
+            <td>resource_availability_checker</td>
+            <td class="num">33</td>
+            <td class="num">0</td>
+            <td class="num">33</td>
+            <td class="num"><span class="pill bad">0.000</span></td>
+            <td>Сейчас ловит слишком много неподтверждённых ресурсов без доказательной базы.</td>
+          </tr>
+          <tr>
+            <td>markdown_structure_checker</td>
+            <td class="num">26</td>
+            <td class="num">5</td>
+            <td class="num">21</td>
+            <td class="num"><span class="pill warn">0.192</span></td>
+            <td>Полезен, но требуется лучше схлопывать дубли по одной структурной ошибке.</td>
+          </tr>
+          <tr>
+            <td>spelling_wording_checker</td>
+            <td class="num">15</td>
+            <td class="num">4</td>
+            <td class="num">11</td>
+            <td class="num"><span class="pill warn">0.267</span></td>
+            <td>Нужна ручная оценка: gold неполный по мелкой редактуре.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Почему ошибки не найдены</h2>
+    <section class="grid cols-3">
+      <article class="card">
+        <h3>Нужен смысловой слой</h3>
+        <p class="metric"><span class="value">39</span></p>
+        <p class="muted">Ошибки требуют понимания смысла README, чек-листа, формулировок и контекста задания.</p>
+      </article>
+      <article class="card">
+        <h3>Похожая находка была</h3>
+        <p class="metric"><span class="value">23</span></p>
+        <p class="muted">Алгоритм нашёл близкий сигнал, но строгий матч не засчитал его. Нужно улучшать сопоставление.</p>
+      </article>
+      <article class="card">
+        <h3>Вне локального анализа</h3>
+        <p class="metric"><span class="value">13</span></p>
+        <p class="muted">Такие дефекты требуют решения по области применимости или внешних данных.</p>
+      </article>
+      <article class="card">
+        <h3>Можно поймать правилом</h3>
+        <p class="metric"><span class="value">8</span></p>
+        <p class="muted">Остались точечные шаблоны: опечатки в схемах, структура глав, некоторые форматы.</p>
+      </article>
+      <article class="card">
+        <h3>Нужны внешние данные</h3>
+        <p class="metric"><span class="value">1</span></p>
+        <p class="muted">Например, метаданные платформы, дата обновления, доступность сервисов.</p>
+      </article>
+      <article class="card">
+        <h3>Итог по FN</h3>
+        <p class="metric"><span class="value">84</span></p>
+        <p class="muted">Больше половины пропусков нельзя закрыть только новыми регулярными правилами.</p>
+      </article>
+    </section>
+
+    <h2>Рекомендуемые действия</h2>
+    <section class="grid cols-3">
+      <article class="card">
+        <h3>1. Снизить шум ресурсов</h3>
+        <ul>
+          <li>Оставлять только сильные сигналы: явное имя файла, ссылка или обязательный артефакт.</li>
+          <li>Слабые предположения переводить в диагностический блок, не в таблицу методолога.</li>
+          <li>Проверить 33 FP resource_availability_checker вручную и выделить реальные шаблоны.</li>
+        </ul>
+      </article>
+      <article class="card">
+        <h3>2. Перекалибровать чек-лист</h3>
+        <ul>
+          <li>Разделить “не нашли соответствие” и “есть противоречие”.</li>
+          <li>Добавить смысловое сопоставление README ↔ check-list с примерами.</li>
+          <li>Схлопывать дубли по одному пункту чек-листа.</li>
+        </ul>
+      </article>
+      <article class="card">
+        <h3>3. Улучшить оценку</h3>
+        <ul>
+          <li>Заполнить лист адъюдикации для редакторского слоя.</li>
+          <li>Провести разрешённый сетевой прогон в утверждённом контуре.</li>
+          <li>Считать отдельно gold recall, действенную точность и стоимость подтверждённой ошибки.</li>
+        </ul>
+      </article>
+    </section>
+
+    <h2>Вывод для руководства</h2>
+    <section class="card">
+      <p>Система уже полезна как локальный редакторско-структурный аудитор: она стабильно находит часть ошибок в ссылках, пунктуации, Markdown-структуре, локальных противоречиях и формулировках. При этом текущий офлайн-прогон показывает, что основная зона роста — не добавление новых общих проверок, а снижение шума в чек-листе и локальных ресурсах.</p>
+      <p>Для перехода к производственной оценке нужны два шага: ручная адъюдикация спорных редакторских находок и разрешённый прогон с внешними моделями в безопасном контуре. Без этого общая F1 остаётся заниженной и не полностью отражает ценность инструмента.</p>
+    </section>
+
+    <div class="footer">
+      Источники: <code>output/validation/offline_metrics_2026-06-23_19-32-26/corpus_evaluation.json</code>,
+      <code>corpus_evaluation_by_checker.csv</code>,
+      <code>corpus_evaluation_by_checker_group.csv</code>,
+      <code>corpus_false_negative_analysis.csv</code>.
+    </div>
+  </main>
+</body>
+</html>

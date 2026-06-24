@@ -1,0 +1,4 @@
+﻿criterion,label,gold_total,predicted_total,true_positive,false_positive,false_negative,precision,recall,f1_score
+checklist_alignment,Соответствие заданий проекта чек-листу,0,1,0,1,0,0.0,0.0,0.0
+correctness,Точность и корректность,0,1,0,1,0,0.0,0.0,0.0
+readability,Грамотность и читаемость текста,1,1,1,0,0,1.0,1.0,1.0

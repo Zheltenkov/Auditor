@@ -41,7 +41,11 @@ RESOURCE_EXTENSIONS = (
 )
 FILE_REF_RE = re.compile(
     rf"`([^`\n]+\.(?:{'|'.join(RESOURCE_EXTENSIONS)}))`|"
-    rf"(?<![\w./-])([\w./-]+\.(?:{'|'.join(RESOURCE_EXTENSIONS)}))\b",
+    rf"(?<![\w./\\-])([A-Za-zА-Яа-яЁё0-9_./\\<>-]+\.(?:{'|'.join(RESOURCE_EXTENSIONS)}))\b",
+    re.IGNORECASE,
+)
+LOOSE_DOC_REF_RE = re.compile(
+    r"(?<!\w)((?:ex|task|quest|day)\d{1,3}[A-Za-zА-Яа-яЁё0-9_./\\ <>\-]*\.(?:docx|dox))\b",
     re.IGNORECASE,
 )
 GROUNDING_COMMANDS = {
@@ -604,8 +608,10 @@ def _extract_file_refs(text: str) -> tuple[str, ...]:
     """Достаёт ресурсные файлы из README или чек-листа."""
 
     refs: list[str] = []
-    for match in FILE_REF_RE.finditer(text):
-        ref = (match.group(1) or match.group(2) or "").strip()
+    matches = [match.group(1) or match.group(2) or "" for match in FILE_REF_RE.finditer(text)]
+    matches.extend(match.group(1) for match in LOOSE_DOC_REF_RE.finditer(text))
+    for raw_ref in matches:
+        ref = _normalize_file_ref_text(raw_ref.strip())
         if not ref:
             continue
         basename = _basename(ref)
@@ -680,7 +686,11 @@ def _artifact_key(value: str) -> str:
     """Нормализует имя ресурса для поиска близких вариантов."""
 
     stem = _basename(value).rsplit(".", 1)[0].lower()
-    stem = stem.replace("usecase", "uc").replace("use_case", "uc")
+    stem = re.sub(r"<[^>]+>", "", stem)
+    stem = stem.replace("use case", "uc").replace("usecase", "uc").replace("use_case", "uc")
+    stem = stem.replace("produse caset prefix", "")
+    stem = stem.replace("product prefix", "").replace("productprefix", "").replace("prefix", "")
+    stem = stem.replace("префикс продукта", "").replace("префикспродукта", "").replace("префикс", "")
     return re.sub(r"[^a-zа-яё0-9]+", "", stem)
 
 
@@ -694,7 +704,20 @@ def _extension(value: str) -> str:
 def _basename(value: str) -> str:
     """Возвращает имя файла без каталогов, поддерживая Windows- и POSIX-разделители."""
 
-    return re.split(r"[\\/]", value.strip())[-1].strip()
+    normalized = _normalize_file_ref_text(value)
+    return re.split(r"[\\/]", normalized.strip())[-1].strip()
+
+
+def _normalize_file_ref_text(value: str) -> str:
+    """Убирает Markdown-экранирование, которое не является частью имени файла."""
+
+    return (
+        value.strip()
+        .replace("\\_", "_")
+        .replace("\\-", "-")
+        .replace("\\.", ".")
+        .strip("`'\".,;)")
+    )
 
 
 def _dedupe_issues(issues: list[ChecklistGroundingIssue]) -> list[ChecklistGroundingIssue]:

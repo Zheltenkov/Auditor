@@ -1,0 +1,548 @@
+{
+  "evaluated_criteria": [
+    "readability"
+  ],
+  "gold_total": 1,
+  "predicted_total": 20,
+  "true_positive": 0,
+  "false_positive": 20,
+  "false_negative": 1,
+  "precision": 0.0,
+  "recall": 0.0,
+  "f1_score": 0.0,
+  "macro_precision": 0.0,
+  "macro_recall": 0.0,
+  "macro_f1_score": 0.0,
+  "overview_gold_total": 1,
+  "overview_predicted_total": 5,
+  "overview_true_positive": 1,
+  "overview_false_positive": 4,
+  "overview_false_negative": 0,
+  "overview_precision": 0.2,
+  "overview_recall": 1.0,
+  "overview_f1_score": 0.3333,
+  "overview_macro_precision": 0.2,
+  "overview_macro_recall": 0.2,
+  "overview_macro_f1_score": 0.2,
+  "gold_scope_predicted_total": 20,
+  "gold_scope_true_positive": 0,
+  "gold_scope_false_positive": 20,
+  "gold_scope_false_negative": 1,
+  "gold_scope_precision": 0.0,
+  "gold_scope_recall": 0.0,
+  "gold_scope_f1_score": 0.0,
+  "gold_scope_macro_precision": 0.0,
+  "gold_scope_macro_recall": 0.0,
+  "gold_scope_macro_f1_score": 0.0,
+  "per_criterion": [
+    {
+      "criterion": "readability",
+      "label": "Грамотность и читаемость текста",
+      "gold_total": 1,
+      "predicted_total": 20,
+      "true_positive": 0,
+      "false_positive": 20,
+      "false_negative": 1,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    }
+  ],
+  "overview_per_criterion": [
+    {
+      "criterion": "actuality",
+      "label": "Актуальность",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "checklist_alignment",
+      "label": "Соответствие заданий проекта чек-листу",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "market_fit",
+      "label": "Соответствие рынку",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "readability",
+      "label": "Грамотность и читаемость текста",
+      "gold_total": 1,
+      "predicted_total": 1,
+      "true_positive": 1,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0
+    }
+  ],
+  "checker_metrics": [
+    {
+      "slice_name": "spelling_wording_checker",
+      "label": "spelling_wording_checker",
+      "predicted_total": 20,
+      "true_positive": 0,
+      "false_positive": 20,
+      "precision": 0.0,
+      "false_positive_share": 1.0
+    }
+  ],
+  "checker_group_metrics": [
+    {
+      "slice_name": "editorial_rules",
+      "label": "Редакторские правила",
+      "predicted_total": 20,
+      "true_positive": 0,
+      "false_positive": 20,
+      "precision": 0.0,
+      "false_positive_share": 1.0
+    }
+  ],
+  "actionable_metrics": {
+    "slice_name": "actionable",
+    "label": "Действенные находки",
+    "predicted_total": 20,
+    "true_positive": 0,
+    "false_positive": 20,
+    "precision": 0.0,
+    "false_positive_share": 1.0
+  },
+  "cost_quality": {
+    "model_calls": 15,
+    "cache_hits": 1,
+    "total_tokens": 22883,
+    "cost_usd": 0.063589,
+    "cost_per_gold_true_positive": null,
+    "cost_per_prediction": 0.002355,
+    "cost_per_actionable_true_positive": null
+  },
+  "false_negative_reason_counts": {
+    "deterministic_possible": 1
+  },
+  "false_negative_analysis": [
+    {
+      "project": "CbS11_Enterprise_IT_landscape.ID_1573765-master",
+      "project_id": "cbs11_enterprise_it_landscape_id_1573765_master__b612154a",
+      "criterion": "readability",
+      "label": "Грамотность и читаемость текста",
+      "gold_line_range": "",
+      "gold_text": "На схеме в задании у половины хостов домен \"COMPANY\", а у другой половины - \"COMANY\" (буква P пропущена) - выглядит как опечатка",
+      "nearest_finding_id": "fnd_b9ec0cb15088",
+      "nearest_checker": "spelling_wording_checker",
+      "nearest_match_type": "criterion_only",
+      "nearest_score": 0.3333,
+      "reason_code": "deterministic_possible",
+      "reason_label": "Можно ловить правилом",
+      "next_step": "Добавить или расширить детерминированный чекер с тестом на этот паттерн."
+    }
+  ],
+  "gold_items": [
+    {
+      "row_number": 2,
+      "raw_project": "CbS11",
+      "matched_project": "CbS11_Enterprise_IT_landscape.ID_1573765-master",
+      "project_id": "cbs11_enterprise_it_landscape_id_1573765_master__b612154a",
+      "raw_problem": "опечатки",
+      "details": "На схеме в задании у половины хостов домен \"COMPANY\", а у другой половины - \"COMANY\" (буква P пропущена) - выглядит как опечатка",
+      "criteria": [
+        "readability"
+      ]
+    }
+  ],
+  "gold_cases": [
+    {
+      "case_id": "gold_2_readability_1",
+      "row_number": 2,
+      "raw_project": "CbS11",
+      "matched_project": "CbS11_Enterprise_IT_landscape.ID_1573765-master",
+      "project_id": "cbs11_enterprise_it_landscape_id_1573765_master__b612154a",
+      "criterion": "readability",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "На схеме в задании у половины хостов домен \"COMPANY\", а у другой половины - \"COMANY\" (буква P пропущена) - выглядит как опечатка"
+    }
+  ],
+  "matches": [
+    {
+      "project": "CbS11_Enterprise_IT_landscape.ID_1573765-master",
+      "project_id": "cbs11_enterprise_it_landscape_id_1573765_master__b612154a",
+      "criterion": "readability",
+      "label": "Грамотность и читаемость текста",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "На схеме в задании у половины хостов домен \"COMPANY\", а у другой половины - \"COMANY\" (буква P пропущена) - выглядит как опечатка",
+      "found_finding_id": "fnd_b9ec0cb15088",
+      "found_checker": "spelling_wording_checker",
+      "found_line_range": "README.md:1",
+      "found_text": "IT-инфаструктура | Опечатка в слове. | IT-инфраструктура | typo",
+      "match_type": "criterion_only",
+      "match_score": 0.3333,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    }
+  ],
+  "detailed_false_positive_items": [
+    {
+      "finding_id": "fnd_b9ec0cb15088",
+      "project_id": "cbs11_enterprise_it_landscape_id_1573765_master__b612154a",
+      "project": "CbS11_Enterprise_IT_landscape.ID_1573765-master",
+      "criterion": "readability",
+      "checker_name": "spelling_wording_checker",
+      "line_start": 1,
+      "line_end": 1,
+      "file_path": "README.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.99,
+      "issue_type": "typo",
+      "found_text": "IT-инфаструктура | Опечатка в слове. | IT-инфраструктура | typo"
+    },
+    {
+      "finding_id": "fnd_70bec15c658c",
+      "project_id": "cbs11_enterprise_it_landscape_id_1573765_master__b612154a",
+      "project": "CbS11_Enterprise_IT_landscape.ID_1573765-master",
+      "criterion": "readability",
+      "checker_name": "spelling_wording_checker",
+      "line_start": 3,
+      "line_end": 3,
+      "file_path": "README.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.72,
+      "issue_type": "typo",
+      "found_text": "ты построишь несколько ИТ-инфраструктур малых предприятий и спроектируешь их защиту | Неудачное словоупотребление: сочетание звучит тяжеловесно и слабо согласуется по смыслу. | ты построишь несколько вариантов ИТ-инфраструктуры для малых предприятий и спроектируешь их защиту | typo"
+    },
+    {
+      "finding_id": "fnd_175196a7d265",
+      "project_id": "cbs11_enterprise_it_landscape_id_1573765_master__b612154a",
+      "project": "CbS11_Enterprise_IT_landscape.ID_1573765-master",
+      "criterion": "readability",
+      "checker_name": "spelling_wording_checker",
+      "line_start": 27,
+      "line_end": 27,
+      "file_path": "README.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.98,
+      "issue_type": "typo",
+      "found_text": "такие же пиры | Опечатка: должно быть другое слово. | такие же пиры | typo"
+    },
+    {
+      "finding_id": "fnd_ae1c00c3e07a",
+      "project_id": "cbs11_enterprise_it_landscape_id_1573765_master__b612154a",
+      "project": "CbS11_Enterprise_IT_landscape.ID_1573765-master",
+      "criterion": "readability",
+      "checker_name": "spelling_wording_checker",
+      "line_start": 29,
+      "line_end": 29,
+      "file_path": "README.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.77,
+      "issue_type": "wording",
+      "found_text": "экспертам по КБ | Сокращение выглядит неудачно и может быть непонятным без расшифровки. | экспертам по кибербезопасности | wording"
+    },
+    {
+      "finding_id": "fnd_cc7fd3ea98ba",
+      "project_id": "cbs11_enterprise_it_landscape_id_1573765_master__b612154a",
+      "project": "CbS11_Enterprise_IT_landscape.ID_1573765-master",
+      "criterion": "readability",
+      "checker_name": "spelling_wording_checker",
+      "line_start": 34,
+      "line_end": 34,
+      "file_path": "README.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.99,
+      "issue_type": "case",
+      "found_text": "Перед выполнением проект необходимо склонировать с GitLab в одноименный репозиторий. | Нарушено согласование: после предлога требуется существительное в форме винительного падежа. | Перед выполнением проекта необходимо склонировать его с GitLab в одноименный репозиторий. | case"
+    },
+    {
+      "finding_id": "fnd_e56fb332fb61",
+      "project_id": "cbs11_enterprise_it_landscape_id_1573765_master__b612154a",
+      "project": "CbS11_Enterprise_IT_landscape.ID_1573765-master",
+      "criterion": "readability",
+      "checker_name": "spelling_wording_checker",
+      "line_start": 35,
+      "line_end": 35,
+      "file_path": "README.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.88,
+      "issue_type": "wording",
+      "found_text": "Все файлы с кодом необходимо создавать в папке src склонированного репозитория. | Неудачная формулировка: «склонированного» звучит неестественно в этом контексте. | Все файлы с кодом необходимо создавать в папке src склонированного репозитория → клонированного репозитория. | wording"
+    },
+    {
+      "finding_id": "fnd_d06bce93043a",
+      "project_id": "cbs11_enterprise_it_landscape_id_1573765_master__b612154a",
+      "project": "CbS11_Enterprise_IT_landscape.ID_1573765-master",
+      "criterion": "readability",
+      "checker_name": "spelling_wording_checker",
+      "line_start": 41,
+      "line_end": 41,
+      "file_path": "README.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.81,
+      "issue_type": "wording",
+      "found_text": "Использовать AI‑помощников в этом проекте в заданиях 2 и 3 полезно – для генерации идей, структурирования данных, поиска угроз и выбора СЗИ. | Повторяется обстоятельство «в этом проекте / в заданиях 2 и 3», из-за чего фраза звучит тяжеловесно. | Использовать AI‑помощников в заданиях 2 и 3 полезно — для генерации идей, структурирования данных, поиска угроз и выбора СЗИ. | wording"
+    },
+    {
+      "finding_id": "fnd_58f148ac4654",
+      "project_id": "cbs11_enterprise_it_landscape_id_1573765_master__b612154a",
+      "project": "CbS11_Enterprise_IT_landscape.ID_1573765-master",
+      "criterion": "readability",
+      "checker_name": "spelling_wording_checker",
+      "line_start": 50,
+      "line_end": 50,
+      "file_path": "README.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.97,
+      "issue_type": "wording",
+      "found_text": "ставится новое ПО | Неудачная формулировка: о ПО обычно говорят «устанавливается». | устанавливается новое ПО | wording"
+    },
+    {
+      "finding_id": "fnd_5ce4b91faa28",
+      "project_id": "cbs11_enterprise_it_landscape_id_1573765_master__b612154a",
+      "project": "CbS11_Enterprise_IT_landscape.ID_1573765-master",
+      "criterion": "readability",
+      "checker_name": "spelling_wording_checker",
+      "line_start": 50,
+      "line_end": 50,
+      "file_path": "README.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.98,
+      "issue_type": "wording",
+      "found_text": "сервера/АРМы | Нарушение нормального оформления множественного числа: лучше единообразно использовать формы существительных. | серверы/АРМы | wording"
+    },
+    {
+      "finding_id": "fnd_98c3daafbe4f",
+      "project_id": "cbs11_enterprise_it_landscape_id_1573765_master__b612154a",
+      "project": "CbS11_Enterprise_IT_landscape.ID_1573765-master",
+      "criterion": "readability",
+      "checker_name": "spelling_wording_checker",
+      "line_start": 50,
+      "line_end": 50,
+      "file_path": "README.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.86,
+      "issue_type": "wording",
+      "found_text": "ровно как и ИТ-инфраструктура никогда не стоит на месте | Неудачное сочетание: в этом контексте лучше использовать сопоставительный союз «так же как». | …так же как и ИТ-инфраструктура никогда не стоит на месте | wording"
+    },
+    {
+      "finding_id": "fnd_aa7d2cbb3bde",
+      "project_id": "cbs11_enterprise_it_landscape_id_1573765_master__b612154a",
+      "project": "CbS11_Enterprise_IT_landscape.ID_1573765-master",
+      "criterion": "readability",
+      "checker_name": "spelling_wording_checker",
+      "line_start": 51,
+      "line_end": 51,
+      "file_path": "README.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.95,
+      "issue_type": "wording",
+      "found_text": "Роль играет безопасность на каждом уровне. | Неудачный порядок слов: устойчивее и естественнее «играет роль». | Безопасность играет роль на каждом уровне. | wording"
+    },
+    {
+      "finding_id": "fnd_a8ceb69b3e2c",
+      "project_id": "cbs11_enterprise_it_landscape_id_1573765_master__b612154a",
+      "project": "CbS11_Enterprise_IT_landscape.ID_1573765-master",
+      "criterion": "readability",
+      "checker_name": "spelling_wording_checker",
+      "line_start": 59,
+      "line_end": 59,
+      "file_path": "README.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.99,
+      "issue_type": "wording",
+      "found_text": "Ты уже наверняка знаешь эти столпы ИБ (их еще называют триада CIA). | Неудачная формулировка: после слова «называют» требуется творительный падеж. | Ты уже наверняка знаешь эти столпы ИБ (их еще называют триадой CIA). | wording"
+    },
+    {
+      "finding_id": "fnd_9853b2d1c1e6",
+      "project_id": "cbs11_enterprise_it_landscape_id_1573765_master__b612154a",
+      "project": "CbS11_Enterprise_IT_landscape.ID_1573765-master",
+      "criterion": "readability",
+      "checker_name": "spelling_wording_checker",
+      "line_start": 63,
+      "line_end": 63,
+      "file_path": "README.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.98,
+      "issue_type": "case",
+      "found_text": "**Целостность** — информация должна быть точная и достоверная. | Ошибка согласования: краткая форма должна согласовываться с подлежащим «информация». | **Целостность** — информация должна быть точной и достоверной. | case"
+    },
+    {
+      "finding_id": "fnd_24776e11e7bf",
+      "project_id": "cbs11_enterprise_it_landscape_id_1573765_master__b612154a",
+      "project": "CbS11_Enterprise_IT_landscape.ID_1573765-master",
+      "criterion": "readability",
+      "checker_name": "spelling_wording_checker",
+      "line_start": 65,
+      "line_end": 65,
+      "file_path": "README.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.93,
+      "issue_type": "wording",
+      "found_text": "— авторизованному субъекту гарантировано, что он сможет получить доступ к информации в любой момент. | Неудачная формулировка: «гарантировано» лучше заменить на более естественное сочетание с «гарантируется». | — авторизованному субъекту гарантируется, что он сможет получить доступ к информации в любой момент. | wording"
+    },
+    {
+      "finding_id": "fnd_c5c258fce03f",
+      "project_id": "cbs11_enterprise_it_landscape_id_1573765_master__b612154a",
+      "project": "CbS11_Enterprise_IT_landscape.ID_1573765-master",
+      "criterion": "readability",
+      "checker_name": "spelling_wording_checker",
+      "line_start": 74,
+      "line_end": 74,
+      "file_path": "README.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.78,
+      "issue_type": "case",
+      "found_text": "Для решения данного задания нужны знания в следующих темах: app.diagrams.net, иконки устройств, сетевые топологии, структурная схема ЛВС. | Сочетание «данного задания» звучит канцелярски и тяжеловесно; в учебном тексте лучше употребить более нейтральную форму. | Для решения этого задания нужны знания в следующих темах: app.diagrams.net, иконки устройств, сетевые топологии, структурная схема ЛВС. | case"
+    },
+    {
+      "finding_id": "fnd_fd0d27ec5a34",
+      "project_id": "cbs11_enterprise_it_landscape_id_1573765_master__b612154a",
+      "project": "CbS11_Enterprise_IT_landscape.ID_1573765-master",
+      "criterion": "readability",
+      "checker_name": "spelling_wording_checker",
+      "line_start": 80,
+      "line_end": 80,
+      "file_path": "README.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.97,
+      "issue_type": "case",
+      "found_text": "Вся следующая ночь муравья прошла в расспросах пчелы об устройстве их типичной структуры общества. | Нарушено согласование: ночь не может «проходить в расспросах муравья»; по смыслу лучше перестроить фразу. | Всю следующую ночь муравей расспрашивал пчелу об устройстве их типичной структуры общества. | case"
+    },
+    {
+      "finding_id": "fnd_6c8d28dfb4fd",
+      "project_id": "cbs11_enterprise_it_landscape_id_1573765_master__b612154a",
+      "project": "CbS11_Enterprise_IT_landscape.ID_1573765-master",
+      "criterion": "readability",
+      "checker_name": "spelling_wording_checker",
+      "line_start": 86,
+      "line_end": 86,
+      "file_path": "README.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.92,
+      "issue_type": "wording",
+      "found_text": "речь про сервера / облачные вычисления / гипервизоры. | Формулировка с «речь про» разговорная и неудачно сочетается с перечислением через слэши. | речь идет о серверах / облачных вычислениях / гипервизорах. | wording"
+    },
+    {
+      "finding_id": "fnd_5325a60d197a",
+      "project_id": "cbs11_enterprise_it_landscape_id_1573765_master__b612154a",
+      "project": "CbS11_Enterprise_IT_landscape.ID_1573765-master",
+      "criterion": "readability",
+      "checker_name": "spelling_wording_checker",
+      "line_start": 96,
+      "line_end": 96,
+      "file_path": "README.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.98,
+      "issue_type": "wording",
+      "found_text": "в которой заблокировать все порты = положить всю инфраструктуру компании. | Символ «=» использован как замена сказуемого, из-за чего фраза выглядит неудачно оформленной. | в которой заблокировать все порты — значит положить всю инфраструктуру компании. | wording"
+    },
+    {
+      "finding_id": "fnd_9ac082b553a1",
+      "project_id": "cbs11_enterprise_it_landscape_id_1573765_master__b612154a",
+      "project": "CbS11_Enterprise_IT_landscape.ID_1573765-master",
+      "criterion": "readability",
+      "checker_name": "spelling_wording_checker",
+      "line_start": 98,
+      "line_end": 98,
+      "file_path": "README.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.9,
+      "issue_type": "wording",
+      "found_text": "Важно понять, что обеспечить безопасность ИТ-инфраструктуры — очень нетривиальная задача, в которой нужно руководствоваться: | Сочетание «важно понять, что обеспечить» звучит тяжеловесно; лучше упростить формулировку. | Важно понимать, что обеспечение безопасности ИТ-инфраструктуры — очень нетривиальная задача, в которой нужно руководствоваться: | wording"
+    },
+    {
+      "finding_id": "fnd_1e80ffbb2b7a",
+      "project_id": "cbs11_enterprise_it_landscape_id_1573765_master__b612154a",
+      "project": "CbS11_Enterprise_IT_landscape.ID_1573765-master",
+      "criterion": "readability",
+      "checker_name": "spelling_wording_checker",
+      "line_start": 125,
+      "line_end": 125,
+      "file_path": "README.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.78,
+      "issue_type": "wording",
+      "found_text": "Может показаться, что инвентаризация активов — это что-то про государственные НИИ или в крайнем случае муниципальные/областные информационные системы. | Сочетание «что-то про» звучит разговорно и неудачно для учебного текста. | Заменить на более нейтральную формулировку, например: «Может показаться, что инвентаризация активов — это тема государственных НИИ или, в крайнем случае, муниципальных/областных информационных систем.» | wording"
+    }
+  ],
+  "false_positive_items": [
+    {
+      "project_id": "cbs11_enterprise_it_landscape_id_1573765_master__b612154a",
+      "criterion": "actuality"
+    },
+    {
+      "project_id": "cbs11_enterprise_it_landscape_id_1573765_master__b612154a",
+      "criterion": "checklist_alignment"
+    },
+    {
+      "project_id": "cbs11_enterprise_it_landscape_id_1573765_master__b612154a",
+      "criterion": "correctness"
+    },
+    {
+      "project_id": "cbs11_enterprise_it_landscape_id_1573765_master__b612154a",
+      "criterion": "market_fit"
+    }
+  ],
+  "false_negative_items": [],
+  "project_mapping": {
+    "CbS11": "CbS11_Enterprise_IT_landscape.ID_1573765-master"
+  },
+  "notes": [
+    "Основное сравнение выполняется на уровне атомарных ошибок: проект, критерий, строка/диапазон и текст.",
+    "В строгую метрику не входят диагностические строки: низкоуверенные unknown, непроверенные ссылки и общие ресурсные предупреждения без имени файла.",
+    "Старая метрика проект × критерий сохранена только как обзорная в overview_* полях.",
+    "Excel-разметка нормализуется эвристически из колонок 'Проблема' и 'Детали'."
+  ]
+}

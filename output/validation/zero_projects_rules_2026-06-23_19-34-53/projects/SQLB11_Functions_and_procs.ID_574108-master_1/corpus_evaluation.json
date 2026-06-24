@@ -1,0 +1,337 @@
+{
+  "evaluated_criteria": [
+    "checklist_alignment"
+  ],
+  "gold_total": 2,
+  "predicted_total": 2,
+  "true_positive": 0,
+  "false_positive": 2,
+  "false_negative": 2,
+  "precision": 0.0,
+  "recall": 0.0,
+  "f1_score": 0.0,
+  "macro_precision": 0.0,
+  "macro_recall": 0.0,
+  "macro_f1_score": 0.0,
+  "overview_gold_total": 1,
+  "overview_predicted_total": 6,
+  "overview_true_positive": 1,
+  "overview_false_positive": 5,
+  "overview_false_negative": 0,
+  "overview_precision": 0.1667,
+  "overview_recall": 1.0,
+  "overview_f1_score": 0.2858,
+  "overview_macro_precision": 0.1667,
+  "overview_macro_recall": 0.1667,
+  "overview_macro_f1_score": 0.1667,
+  "gold_scope_predicted_total": 2,
+  "gold_scope_true_positive": 0,
+  "gold_scope_false_positive": 2,
+  "gold_scope_false_negative": 2,
+  "gold_scope_precision": 0.0,
+  "gold_scope_recall": 0.0,
+  "gold_scope_f1_score": 0.0,
+  "gold_scope_macro_precision": 0.0,
+  "gold_scope_macro_recall": 0.0,
+  "gold_scope_macro_f1_score": 0.0,
+  "per_criterion": [
+    {
+      "criterion": "checklist_alignment",
+      "label": "Соответствие заданий проекта чек-листу",
+      "gold_total": 2,
+      "predicted_total": 2,
+      "true_positive": 0,
+      "false_positive": 2,
+      "false_negative": 2,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    }
+  ],
+  "overview_per_criterion": [
+    {
+      "criterion": "actuality",
+      "label": "Актуальность",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "checklist_alignment",
+      "label": "Соответствие заданий проекта чек-листу",
+      "gold_total": 1,
+      "predicted_total": 1,
+      "true_positive": 1,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0
+    },
+    {
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "image_quality",
+      "label": "Качество изображений",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "readability",
+      "label": "Грамотность и читаемость текста",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "rights",
+      "label": "Оригинальность и права использования ресурсов",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    }
+  ],
+  "checker_metrics": [
+    {
+      "slice_name": "checklist_checker",
+      "label": "checklist_checker",
+      "predicted_total": 2,
+      "true_positive": 0,
+      "false_positive": 2,
+      "precision": 0.0,
+      "false_positive_share": 1.0
+    }
+  ],
+  "checker_group_metrics": [
+    {
+      "slice_name": "checklist_and_artifacts",
+      "label": "Чек-лист и артефакты",
+      "predicted_total": 2,
+      "true_positive": 0,
+      "false_positive": 2,
+      "precision": 0.0,
+      "false_positive_share": 1.0
+    }
+  ],
+  "actionable_metrics": {
+    "slice_name": "actionable",
+    "label": "Действенные находки",
+    "predicted_total": 2,
+    "true_positive": 0,
+    "false_positive": 2,
+    "precision": 0.0,
+    "false_positive_share": 1.0
+  },
+  "cost_quality": {
+    "model_calls": 0,
+    "cache_hits": 0,
+    "total_tokens": 0,
+    "cost_usd": 0.0,
+    "cost_per_gold_true_positive": null,
+    "cost_per_prediction": 0.0,
+    "cost_per_actionable_true_positive": null
+  },
+  "false_negative_reason_counts": {
+    "model_possible": 2
+  },
+  "false_negative_analysis": [
+    {
+      "project": "SQLB11_Functions_and_procs.ID_574108-master",
+      "project_id": "sqlb11_functions_and_procs_id_574108_master__431d8d18",
+      "criterion": "checklist_alignment",
+      "label": "Соответствие заданий проекта чек-листу",
+      "gold_line_range": "",
+      "gold_text": ":small_blue_diamond: Description: По заданию нужно найти пиццерии, где был человек в определённый день и где мог заказать пиццу дешевле определённой суммы.",
+      "nearest_finding_id": "fnd_dfc0c8306845",
+      "nearest_checker": "checklist_checker",
+      "nearest_match_type": "criterion_only",
+      "nearest_score": 0.15,
+      "reason_code": "model_possible",
+      "reason_label": "Нужен смысловой анализ",
+      "next_step": "Добавить модельный/семантический слой с проверяемым JSON-контрактом и примерами."
+    },
+    {
+      "project": "SQLB11_Functions_and_procs.ID_574108-master",
+      "project_id": "sqlb11_functions_and_procs_id_574108_master__431d8d18",
+      "criterion": "checklist_alignment",
+      "label": "Соответствие заданий проекта чек-листу",
+      "gold_line_range": "",
+      "gold_text": "В чек листе на втором наборе тестовых параметров правильным результатов считается вывод из 4 строк Pizza Hut, что бесмысленно, достаточно одной",
+      "nearest_finding_id": "fnd_dfc0c8306845",
+      "nearest_checker": "checklist_checker",
+      "nearest_match_type": "criterion_only",
+      "nearest_score": 0.2381,
+      "reason_code": "model_possible",
+      "reason_label": "Нужен смысловой анализ",
+      "next_step": "Добавить модельный/семантический слой с проверяемым JSON-контрактом и примерами."
+    }
+  ],
+  "gold_items": [
+    {
+      "row_number": 2,
+      "raw_project": "SQLB11",
+      "matched_project": "SQLB11_Functions_and_procs.ID_574108-master",
+      "project_id": "sqlb11_functions_and_procs_id_574108_master__431d8d18",
+      "raw_problem": "несоответствие задания чек-листу",
+      "details": ":small_blue_diamond: Description: По заданию нужно найти пиццерии, где был человек в определённый день и где мог заказать пиццу дешевле определённой суммы.\nВ чек листе на втором наборе тестовых параметров правильным результатов считается вывод из 4 строк Pizza Hut, что бесмысленно, достаточно одной\n Предложение по решению: \nЛибо поменять задание, что в результате работы функции/запроса нужно получить не просто список пиццерий, а пицериии и конкретные пиццы, которые можно было заказать дешевле определенной суммы.\nЛибо поменять чеклист, и оставить во втором кейсе вывод с 1 строкой \"Pizza Hut\"\n Аргументы и исследования на тему: \nВсе разъяснения приведены выше по тексту",
+      "criteria": [
+        "checklist_alignment"
+      ]
+    }
+  ],
+  "gold_cases": [
+    {
+      "case_id": "gold_2_checklist_alignment_1",
+      "row_number": 2,
+      "raw_project": "SQLB11",
+      "matched_project": "SQLB11_Functions_and_procs.ID_574108-master",
+      "project_id": "sqlb11_functions_and_procs_id_574108_master__431d8d18",
+      "criterion": "checklist_alignment",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": ":small_blue_diamond: Description: По заданию нужно найти пиццерии, где был человек в определённый день и где мог заказать пиццу дешевле определённой суммы."
+    },
+    {
+      "case_id": "gold_2_checklist_alignment_2",
+      "row_number": 2,
+      "raw_project": "SQLB11",
+      "matched_project": "SQLB11_Functions_and_procs.ID_574108-master",
+      "project_id": "sqlb11_functions_and_procs_id_574108_master__431d8d18",
+      "criterion": "checklist_alignment",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "В чек листе на втором наборе тестовых параметров правильным результатов считается вывод из 4 строк Pizza Hut, что бесмысленно, достаточно одной"
+    }
+  ],
+  "matches": [
+    {
+      "project": "SQLB11_Functions_and_procs.ID_574108-master",
+      "project_id": "sqlb11_functions_and_procs_id_574108_master__431d8d18",
+      "criterion": "checklist_alignment",
+      "label": "Соответствие заданий проекта чек-листу",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": ":small_blue_diamond: Description: По заданию нужно найти пиццерии, где был человек в определённый день и где мог заказать пиццу дешевле определённой суммы.",
+      "found_finding_id": "fnd_dfc0c8306845",
+      "found_checker": "checklist_checker",
+      "found_line_range": "check-list.yml",
+      "found_text": "Pizza Hut × 4 | Чек-лист ожидает несколько одинаковых строк результата, хотя README формулирует результат как список названий. | Схлопнуто 2 строк: check-list.yml, check-list_RUS.yml. | Проверить ожидаемый вывод чек-листа и убрать дубли, если задание просит уникальный список. | suspicious_duplicate_name_result",
+      "match_type": "criterion_only",
+      "match_score": 0.15,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    },
+    {
+      "project": "SQLB11_Functions_and_procs.ID_574108-master",
+      "project_id": "sqlb11_functions_and_procs_id_574108_master__431d8d18",
+      "criterion": "checklist_alignment",
+      "label": "Соответствие заданий проекта чек-листу",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "В чек листе на втором наборе тестовых параметров правильным результатов считается вывод из 4 строк Pizza Hut, что бесмысленно, достаточно одной",
+      "found_finding_id": "fnd_dfc0c8306845",
+      "found_checker": "checklist_checker",
+      "found_line_range": "check-list.yml",
+      "found_text": "Pizza Hut × 4 | Чек-лист ожидает несколько одинаковых строк результата, хотя README формулирует результат как список названий. | Схлопнуто 2 строк: check-list.yml, check-list_RUS.yml. | Проверить ожидаемый вывод чек-листа и убрать дубли, если задание просит уникальный список. | suspicious_duplicate_name_result",
+      "match_type": "criterion_only",
+      "match_score": 0.2381,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    }
+  ],
+  "detailed_false_positive_items": [
+    {
+      "finding_id": "fnd_dfc0c8306845",
+      "project_id": "sqlb11_functions_and_procs_id_574108_master__431d8d18",
+      "project": "SQLB11_Functions_and_procs.ID_574108-master",
+      "criterion": "checklist_alignment",
+      "checker_name": "checklist_checker",
+      "line_start": null,
+      "line_end": null,
+      "file_path": "check-list.yml",
+      "severity": "major",
+      "verdict": "warning",
+      "confidence": 0.84,
+      "issue_type": "suspicious_duplicate_name_result",
+      "found_text": "Pizza Hut × 4 | Чек-лист ожидает несколько одинаковых строк результата, хотя README формулирует результат как список названий. | Схлопнуто 2 строк: check-list.yml, check-list_RUS.yml. | Проверить ожидаемый вывод чек-листа и убрать дубли, если задание просит уникальный список. | suspicious_duplicate_name_result"
+    },
+    {
+      "finding_id": "fnd_eb440286d9d5",
+      "project_id": "sqlb11_functions_and_procs_id_574108_master__431d8d18",
+      "project": "SQLB11_Functions_and_procs.ID_574108-master",
+      "criterion": "checklist_alignment",
+      "checker_name": "checklist_checker",
+      "line_start": null,
+      "line_end": null,
+      "file_path": "check-list.yml",
+      "severity": "major",
+      "verdict": "warning",
+      "confidence": 0.84,
+      "issue_type": "ungrounded_sql_condition",
+      "found_text": "TG_OP = 'INSERT' | Чек-лист фиксирует SQL-условие, которое не сформулировано в README. | Схлопнуто 18 строк: check-list.yml, check-list_RUS.yml. | Описать это SQL-условие в задании или убрать его из ожидаемого решения чек-листа. | ungrounded_sql_condition"
+    }
+  ],
+  "false_positive_items": [
+    {
+      "project_id": "sqlb11_functions_and_procs_id_574108_master__431d8d18",
+      "criterion": "actuality"
+    },
+    {
+      "project_id": "sqlb11_functions_and_procs_id_574108_master__431d8d18",
+      "criterion": "correctness"
+    },
+    {
+      "project_id": "sqlb11_functions_and_procs_id_574108_master__431d8d18",
+      "criterion": "image_quality"
+    },
+    {
+      "project_id": "sqlb11_functions_and_procs_id_574108_master__431d8d18",
+      "criterion": "readability"
+    },
+    {
+      "project_id": "sqlb11_functions_and_procs_id_574108_master__431d8d18",
+      "criterion": "rights"
+    }
+  ],
+  "false_negative_items": [],
+  "project_mapping": {
+    "SQLB11": "SQLB11_Functions_and_procs.ID_574108-master"
+  },
+  "notes": [
+    "Основное сравнение выполняется на уровне атомарных ошибок: проект, критерий, строка/диапазон и текст.",
+    "В строгую метрику не входят диагностические строки: низкоуверенные unknown, непроверенные ссылки и общие ресурсные предупреждения без имени файла.",
+    "Старая метрика проект × критерий сохранена только как обзорная в overview_* полях.",
+    "Excel-разметка нормализуется эвристически из колонок 'Проблема' и 'Детали'."
+  ]
+}

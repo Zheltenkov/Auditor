@@ -1,0 +1,420 @@
+{
+  "evaluated_criteria": [
+    "correctness"
+  ],
+  "gold_total": 5,
+  "predicted_total": 0,
+  "true_positive": 0,
+  "false_positive": 0,
+  "false_negative": 5,
+  "precision": 0.0,
+  "recall": 0.0,
+  "f1_score": 0.0,
+  "macro_precision": 0.0,
+  "macro_recall": 0.0,
+  "macro_f1_score": 0.0,
+  "overview_gold_total": 1,
+  "overview_predicted_total": 5,
+  "overview_true_positive": 0,
+  "overview_false_positive": 5,
+  "overview_false_negative": 1,
+  "overview_precision": 0.0,
+  "overview_recall": 0.0,
+  "overview_f1_score": 0.0,
+  "overview_macro_precision": 0.0,
+  "overview_macro_recall": 0.0,
+  "overview_macro_f1_score": 0.0,
+  "gold_scope_predicted_total": 0,
+  "gold_scope_true_positive": 0,
+  "gold_scope_false_positive": 0,
+  "gold_scope_false_negative": 5,
+  "gold_scope_precision": 0.0,
+  "gold_scope_recall": 0.0,
+  "gold_scope_f1_score": 0.0,
+  "gold_scope_macro_precision": 0.0,
+  "gold_scope_macro_recall": 0.0,
+  "gold_scope_macro_f1_score": 0.0,
+  "per_criterion": [
+    {
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_total": 5,
+      "predicted_total": 0,
+      "true_positive": 0,
+      "false_positive": 0,
+      "false_negative": 5,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    }
+  ],
+  "overview_per_criterion": [
+    {
+      "criterion": "actuality",
+      "label": "Актуальность",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "checklist_alignment",
+      "label": "Соответствие заданий проекта чек-листу",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_total": 1,
+      "predicted_total": 0,
+      "true_positive": 0,
+      "false_positive": 0,
+      "false_negative": 1,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "image_quality",
+      "label": "Качество изображений",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "market_fit",
+      "label": "Соответствие рынку",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "rights",
+      "label": "Оригинальность и права использования ресурсов",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    }
+  ],
+  "checker_metrics": [],
+  "checker_group_metrics": [],
+  "actionable_metrics": {
+    "slice_name": "actionable",
+    "label": "Действенные находки",
+    "predicted_total": 0,
+    "true_positive": 0,
+    "false_positive": 0,
+    "precision": 0.0,
+    "false_positive_share": 0.0
+  },
+  "cost_quality": {
+    "model_calls": 0,
+    "cache_hits": 0,
+    "total_tokens": 0,
+    "cost_usd": 0.0,
+    "cost_per_gold_true_positive": null,
+    "cost_per_prediction": 0.0,
+    "cost_per_actionable_true_positive": null
+  },
+  "false_negative_reason_counts": {
+    "model_possible": 5
+  },
+  "false_negative_analysis": [
+    {
+      "project": "t05d08-id_239624-master",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_line_range": "",
+      "gold_text": "[Quest 4]: Противоречие, написано в задаче: \"\"Функции должны быть компактными и простыми, и занимать не более 20-30 строк кода.==\"\", а в принципах структурного программирования 40-50 строк.",
+      "nearest_finding_id": null,
+      "nearest_checker": null,
+      "nearest_match_type": "missed",
+      "nearest_score": 0.0,
+      "reason_code": "model_possible",
+      "reason_label": "Нужен смысловой анализ",
+      "next_step": "Добавить модельный/семантический слой с проверяемым JSON-контрактом и примерами."
+    },
+    {
+      "project": "t05d08-id_239624-master",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_line_range": "",
+      "gold_text": "[Общее]: Можно добавить информацию о передачи аргументов в функцию по ссылки или значению в list.",
+      "nearest_finding_id": null,
+      "nearest_checker": null,
+      "nearest_match_type": "missed",
+      "nearest_score": 0.0,
+      "reason_code": "model_possible",
+      "reason_label": "Нужен смысловой анализ",
+      "next_step": "Добавить модельный/семантический слой с проверяемым JSON-контрактом и примерами."
+    },
+    {
+      "project": "t05d08-id_239624-master",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_line_range": "",
+      "gold_text": "[Общее]: Упор при знакомстве с указателями и массивами лучше делать на операции с ними такие как извлечению и получению данных и на простых алгоритмах, меньше математических функций. Указатели сложная тема для понимания.",
+      "nearest_finding_id": null,
+      "nearest_checker": null,
+      "nearest_match_type": "missed",
+      "nearest_score": 0.0,
+      "reason_code": "model_possible",
+      "reason_label": "Нужен смысловой анализ",
+      "next_step": "Добавить модельный/семантический слой с проверяемым JSON-контрактом и примерами."
+    },
+    {
+      "project": "t05d08-id_239624-master",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_line_range": "",
+      "gold_text": "[Общее]: Задача разбора потока данных является стандартной, но не в том виде, в котором представлены примеры.",
+      "nearest_finding_id": null,
+      "nearest_checker": null,
+      "nearest_match_type": "missed",
+      "nearest_score": 0.0,
+      "reason_code": "model_possible",
+      "reason_label": "Нужен смысловой анализ",
+      "next_step": "Добавить модельный/семантический слой с проверяемым JSON-контрактом и примерами."
+    },
+    {
+      "project": "t05d08-id_239624-master",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_line_range": "",
+      "gold_text": "[Общее]: Нет упоминание, что такое define и include и что такое препроцессинг.",
+      "nearest_finding_id": null,
+      "nearest_checker": null,
+      "nearest_match_type": "missed",
+      "nearest_score": 0.0,
+      "reason_code": "model_possible",
+      "reason_label": "Нужен смысловой анализ",
+      "next_step": "Добавить модельный/семантический слой с проверяемым JSON-контрактом и примерами."
+    }
+  ],
+  "gold_items": [
+    {
+      "row_number": 2,
+      "raw_project": "T05D08",
+      "matched_project": "t05d08-id_239624-master",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "raw_problem": "ошибка в задании",
+      "details": "\"*[Quest 4]: Противоречие, написано в задаче: \"\"Функции должны быть компактными и простыми, и занимать не более 20-30 строк кода.==\"\", а в принципах структурного программирования 40-50 строк.\n*[Общее]: Можно добавить информацию о передачи аргументов в функцию по ссылки или значению в list.\n*[Общее]: Упор при знакомстве с указателями и массивами лучше делать на операции с ними такие как извлечению и получению данных и на простых алгоритмах, меньше математических функций. Указатели сложная тема для понимания.\n*[Общее]: Задача разбора потока данных является стандартной, но не в том виде, в котором представлены примеры. \n*[Общее]: Нет упоминание, что такое define и include и что такое препроцессинг.\"",
+      "criteria": [
+        "correctness"
+      ]
+    }
+  ],
+  "gold_cases": [
+    {
+      "case_id": "gold_2_correctness_1",
+      "row_number": 2,
+      "raw_project": "T05D08",
+      "matched_project": "t05d08-id_239624-master",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "correctness",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "[Quest 4]: Противоречие, написано в задаче: \"\"Функции должны быть компактными и простыми, и занимать не более 20-30 строк кода.==\"\", а в принципах структурного программирования 40-50 строк."
+    },
+    {
+      "case_id": "gold_2_correctness_2",
+      "row_number": 2,
+      "raw_project": "T05D08",
+      "matched_project": "t05d08-id_239624-master",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "correctness",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "[Общее]: Можно добавить информацию о передачи аргументов в функцию по ссылки или значению в list."
+    },
+    {
+      "case_id": "gold_2_correctness_3",
+      "row_number": 2,
+      "raw_project": "T05D08",
+      "matched_project": "t05d08-id_239624-master",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "correctness",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "[Общее]: Упор при знакомстве с указателями и массивами лучше делать на операции с ними такие как извлечению и получению данных и на простых алгоритмах, меньше математических функций. Указатели сложная тема для понимания."
+    },
+    {
+      "case_id": "gold_2_correctness_4",
+      "row_number": 2,
+      "raw_project": "T05D08",
+      "matched_project": "t05d08-id_239624-master",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "correctness",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "[Общее]: Задача разбора потока данных является стандартной, но не в том виде, в котором представлены примеры."
+    },
+    {
+      "case_id": "gold_2_correctness_5",
+      "row_number": 2,
+      "raw_project": "T05D08",
+      "matched_project": "t05d08-id_239624-master",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "correctness",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "[Общее]: Нет упоминание, что такое define и include и что такое препроцессинг."
+    }
+  ],
+  "matches": [
+    {
+      "project": "t05d08-id_239624-master",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "[Quest 4]: Противоречие, написано в задаче: \"\"Функции должны быть компактными и простыми, и занимать не более 20-30 строк кода.==\"\", а в принципах структурного программирования 40-50 строк.",
+      "found_finding_id": null,
+      "found_checker": null,
+      "found_line_range": "",
+      "found_text": "",
+      "match_type": "missed",
+      "match_score": 0.0,
+      "counted": false,
+      "reason": "По этому проекту и критерию не найдено подходящей ошибки с совпадающей строкой или текстом."
+    },
+    {
+      "project": "t05d08-id_239624-master",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "[Общее]: Можно добавить информацию о передачи аргументов в функцию по ссылки или значению в list.",
+      "found_finding_id": null,
+      "found_checker": null,
+      "found_line_range": "",
+      "found_text": "",
+      "match_type": "missed",
+      "match_score": 0.0,
+      "counted": false,
+      "reason": "По этому проекту и критерию не найдено подходящей ошибки с совпадающей строкой или текстом."
+    },
+    {
+      "project": "t05d08-id_239624-master",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "[Общее]: Упор при знакомстве с указателями и массивами лучше делать на операции с ними такие как извлечению и получению данных и на простых алгоритмах, меньше математических функций. Указатели сложная тема для понимания.",
+      "found_finding_id": null,
+      "found_checker": null,
+      "found_line_range": "",
+      "found_text": "",
+      "match_type": "missed",
+      "match_score": 0.0,
+      "counted": false,
+      "reason": "По этому проекту и критерию не найдено подходящей ошибки с совпадающей строкой или текстом."
+    },
+    {
+      "project": "t05d08-id_239624-master",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "[Общее]: Задача разбора потока данных является стандартной, но не в том виде, в котором представлены примеры.",
+      "found_finding_id": null,
+      "found_checker": null,
+      "found_line_range": "",
+      "found_text": "",
+      "match_type": "missed",
+      "match_score": 0.0,
+      "counted": false,
+      "reason": "По этому проекту и критерию не найдено подходящей ошибки с совпадающей строкой или текстом."
+    },
+    {
+      "project": "t05d08-id_239624-master",
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "[Общее]: Нет упоминание, что такое define и include и что такое препроцессинг.",
+      "found_finding_id": null,
+      "found_checker": null,
+      "found_line_range": "",
+      "found_text": "",
+      "match_type": "missed",
+      "match_score": 0.0,
+      "counted": false,
+      "reason": "По этому проекту и критерию не найдено подходящей ошибки с совпадающей строкой или текстом."
+    }
+  ],
+  "detailed_false_positive_items": [],
+  "false_positive_items": [
+    {
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "actuality"
+    },
+    {
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "checklist_alignment"
+    },
+    {
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "image_quality"
+    },
+    {
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "market_fit"
+    },
+    {
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "rights"
+    }
+  ],
+  "false_negative_items": [
+    {
+      "project_id": "t05d08_id_239624_master__d6ade4ef",
+      "criterion": "correctness"
+    }
+  ],
+  "project_mapping": {
+    "T05D08": "t05d08-id_239624-master"
+  },
+  "notes": [
+    "Основное сравнение выполняется на уровне атомарных ошибок: проект, критерий, строка/диапазон и текст.",
+    "В строгую метрику не входят диагностические строки: низкоуверенные unknown, непроверенные ссылки и общие ресурсные предупреждения без имени файла.",
+    "Старая метрика проект × критерий сохранена только как обзорная в overview_* полях.",
+    "Excel-разметка нормализуется эвристически из колонок 'Проблема' и 'Детали'."
+  ]
+}

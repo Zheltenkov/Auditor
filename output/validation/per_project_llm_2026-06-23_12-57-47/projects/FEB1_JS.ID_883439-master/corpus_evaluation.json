@@ -1,0 +1,318 @@
+{
+  "evaluated_criteria": [
+    "correctness"
+  ],
+  "gold_total": 3,
+  "predicted_total": 6,
+  "true_positive": 0,
+  "false_positive": 6,
+  "false_negative": 3,
+  "precision": 0.0,
+  "recall": 0.0,
+  "f1_score": 0.0,
+  "macro_precision": 0.0,
+  "macro_recall": 0.0,
+  "macro_f1_score": 0.0,
+  "overview_gold_total": 1,
+  "overview_predicted_total": 4,
+  "overview_true_positive": 1,
+  "overview_false_positive": 3,
+  "overview_false_negative": 0,
+  "overview_precision": 0.25,
+  "overview_recall": 1.0,
+  "overview_f1_score": 0.4,
+  "overview_macro_precision": 0.25,
+  "overview_macro_recall": 0.25,
+  "overview_macro_f1_score": 0.25,
+  "gold_scope_predicted_total": 6,
+  "gold_scope_true_positive": 0,
+  "gold_scope_false_positive": 6,
+  "gold_scope_false_negative": 3,
+  "gold_scope_precision": 0.0,
+  "gold_scope_recall": 0.0,
+  "gold_scope_f1_score": 0.0,
+  "gold_scope_macro_precision": 0.0,
+  "gold_scope_macro_recall": 0.0,
+  "gold_scope_macro_f1_score": 0.0,
+  "per_criterion": [
+    {
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_total": 3,
+      "predicted_total": 6,
+      "true_positive": 0,
+      "false_positive": 6,
+      "false_negative": 3,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    }
+  ],
+  "overview_per_criterion": [
+    {
+      "criterion": "actuality",
+      "label": "Актуальность",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "checklist_alignment",
+      "label": "Соответствие заданий проекта чек-листу",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_total": 1,
+      "predicted_total": 1,
+      "true_positive": 1,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0
+    },
+    {
+      "criterion": "readability",
+      "label": "Грамотность и читаемость текста",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    }
+  ],
+  "gold_items": [
+    {
+      "row_number": 2,
+      "raw_project": "FEB1_js",
+      "matched_project": "FEB1_JS.ID_883439-master",
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "raw_problem": "нарушение логики в задании",
+      "details": "в задание 7 приведна таблица вывода где написано что возвращается объект со всеми купюраками (и теми что 0 и теми что имеют какое-то значение)\nно уже в файле для задания (atm.js) написано что выводится только те которые имеют какое либо число, отличное от 0\nкак-то нало это между собой состыковать",
+      "criteria": [
+        "correctness"
+      ]
+    }
+  ],
+  "gold_cases": [
+    {
+      "case_id": "gold_2_correctness_1",
+      "row_number": 2,
+      "raw_project": "FEB1_js",
+      "matched_project": "FEB1_JS.ID_883439-master",
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "criterion": "correctness",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "в задание 7 приведна таблица вывода где написано что возвращается объект со всеми купюраками (и теми что 0 и теми что имеют какое-то значение)"
+    },
+    {
+      "case_id": "gold_2_correctness_2",
+      "row_number": 2,
+      "raw_project": "FEB1_js",
+      "matched_project": "FEB1_JS.ID_883439-master",
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "criterion": "correctness",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "но уже в файле для задания (atm.js) написано что выводится только те которые имеют какое либо число, отличное от 0"
+    },
+    {
+      "case_id": "gold_2_correctness_3",
+      "row_number": 2,
+      "raw_project": "FEB1_js",
+      "matched_project": "FEB1_JS.ID_883439-master",
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "criterion": "correctness",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "как-то нало это между собой состыковать"
+    }
+  ],
+  "matches": [
+    {
+      "project": "FEB1_JS.ID_883439-master",
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "в задание 7 приведна таблица вывода где написано что возвращается объект со всеми купюраками (и теми что 0 и теми что имеют какое-то значение)",
+      "found_finding_id": "fnd_3209d7de41f4",
+      "found_checker": "readme_fact_actuality_checker",
+      "found_line_range": "README.md:64",
+      "found_text": "push-уведомления — всплывающие сообщения в браузере, которые реализуются с помощью технологии Comet | Browser push notifications в массовом применении реализуются через Push API и Service Workers, а не через Comet. Comet — это устаревший подход к long-polling и streaming, который сейчас не используется как основной способ реализации браузерных push-уведомлений. | Заменить формулировку утверждения о том, что push-уведомления реализуются через Comet, на описание Push API и Service Workers как современного стандарта для браузерных push‑уведомлений, либо полностью убрать ссылку на Comet из этого контекста.",
+      "match_type": "criterion_only",
+      "match_score": 0.15,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    },
+    {
+      "project": "FEB1_JS.ID_883439-master",
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "но уже в файле для задания (atm.js) написано что выводится только те которые имеют какое либо число, отличное от 0",
+      "found_finding_id": "fnd_936f4b33d21d",
+      "found_checker": "fact_checker_perplexity",
+      "found_line_range": "README.md:64",
+      "found_text": "На JS работают, например, запросы AJAX (asynchronous javascript and XML), которые отправляются на сервер в фоновом режиме без перезагрузки веб-страницы, и push-уведомления — всплывающие сообщения в браузере, которые реализуются с помощью технологии Comet. | AJAX‑запросы действительно организуются JavaScript‑кодом в браузере и отправляются на сервер без перезагрузки страницы; аббревиатура AJAX расшифровывается как «Asynchronous JavaScript and XML» — эти факты подтверждены учебниками по JavaScript и статьями о веб‑разработке. Однако часть про push‑уведомления и Comet вызывает сомнения: современные браузерные push‑уведомления обычно реализуются через Web Push API (HTTP/2, Push Service) и технологии типа Service Workers, а не через Comet (долгие опросы и long polling). Comet‑подход сейчас считается устаревшим за счёт более эффективных протоколов и API; связка «push‑уведомления = Comet» получается неточной и упрощённой. | Уточните формулировку про push‑уведомления: вместо «реализуются с помощью технологии Comet» стоит написать, что сейчас они выполняются через Web Push API и Service Workers, а Comet‑подобные подходы (long polling и др.) использовались в прошлом для реализации асинхронных обновлений, но практически вытеснены новыми стандартами.",
+      "match_type": "criterion_only",
+      "match_score": 0.2857,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    },
+    {
+      "project": "FEB1_JS.ID_883439-master",
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "как-то нало это между собой состыковать",
+      "found_finding_id": "fnd_e88182381a43",
+      "found_checker": "fact_checker_perplexity",
+      "found_line_range": "README.md:81",
+      "found_text": "*JavaScript является слабо типизированным или динамическим языком**. | JavaScript одновременно и динамически, и слабо типизирован; формулировка «слабо типизированный или динамический язык» не точно отражает это: правильнее говорить о динамической и слабой типизации, а не выборе между «или». Переменные можно переопределять и приводить типы неявно, но некоторые эксперты подчёркивают, что JavaScript всё же типизирован (есть типы, просто они неявны и слабые). | Переформулируй утверждение: например, «JavaScript является динамически и слабо типизированным языком программирования, поэтому тип переменной не нужно объявлять заранее и он может меняться во время выполнения».",
+      "match_type": "criterion_only",
+      "match_score": 0.3333,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    }
+  ],
+  "detailed_false_positive_items": [
+    {
+      "finding_id": "fnd_3209d7de41f4",
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "project": "FEB1_JS.ID_883439-master",
+      "criterion": "correctness",
+      "checker_name": "readme_fact_actuality_checker",
+      "line_start": 64,
+      "line_end": 64,
+      "file_path": "README.md",
+      "severity": "major",
+      "verdict": "fail",
+      "confidence": 0.9,
+      "issue_type": "",
+      "found_text": "push-уведомления — всплывающие сообщения в браузере, которые реализуются с помощью технологии Comet | Browser push notifications в массовом применении реализуются через Push API и Service Workers, а не через Comet. Comet — это устаревший подход к long-polling и streaming, который сейчас не используется как основной способ реализации браузерных push-уведомлений. | Заменить формулировку утверждения о том, что push-уведомления реализуются через Comet, на описание Push API и Service Workers как современного стандарта для браузерных push‑уведомлений, либо полностью убрать ссылку на Comet из этого контекста."
+    },
+    {
+      "finding_id": "fnd_322e6d315375",
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "project": "FEB1_JS.ID_883439-master",
+      "criterion": "correctness",
+      "checker_name": "readme_fact_actuality_checker",
+      "line_start": 64,
+      "line_end": 64,
+      "file_path": "README.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.8,
+      "issue_type": "",
+      "found_text": "на JS работают, например, запросы AJAX (asynchronous javascript and XML), которые отправляются на сервер в фоновом режиме без перезагрузки веб-страницы | Термин AJAX устарел в чистом значении, сейчас вместо него чаще говорят о асинхронных запросах через Fetch API или XMLHttpRequest. Некоторые описания всё ещё используют «AJAX» как обобщающий термин, но технически современный стандарт — Fetch API. | Уточнить формулировку, например: «на JS работают, например, асинхронные запросы (ранее называвшиеся AJAX), которые отправляются на сервер в фоновом режиме без перезагрузки веб-страницы»."
+    },
+    {
+      "finding_id": "fnd_936f4b33d21d",
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "project": "FEB1_JS.ID_883439-master",
+      "criterion": "correctness",
+      "checker_name": "fact_checker_perplexity",
+      "line_start": 64,
+      "line_end": 64,
+      "file_path": "README.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.85,
+      "issue_type": "",
+      "found_text": "На JS работают, например, запросы AJAX (asynchronous javascript and XML), которые отправляются на сервер в фоновом режиме без перезагрузки веб-страницы, и push-уведомления — всплывающие сообщения в браузере, которые реализуются с помощью технологии Comet. | AJAX‑запросы действительно организуются JavaScript‑кодом в браузере и отправляются на сервер без перезагрузки страницы; аббревиатура AJAX расшифровывается как «Asynchronous JavaScript and XML» — эти факты подтверждены учебниками по JavaScript и статьями о веб‑разработке. Однако часть про push‑уведомления и Comet вызывает сомнения: современные браузерные push‑уведомления обычно реализуются через Web Push API (HTTP/2, Push Service) и технологии типа Service Workers, а не через Comet (долгие опросы и long polling). Comet‑подход сейчас считается устаревшим за счёт более эффективных протоколов и API; связка «push‑уведомления = Comet» получается неточной и упрощённой. | Уточните формулировку про push‑уведомления: вместо «реализуются с помощью технологии Comet» стоит написать, что сейчас они выполняются через Web Push API и Service Workers, а Comet‑подобные подходы (long polling и др.) использовались в прошлом для реализации асинхронных обновлений, но практически вытеснены новыми стандартами."
+    },
+    {
+      "finding_id": "fnd_9c4a667aeaba",
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "project": "FEB1_JS.ID_883439-master",
+      "criterion": "correctness",
+      "checker_name": "fact_checker_perplexity",
+      "line_start": 64,
+      "line_end": 64,
+      "file_path": "README.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.9,
+      "issue_type": "",
+      "found_text": "Серверный код пишут на платформе Node.js. | Node.js действительно является платформой, на которой часто пишут серверный код на JavaScript, но формулировка «серверный код пишут на платформе Node.js» слишком категорична и неточна: серверный код можно писать и на других языках/платформах (например, Python/Django, Java/Spring, PHP, Ruby on Rails и т.д.), а не только на Node.js. В контексте утверждения также смешиваются AJAX‑запросы (клиентский JS) и push‑уведомления/Comet (серверная логика), что может вводить в заблуждение. | Уточните формулировку, например: «Серверный код можно писать на платформе Node.js» или «На сервере часто используют платформу Node.js для написания кода на JavaScript». Также разнесите клиентские возможности (AJAX) и серверные механизмы (push‑уведомления/Comet) в отдельные предложения, чтобы избежать путаницы."
+    },
+    {
+      "finding_id": "fnd_68d3776aef57",
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "project": "FEB1_JS.ID_883439-master",
+      "criterion": "correctness",
+      "checker_name": "readme_fact_actuality_checker",
+      "line_start": 65,
+      "line_end": 65,
+      "file_path": "README.md",
+      "severity": "major",
+      "verdict": "fail",
+      "confidence": 0.9,
+      "issue_type": "",
+      "found_text": "push-уведомления приходят со специального Comet-сервера, который постоянно поддерживает соединение с браузером | Современные браузерные push-уведомления используют сервис-воркеры, системные сервисы браузера и/или сервисы операционной системы, а не постоянное соединение Comet‑сервера с браузером. Comet сейчас не является стандартным или рекомендованным способом доставки push‑уведомлений. | Изменить описание на то, что push-уведомления приходят через сервис-воркеры и Push Service, и уточнить, что постоянное соединение Comet здесь не используется."
+    },
+    {
+      "finding_id": "fnd_e88182381a43",
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "project": "FEB1_JS.ID_883439-master",
+      "criterion": "correctness",
+      "checker_name": "fact_checker_perplexity",
+      "line_start": 81,
+      "line_end": 81,
+      "file_path": "README.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.8,
+      "issue_type": "",
+      "found_text": "*JavaScript является слабо типизированным или динамическим языком**. | JavaScript одновременно и динамически, и слабо типизирован; формулировка «слабо типизированный или динамический язык» не точно отражает это: правильнее говорить о динамической и слабой типизации, а не выборе между «или». Переменные можно переопределять и приводить типы неявно, но некоторые эксперты подчёркивают, что JavaScript всё же типизирован (есть типы, просто они неявны и слабые). | Переформулируй утверждение: например, «JavaScript является динамически и слабо типизированным языком программирования, поэтому тип переменной не нужно объявлять заранее и он может меняться во время выполнения»."
+    }
+  ],
+  "false_positive_items": [
+    {
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "criterion": "actuality"
+    },
+    {
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "criterion": "checklist_alignment"
+    },
+    {
+      "project_id": "feb1_js_id_883439_master__124e7b72",
+      "criterion": "readability"
+    }
+  ],
+  "false_negative_items": [],
+  "project_mapping": {
+    "FEB1_js": "FEB1_JS.ID_883439-master"
+  },
+  "notes": [
+    "Основное сравнение выполняется на уровне атомарных ошибок: проект, критерий, строка/диапазон и текст.",
+    "В строгую метрику не входят диагностические строки: низкоуверенные unknown, непроверенные ссылки и общие ресурсные предупреждения без имени файла.",
+    "Старая метрика проект × критерий сохранена только как обзорная в overview_* полях.",
+    "Excel-разметка нормализуется эвристически из колонок 'Проблема' и 'Детали'."
+  ]
+}

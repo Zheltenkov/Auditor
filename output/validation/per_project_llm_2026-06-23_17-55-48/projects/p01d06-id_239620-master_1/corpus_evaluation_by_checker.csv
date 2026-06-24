@@ -1,0 +1,4 @@
+﻿slice_name,label,predicted_total,true_positive,false_positive,precision,false_positive_share
+fact_checker_perplexity,fact_checker_perplexity,4,0,4,0.0,0.3077
+readme_fact_actuality_checker,readme_fact_actuality_checker,6,0,6,0.0,0.4615
+tech_freshness_checker,tech_freshness_checker,3,0,3,0.0,0.2308

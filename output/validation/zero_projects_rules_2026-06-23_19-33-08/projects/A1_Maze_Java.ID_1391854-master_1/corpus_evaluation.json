@@ -1,0 +1,305 @@
+{
+  "evaluated_criteria": [
+    "actuality",
+    "correctness"
+  ],
+  "gold_total": 2,
+  "predicted_total": 0,
+  "true_positive": 0,
+  "false_positive": 0,
+  "false_negative": 2,
+  "precision": 0.0,
+  "recall": 0.0,
+  "f1_score": 0.0,
+  "macro_precision": 0.0,
+  "macro_recall": 0.0,
+  "macro_f1_score": 0.0,
+  "overview_gold_total": 1,
+  "overview_predicted_total": 5,
+  "overview_true_positive": 0,
+  "overview_false_positive": 5,
+  "overview_false_negative": 1,
+  "overview_precision": 0.0,
+  "overview_recall": 0.0,
+  "overview_f1_score": 0.0,
+  "overview_macro_precision": 0.0,
+  "overview_macro_recall": 0.0,
+  "overview_macro_f1_score": 0.0,
+  "gold_scope_predicted_total": 0,
+  "gold_scope_true_positive": 0,
+  "gold_scope_false_positive": 0,
+  "gold_scope_false_negative": 2,
+  "gold_scope_precision": 0.0,
+  "gold_scope_recall": 0.0,
+  "gold_scope_f1_score": 0.0,
+  "gold_scope_macro_precision": 0.0,
+  "gold_scope_macro_recall": 0.0,
+  "gold_scope_macro_f1_score": 0.0,
+  "per_criterion": [
+    {
+      "criterion": "actuality",
+      "label": "Актуальность",
+      "gold_total": 1,
+      "predicted_total": 0,
+      "true_positive": 0,
+      "false_positive": 0,
+      "false_negative": 1,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_total": 1,
+      "predicted_total": 0,
+      "true_positive": 0,
+      "false_positive": 0,
+      "false_negative": 1,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    }
+  ],
+  "overview_per_criterion": [
+    {
+      "criterion": "actuality",
+      "label": "Актуальность",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "checklist_alignment",
+      "label": "Соответствие заданий проекта чек-листу",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_total": 1,
+      "predicted_total": 0,
+      "true_positive": 0,
+      "false_positive": 0,
+      "false_negative": 1,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "image_quality",
+      "label": "Качество изображений",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "readability",
+      "label": "Грамотность и читаемость текста",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "rights",
+      "label": "Оригинальность и права использования ресурсов",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    }
+  ],
+  "checker_metrics": [],
+  "checker_group_metrics": [],
+  "actionable_metrics": {
+    "slice_name": "actionable",
+    "label": "Действенные находки",
+    "predicted_total": 0,
+    "true_positive": 0,
+    "false_positive": 0,
+    "precision": 0.0,
+    "false_positive_share": 0.0
+  },
+  "cost_quality": {
+    "model_calls": 0,
+    "cache_hits": 0,
+    "total_tokens": 0,
+    "cost_usd": 0.0,
+    "cost_per_gold_true_positive": null,
+    "cost_per_prediction": 0.0,
+    "cost_per_actionable_true_positive": null
+  },
+  "false_negative_reason_counts": {
+    "deterministic_possible": 1,
+    "model_possible": 1
+  },
+  "false_negative_analysis": [
+    {
+      "project": "A1_Maze_Java.ID_1391854-master",
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "criterion": "actuality",
+      "label": "Актуальность",
+      "gold_line_range": "",
+      "gold_text": "Нормально ли то, что в материалах ссылка на C++ code style, а код предлагается писать на Java?",
+      "nearest_finding_id": null,
+      "nearest_checker": null,
+      "nearest_match_type": "missed",
+      "nearest_score": 0.0,
+      "reason_code": "deterministic_possible",
+      "reason_label": "Можно ловить правилом",
+      "next_step": "Добавить или расширить детерминированный чекер с тестом на этот паттерн."
+    },
+    {
+      "project": "A1_Maze_Java.ID_1391854-master",
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_line_range": "",
+      "gold_text": "Нормально ли требование сборки с помощью Makefile?",
+      "nearest_finding_id": null,
+      "nearest_checker": null,
+      "nearest_match_type": "missed",
+      "nearest_score": 0.0,
+      "reason_code": "model_possible",
+      "reason_label": "Нужен смысловой анализ",
+      "next_step": "Добавить модельный/семантический слой с проверяемым JSON-контрактом и примерами."
+    }
+  ],
+  "gold_items": [
+    {
+      "row_number": 2,
+      "raw_project": "A1_Maze_Java",
+      "matched_project": "A1_Maze_Java.ID_1391854-master",
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "raw_problem": "ошибка в задании",
+      "details": "\"1. Нормально ли то, что в материалах ссылка на C++ code style, а код предлагается писать на Java?\n2. Нормально ли требование сборки с помощью Makefile?\"",
+      "criteria": [
+        "correctness"
+      ]
+    }
+  ],
+  "gold_cases": [
+    {
+      "case_id": "gold_2_actuality_1",
+      "row_number": 2,
+      "raw_project": "A1_Maze_Java",
+      "matched_project": "A1_Maze_Java.ID_1391854-master",
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "criterion": "actuality",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "Нормально ли то, что в материалах ссылка на C++ code style, а код предлагается писать на Java?"
+    },
+    {
+      "case_id": "gold_2_correctness_2",
+      "row_number": 2,
+      "raw_project": "A1_Maze_Java",
+      "matched_project": "A1_Maze_Java.ID_1391854-master",
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "criterion": "correctness",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "Нормально ли требование сборки с помощью Makefile?"
+    }
+  ],
+  "matches": [
+    {
+      "project": "A1_Maze_Java.ID_1391854-master",
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "criterion": "actuality",
+      "label": "Актуальность",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "Нормально ли то, что в материалах ссылка на C++ code style, а код предлагается писать на Java?",
+      "found_finding_id": null,
+      "found_checker": null,
+      "found_line_range": "",
+      "found_text": "",
+      "match_type": "missed",
+      "match_score": 0.0,
+      "counted": false,
+      "reason": "По этому проекту и критерию не найдено подходящей ошибки с совпадающей строкой или текстом."
+    },
+    {
+      "project": "A1_Maze_Java.ID_1391854-master",
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "Нормально ли требование сборки с помощью Makefile?",
+      "found_finding_id": null,
+      "found_checker": null,
+      "found_line_range": "",
+      "found_text": "",
+      "match_type": "missed",
+      "match_score": 0.0,
+      "counted": false,
+      "reason": "По этому проекту и критерию не найдено подходящей ошибки с совпадающей строкой или текстом."
+    }
+  ],
+  "detailed_false_positive_items": [],
+  "false_positive_items": [
+    {
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "criterion": "actuality"
+    },
+    {
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "criterion": "checklist_alignment"
+    },
+    {
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "criterion": "image_quality"
+    },
+    {
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "criterion": "readability"
+    },
+    {
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "criterion": "rights"
+    }
+  ],
+  "false_negative_items": [
+    {
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "criterion": "correctness"
+    }
+  ],
+  "project_mapping": {
+    "A1_Maze_Java": "A1_Maze_Java.ID_1391854-master"
+  },
+  "notes": [
+    "Основное сравнение выполняется на уровне атомарных ошибок: проект, критерий, строка/диапазон и текст.",
+    "В строгую метрику не входят диагностические строки: низкоуверенные unknown, непроверенные ссылки и общие ресурсные предупреждения без имени файла.",
+    "Старая метрика проект × критерий сохранена только как обзорная в overview_* полях.",
+    "Excel-разметка нормализуется эвристически из колонок 'Проблема' и 'Детали'."
+  ]
+}

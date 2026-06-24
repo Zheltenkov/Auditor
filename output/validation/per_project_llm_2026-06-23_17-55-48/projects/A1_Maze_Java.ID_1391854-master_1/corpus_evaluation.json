@@ -1,0 +1,492 @@
+{
+  "evaluated_criteria": [
+    "actuality",
+    "correctness"
+  ],
+  "gold_total": 2,
+  "predicted_total": 9,
+  "true_positive": 0,
+  "false_positive": 9,
+  "false_negative": 2,
+  "precision": 0.0,
+  "recall": 0.0,
+  "f1_score": 0.0,
+  "macro_precision": 0.0,
+  "macro_recall": 0.0,
+  "macro_f1_score": 0.0,
+  "overview_gold_total": 1,
+  "overview_predicted_total": 6,
+  "overview_true_positive": 1,
+  "overview_false_positive": 5,
+  "overview_false_negative": 0,
+  "overview_precision": 0.1667,
+  "overview_recall": 1.0,
+  "overview_f1_score": 0.2858,
+  "overview_macro_precision": 0.1667,
+  "overview_macro_recall": 0.1667,
+  "overview_macro_f1_score": 0.1667,
+  "gold_scope_predicted_total": 9,
+  "gold_scope_true_positive": 0,
+  "gold_scope_false_positive": 9,
+  "gold_scope_false_negative": 2,
+  "gold_scope_precision": 0.0,
+  "gold_scope_recall": 0.0,
+  "gold_scope_f1_score": 0.0,
+  "gold_scope_macro_precision": 0.0,
+  "gold_scope_macro_recall": 0.0,
+  "gold_scope_macro_f1_score": 0.0,
+  "per_criterion": [
+    {
+      "criterion": "actuality",
+      "label": "Актуальность",
+      "gold_total": 1,
+      "predicted_total": 2,
+      "true_positive": 0,
+      "false_positive": 2,
+      "false_negative": 1,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_total": 1,
+      "predicted_total": 7,
+      "true_positive": 0,
+      "false_positive": 7,
+      "false_negative": 1,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    }
+  ],
+  "overview_per_criterion": [
+    {
+      "criterion": "actuality",
+      "label": "Актуальность",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "checklist_alignment",
+      "label": "Соответствие заданий проекта чек-листу",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_total": 1,
+      "predicted_total": 1,
+      "true_positive": 1,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0
+    },
+    {
+      "criterion": "image_quality",
+      "label": "Качество изображений",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "readability",
+      "label": "Грамотность и читаемость текста",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "rights",
+      "label": "Оригинальность и права использования ресурсов",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    }
+  ],
+  "checker_metrics": [
+    {
+      "slice_name": "curriculum_relevance_checker",
+      "label": "curriculum_relevance_checker",
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "precision": 0.0,
+      "false_positive_share": 0.1111
+    },
+    {
+      "slice_name": "fact_checker_perplexity",
+      "label": "fact_checker_perplexity",
+      "predicted_total": 2,
+      "true_positive": 0,
+      "false_positive": 2,
+      "precision": 0.0,
+      "false_positive_share": 0.2222
+    },
+    {
+      "slice_name": "readme_fact_actuality_checker",
+      "label": "readme_fact_actuality_checker",
+      "predicted_total": 4,
+      "true_positive": 0,
+      "false_positive": 4,
+      "precision": 0.0,
+      "false_positive_share": 0.4444
+    },
+    {
+      "slice_name": "tech_freshness_checker",
+      "label": "tech_freshness_checker",
+      "predicted_total": 2,
+      "true_positive": 0,
+      "false_positive": 2,
+      "precision": 0.0,
+      "false_positive_share": 0.2222
+    }
+  ],
+  "checker_group_metrics": [
+    {
+      "slice_name": "factcheck",
+      "label": "Фактчек и актуальность",
+      "predicted_total": 8,
+      "true_positive": 0,
+      "false_positive": 8,
+      "precision": 0.0,
+      "false_positive_share": 0.8889
+    },
+    {
+      "slice_name": "methodology",
+      "label": "Методические критерии",
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "precision": 0.0,
+      "false_positive_share": 0.1111
+    }
+  ],
+  "actionable_metrics": {
+    "slice_name": "actionable",
+    "label": "Действенные находки",
+    "predicted_total": 1,
+    "true_positive": 0,
+    "false_positive": 1,
+    "precision": 0.0,
+    "false_positive_share": 0.1111
+  },
+  "cost_quality": {
+    "model_calls": 27,
+    "cache_hits": 0,
+    "total_tokens": 36700,
+    "cost_usd": 0.086343,
+    "cost_per_gold_true_positive": null,
+    "cost_per_prediction": 0.001233,
+    "cost_per_actionable_true_positive": null
+  },
+  "false_negative_reason_counts": {
+    "deterministic_possible": 1,
+    "model_possible": 1
+  },
+  "false_negative_analysis": [
+    {
+      "project": "A1_Maze_Java.ID_1391854-master",
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "criterion": "actuality",
+      "label": "Актуальность",
+      "gold_line_range": "",
+      "gold_text": "Нормально ли то, что в материалах ссылка на C++ code style, а код предлагается писать на Java?",
+      "nearest_finding_id": "fnd_5870834148b2",
+      "nearest_checker": "tech_freshness_checker",
+      "nearest_match_type": "criterion_only",
+      "nearest_score": 0.25,
+      "reason_code": "deterministic_possible",
+      "reason_label": "Можно ловить правилом",
+      "next_step": "Добавить или расширить детерминированный чекер с тестом на этот паттерн."
+    },
+    {
+      "project": "A1_Maze_Java.ID_1391854-master",
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_line_range": "",
+      "gold_text": "Нормально ли требование сборки с помощью Makefile?",
+      "nearest_finding_id": "fnd_3ba879f35363",
+      "nearest_checker": "readme_fact_actuality_checker",
+      "nearest_match_type": "criterion_only",
+      "nearest_score": 0.2857,
+      "reason_code": "model_possible",
+      "reason_label": "Нужен смысловой анализ",
+      "next_step": "Добавить модельный/семантический слой с проверяемым JSON-контрактом и примерами."
+    }
+  ],
+  "gold_items": [
+    {
+      "row_number": 2,
+      "raw_project": "A1_Maze_Java",
+      "matched_project": "A1_Maze_Java.ID_1391854-master",
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "raw_problem": "ошибка в задании",
+      "details": "\"1. Нормально ли то, что в материалах ссылка на C++ code style, а код предлагается писать на Java?\n2. Нормально ли требование сборки с помощью Makefile?\"",
+      "criteria": [
+        "correctness"
+      ]
+    }
+  ],
+  "gold_cases": [
+    {
+      "case_id": "gold_2_actuality_1",
+      "row_number": 2,
+      "raw_project": "A1_Maze_Java",
+      "matched_project": "A1_Maze_Java.ID_1391854-master",
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "criterion": "actuality",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "Нормально ли то, что в материалах ссылка на C++ code style, а код предлагается писать на Java?"
+    },
+    {
+      "case_id": "gold_2_correctness_2",
+      "row_number": 2,
+      "raw_project": "A1_Maze_Java",
+      "matched_project": "A1_Maze_Java.ID_1391854-master",
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "criterion": "correctness",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "Нормально ли требование сборки с помощью Makefile?"
+    }
+  ],
+  "matches": [
+    {
+      "project": "A1_Maze_Java.ID_1391854-master",
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "criterion": "actuality",
+      "label": "Актуальность",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "Нормально ли то, что в материалах ссылка на C++ code style, а код предлагается писать на Java?",
+      "found_finding_id": "fnd_5870834148b2",
+      "found_checker": "tech_freshness_checker",
+      "found_line_range": "materials/instructions_for_testing.md:24",
+      "found_text": "Google Style: https://google.github.io/styleguide/cppguide.html | В материалах указана версия clang-format 14.0.5 для Mac и 13.0.1 для Linux, тогда как последняя стабильная версия — 18.1.3. Использование устаревших версий может привести к несоответствию форматирования или отсутствию поддержки новых языковых конструкций. | Рекомендуется обновить рекомендуемую версию clang-format до актуальной (18.1.3) и проверить корректность работы скриптов форматирования на этой версии.",
+      "match_type": "criterion_only",
+      "match_score": 0.25,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    },
+    {
+      "project": "A1_Maze_Java.ID_1391854-master",
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "Нормально ли требование сборки с помощью Makefile?",
+      "found_finding_id": "fnd_3ba879f35363",
+      "found_checker": "readme_fact_actuality_checker",
+      "found_line_range": "README_RUS.md:104",
+      "found_text": "Петля — это часть лабиринта с проходами, по которым можно ходить «кругами». Стены в петлях не соединены со стенами, окружающими лабиринт. Например: | Согласно классификации лабиринтов, «петля» обычно относится к наличию циклов в графе лабиринта (неветвящихся или ветвящихся), но не обязательно связана с тем, соединены ли стены петли с внешними стенами; важнее именно наличие цикла в проходах. | Уточните, что петля — это цикл в графе лабиринта (возможность ходить кругом по проходам), а не обязательно свойство структуры стен относительно внешних границ.",
+      "match_type": "criterion_only",
+      "match_score": 0.2857,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    }
+  ],
+  "detailed_false_positive_items": [
+    {
+      "finding_id": "fnd_67f1a21e0b76",
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "project": "A1_Maze_Java.ID_1391854-master",
+      "criterion": "actuality",
+      "checker_name": "tech_freshness_checker",
+      "line_start": 17,
+      "line_end": 17,
+      "file_path": "materials/instructions_for_testing.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.9,
+      "issue_type": "",
+      "found_text": "or if you have root rights (for Ubuntu / Linux Mint / Debian) \\ | В цитируемом тексте упоминается Ubuntu в контексте установки clang-format, что указывает на использование дистрибутива в учебном процессе. Хотя конкретная версия Ubuntu не указана, материал подразумевает актуальность для современных версий. Ubuntu 24.04 является последней LTS на 2026 год, но 22.04 ещё поддерживается. | Рекомендуется уточнить конкретные версии Ubuntu, используемые в материалах, и обновить до актуальной LTS-версии (22.04 или 24.04) для обеспечения совместимости и безопасности."
+    },
+    {
+      "finding_id": "fnd_5870834148b2",
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "project": "A1_Maze_Java.ID_1391854-master",
+      "criterion": "actuality",
+      "checker_name": "tech_freshness_checker",
+      "line_start": 24,
+      "line_end": 24,
+      "file_path": "materials/instructions_for_testing.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.9,
+      "issue_type": "",
+      "found_text": "Google Style: https://google.github.io/styleguide/cppguide.html | В материалах указана версия clang-format 14.0.5 для Mac и 13.0.1 для Linux, тогда как последняя стабильная версия — 18.1.3. Использование устаревших версий может привести к несоответствию форматирования или отсутствию поддержки новых языковых конструкций. | Рекомендуется обновить рекомендуемую версию clang-format до актуальной (18.1.3) и проверить корректность работы скриптов форматирования на этой версии."
+    },
+    {
+      "finding_id": "fnd_7949484f7fe8",
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "project": "A1_Maze_Java.ID_1391854-master",
+      "criterion": "correctness",
+      "checker_name": "fact_checker_perplexity",
+      "line_start": 17,
+      "line_end": 17,
+      "file_path": "materials/instructions_for_testing_rus.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.8,
+      "issue_type": "",
+      "found_text": "или, если у вас есть root-права (для Ubuntu / Linux Mint / Debian) \\ | Фраза \"или, если у вас есть root-права (для Ubuntu / Linux Mint / Debian)\" технически корректна в смысле, что на этих системах существует суперпользователь root, но не уточняет, что в современных дистрибутивах (особенно Ubuntu) root-аккаунт обычно отключен, и управление привилегиями идет через sudo и группу sudo. Это может ввести новичка в заблуждение. Понимание термина \"root-права\" как привилегий администратора в этих системах широко принято, однако формулировка требует пояснения про sudo и отсутствие логина под root по умолчанию. | Уточните формулировку, указав, что на Ubuntu / Linux Mint / Debian обычно используют sudo и группы sudo для получения прав администратора, а прямой вход под root по умолчанию отключен."
+    },
+    {
+      "finding_id": "fnd_bb2abc23815e",
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "project": "A1_Maze_Java.ID_1391854-master",
+      "criterion": "correctness",
+      "checker_name": "fact_checker_perplexity",
+      "line_start": 17,
+      "line_end": 17,
+      "file_path": "materials/instructions_for_testing.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.85,
+      "issue_type": "",
+      "found_text": "or if you have root rights (for Ubuntu / Linux Mint / Debian) \\ | В большинстве современных дистрибутивов Ubuntu, Linux Mint (на базе Ubuntu) и Debian доступ к полным привилегиям «root» обычно даётся через `sudo` или `su`, а не через постоянный вход в учётную запись root, которая часто отключена или защищена паролем. Формулировка «if you have root rights» корректна в целом, но требует уточнения: подразумевается выполнение команд с повышенными привилегиями (через `sudo`, `pkexec`, графический инструмент и т.п.), а не фактическое вход в систему как root. | Уточните фразу, например, так: \"or if you have root privileges (e.g., by running commands with sudo) on Ubuntu / Linux Mint / Debian\"."
+    },
+    {
+      "finding_id": "fnd_47e8a82ad99e",
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "project": "A1_Maze_Java.ID_1391854-master",
+      "criterion": "correctness",
+      "checker_name": "curriculum_relevance_checker",
+      "line_start": 24,
+      "line_end": 24,
+      "file_path": "materials/instructions_for_testing.md",
+      "severity": "major",
+      "verdict": "warning",
+      "confidence": 0.86,
+      "issue_type": "language_material_conflict",
+      "found_text": "Google Style: https://google.github.io/styleguide/cppguide.html | Рекомендован C++ style guide, хотя проект относится к Java. | Схлопнуто 2 строк: materials/instructions_for_testing.md, materials/instructions_for_testing_rus.md. | Заменить рекомендацию на стиль и материалы для фактического языка проекта. | language_material_conflict"
+    },
+    {
+      "finding_id": "fnd_6ed1949fbcac",
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "project": "A1_Maze_Java.ID_1391854-master",
+      "criterion": "correctness",
+      "checker_name": "readme_fact_actuality_checker",
+      "line_start": 101,
+      "line_end": 101,
+      "file_path": "README_RUS.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.8,
+      "issue_type": "",
+      "found_text": "Изолированная область — это часть лабиринта с проходами, в которые нельзя попасть из оставшейся части лабиринта. Например: | В контексте лабиринтов понятие «изолированной области» обычно относится к компоненте связности, недостижимой из стартовой точки, однако для общего определения лабиринтов принято считать, что связность лабиринта между входом и выходом является желательной характеристикой идеального лабиринта. | Уточните, что изолированная область — это компонента связности проходов, недостижимая из стартовой точки, а не просто любая недостижимая часть."
+    },
+    {
+      "finding_id": "fnd_3ba879f35363",
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "project": "A1_Maze_Java.ID_1391854-master",
+      "criterion": "correctness",
+      "checker_name": "readme_fact_actuality_checker",
+      "line_start": 104,
+      "line_end": 104,
+      "file_path": "README_RUS.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.7,
+      "issue_type": "",
+      "found_text": "Петля — это часть лабиринта с проходами, по которым можно ходить «кругами». Стены в петлях не соединены со стенами, окружающими лабиринт. Например: | Согласно классификации лабиринтов, «петля» обычно относится к наличию циклов в графе лабиринта (неветвящихся или ветвящихся), но не обязательно связана с тем, соединены ли стены петли с внешними стенами; важнее именно наличие цикла в проходах. | Уточните, что петля — это цикл в графе лабиринта (возможность ходить кругом по проходам), а не обязательно свойство структуры стен относительно внешних границ."
+    },
+    {
+      "finding_id": "fnd_a5825466769e",
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "project": "A1_Maze_Java.ID_1391854-master",
+      "criterion": "correctness",
+      "checker_name": "readme_fact_actuality_checker",
+      "line_start": 113,
+      "line_end": 113,
+      "file_path": "README_RUS.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.8,
+      "issue_type": "",
+      "found_text": "Правила проще, чем в «Жизни»: есть две специальные переменные, одна — для «рождения» «мертвых» клеток (предел «рождения») и одна — для уничтожения «живых» клеток (предел «смерти»). Если «живые» клетки окружены «живыми» клетками, количество которых меньше, чем предел «смерти», они «умирают». | В классических условных схемах для клеточных автоматов вроде «Жизни» государство клетки зависит от числа «живых» соседей; здесь описано упрощённое правило, но формулировка «окружены живыми клетками» может быть неоднозначной: речь, судя по контексту, идёт о числе соседей, а не о том, что все соседи живы. | Уточните формулировку, например: «Если у живой клетки число живых соседей меньше предела смерти, она “умирает».“"
+    },
+    {
+      "finding_id": "fnd_915813c966d6",
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "project": "A1_Maze_Java.ID_1391854-master",
+      "criterion": "correctness",
+      "checker_name": "readme_fact_actuality_checker",
+      "line_start": 164,
+      "line_end": 164,
+      "file_path": "README_RUS.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.7,
+      "issue_type": "",
+      "found_text": "Пользователем вводится только размерность лабиринта: количество строк и столбцов. | В реальных программах по генерации лабиринтов пользователь часто задаёт дополнительные параметры (вероятности, скорости моделей, seed генератора, типы алгоритмов и т.д.), однако для учебного проекта ограничение только на размерность допустимо, если оно отражает конкретный выбор автора. | Отметьте, что в данном проекте размерность — единственный параметр, который вводится пользователем, а другие параметры фиксированы или задаются по умолчанию."
+    }
+  ],
+  "false_positive_items": [
+    {
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "criterion": "actuality"
+    },
+    {
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "criterion": "checklist_alignment"
+    },
+    {
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "criterion": "image_quality"
+    },
+    {
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "criterion": "readability"
+    },
+    {
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "criterion": "rights"
+    }
+  ],
+  "false_negative_items": [],
+  "project_mapping": {
+    "A1_Maze_Java": "A1_Maze_Java.ID_1391854-master"
+  },
+  "notes": [
+    "Основное сравнение выполняется на уровне атомарных ошибок: проект, критерий, строка/диапазон и текст.",
+    "В строгую метрику не входят диагностические строки: низкоуверенные unknown, непроверенные ссылки и общие ресурсные предупреждения без имени файла.",
+    "Старая метрика проект × критерий сохранена только как обзорная в overview_* полях.",
+    "Excel-разметка нормализуется эвристически из колонок 'Проблема' и 'Детали'."
+  ]
+}

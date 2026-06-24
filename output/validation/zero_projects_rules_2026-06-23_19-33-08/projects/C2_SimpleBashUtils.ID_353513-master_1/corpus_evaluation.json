@@ -1,0 +1,532 @@
+{
+  "evaluated_criteria": [
+    "actuality"
+  ],
+  "gold_total": 8,
+  "predicted_total": 1,
+  "true_positive": 0,
+  "false_positive": 1,
+  "false_negative": 8,
+  "precision": 0.0,
+  "recall": 0.0,
+  "f1_score": 0.0,
+  "macro_precision": 0.0,
+  "macro_recall": 0.0,
+  "macro_f1_score": 0.0,
+  "overview_gold_total": 1,
+  "overview_predicted_total": 3,
+  "overview_true_positive": 1,
+  "overview_false_positive": 2,
+  "overview_false_negative": 0,
+  "overview_precision": 0.3333,
+  "overview_recall": 1.0,
+  "overview_f1_score": 0.5,
+  "overview_macro_precision": 0.3333,
+  "overview_macro_recall": 0.3333,
+  "overview_macro_f1_score": 0.3333,
+  "gold_scope_predicted_total": 1,
+  "gold_scope_true_positive": 0,
+  "gold_scope_false_positive": 1,
+  "gold_scope_false_negative": 8,
+  "gold_scope_precision": 0.0,
+  "gold_scope_recall": 0.0,
+  "gold_scope_f1_score": 0.0,
+  "gold_scope_macro_precision": 0.0,
+  "gold_scope_macro_recall": 0.0,
+  "gold_scope_macro_f1_score": 0.0,
+  "per_criterion": [
+    {
+      "criterion": "actuality",
+      "label": "Актуальность",
+      "gold_total": 8,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 8,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    }
+  ],
+  "overview_per_criterion": [
+    {
+      "criterion": "actuality",
+      "label": "Актуальность",
+      "gold_total": 1,
+      "predicted_total": 1,
+      "true_positive": 1,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0
+    },
+    {
+      "criterion": "checklist_alignment",
+      "label": "Соответствие заданий проекта чек-листу",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "rights",
+      "label": "Оригинальность и права использования ресурсов",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    }
+  ],
+  "checker_metrics": [
+    {
+      "slice_name": "local_link_checker",
+      "label": "local_link_checker",
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "precision": 0.0,
+      "false_positive_share": 1.0
+    }
+  ],
+  "checker_group_metrics": [
+    {
+      "slice_name": "links_and_resources",
+      "label": "Ссылки и ресурсы",
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "precision": 0.0,
+      "false_positive_share": 1.0
+    }
+  ],
+  "actionable_metrics": {
+    "slice_name": "actionable",
+    "label": "Действенные находки",
+    "predicted_total": 1,
+    "true_positive": 0,
+    "false_positive": 1,
+    "precision": 0.0,
+    "false_positive_share": 1.0
+  },
+  "cost_quality": {
+    "model_calls": 0,
+    "cache_hits": 0,
+    "total_tokens": 0,
+    "cost_usd": 0.0,
+    "cost_per_gold_true_positive": null,
+    "cost_per_prediction": 0.0,
+    "cost_per_actionable_true_positive": null
+  },
+  "false_negative_reason_counts": {
+    "out_of_scope_or_needs_review": 8
+  },
+  "false_negative_analysis": [
+    {
+      "project": "C2_SimpleBashUtils.ID_353513-master",
+      "project_id": "c2_simplebashutils_id_353513_master__1794aa11",
+      "criterion": "actuality",
+      "label": "Актуальность",
+      "gold_line_range": "",
+      "gold_text": "Вопрос актуальности задачи, лучше реализовать на основе библиотеки. Например разбора протоколов взаимодействия между сервисами.",
+      "nearest_finding_id": "fnd_7dc1d5b2caaf",
+      "nearest_checker": "local_link_checker",
+      "nearest_match_type": "criterion_only",
+      "nearest_score": 0.2222,
+      "reason_code": "out_of_scope_or_needs_review",
+      "reason_label": "Требуется ручной разбор области применимости",
+      "next_step": "Решить, должна ли локальная проверка ловить этот класс ошибок."
+    },
+    {
+      "project": "C2_SimpleBashUtils.ID_353513-master",
+      "project_id": "c2_simplebashutils_id_353513_master__1794aa11",
+      "criterion": "actuality",
+      "label": "Актуальность",
+      "gold_line_range": "",
+      "gold_text": "Проблема с названием переменных и функций, мало значащие названия. Лишние комментарии со словами \"\"Лишнее\"\".",
+      "nearest_finding_id": "fnd_7dc1d5b2caaf",
+      "nearest_checker": "local_link_checker",
+      "nearest_match_type": "criterion_only",
+      "nearest_score": 0.1849,
+      "reason_code": "out_of_scope_or_needs_review",
+      "reason_label": "Требуется ручной разбор области применимости",
+      "next_step": "Решить, должна ли локальная проверка ловить этот класс ошибок."
+    },
+    {
+      "project": "C2_SimpleBashUtils.ID_353513-master",
+      "project_id": "c2_simplebashutils_id_353513_master__1794aa11",
+      "criterion": "actuality",
+      "label": "Актуальность",
+      "gold_line_range": "",
+      "gold_text": "Помимо функционала, стоит еще сравнивать реализации по скорости т.е. делать профилирование.",
+      "nearest_finding_id": "fnd_7dc1d5b2caaf",
+      "nearest_checker": "local_link_checker",
+      "nearest_match_type": "criterion_only",
+      "nearest_score": 0.1956,
+      "reason_code": "out_of_scope_or_needs_review",
+      "reason_label": "Требуется ручной разбор области применимости",
+      "next_step": "Решить, должна ли локальная проверка ловить этот класс ошибок."
+    },
+    {
+      "project": "C2_SimpleBashUtils.ID_353513-master",
+      "project_id": "c2_simplebashutils_id_353513_master__1794aa11",
+      "criterion": "actuality",
+      "label": "Актуальность",
+      "gold_line_range": "",
+      "gold_text": "Недостаточно времени в связи с отсутсвием опыта написания интеграционных тестов из бассейна.",
+      "nearest_finding_id": "fnd_7dc1d5b2caaf",
+      "nearest_checker": "local_link_checker",
+      "nearest_match_type": "criterion_only",
+      "nearest_score": 0.15,
+      "reason_code": "out_of_scope_or_needs_review",
+      "reason_label": "Требуется ручной разбор области применимости",
+      "next_step": "Решить, должна ли локальная проверка ловить этот класс ошибок."
+    },
+    {
+      "project": "C2_SimpleBashUtils.ID_353513-master",
+      "project_id": "c2_simplebashutils_id_353513_master__1794aa11",
+      "criterion": "actuality",
+      "label": "Актуальность",
+      "gold_line_range": "",
+      "gold_text": "Программа должна быть разработана в соответствии с принципами структурного программирования.",
+      "nearest_finding_id": "fnd_7dc1d5b2caaf",
+      "nearest_checker": "local_link_checker",
+      "nearest_match_type": "criterion_only",
+      "nearest_score": 0.1842,
+      "reason_code": "out_of_scope_or_needs_review",
+      "reason_label": "Требуется ручной разбор области применимости",
+      "next_step": "Решить, должна ли локальная проверка ловить этот класс ошибок."
+    },
+    {
+      "project": "C2_SimpleBashUtils.ID_353513-master",
+      "project_id": "c2_simplebashutils_id_353513_master__1794aa11",
+      "criterion": "actuality",
+      "label": "Актуальность",
+      "gold_line_range": "",
+      "gold_text": "Все же бы ссылался на принцип модульного программирования.",
+      "nearest_finding_id": "fnd_7dc1d5b2caaf",
+      "nearest_checker": "local_link_checker",
+      "nearest_match_type": "criterion_only",
+      "nearest_score": 0.1649,
+      "reason_code": "out_of_scope_or_needs_review",
+      "reason_label": "Требуется ручной разбор области применимости",
+      "next_step": "Решить, должна ли локальная проверка ловить этот класс ошибок."
+    },
+    {
+      "project": "C2_SimpleBashUtils.ID_353513-master",
+      "project_id": "c2_simplebashutils_id_353513_master__1794aa11",
+      "criterion": "actuality",
+      "label": "Актуальность",
+      "gold_line_range": "",
+      "gold_text": "Тестирование должно быть на разных ОС, чтобы проверить, что портируемость достигнута в соотвествии с POSIX.",
+      "nearest_finding_id": "fnd_7dc1d5b2caaf",
+      "nearest_checker": "local_link_checker",
+      "nearest_match_type": "criterion_only",
+      "nearest_score": 0.2241,
+      "reason_code": "out_of_scope_or_needs_review",
+      "reason_label": "Требуется ручной разбор области применимости",
+      "next_step": "Решить, должна ли локальная проверка ловить этот класс ошибок."
+    },
+    {
+      "project": "C2_SimpleBashUtils.ID_353513-master",
+      "project_id": "c2_simplebashutils_id_353513_master__1794aa11",
+      "criterion": "actuality",
+      "label": "Актуальность",
+      "gold_line_range": "",
+      "gold_text": "Старые версии ОС Mac 18.1.8, Linux 18.1.8, лучше хотя бы, если Ubuntu 22.04.",
+      "nearest_finding_id": "fnd_7dc1d5b2caaf",
+      "nearest_checker": "local_link_checker",
+      "nearest_match_type": "criterion_only",
+      "nearest_score": 0.15,
+      "reason_code": "out_of_scope_or_needs_review",
+      "reason_label": "Требуется ручной разбор области применимости",
+      "next_step": "Решить, должна ли локальная проверка ловить этот класс ошибок."
+    }
+  ],
+  "gold_items": [
+    {
+      "row_number": 2,
+      "raw_project": "С2 - s21_string+",
+      "matched_project": "C2_SimpleBashUtils.ID_353513-master",
+      "project_id": "c2_simplebashutils_id_353513_master__1794aa11",
+      "raw_problem": "неактуальные версии ОС",
+      "details": "\"* Вопрос актуальности задачи, лучше реализовать на основе библиотеки. Например разбора протоколов взаимодействия между сервисами.\n* Проблема с названием переменных и функций, мало значащие названия. Лишние комментарии со словами \"\"Лишнее\"\".\n* Помимо функционала, стоит еще сравнивать реализации по скорости т.е. делать профилирование.\n* Недостаточно времени в связи с отсутсвием опыта написания интеграционных тестов из бассейна.\n* Программа должна быть разработана в соответствии с принципами структурного программирования.\nВсе же бы ссылался на принцип модульного программирования.\n* Тестирование должно быть на разных ОС, чтобы проверить, что портируемость достигнута в соотвествии с POSIX.\n* Старые версии ОС Mac 18.1.8, Linux 18.1.8, лучше хотя бы, если Ubuntu 22.04.",
+      "criteria": [
+        "actuality"
+      ]
+    }
+  ],
+  "gold_cases": [
+    {
+      "case_id": "gold_2_actuality_1",
+      "row_number": 2,
+      "raw_project": "С2 - s21_string+",
+      "matched_project": "C2_SimpleBashUtils.ID_353513-master",
+      "project_id": "c2_simplebashutils_id_353513_master__1794aa11",
+      "criterion": "actuality",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "Вопрос актуальности задачи, лучше реализовать на основе библиотеки. Например разбора протоколов взаимодействия между сервисами."
+    },
+    {
+      "case_id": "gold_2_actuality_2",
+      "row_number": 2,
+      "raw_project": "С2 - s21_string+",
+      "matched_project": "C2_SimpleBashUtils.ID_353513-master",
+      "project_id": "c2_simplebashutils_id_353513_master__1794aa11",
+      "criterion": "actuality",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "Проблема с названием переменных и функций, мало значащие названия. Лишние комментарии со словами \"\"Лишнее\"\"."
+    },
+    {
+      "case_id": "gold_2_actuality_3",
+      "row_number": 2,
+      "raw_project": "С2 - s21_string+",
+      "matched_project": "C2_SimpleBashUtils.ID_353513-master",
+      "project_id": "c2_simplebashutils_id_353513_master__1794aa11",
+      "criterion": "actuality",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "Помимо функционала, стоит еще сравнивать реализации по скорости т.е. делать профилирование."
+    },
+    {
+      "case_id": "gold_2_actuality_4",
+      "row_number": 2,
+      "raw_project": "С2 - s21_string+",
+      "matched_project": "C2_SimpleBashUtils.ID_353513-master",
+      "project_id": "c2_simplebashutils_id_353513_master__1794aa11",
+      "criterion": "actuality",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "Недостаточно времени в связи с отсутсвием опыта написания интеграционных тестов из бассейна."
+    },
+    {
+      "case_id": "gold_2_actuality_5",
+      "row_number": 2,
+      "raw_project": "С2 - s21_string+",
+      "matched_project": "C2_SimpleBashUtils.ID_353513-master",
+      "project_id": "c2_simplebashutils_id_353513_master__1794aa11",
+      "criterion": "actuality",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "Программа должна быть разработана в соответствии с принципами структурного программирования."
+    },
+    {
+      "case_id": "gold_2_actuality_6",
+      "row_number": 2,
+      "raw_project": "С2 - s21_string+",
+      "matched_project": "C2_SimpleBashUtils.ID_353513-master",
+      "project_id": "c2_simplebashutils_id_353513_master__1794aa11",
+      "criterion": "actuality",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "Все же бы ссылался на принцип модульного программирования."
+    },
+    {
+      "case_id": "gold_2_actuality_7",
+      "row_number": 2,
+      "raw_project": "С2 - s21_string+",
+      "matched_project": "C2_SimpleBashUtils.ID_353513-master",
+      "project_id": "c2_simplebashutils_id_353513_master__1794aa11",
+      "criterion": "actuality",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "Тестирование должно быть на разных ОС, чтобы проверить, что портируемость достигнута в соотвествии с POSIX."
+    },
+    {
+      "case_id": "gold_2_actuality_8",
+      "row_number": 2,
+      "raw_project": "С2 - s21_string+",
+      "matched_project": "C2_SimpleBashUtils.ID_353513-master",
+      "project_id": "c2_simplebashutils_id_353513_master__1794aa11",
+      "criterion": "actuality",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "Старые версии ОС Mac 18.1.8, Linux 18.1.8, лучше хотя бы, если Ubuntu 22.04."
+    }
+  ],
+  "matches": [
+    {
+      "project": "C2_SimpleBashUtils.ID_353513-master",
+      "project_id": "c2_simplebashutils_id_353513_master__1794aa11",
+      "criterion": "actuality",
+      "label": "Актуальность",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "Вопрос актуальности задачи, лучше реализовать на основе библиотеки. Например разбора протоколов взаимодействия между сервисами.",
+      "found_finding_id": "fnd_7dc1d5b2caaf",
+      "found_checker": "local_link_checker",
+      "found_line_range": "materials/7 principles of structural programming.md:20",
+      "found_text": "![goto](../misc/eng/images/GOTO.png) | Файл не найден: ../misc/eng/images/GOTO.png | Исправить путь к локальному ресурсу или добавить отсутствующий файл.",
+      "match_type": "criterion_only",
+      "match_score": 0.2222,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    },
+    {
+      "project": "C2_SimpleBashUtils.ID_353513-master",
+      "project_id": "c2_simplebashutils_id_353513_master__1794aa11",
+      "criterion": "actuality",
+      "label": "Актуальность",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "Проблема с названием переменных и функций, мало значащие названия. Лишние комментарии со словами \"\"Лишнее\"\".",
+      "found_finding_id": "fnd_7dc1d5b2caaf",
+      "found_checker": "local_link_checker",
+      "found_line_range": "materials/7 principles of structural programming.md:20",
+      "found_text": "![goto](../misc/eng/images/GOTO.png) | Файл не найден: ../misc/eng/images/GOTO.png | Исправить путь к локальному ресурсу или добавить отсутствующий файл.",
+      "match_type": "criterion_only",
+      "match_score": 0.1849,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    },
+    {
+      "project": "C2_SimpleBashUtils.ID_353513-master",
+      "project_id": "c2_simplebashutils_id_353513_master__1794aa11",
+      "criterion": "actuality",
+      "label": "Актуальность",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "Помимо функционала, стоит еще сравнивать реализации по скорости т.е. делать профилирование.",
+      "found_finding_id": "fnd_7dc1d5b2caaf",
+      "found_checker": "local_link_checker",
+      "found_line_range": "materials/7 principles of structural programming.md:20",
+      "found_text": "![goto](../misc/eng/images/GOTO.png) | Файл не найден: ../misc/eng/images/GOTO.png | Исправить путь к локальному ресурсу или добавить отсутствующий файл.",
+      "match_type": "criterion_only",
+      "match_score": 0.1956,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    },
+    {
+      "project": "C2_SimpleBashUtils.ID_353513-master",
+      "project_id": "c2_simplebashutils_id_353513_master__1794aa11",
+      "criterion": "actuality",
+      "label": "Актуальность",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "Недостаточно времени в связи с отсутсвием опыта написания интеграционных тестов из бассейна.",
+      "found_finding_id": "fnd_7dc1d5b2caaf",
+      "found_checker": "local_link_checker",
+      "found_line_range": "materials/7 principles of structural programming.md:20",
+      "found_text": "![goto](../misc/eng/images/GOTO.png) | Файл не найден: ../misc/eng/images/GOTO.png | Исправить путь к локальному ресурсу или добавить отсутствующий файл.",
+      "match_type": "criterion_only",
+      "match_score": 0.15,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    },
+    {
+      "project": "C2_SimpleBashUtils.ID_353513-master",
+      "project_id": "c2_simplebashutils_id_353513_master__1794aa11",
+      "criterion": "actuality",
+      "label": "Актуальность",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "Программа должна быть разработана в соответствии с принципами структурного программирования.",
+      "found_finding_id": "fnd_7dc1d5b2caaf",
+      "found_checker": "local_link_checker",
+      "found_line_range": "materials/7 principles of structural programming.md:20",
+      "found_text": "![goto](../misc/eng/images/GOTO.png) | Файл не найден: ../misc/eng/images/GOTO.png | Исправить путь к локальному ресурсу или добавить отсутствующий файл.",
+      "match_type": "criterion_only",
+      "match_score": 0.1842,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    },
+    {
+      "project": "C2_SimpleBashUtils.ID_353513-master",
+      "project_id": "c2_simplebashutils_id_353513_master__1794aa11",
+      "criterion": "actuality",
+      "label": "Актуальность",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "Все же бы ссылался на принцип модульного программирования.",
+      "found_finding_id": "fnd_7dc1d5b2caaf",
+      "found_checker": "local_link_checker",
+      "found_line_range": "materials/7 principles of structural programming.md:20",
+      "found_text": "![goto](../misc/eng/images/GOTO.png) | Файл не найден: ../misc/eng/images/GOTO.png | Исправить путь к локальному ресурсу или добавить отсутствующий файл.",
+      "match_type": "criterion_only",
+      "match_score": 0.1649,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    },
+    {
+      "project": "C2_SimpleBashUtils.ID_353513-master",
+      "project_id": "c2_simplebashutils_id_353513_master__1794aa11",
+      "criterion": "actuality",
+      "label": "Актуальность",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "Тестирование должно быть на разных ОС, чтобы проверить, что портируемость достигнута в соотвествии с POSIX.",
+      "found_finding_id": "fnd_7dc1d5b2caaf",
+      "found_checker": "local_link_checker",
+      "found_line_range": "materials/7 principles of structural programming.md:20",
+      "found_text": "![goto](../misc/eng/images/GOTO.png) | Файл не найден: ../misc/eng/images/GOTO.png | Исправить путь к локальному ресурсу или добавить отсутствующий файл.",
+      "match_type": "criterion_only",
+      "match_score": 0.2241,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    },
+    {
+      "project": "C2_SimpleBashUtils.ID_353513-master",
+      "project_id": "c2_simplebashutils_id_353513_master__1794aa11",
+      "criterion": "actuality",
+      "label": "Актуальность",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "Старые версии ОС Mac 18.1.8, Linux 18.1.8, лучше хотя бы, если Ubuntu 22.04.",
+      "found_finding_id": "fnd_7dc1d5b2caaf",
+      "found_checker": "local_link_checker",
+      "found_line_range": "materials/7 principles of structural programming.md:20",
+      "found_text": "![goto](../misc/eng/images/GOTO.png) | Файл не найден: ../misc/eng/images/GOTO.png | Исправить путь к локальному ресурсу или добавить отсутствующий файл.",
+      "match_type": "criterion_only",
+      "match_score": 0.15,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    }
+  ],
+  "detailed_false_positive_items": [
+    {
+      "finding_id": "fnd_7dc1d5b2caaf",
+      "project_id": "c2_simplebashutils_id_353513_master__1794aa11",
+      "project": "C2_SimpleBashUtils.ID_353513-master",
+      "criterion": "actuality",
+      "checker_name": "local_link_checker",
+      "line_start": 20,
+      "line_end": 20,
+      "file_path": "materials/7 principles of structural programming.md",
+      "severity": "major",
+      "verdict": "fail",
+      "confidence": 0.95,
+      "issue_type": "",
+      "found_text": "![goto](../misc/eng/images/GOTO.png) | Файл не найден: ../misc/eng/images/GOTO.png | Исправить путь к локальному ресурсу или добавить отсутствующий файл."
+    }
+  ],
+  "false_positive_items": [
+    {
+      "project_id": "c2_simplebashutils_id_353513_master__1794aa11",
+      "criterion": "checklist_alignment"
+    },
+    {
+      "project_id": "c2_simplebashutils_id_353513_master__1794aa11",
+      "criterion": "rights"
+    }
+  ],
+  "false_negative_items": [],
+  "project_mapping": {
+    "С2 - s21_string+": "C2_SimpleBashUtils.ID_353513-master"
+  },
+  "notes": [
+    "Основное сравнение выполняется на уровне атомарных ошибок: проект, критерий, строка/диапазон и текст.",
+    "В строгую метрику не входят диагностические строки: низкоуверенные unknown, непроверенные ссылки и общие ресурсные предупреждения без имени файла.",
+    "Старая метрика проект × критерий сохранена только как обзорная в overview_* полях.",
+    "Excel-разметка нормализуется эвристически из колонок 'Проблема' и 'Детали'."
+  ]
+}

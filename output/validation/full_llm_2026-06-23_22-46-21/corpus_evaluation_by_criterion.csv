@@ -1,0 +1,5 @@
+﻿criterion,label,gold_total,predicted_total,true_positive,false_positive,false_negative,precision,recall,f1_score
+actuality,Актуальность,25,31,1,30,24,0.0323,0.04,0.0357
+checklist_alignment,Соответствие заданий проекта чек-листу,8,35,1,34,7,0.0286,0.125,0.0465
+correctness,Точность и корректность,40,150,5,144,35,0.0336,0.125,0.053
+readability,Грамотность и читаемость текста,25,686,13,671,12,0.019,0.52,0.0367

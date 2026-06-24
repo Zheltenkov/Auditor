@@ -1,0 +1,898 @@
+{
+  "summary": {
+    "started_at": "2026-06-23T19:33:09.299056Z",
+    "finished_at": "2026-06-23T19:33:09.481877Z",
+    "input_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-33-08\\AP1_Jv_T04B.ID_1421426-master_1",
+    "units_total": 1,
+    "files_total": 7,
+    "findings_total": 8,
+    "affected_units_total": 1,
+    "by_severity": {
+      "info": 4,
+      "major": 2,
+      "minor": 2
+    },
+    "by_criterion": {
+      "actuality": 4,
+      "checklist_alignment": 2,
+      "market_fit": 1,
+      "readability": 1
+    },
+    "by_branch": {
+      "AP1_Jv_T04B.ID_1421426-master (1)": 8
+    },
+    "by_unit": {
+      "ap1_jv_t04b_id_1421426_master__a88e0c31": 8
+    },
+    "model_usage": {
+      "calls_total": 0,
+      "cache_hits": 0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "by_model": {}
+    },
+    "prompt_versions": {},
+    "steps": [
+      {
+        "name": "Загрузка файлов",
+        "status": "ok",
+        "started_at": "2026-06-23T19:33:09.299061Z",
+        "finished_at": "2026-06-23T19:33:09.310355Z",
+        "duration_ms": 11,
+        "detail": "Единиц: 1"
+      },
+      {
+        "name": "Подготовка проверок",
+        "status": "ok",
+        "started_at": "2026-06-23T19:33:09.310381Z",
+        "finished_at": "2026-06-23T19:33:09.316065Z",
+        "duration_ms": 5,
+        "detail": "Модулей: 18, совпадений кода: 0"
+      },
+      {
+        "name": "Извлечение и проверки",
+        "status": "ok",
+        "started_at": "2026-06-23T19:33:09.316111Z",
+        "finished_at": "2026-06-23T19:33:09.479568Z",
+        "duration_ms": 163,
+        "detail": "Сущностей: 33"
+      },
+      {
+        "name": "Сборка отчёта",
+        "status": "ok",
+        "started_at": "2026-06-23T19:33:09.479621Z",
+        "finished_at": "2026-06-23T19:33:09.481804Z",
+        "duration_ms": 2,
+        "detail": "Случаев: 8"
+      }
+    ],
+    "model_used": false,
+    "network_used": false,
+    "warnings": [
+      "Постобработка: 2 языковых дублей схлопнуты в базовые строки."
+    ]
+  },
+  "units": [
+    {
+      "unit_id": "ap1_jv_t04b_id_1421426_master__a88e0c31",
+      "name": "AP1_Jv_T04B.ID_1421426-master",
+      "root_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-33-08\\AP1_Jv_T04B.ID_1421426-master_1\\AP1_Jv_T04B.ID_1421426-master (1)\\AP1_Jv_T04B.ID_1421426-master",
+      "relative_path": "AP1_Jv_T04B.ID_1421426-master (1)/AP1_Jv_T04B.ID_1421426-master",
+      "branch": "AP1_Jv_T04B.ID_1421426-master (1)",
+      "files": [
+        {
+          "relative_path": "CHANGELOG",
+          "absolute_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-33-08\\AP1_Jv_T04B.ID_1421426-master_1\\AP1_Jv_T04B.ID_1421426-master (1)\\AP1_Jv_T04B.ID_1421426-master\\CHANGELOG",
+          "kind": "text",
+          "text": "",
+          "size_bytes": 0
+        },
+        {
+          "relative_path": "check-list.yml",
+          "absolute_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-33-08\\AP1_Jv_T04B.ID_1421426-master_1\\AP1_Jv_T04B.ID_1421426-master (1)\\AP1_Jv_T04B.ID_1421426-master\\check-list.yml",
+          "kind": "checklist",
+          "text": "introduction: >-\n  - School 21 methodology only makes sense if peer-to-peer reviews are taken seriously. Please read all the guidelines carefully before starting the review.\n\n  - Please remain courteous, polite, respectful, and constructive in all communications during this review.\n\n  - Point out possible flaws in the person's work and take the time to discuss and debate them.\n\n  - Keep in mind that sometimes there may be differences in interpretation of tasks and scope of functionality. Please remain open to each other's vision.\nguidelines: >\n  - Evaluate only the files located in the src folder of the student's or group's GIT repository.\n\n  - If you have not finished the project yet, it is compulsory to read the entire instruction before starting the review. \n\n  - Ensure to start reviewing a group project only when the team is present in full.\n\n  - Use special flags in the checklist to report, for example, \"empty work\" if the repository does not contain the student's (or group's) work in the src folder of the develop branch, or \"cheat\" in the case of cheating, or if the student (or group) is unable to explain their work at any time during the review, or if any of the items below are not met. However, except in cases of cheating, you are encouraged to continue reviewing the project to identify the problems that caused the situation so that they can be avoided in the next review.\n\n  - Double check that the GIT repository is the one corresponding to the student or group.\n\n  - Carefully check that nothing malicious has been used to fool you.\n\n  - In controversial cases, remember that the checklist determines only the general order of the check. The final decision on project evaluation remains with the reviewer.\nquick_actions:\n  - EMPTY_WORK\n  - INVALID_COMPILATION\n  - LEAKS\n  - CRASH\n  - FORBIDDEN_FUNCTION\n  - CHEAT\nlanguage: en\nname: Java. T04. Backend\ncomment: \"\"\nsections:\n  - kind: \"1\"\n    name: Preliminary\n    description: \"\"\n    questions:\n      - name: \"Respect the rules:\"\n        description: >\n          - The repository you are reviewing must belong to the peer (or group).\n          \n          - The peer can provide clarifications about the work at any time during the evaluation.\n          \n          - All general rules apply throughout the entire assessment.\n        rating: \"5\"\n  - kind: \"1\"\n    name: Main part\n    description: \"\"\n    questions:\n      - name: \"Task 1. Adding a Database\"\n        description: |-\n          - PostgreSQL database connection is described in application.properties.\n          - The storage class has been removed.\n          - Special annotations have been added to classes that need to be stored in the database.\n          - Repositories use CrudRepository as the parent interface.\n        rating: \"6\"\n      - name: \"Task 2. Adding Authorization\"\n        description: |-\n          - Users have been added, each with a UUID, login, and password.\n          - User support has been implemented across all layers.\n          - A SignUpRequest model has been created, containing the login and password.\n          - An authorization service has been created, using UserService.\n            - The authorization service has a registration method that takes SignUpRequest and returns whether registration was successful.\n            - The authorization service has an authorization method that receives a login and password in the header as base64(login:password) and returns whether authorization was successful.\n          - An authorization controller has been created.\n            - This controller has an endpoint to register a user.\n            - This controller has an endpoint to authorize a user.\n          - An AuthFilter class has been created that inherits from GenericFilterBean and implements the doFilter method.\n            - Within doFilter, the login and password are validated. If the validation is successful, the request is processed. If the validation fails, a 401 status code is appended to the response and the request isn't processed.\n          - A Spring Configuration has been created.\n            - In the Spring Configuration, a Bean is described to obtain the SecurityFilterChain.\n            - Access to the registration and authorization endpoints is allowed without authorization; all other endpoints require authorization.\n            - AuthFilter is used as the filter in the Spring configuration.\n        rating: \"6\"\n      - name: \"Task 3. Adding Game Logic Between Two Players\"\n        description: |-\n          - A state of \"Waiting for players\" has been added for the current game.\n          - A state of \"Player turn (UUID)\" has been added for the current game.\n          - A state of \"Draw\" has been added for the current game.\n          - A state of \"Win (UUID)\" has been added for the current game.\n          - Information about the tokens with which the users will play has been added to the current game.\n          - The game-ending logic has been improved using these states.\n          - An endpoint has been added to create a new game with either a user or a computer.\n          - An endpoint has been added to get the available current games.\n          - An endpoint has been added to allow a user to join a game.\n          - The endpoint for updating the current game has been improved to account for playing against another user or the computer.\n          - An endpoint has been added to get the current game.\n          - An endpoint has been added to get user information by UUID.\n        rating: \"6\"\n",
+          "size_bytes": 5519
+        },
+        {
+          "relative_path": "check-list_RUS.yml",
+          "absolute_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-33-08\\AP1_Jv_T04B.ID_1421426-master_1\\AP1_Jv_T04B.ID_1421426-master (1)\\AP1_Jv_T04B.ID_1421426-master\\check-list_RUS.yml",
+          "kind": "checklist",
+          "text": "introduction: >-\n  - Методология «Школы 21» способна приводить к высоким образовательным результатам, только если peer-to-peer оценка производится максимально ответственно. Этот документ призван помочь тебе в этом.\n\n  - Будь доброжелательным, вежливым. Относись с уважением к другому человеку и проделанной им работе. Будь конструктивен, давая обратную связь.\n\n  - Проверяя работу другого, отмечай для себя спорные и потенциально неверные моменты. Обсуди их с автором решения. Возможно, неправ ты, а не он.\n\n  - Старайся быть открытым к другому мнению или способу интерпретировать задание. Возможно, и твой подход, и подход другого — оба имеют право на жизнь.\nguidelines: >\n  - Подлежат оцениванию только те файлы, которые учащийся или группа выложили в GIT-репозиторий.\n\n  - Убедись в том, что ты ничего не перепутал и репозиторий является репозиторием учащегося или группы, которых ты проверяешь.\n\n  - Если ты сам еще не закончил работу над заданием, обязательно перечитай его еще раз перед проверкой.\n\n  - Ниже ты найдешь специальные теги для разных случаев: отсутствие решения, неработающее решение, плагиат. В этих случаях участник получает 0 баллов. В случае отсутствия плагиата мы призываем все равно продолжить проверку и попытаться вместе с другим учащимся выяснить проблему, приведшую к неработающему решению.\n\n  - Не заканчивай проверку после первого неверно выполненного упражнения, если остальные были выполнены правильно.\nquick_actions:\n  - EMPTY_WORK\n  - INVALID_COMPILATION\n  - LEAKS\n  - CRASH\n  - FORBIDDEN_FUNCTION\n  - CHEAT\nlanguage: ru\nname: Java. T04. Backend\ncomment: \"\"\nsections:\n  - kind: \"1\"\n    name: Предварительное\n    description: \"\"\n    questions:\n      - name: \"Уважай правила:\"\n        description: >\n          - Репозиторий содержит работу пира (или группы).\n\n          - Пир может давать пояснения по работе в любое время во время оценивания.\n\n          - Общие правила соблюдаются на протяжении всей оценки.\n        rating: \"5\"\n  - kind: \"1\"\n    name: Главная часть\n    description: \"\"\n    questions:\n      - name: \"Задание 1. Добавление базы данных\"\n        description: |-\n          - Описано подключение к базе данных PostgreSQL в application.properties.\n          - Удален класс-хранилище.\n          - Добавлены специальные аннотации для классов, которые необходимо сохранять в базу данных.\n          - У репозиториев в качестве родителя CrudRepository.\n        rating: \"6\"\n      - name: \"Задание 2. Добавление авторизации\"\n        description: |-\n          - Добавлены пользователи, у которых есть UUID, логин, пароль.\n          - Реализована поддержка пользователей на всех слоях.\n          - Создана модель SignUpRequest, у которой есть логин и пароль.\n          - Создан сервис авторизации, который использует UserService.\n          - У сервиса авторизации есть метод регистрации, который принимает SignUpRequest и возвращает факт успешной регистрации.\n          - У сервиса авторизации есть метод авторизации, который принимает в заголовке логин и пароль в виде base64(login:password) и возвращает факт успешной авторизации.\n          - Создан контроллер авторизации.\n          - У контроллера авторизации есть endpoint для регистрации пользователя.\n          - У контроллера авторизации есть endpoint для авторизации  пользователя.\n          - Создан класс AuthFilter, сделано наследование от GenericFilterBean и реализован метод doFilter.\n          - В методе doFilter класса AuthFilter есть валидация логина и пароля. Если валидация прошла успешно, то выполняется запрос; если валидация прошла с ошибкой, то в ответ добавляется 401 код и запрос не выполняется.\n          - Создана Spring Configuration.\n          - В Spring Configuration описан Bean для получения SecurityFilterChain.\n          - В Spring Configuration разрешен доступ без авторизации к endpoint'ам регистрации и авторизации, а для всех остальных требуется авторизация.\n          - В Spring Configuration используется AuthFilter в качестве фильтра.\n        rating: \"6\"\n      - name: \"Задание 3. Добавление логики игры между двумя игроками\"\n        description: |-\n          - Добавлено состояние для «Ожидание игроков» текущей игры.\n          - Добавлено состояние для «Ход игрока с UUID» текущей игры.\n          - Добавлено состояние для «Ничья» текущей игры.\n          - Добавлено состояние для «Победа игрока с UUID» текущей игры.\n          - Добавлена информация о значках, которыми будут ходить пользователи, в текущую игру.\n          - Улучшен алгоритм определения окончания игры с использованием состояний.\n          - Добавлен endpoint для создания новой игры с пользователем или компьютером.\n          - Добавлен endpoint для получения доступных текущих игр.\n          - Добавлен endpoint для присоединения пользователя к игре.\n          - Улучшен endpoint обновления текущей игры с учетом игры с пользователем или компьютером.\n          - Добавлен endpoint для получения текущей игры.\n          - Добавлен endpoint для получения информации о пользователе по UUID.\n        rating: \"6\"\n      \n",
+          "size_bytes": 8018
+        },
+        {
+          "relative_path": "LICENSE",
+          "absolute_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-33-08\\AP1_Jv_T04B.ID_1421426-master_1\\AP1_Jv_T04B.ID_1421426-master (1)\\AP1_Jv_T04B.ID_1421426-master\\LICENSE",
+          "kind": "text",
+          "text": "# School 21 License",
+          "size_bytes": 19
+        },
+        {
+          "relative_path": "README.md",
+          "absolute_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-33-08\\AP1_Jv_T04B.ID_1421426-master_1\\AP1_Jv_T04B.ID_1421426-master (1)\\AP1_Jv_T04B.ID_1421426-master\\README.md",
+          "kind": "readme",
+          "text": "﻿# Project Backend 04 — Java_Bootcamp\n\n**Summary:** In this project, you will learn how to add databases to Java web applications using Spring and work with authorization.\n\n💡 *[Click here](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624) to share your feedback on this project.* It’s anonymous and will help our team improve the training. We recommend filling out the survey right after completing the project.\n\n## Contents**\n\n1. **Chapter I**\n   1. Instructions\n1. **Chapter II**\n   1. General Information\n   1. Authorization\n      1. Identification, Authentication, Authorization\n      1. Authorization via Login and Password\n1. **Chapter III**\n   1. Task 1. Adding a Database\n   1. Task 2. Adding Authorization\n   1. Task 3. Adding Game Logic Between Two Players\n\n## Chapter I\n\n### Instructions\n\nHow to learn at “School 21”:\n\n- Here, you’ll find a unique learning experience with a lot of freedom. You’re given a task and left to find your own way to solve it, using whatever resources work best for you — whether that’s the Internet or AI tools like GigaChat. Just be mindful of information quality: verify, think critically, analyze, and compare.\n- Peer-to-peer (P2P) learning is the exchange of knowledge and experience with peers, where everyone acts as both mentor and student. This approach allows you to gain a deeper understanding of the material by learning from one another.\n- Feel free to ask for help: around you are peers who are also navigating this path for the first time. Share your own experience and ideas with others.  Join Rocket.Chat to stay updated with the latest community announcements. \n- Your learning is meaningless if you just copy someone else’s solutions. When receiving help from others, always make sure you fully understand the “why”, “how”, and “purpose” behind the solution. Don’t be afraid to make mistakes. \n- Does the task seem impossible? Take a break, get some fresh air and clear your mind — this has helped many people. Maybe after that, the solution will come to you naturally.\n- The learning process is just as important as the result. It’s not just about completing the task — it’s about understanding HOW to solve it. \n\nHow to work with the project:\n\n- Before starting, clone the project from GitLab into a repository with the same name.\n- All files should be created inside the _src/_ folder of the cloned repository.\n- After cloning the project, create a _develop_ branch and do all your development there. Then, push the _develop_ branch to GitLab.\n- Your directory should not contain any files other than those specified in the assignments.\n\n## Chapter II\n\n### General Information\n\n#### Authorization\n\nAuthorization controls the access of legitimate users to the system's resources, granting each user exactly those privileges assigned by the administrator.\n\n#### Identification, Authentication, Authorization\n\n- **Identification** is a process by which a subject's unique identifier is established, uniquely defining the subject in the information system.\n- **Authentication** is the process of verifying authenticity. For example, verifying the user by comparing the password entered by the user with the password stored in the system.\n- **Authorization** is the granting of rights to a specific person or group to perform a specific set of actions.\n\n#### Authorization via Login and Password**\n\nThis method is based on the user providing a login and password for successful identification and authentication in the system. The login/password pair is specified by the user during registration. Upon successful authorization on the server, the user is granted the rights to perform the available requests.\n\nThe client sends a request to the server and receives an \"Unauthorized\" response with information about the authorization procedure. After successful authorization, each subsequent client request automatically includes an \"Authorization\" header (forming the authorization header), which carries the client's credentials for server authentication.\n\nThere are also other authorization methods.\n\n**Topics to study**:\n\n- Web application;\n- Login-password (basic auth) authorization;\n- PostgreSQL;\n- ASP.NET.\n\n## Chapter III\n\n**Project: Tic-Tac-Toe**\n\nUse the server-side project from the previous week (T03).\n\n### Task 1. Adding a Database\n\n- Describe the PostgreSQL database connection in application.properties.\n- Eliminate the storage-class approach (i.e., get rid of the in-memory storage class).\n- Add special annotations to the classes that need to be stored in the database.\n- In your repositories, use CrudRepository as the parent interface.\n\n### Task 2. Adding Authorization\n\n- Add users, each with a UUID, login, and password.\n- Provide user support across all layers.\n- Create a SignUpRequest model that contains a login and password.\n- Create an authorization service that uses UserService:\n  - a registration method that takes a SignUpRequest and returns a registration success status;\n  - an authorization method that takes the login and password in the header as base64(login:password) and returns the user's UUID.\n- Create an authorization controller with the following endpoints:\n  - for user registration,\n  - for user authorization.\n- Create a class AuthFilter extending GenericFilterBean and implement the doFilter method:\n  - Validate the login and password.\n  - If the validation is successful, proceed with the request.\n  - If the validation fails, add the 401 status code to the response and do not proceed with the request.\n- Create a Spring Configuration class where:\n  - You define a Bean for obtaining SecurityFilterChain.\n  - Allow access without authorization to the registration and authorization endpoints.\n  - All other endpoints require authorization.\n  - Use AuthFilter as a filter.\n\n### Task 3. Adding Game Logic Between Two Players\n\n- Add states for the current game:\n  - Waiting for players;\n  - Turn of the player with the UUID;\n  - Draw;\n  - Win by the player with the UUID.\n- Add information about the tokens (X/O) that users will use in the current game.\n- Improve the game-ending logic using these states.\n- Add an endpoint to create a new game with a user or with a computer.\n- Add an endpoint to get the available current games.\n- Add an endpoint for a user to join a game.\n- Enhance the endpoint for updating the current game to account for playing against another user or against the computer.\n- Add an endpoint to get the current game.\n- Add an endpoint to get user information by UUID.",
+          "size_bytes": 6549
+        },
+        {
+          "relative_path": "README_RUS.md",
+          "absolute_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-33-08\\AP1_Jv_T04B.ID_1421426-master_1\\AP1_Jv_T04B.ID_1421426-master (1)\\AP1_Jv_T04B.ID_1421426-master\\README_RUS.md",
+          "kind": "readme",
+          "text": "# Project Backend 04 — Java_Bootcamp  \n\nРезюме: в этом проекте ты научишься добавлять базы данных в веб-приложения на языке **Java** с использованием Spring и работать с авторизацией.\n\n💡 [Нажми сюда](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624), **чтобы поделиться с нами обратной связью на этот проект**. Это анонимно и поможет нашей команде сделать обучение лучше. Рекомендуем заполнить опрос сразу после выполнения проекта.\n\n## Содержание\n 1. [Chapter I](#chapter-i)   \n     - [Инструкция](#инструкция)   \n 2. [Chapter II](#chapter-ii)  \n     - [Общая информация](#общая-информация)  \n         - [Авторизация](#авторизация)  \n         - [Идентификация, аутентификация, авторизация](#идентификация-аутентификация-авторизация) \n         - [Авторизация с помощью логина и пароля](#авторизация-с-помощью-логина-и-пароля) \n 3. [Chapter III](#chapter-iii)      \n     - [Задание 1. Добавление базы данных](#задание-1-добавление-базы-данных)    \n     - [Задание 2. Добавление авторизации](#задание-2-добавление-авторизации)  \n     - [Задание 3. Добавление логики игры между двумя игроками](#задание-3-добавление-логики-игры-между-двумя-игроками)    \n\n         \n## Chapter I\n## Инструкция\n\nКак учиться в «Школе 21»:\n\n- Здесь тебя ждет уникальный образовательный опыт с большим количеством свободы. Ты получаешь задачу и самостоятельно ищешь пути решения, используя любые удобные способы поиска информации — ресурсы Интернета или нейросети (например, GigaChat). Но внимательно относись к качеству информации: проверяй, думай, анализируй, сравнивай.\n- Взаимообучение (Peer-to-Peer, P2P) — это обмен знаниями и опытом с другими пирами, где каждый выступает и учителем, и учеником. Такой подход позволяет глубже понять материал, учась друг у друга.\n- Чувствуй себя свободно и проси о помощи — вокруг тебя те, кто тоже впервые проходят этот путь. Делись своим опытом и идеями с другими. Присоединяйся к Rocket.Chat, чтобы быть в курсе всех новостей от нашего сообщества.\n- Твое обучение не будет иметь никакого смысла, если ты будешь копировать чужие решения. Если пользуешься помощью других — всегда разбирайся до конца, почему, как и зачем. Не бойся ошибиться.\n- Кажется, что задача невыполнима? Сделай перерыв, проветрись, перезагрузи голову — это помогало многим. Возможно, после этого решение придет само собой.\n- Важен не только результат обучения, но и сам процесс. Нужно не просто решить задачу, а понять, КАК ее решить.\n\nКак работать с проектом:\n\n- Перед выполнением проект необходимо склонировать с GitLab в одноименный репозиторий.\n- Все файлы необходимо создавать в папке _src/_ склонированного репозитория.\n- После клонирования проекта необходимо создать ветку _develop_ и вести разработку в ней. После этого пушить в GitLab также нужно ветку _develop_.\n- В твоей директории не должно быть иных файлов, кроме тех, что обозначены в заданиях.\n\n## Chapter II\n## Общая информация\n\n### Авторизация\n\nСредства авторизации контролируют доступ легальных пользователей к ресурсам системы, предоставляя каждому из них именно те права, которые ему были определены администратором.\n\n### Идентификация, аутентификация, авторизация\n\n**Идентификация** — процедура, в результате выполнения которой для субъекта выявляется его уникальный признак, однозначно определяющий его в информационной системе.\n\n**Аутентификация** — процедура проверки подлинности, например, проверка подлинности пользователя путем сравнения введенного им пароля с паролем, сохраненным в системе.\n\n**Авторизация** — предоставление определенному лицу или группе лиц прав на выполнение определенного набора действий.\n\n### Авторизация с помощью логина и пароля\n\nМетод основывается на том, что пользователь должен предоставить логин и пароль для успешной идентификации и аутентификации в системе. Пара логина и пароля задается пользователем при его регистрации в системе. В случае успешной авторизации на сервере пользователю выдаются права на выполнение доступных ему запросов.\n\nКлиент отправляет запрос на сервер и получает в виде ответа сообщение «Unauthorized» вместе с информацией о порядке авторизации. После успешного прохождения авторизации в каждый последующий запрос клиента автоматически добавляется заголовок «Authorization» ([формирование заголовка авторизации](https://datatracker.ietf.org/doc/html/rfc7617)), в котором передаются данные клиента для аутентификации сервером.\n\n<div align=\"center\">\n  <img src=\"misc/images/Auth.png\"/>\n</div>\n\nСуществуют и [другие способы авторизации](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#authentication_schemes).\n\n### Темы для изучения:\n- Веб-приложение;\n- Авторизация по паре логина и пароля (basic auth);\n- PostgreSQL;\n- ASP.NET.\n\n## Chapter III\n### Проект: Крестики-Нолики\nИспользуй проект для серверной части с предыдущей недели Т03.\n\n## Задание 1. Добавление базы данных\n- Опиши подключение к базе данных PostgreSQL в application.properties.\n- Избавься от класса-хранилища.\n- Добавь специальные аннотации для классов, которые необходимо сохранять в базу данных.\n- Используй у репозиториев в качестве родителя CrudRepository.\n\n## Задание 2. Добавление авторизации\n- Добавь пользователей, у которых будет UUID, логин, пароль.\n- Реализуй поддержку пользователей на всех слоях.\n- Создай модель SignUpRequest, у которой будет логин и пароль.\n- Создай сервис авторизации, который использует UserService:\n    - метод регистрации, который принимает SignUpRequest и возвращает факт успешной регистрации;\n    - метод авторизации, который принимает в заголовке логин и пароль в виде base64(login:password) и возвращает UUID пользователя.\n- Создай контроллер авторизации, у которого будут следующие endpoint'ы:\n    - для регистрации пользователя;\n    - для авторизации пользователя.\n- Создай класс AuthFilter, сделай наследование от GenericFilterBean и реализуй метод doFilter:\n    - Провалидируй логин и пароль.\n    - Если валидация прошла успешно, то выполни запрос.\n    - Если валидация прошла с ошибкой, то добавь в ответ 401 код и не выполняй запрос.\n- Создай Spring Configuration, где:\n    - Опиши Bean для получения SecurityFilterChain.\n    - Разреши доступ без авторизации к endpoint'ам регистрации и авторизации.\n    - Для всех остальных endpoint'ов должна требоваться авторизация.\n    - Воспользуйся AuthFilter в качестве фильтра.\n\n## Задание 3. Добавление логики игры между двумя игроками\n- Добавь состояния для текущей игры:\n    - ожидание игроков;\n    - ход игрока с UUID;\n    - ничья;\n    - победа игрока с UUID.\n- Добавь информацию о значках, которыми будут ходить пользователи, в текущую игру.\n- Улучши алгоритм определения окончания игры с использованием состояний.\n- Добавь endpoint для создания новой игры с пользователем или компьютером.\n- Добавь endpoint для получения доступных текущих игр.\n- Добавь endpoint для присоединения пользователя к игре.\n- Улучши endpoint обновления текущей игры с учетом игры с пользователем или компьютером.\n- Добавь endpoint для получения текущей игры.\n- Добавь endpoint для получения информации о пользователе по UUID.\n",
+          "size_bytes": 11807
+        },
+        {
+          "relative_path": "TAGS_FILES.txt",
+          "absolute_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-33-08\\AP1_Jv_T04B.ID_1421426-master_1\\AP1_Jv_T04B.ID_1421426-master (1)\\AP1_Jv_T04B.ID_1421426-master\\TAGS_FILES.txt",
+          "kind": "text",
+          "text": "10:\n\n\n*********************************************************************\n\n3:\n\n\n*********************************************************************\n\n4:\n\n\n*********************************************************************\n\n5:\n\n\n*********************************************************************\n\n9:\n\n\n*********************************************************************\n\n",
+          "size_bytes": 381
+        }
+      ]
+    }
+  ],
+  "entities": [
+    {
+      "entity_id": "ent_6f6d4d87af77",
+      "entity_type": "technology",
+      "value": "Java",
+      "quote": "name: Java. T04. Backend",
+      "location": {
+        "file_path": "check-list.yml",
+        "line_start": 31,
+        "line_end": 31
+      },
+      "context": "ey can be avoided in the next review.\n\n  - Double check that the GIT repository is the one corresponding to the student or group.\n\n  - Carefully check that nothing malicious has been used to fool you.\n\n  - In controversial cases, remember that the checklist determines only the general order of the check. The final decision on project evaluation remains with the reviewer.\nquick_actions:\n  - EMPTY_WORK\n  - INVALID_COMPILATION\n  - LEAKS\n  - CRASH\n  - FORBIDDEN_FUNCTION\n  - CHEAT\nlanguage: en\nname: Java. T04. Backend\ncomment: \"\"\nsections:\n  - kind: \"1\"\n    name: Preliminary\n    description: \"\"\n    questions:\n      - name: \"Respect the rules:\"\n        description: >\n          - The repository you are reviewing must belong to the peer (or group).\n          \n          - The peer can provide clarifications about the work at any time during the evaluation.\n          \n          - All general rules apply throughout the entire assessment.\n        rating: \"5\"\n  - kind: \"1\"\n    name: Main part\n    descr"
+    },
+    {
+      "entity_id": "ent_50ab40f151d3",
+      "entity_type": "technology",
+      "value": "PostgreSQL",
+      "quote": "- PostgreSQL database connection is described in application.properties.",
+      "location": {
+        "file_path": "check-list.yml",
+        "line_start": 52,
+        "line_end": 52
+      },
+      "context": "ns:\n      - name: \"Respect the rules:\"\n        description: >\n          - The repository you are reviewing must belong to the peer (or group).\n          \n          - The peer can provide clarifications about the work at any time during the evaluation.\n          \n          - All general rules apply throughout the entire assessment.\n        rating: \"5\"\n  - kind: \"1\"\n    name: Main part\n    description: \"\"\n    questions:\n      - name: \"Task 1. Adding a Database\"\n        description: |-\n          - PostgreSQL database connection is described in application.properties.\n          - The storage class has been removed.\n          - Special annotations have been added to classes that need to be stored in the database.\n          - Repositories use CrudRepository as the parent interface.\n        rating: \"6\"\n      - name: \"Task 2. Adding Authorization\"\n        description: |-\n          - Users have been added, each with a UUID, login, and password.\n          - User support has been implemented across all lay"
+    },
+    {
+      "entity_id": "ent_b80d0d1b7e6a",
+      "entity_type": "technology",
+      "value": "Spring",
+      "quote": "- A Spring Configuration has been created.",
+      "location": {
+        "file_path": "check-list.yml",
+        "line_start": 70,
+        "line_end": 70
+      },
+      "context": "- This controller has an endpoint to register a user.\n            - This controller has an endpoint to authorize a user.\n          - An AuthFilter class has been created that inherits from GenericFilterBean and implements the doFilter method.\n            - Within doFilter, the login and password are validated. If the validation is successful, the request is processed. If the validation fails, a 401 status code is appended to the response and the request isn't processed.\n          - A Spring Configuration has been created.\n            - In the Spring Configuration, a Bean is described to obtain the SecurityFilterChain.\n            - Access to the registration and authorization endpoints is allowed without authorization; all other endpoints require authorization.\n            - AuthFilter is used as the filter in the Spring configuration.\n        rating: \"6\"\n      - name: \"Task 3. Adding Game Logic Between Two Players\"\n        description: |-\n          - A state of \"Waiting for playe"
+    },
+    {
+      "entity_id": "ent_afb7ec7ba74c",
+      "entity_type": "technology",
+      "value": "Spring",
+      "quote": "- In the Spring Configuration, a Bean is described to obtain the SecurityFilterChain.",
+      "location": {
+        "file_path": "check-list.yml",
+        "line_start": 71,
+        "line_end": 71
+      },
+      "context": "ser.\n            - This controller has an endpoint to authorize a user.\n          - An AuthFilter class has been created that inherits from GenericFilterBean and implements the doFilter method.\n            - Within doFilter, the login and password are validated. If the validation is successful, the request is processed. If the validation fails, a 401 status code is appended to the response and the request isn't processed.\n          - A Spring Configuration has been created.\n            - In the Spring Configuration, a Bean is described to obtain the SecurityFilterChain.\n            - Access to the registration and authorization endpoints is allowed without authorization; all other endpoints require authorization.\n            - AuthFilter is used as the filter in the Spring configuration.\n        rating: \"6\"\n      - name: \"Task 3. Adding Game Logic Between Two Players\"\n        description: |-\n          - A state of \"Waiting for players\" has been added for the current game.\n          - A state"
+    },
+    {
+      "entity_id": "ent_db2c4c29a287",
+      "entity_type": "technology",
+      "value": "Spring",
+      "quote": "- AuthFilter is used as the filter in the Spring configuration.",
+      "location": {
+        "file_path": "check-list.yml",
+        "line_start": 73,
+        "line_end": 73
+      },
+      "context": "ion is successful, the request is processed. If the validation fails, a 401 status code is appended to the response and the request isn't processed.\n          - A Spring Configuration has been created.\n            - In the Spring Configuration, a Bean is described to obtain the SecurityFilterChain.\n            - Access to the registration and authorization endpoints is allowed without authorization; all other endpoints require authorization.\n            - AuthFilter is used as the filter in the Spring configuration.\n        rating: \"6\"\n      - name: \"Task 3. Adding Game Logic Between Two Players\"\n        description: |-\n          - A state of \"Waiting for players\" has been added for the current game.\n          - A state of \"Player turn (UUID)\" has been added for the current game.\n          - A state of \"Draw\" has been added for the current game.\n          - A state of \"Win (UUID)\" has been added for the current game.\n          - Information about the tokens with which the users will play has"
+    },
+    {
+      "entity_id": "ent_bc6896a284b5",
+      "entity_type": "technology",
+      "value": "Java",
+      "quote": "name: Java. T04. Backend",
+      "location": {
+        "file_path": "check-list_RUS.yml",
+        "line_start": 27,
+        "line_end": 27
+      },
+      "context": "отсутствие решения, неработающее решение, плагиат. В этих случаях участник получает 0 баллов. В случае отсутствия плагиата мы призываем все равно продолжить проверку и попытаться вместе с другим учащимся выяснить проблему, приведшую к неработающему решению.\n\n  - Не заканчивай проверку после первого неверно выполненного упражнения, если остальные были выполнены правильно.\nquick_actions:\n  - EMPTY_WORK\n  - INVALID_COMPILATION\n  - LEAKS\n  - CRASH\n  - FORBIDDEN_FUNCTION\n  - CHEAT\nlanguage: ru\nname: Java. T04. Backend\ncomment: \"\"\nsections:\n  - kind: \"1\"\n    name: Предварительное\n    description: \"\"\n    questions:\n      - name: \"Уважай правила:\"\n        description: >\n          - Репозиторий содержит работу пира (или группы).\n\n          - Пир может давать пояснения по работе в любое время во время оценивания.\n\n          - Общие правила соблюдаются на протяжении всей оценки.\n        rating: \"5\"\n  - kind: \"1\"\n    name: Главная часть\n    description: \"\"\n    questions:\n      - name: \"Задание 1. Доба"
+    },
+    {
+      "entity_id": "ent_b471e75cd8d2",
+      "entity_type": "technology",
+      "value": "PostgreSQL",
+      "quote": "- Описано подключение к базе данных PostgreSQL в application.properties.",
+      "location": {
+        "file_path": "check-list_RUS.yml",
+        "line_start": 48,
+        "line_end": 48
+      },
+      "context": "on: \"\"\n    questions:\n      - name: \"Уважай правила:\"\n        description: >\n          - Репозиторий содержит работу пира (или группы).\n\n          - Пир может давать пояснения по работе в любое время во время оценивания.\n\n          - Общие правила соблюдаются на протяжении всей оценки.\n        rating: \"5\"\n  - kind: \"1\"\n    name: Главная часть\n    description: \"\"\n    questions:\n      - name: \"Задание 1. Добавление базы данных\"\n        description: |-\n          - Описано подключение к базе данных PostgreSQL в application.properties.\n          - Удален класс-хранилище.\n          - Добавлены специальные аннотации для классов, которые необходимо сохранять в базу данных.\n          - У репозиториев в качестве родителя CrudRepository.\n        rating: \"6\"\n      - name: \"Задание 2. Добавление авторизации\"\n        description: |-\n          - Добавлены пользователи, у которых есть UUID, логин, пароль.\n          - Реализована поддержка пользователей на всех слоях.\n          - Создана модель SignUpRequest, у"
+    },
+    {
+      "entity_id": "ent_b952d4772d46",
+      "entity_type": "technology",
+      "value": "Spring",
+      "quote": "- Создана Spring Configuration.",
+      "location": {
+        "file_path": "check-list_RUS.yml",
+        "line_start": 66,
+        "line_end": 66
+      },
+      "context": "нтроллера авторизации есть endpoint для регистрации пользователя.\n          - У контроллера авторизации есть endpoint для авторизации  пользователя.\n          - Создан класс AuthFilter, сделано наследование от GenericFilterBean и реализован метод doFilter.\n          - В методе doFilter класса AuthFilter есть валидация логина и пароля. Если валидация прошла успешно, то выполняется запрос; если валидация прошла с ошибкой, то в ответ добавляется 401 код и запрос не выполняется.\n          - Создана Spring Configuration.\n          - В Spring Configuration описан Bean для получения SecurityFilterChain.\n          - В Spring Configuration разрешен доступ без авторизации к endpoint'ам регистрации и авторизации, а для всех остальных требуется авторизация.\n          - В Spring Configuration используется AuthFilter в качестве фильтра.\n        rating: \"6\"\n      - name: \"Задание 3. Добавление логики игры между двумя игроками\"\n        description: |-\n          - Добавлено состояние для «Ожидание игроков» т"
+    },
+    {
+      "entity_id": "ent_d31bdb387f70",
+      "entity_type": "technology",
+      "value": "Spring",
+      "quote": "- В Spring Configuration описан Bean для получения SecurityFilterChain.",
+      "location": {
+        "file_path": "check-list_RUS.yml",
+        "line_start": 67,
+        "line_end": 67
+      },
+      "context": "для регистрации пользователя.\n          - У контроллера авторизации есть endpoint для авторизации  пользователя.\n          - Создан класс AuthFilter, сделано наследование от GenericFilterBean и реализован метод doFilter.\n          - В методе doFilter класса AuthFilter есть валидация логина и пароля. Если валидация прошла успешно, то выполняется запрос; если валидация прошла с ошибкой, то в ответ добавляется 401 код и запрос не выполняется.\n          - Создана Spring Configuration.\n          - В Spring Configuration описан Bean для получения SecurityFilterChain.\n          - В Spring Configuration разрешен доступ без авторизации к endpoint'ам регистрации и авторизации, а для всех остальных требуется авторизация.\n          - В Spring Configuration используется AuthFilter в качестве фильтра.\n        rating: \"6\"\n      - name: \"Задание 3. Добавление логики игры между двумя игроками\"\n        description: |-\n          - Добавлено состояние для «Ожидание игроков» текущей игры.\n          - Добавлено с"
+    },
+    {
+      "entity_id": "ent_f4254f44db1f",
+      "entity_type": "technology",
+      "value": "Spring",
+      "quote": "- В Spring Configuration разрешен доступ без авторизации к endpoint'ам регистрации и авторизации, а для всех остальных требуется авторизация.",
+      "location": {
+        "file_path": "check-list_RUS.yml",
+        "line_start": 68,
+        "line_end": 68
+      },
+      "context": "для авторизации  пользователя.\n          - Создан класс AuthFilter, сделано наследование от GenericFilterBean и реализован метод doFilter.\n          - В методе doFilter класса AuthFilter есть валидация логина и пароля. Если валидация прошла успешно, то выполняется запрос; если валидация прошла с ошибкой, то в ответ добавляется 401 код и запрос не выполняется.\n          - Создана Spring Configuration.\n          - В Spring Configuration описан Bean для получения SecurityFilterChain.\n          - В Spring Configuration разрешен доступ без авторизации к endpoint'ам регистрации и авторизации, а для всех остальных требуется авторизация.\n          - В Spring Configuration используется AuthFilter в качестве фильтра.\n        rating: \"6\"\n      - name: \"Задание 3. Добавление логики игры между двумя игроками\"\n        description: |-\n          - Добавлено состояние для «Ожидание игроков» текущей игры.\n          - Добавлено состояние для «Ход игрока с UUID» текущей игры.\n          - Добавлено состояние для"
+    },
+    {
+      "entity_id": "ent_81bfd4e0ba28",
+      "entity_type": "technology",
+      "value": "Spring",
+      "quote": "- В Spring Configuration используется AuthFilter в качестве фильтра.",
+      "location": {
+        "file_path": "check-list_RUS.yml",
+        "line_start": 69,
+        "line_end": 69
+      },
+      "context": "методе doFilter класса AuthFilter есть валидация логина и пароля. Если валидация прошла успешно, то выполняется запрос; если валидация прошла с ошибкой, то в ответ добавляется 401 код и запрос не выполняется.\n          - Создана Spring Configuration.\n          - В Spring Configuration описан Bean для получения SecurityFilterChain.\n          - В Spring Configuration разрешен доступ без авторизации к endpoint'ам регистрации и авторизации, а для всех остальных требуется авторизация.\n          - В Spring Configuration используется AuthFilter в качестве фильтра.\n        rating: \"6\"\n      - name: \"Задание 3. Добавление логики игры между двумя игроками\"\n        description: |-\n          - Добавлено состояние для «Ожидание игроков» текущей игры.\n          - Добавлено состояние для «Ход игрока с UUID» текущей игры.\n          - Добавлено состояние для «Ничья» текущей игры.\n          - Добавлено состояние для «Победа игрока с UUID» текущей игры.\n          - Добавлена информация о значках, которыми буд"
+    },
+    {
+      "entity_id": "ent_880b011b1510",
+      "entity_type": "link",
+      "value": "https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624",
+      "quote": "💡 *[Click here](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624) to share your feedback on this project.* It’s anonymous and will help our team improve the training. We recommend filling out the survey right after completing the project.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 5,
+        "line_end": 5
+      },
+      "context": "﻿# Project Backend 04 — Java_Bootcamp\n\n**Summary:** In this project, you will learn how to add databases to Java web applications using Spring and work with authorization.\n\n💡 *[Click here](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624) to share your feedback on this project.* It’s anonymous and will help our team improve the training. We recommend filling out the survey right after completing the project.\n\n## Contents**\n\n1. **Chapter I**\n   1. Instructions\n1. **Chapter II**\n   1. General Information\n   1. Authorization\n      1. Identification, Authentication, Authorization\n      1. Authorization via Login and Password\n1. **Chapter III**\n   1. Task 1. Adding a Database\n   1. Task 2. Adding Authorization\n   1. Task 3. Adding G"
+    },
+    {
+      "entity_id": "ent_2fcfe02e86bf",
+      "entity_type": "technology",
+      "value": "Java",
+      "quote": "**Summary:** In this project, you will learn how to add databases to Java web applications using Spring and work with authorization.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 3,
+        "line_end": 3
+      },
+      "context": "﻿# Project Backend 04 — Java_Bootcamp\n\n**Summary:** In this project, you will learn how to add databases to Java web applications using Spring and work with authorization.\n\n💡 *[Click here](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624) to share your feedback on this project.* It’s anonymous and will help our team improve the training. We recommend filling out the survey right after completing the project.\n\n## Contents**\n\n1. **Chapter I**\n   1. Instructions\n1. **Chapter II**\n   1. General Information\n   1. Authorization\n      1. Identification, Authentication, Authorization\n      1. Authorizat"
+    },
+    {
+      "entity_id": "ent_65151276b325",
+      "entity_type": "technology",
+      "value": "Spring",
+      "quote": "**Summary:** In this project, you will learn how to add databases to Java web applications using Spring and work with authorization.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 3,
+        "line_end": 3
+      },
+      "context": "﻿# Project Backend 04 — Java_Bootcamp\n\n**Summary:** In this project, you will learn how to add databases to Java web applications using Spring and work with authorization.\n\n💡 *[Click here](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624) to share your feedback on this project.* It’s anonymous and will help our team improve the training. We recommend filling out the survey right after completing the project.\n\n## Contents**\n\n1. **Chapter I**\n   1. Instructions\n1. **Chapter II**\n   1. General Information\n   1. Authorization\n      1. Identification, Authentication, Authorization\n      1. Authorization via Login and Password\n1."
+    },
+    {
+      "entity_id": "ent_26df28224dcc",
+      "entity_type": "technology",
+      "value": "GigaChat",
+      "quote": "- Here, you’ll find a unique learning experience with a lot of freedom. You’re given a task and left to find your own way to solve it, using whatever resources work best for you — whether that’s the Internet or AI tools like GigaChat. Just be mindful of information quality: verify, think critically, analyze, and compa…",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 27,
+        "line_end": 27
+      },
+      "context": "thentication, Authorization\n      1. Authorization via Login and Password\n1. **Chapter III**\n   1. Task 1. Adding a Database\n   1. Task 2. Adding Authorization\n   1. Task 3. Adding Game Logic Between Two Players\n\n## Chapter I\n\n### Instructions\n\nHow to learn at “School 21”:\n\n- Here, you’ll find a unique learning experience with a lot of freedom. You’re given a task and left to find your own way to solve it, using whatever resources work best for you — whether that’s the Internet or AI tools like GigaChat. Just be mindful of information quality: verify, think critically, analyze, and compare.\n- Peer-to-peer (P2P) learning is the exchange of knowledge and experience with peers, where everyone acts as both mentor and student. This approach allows you to gain a deeper understanding of the material by learning from one another.\n- Feel free to ask for help: around you are peers who are also navigating this path for the first time. Share your own experience and ideas with others.  Join Rocket.Chat to"
+    },
+    {
+      "entity_id": "ent_e7f9167eb597",
+      "entity_type": "technology",
+      "value": "Rocket.Chat",
+      "quote": "- Feel free to ask for help: around you are peers who are also navigating this path for the first time. Share your own experience and ideas with others. Join Rocket.Chat to stay updated with the latest community announcements.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 29,
+        "line_end": 29
+      },
+      "context": "s like GigaChat. Just be mindful of information quality: verify, think critically, analyze, and compare.\n- Peer-to-peer (P2P) learning is the exchange of knowledge and experience with peers, where everyone acts as both mentor and student. This approach allows you to gain a deeper understanding of the material by learning from one another.\n- Feel free to ask for help: around you are peers who are also navigating this path for the first time. Share your own experience and ideas with others.  Join Rocket.Chat to stay updated with the latest community announcements. \n- Your learning is meaningless if you just copy someone else’s solutions. When receiving help from others, always make sure you fully understand the “why”, “how”, and “purpose” behind the solution. Don’t be afraid to make mistakes. \n- Does the task seem impossible? Take a break, get some fresh air and clear your mind — this has helped many people. Maybe after that, the solution will come to you naturally.\n- The learning process is just a"
+    },
+    {
+      "entity_id": "ent_acc731658a45",
+      "entity_type": "technology",
+      "value": "GitLab",
+      "quote": "- Before starting, clone the project from GitLab into a repository with the same name.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 36,
+        "line_end": 36
+      },
+      "context": "fully understand the “why”, “how”, and “purpose” behind the solution. Don’t be afraid to make mistakes. \n- Does the task seem impossible? Take a break, get some fresh air and clear your mind — this has helped many people. Maybe after that, the solution will come to you naturally.\n- The learning process is just as important as the result. It’s not just about completing the task — it’s about understanding HOW to solve it. \n\nHow to work with the project:\n\n- Before starting, clone the project from GitLab into a repository with the same name.\n- All files should be created inside the _src/_ folder of the cloned repository.\n- After cloning the project, create a _develop_ branch and do all your development there. Then, push the _develop_ branch to GitLab.\n- Your directory should not contain any files other than those specified in the assignments.\n\n## Chapter II\n\n### General Information\n\n#### Authorization\n\nAuthorization controls the access of legitimate users to the system's resources, granting eac"
+    },
+    {
+      "entity_id": "ent_0398285b7dcb",
+      "entity_type": "technology",
+      "value": "GitLab",
+      "quote": "- After cloning the project, create a _develop_ branch and do all your development there. Then, push the _develop_ branch to GitLab.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 38,
+        "line_end": 38
+      },
+      "context": "on will come to you naturally.\n- The learning process is just as important as the result. It’s not just about completing the task — it’s about understanding HOW to solve it. \n\nHow to work with the project:\n\n- Before starting, clone the project from GitLab into a repository with the same name.\n- All files should be created inside the _src/_ folder of the cloned repository.\n- After cloning the project, create a _develop_ branch and do all your development there. Then, push the _develop_ branch to GitLab.\n- Your directory should not contain any files other than those specified in the assignments.\n\n## Chapter II\n\n### General Information\n\n#### Authorization\n\nAuthorization controls the access of legitimate users to the system's resources, granting each user exactly those privileges assigned by the administrator.\n\n#### Identification, Authentication, Authorization\n\n- **Identification** is a process by which a subject's unique identifier is established, uniquely defining the subject in the informati"
+    },
+    {
+      "entity_id": "ent_7cbe39869e3b",
+      "entity_type": "technology",
+      "value": "PostgreSQL",
+      "quote": "- PostgreSQL;",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 67,
+        "line_end": 67
+      },
+      "context": "ailable requests.\n\nThe client sends a request to the server and receives an \"Unauthorized\" response with information about the authorization procedure. After successful authorization, each subsequent client request automatically includes an \"Authorization\" header (forming the authorization header), which carries the client's credentials for server authentication.\n\nThere are also other authorization methods.\n\n**Topics to study**:\n\n- Web application;\n- Login-password (basic auth) authorization;\n- PostgreSQL;\n- ASP.NET.\n\n## Chapter III\n\n**Project: Tic-Tac-Toe**\n\nUse the server-side project from the previous week (T03).\n\n### Task 1. Adding a Database\n\n- Describe the PostgreSQL database connection in application.properties.\n- Eliminate the storage-class approach (i.e., get rid of the in-memory storage class).\n- Add special annotations to the classes that need to be stored in the database.\n- In your repositories, use CrudRepository as the parent interface.\n\n### Task 2. Adding Authorization\n\n- Add user"
+    },
+    {
+      "entity_id": "ent_ab2d46719bfd",
+      "entity_type": "technology",
+      "value": "PostgreSQL",
+      "quote": "- Describe the PostgreSQL database connection in application.properties.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 78,
+        "line_end": 78
+      },
+      "context": "thorization, each subsequent client request automatically includes an \"Authorization\" header (forming the authorization header), which carries the client's credentials for server authentication.\n\nThere are also other authorization methods.\n\n**Topics to study**:\n\n- Web application;\n- Login-password (basic auth) authorization;\n- PostgreSQL;\n- ASP.NET.\n\n## Chapter III\n\n**Project: Tic-Tac-Toe**\n\nUse the server-side project from the previous week (T03).\n\n### Task 1. Adding a Database\n\n- Describe the PostgreSQL database connection in application.properties.\n- Eliminate the storage-class approach (i.e., get rid of the in-memory storage class).\n- Add special annotations to the classes that need to be stored in the database.\n- In your repositories, use CrudRepository as the parent interface.\n\n### Task 2. Adding Authorization\n\n- Add users, each with a UUID, login, and password.\n- Provide user support across all layers.\n- Create a SignUpRequest model that contains a login and password.\n- Create an authoriz"
+    },
+    {
+      "entity_id": "ent_ec8e63a39ad3",
+      "entity_type": "technology",
+      "value": "Spring",
+      "quote": "- Create a Spring Configuration class where:",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 98,
+        "line_end": 98
+      },
+      "context": "in the header as base64(login:password) and returns the user's UUID.\n- Create an authorization controller with the following endpoints:\n  - for user registration,\n  - for user authorization.\n- Create a class AuthFilter extending GenericFilterBean and implement the doFilter method:\n  - Validate the login and password.\n  - If the validation is successful, proceed with the request.\n  - If the validation fails, add the 401 status code to the response and do not proceed with the request.\n- Create a Spring Configuration class where:\n  - You define a Bean for obtaining SecurityFilterChain.\n  - Allow access without authorization to the registration and authorization endpoints.\n  - All other endpoints require authorization.\n  - Use AuthFilter as a filter.\n\n### Task 3. Adding Game Logic Between Two Players\n\n- Add states for the current game:\n  - Waiting for players;\n  - Turn of the player with the UUID;\n  - Draw;\n  - Win by the player with the UUID.\n- Add information about the tokens (X/O) that users"
+    },
+    {
+      "entity_id": "ent_7ab02a34c4af",
+      "entity_type": "link",
+      "value": "https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624",
+      "quote": "💡 [Нажми сюда](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624), **чтобы поделиться с нами обратной связью на этот проект**. Это анонимно и поможет нашей команде сделать обучение лучше. Рекомендуем заполнить опрос сразу после выполнения проекта.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 5,
+        "line_end": 5
+      },
+      "context": "# Project Backend 04 — Java_Bootcamp  \n\nРезюме: в этом проекте ты научишься добавлять базы данных в веб-приложения на языке **Java** с использованием Spring и работать с авторизацией.\n\n💡 [Нажми сюда](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624), **чтобы поделиться с нами обратной связью на этот проект**. Это анонимно и поможет нашей команде сделать обучение лучше. Рекомендуем заполнить опрос сразу после выполнения проекта.\n\n## Содержание\n 1. [Chapter I](#chapter-i)   \n     - [Инструкция](#инструкция)   \n 2. [Chapter II](#chapter-ii)  \n     - [Общая информация](#общая-информация)  \n         - [Авторизация](#авторизация)  \n         - [Идентификация, аутентификация, авторизация](#идентификация-аутентификация-авторизация) \n         - [Ав"
+    },
+    {
+      "entity_id": "ent_5de86f2dc07c",
+      "entity_type": "link",
+      "value": "https://datatracker.ietf.org/doc/html/rfc7617",
+      "quote": "Клиент отправляет запрос на сервер и получает в виде ответа сообщение «Unauthorized» вместе с информацией о порядке авторизации. После успешного прохождения авторизации в каждый последующий запрос клиента автоматически добавляется заголовок «Authorization» ([формирование заголовка авторизации](https://datatracker.ietf…",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 59,
+        "line_end": 59
+      },
+      "context": "нтификации в системе. Пара логина и пароля задается пользователем при его регистрации в системе. В случае успешной авторизации на сервере пользователю выдаются права на выполнение доступных ему запросов.\n\nКлиент отправляет запрос на сервер и получает в виде ответа сообщение «Unauthorized» вместе с информацией о порядке авторизации. После успешного прохождения авторизации в каждый последующий запрос клиента автоматически добавляется заголовок «Authorization» ([формирование заголовка авторизации](https://datatracker.ietf.org/doc/html/rfc7617)), в котором передаются данные клиента для аутентификации сервером.\n\n<div align=\"center\">\n  <img src=\"misc/images/Auth.png\"/>\n</div>\n\nСуществуют и [другие способы авторизации](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#authentication_schemes).\n\n### Темы для изучения:\n- Веб-приложение;\n- Авторизация по паре логина и пароля (basic auth);\n- PostgreSQL;\n- ASP.NET.\n\n## Chapter III\n### Проект: Крестики-Нолики\nИспользуй проект для серверной части с предыдущей недели Т03.\n\n## Зада"
+    },
+    {
+      "entity_id": "ent_003e8ae8a002",
+      "entity_type": "link",
+      "value": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#authentication_schemes",
+      "quote": "Существуют и [другие способы авторизации](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#authentication_schemes).",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 65,
+        "line_end": 65
+      },
+      "context": "запрос на сервер и получает в виде ответа сообщение «Unauthorized» вместе с информацией о порядке авторизации. После успешного прохождения авторизации в каждый последующий запрос клиента автоматически добавляется заголовок «Authorization» ([формирование заголовка авторизации](https://datatracker.ietf.org/doc/html/rfc7617)), в котором передаются данные клиента для аутентификации сервером.\n\n<div align=\"center\">\n  <img src=\"misc/images/Auth.png\"/>\n</div>\n\nСуществуют и [другие способы авторизации](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#authentication_schemes).\n\n### Темы для изучения:\n- Веб-приложение;\n- Авторизация по паре логина и пароля (basic auth);\n- PostgreSQL;\n- ASP.NET.\n\n## Chapter III\n### Проект: Крестики-Нолики\nИспользуй проект для серверной части с предыдущей недели Т03.\n\n## Задание 1. Добавление базы данных\n- Опиши подключение к базе данных PostgreSQL в application.properties.\n- Избавься от класса-хранилища.\n- Добавь специальные аннотации для классов, которые необходимо сохранять в базу данных.\n- Используй у репозиториев в качестве родит"
+    },
+    {
+      "entity_id": "ent_cc9a7f6c1ee2",
+      "entity_type": "technology",
+      "value": "Java",
+      "quote": "Резюме: в этом проекте ты научишься добавлять базы данных в веб-приложения на языке **Java** с использованием Spring и работать с авторизацией.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 3,
+        "line_end": 3
+      },
+      "context": "# Project Backend 04 — Java_Bootcamp  \n\nРезюме: в этом проекте ты научишься добавлять базы данных в веб-приложения на языке **Java** с использованием Spring и работать с авторизацией.\n\n💡 [Нажми сюда](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624), **чтобы поделиться с нами обратной связью на этот проект**. Это анонимно и поможет нашей команде сделать обучение лучше. Рекомендуем заполнить опрос сразу после выполнения проекта.\n\n## Содержание\n 1. [Chapter I](#chapter-i)   \n     - [Инструкция](#инструкция)   \n 2. [Chapter II](#chapter-ii)  \n     - [Общая информация](#общая-информация)  \n         - [Авторизация](#а"
+    },
+    {
+      "entity_id": "ent_78fe445a8108",
+      "entity_type": "technology",
+      "value": "Spring",
+      "quote": "Резюме: в этом проекте ты научишься добавлять базы данных в веб-приложения на языке **Java** с использованием Spring и работать с авторизацией.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 3,
+        "line_end": 3
+      },
+      "context": "# Project Backend 04 — Java_Bootcamp  \n\nРезюме: в этом проекте ты научишься добавлять базы данных в веб-приложения на языке **Java** с использованием Spring и работать с авторизацией.\n\n💡 [Нажми сюда](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624), **чтобы поделиться с нами обратной связью на этот проект**. Это анонимно и поможет нашей команде сделать обучение лучше. Рекомендуем заполнить опрос сразу после выполнения проекта.\n\n## Содержание\n 1. [Chapter I](#chapter-i)   \n     - [Инструкция](#инструкция)   \n 2. [Chapter II](#chapter-ii)  \n     - [Общая информация](#общая-информация)  \n         - [Авторизация](#авторизация)  \n         - ["
+    },
+    {
+      "entity_id": "ent_5bbb37a52932",
+      "entity_type": "technology",
+      "value": "GigaChat",
+      "quote": "- Здесь тебя ждет уникальный образовательный опыт с большим количеством свободы. Ты получаешь задачу и самостоятельно ищешь пути решения, используя любые удобные способы поиска информации — ресурсы Интернета или нейросети (например, GigaChat). Но внимательно относись к качеству информации: проверяй, думай, анализируй,…",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 26,
+        "line_end": 26
+      },
+      "context": "- [Задание 2. Добавление авторизации](#задание-2-добавление-авторизации)  \n     - [Задание 3. Добавление логики игры между двумя игроками](#задание-3-добавление-логики-игры-между-двумя-игроками)    \n\n         \n## Chapter I\n## Инструкция\n\nКак учиться в «Школе 21»:\n\n- Здесь тебя ждет уникальный образовательный опыт с большим количеством свободы. Ты получаешь задачу и самостоятельно ищешь пути решения, используя любые удобные способы поиска информации — ресурсы Интернета или нейросети (например, GigaChat). Но внимательно относись к качеству информации: проверяй, думай, анализируй, сравнивай.\n- Взаимообучение (Peer-to-Peer, P2P) — это обмен знаниями и опытом с другими пирами, где каждый выступает и учителем, и учеником. Такой подход позволяет глубже понять материал, учась друг у друга.\n- Чувствуй себя свободно и проси о помощи — вокруг тебя те, кто тоже впервые проходят этот путь. Делись своим опытом и идеями с другими. Присоединяйся к Rocket.Chat, чтобы быть в курсе всех новостей от нашего сооб"
+    },
+    {
+      "entity_id": "ent_91144642414d",
+      "entity_type": "technology",
+      "value": "Rocket.Chat",
+      "quote": "- Чувствуй себя свободно и проси о помощи — вокруг тебя те, кто тоже впервые проходят этот путь. Делись своим опытом и идеями с другими. Присоединяйся к Rocket.Chat, чтобы быть в курсе всех новостей от нашего сообщества.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 28,
+        "line_end": 28
+      },
+      "context": "рмации — ресурсы Интернета или нейросети (например, GigaChat). Но внимательно относись к качеству информации: проверяй, думай, анализируй, сравнивай.\n- Взаимообучение (Peer-to-Peer, P2P) — это обмен знаниями и опытом с другими пирами, где каждый выступает и учителем, и учеником. Такой подход позволяет глубже понять материал, учась друг у друга.\n- Чувствуй себя свободно и проси о помощи — вокруг тебя те, кто тоже впервые проходят этот путь. Делись своим опытом и идеями с другими. Присоединяйся к Rocket.Chat, чтобы быть в курсе всех новостей от нашего сообщества.\n- Твое обучение не будет иметь никакого смысла, если ты будешь копировать чужие решения. Если пользуешься помощью других — всегда разбирайся до конца, почему, как и зачем. Не бойся ошибиться.\n- Кажется, что задача невыполнима? Сделай перерыв, проветрись, перезагрузи голову — это помогало многим. Возможно, после этого решение придет само собой.\n- Важен не только результат обучения, но и сам процесс. Нужно не просто решить задачу, а понять,"
+    },
+    {
+      "entity_id": "ent_72952fc7c4a1",
+      "entity_type": "technology",
+      "value": "GitLab",
+      "quote": "- Перед выполнением проект необходимо склонировать с GitLab в одноименный репозиторий.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 35,
+        "line_end": 35
+      },
+      "context": "о смысла, если ты будешь копировать чужие решения. Если пользуешься помощью других — всегда разбирайся до конца, почему, как и зачем. Не бойся ошибиться.\n- Кажется, что задача невыполнима? Сделай перерыв, проветрись, перезагрузи голову — это помогало многим. Возможно, после этого решение придет само собой.\n- Важен не только результат обучения, но и сам процесс. Нужно не просто решить задачу, а понять, КАК ее решить.\n\nКак работать с проектом:\n\n- Перед выполнением проект необходимо склонировать с GitLab в одноименный репозиторий.\n- Все файлы необходимо создавать в папке _src/_ склонированного репозитория.\n- После клонирования проекта необходимо создать ветку _develop_ и вести разработку в ней. После этого пушить в GitLab также нужно ветку _develop_.\n- В твоей директории не должно быть иных файлов, кроме тех, что обозначены в заданиях.\n\n## Chapter II\n## Общая информация\n\n### Авторизация\n\nСредства авторизации контролируют доступ легальных пользователей к ресурсам системы, предоставляя каждому из"
+    },
+    {
+      "entity_id": "ent_951452927002",
+      "entity_type": "technology",
+      "value": "GitLab",
+      "quote": "- После клонирования проекта необходимо создать ветку _develop_ и вести разработку в ней. После этого пушить в GitLab также нужно ветку _develop_.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 37,
+        "line_end": 37
+      },
+      "context": "агрузи голову — это помогало многим. Возможно, после этого решение придет само собой.\n- Важен не только результат обучения, но и сам процесс. Нужно не просто решить задачу, а понять, КАК ее решить.\n\nКак работать с проектом:\n\n- Перед выполнением проект необходимо склонировать с GitLab в одноименный репозиторий.\n- Все файлы необходимо создавать в папке _src/_ склонированного репозитория.\n- После клонирования проекта необходимо создать ветку _develop_ и вести разработку в ней. После этого пушить в GitLab также нужно ветку _develop_.\n- В твоей директории не должно быть иных файлов, кроме тех, что обозначены в заданиях.\n\n## Chapter II\n## Общая информация\n\n### Авторизация\n\nСредства авторизации контролируют доступ легальных пользователей к ресурсам системы, предоставляя каждому из них именно те права, которые ему были определены администратором.\n\n### Идентификация, аутентификация, авторизация\n\n**Идентификация** — процедура, в результате выполнения которой для субъекта выявляется его уникальный приз"
+    },
+    {
+      "entity_id": "ent_212dd581afe0",
+      "entity_type": "technology",
+      "value": "PostgreSQL",
+      "quote": "- PostgreSQL;",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 70,
+        "line_end": 70
+      },
+      "context": "а автоматически добавляется заголовок «Authorization» ([формирование заголовка авторизации](https://datatracker.ietf.org/doc/html/rfc7617)), в котором передаются данные клиента для аутентификации сервером.\n\n<div align=\"center\">\n  <img src=\"misc/images/Auth.png\"/>\n</div>\n\nСуществуют и [другие способы авторизации](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#authentication_schemes).\n\n### Темы для изучения:\n- Веб-приложение;\n- Авторизация по паре логина и пароля (basic auth);\n- PostgreSQL;\n- ASP.NET.\n\n## Chapter III\n### Проект: Крестики-Нолики\nИспользуй проект для серверной части с предыдущей недели Т03.\n\n## Задание 1. Добавление базы данных\n- Опиши подключение к базе данных PostgreSQL в application.properties.\n- Избавься от класса-хранилища.\n- Добавь специальные аннотации для классов, которые необходимо сохранять в базу данных.\n- Используй у репозиториев в качестве родителя CrudRepository.\n\n## Задание 2. Добавление авторизации\n- Добавь пользователей, у которых будет UUID, логин"
+    },
+    {
+      "entity_id": "ent_3966d31919d1",
+      "entity_type": "technology",
+      "value": "PostgreSQL",
+      "quote": "- Опиши подключение к базе данных PostgreSQL в application.properties.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 78,
+        "line_end": 78
+      },
+      "context": "ром.\n\n<div align=\"center\">\n  <img src=\"misc/images/Auth.png\"/>\n</div>\n\nСуществуют и [другие способы авторизации](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#authentication_schemes).\n\n### Темы для изучения:\n- Веб-приложение;\n- Авторизация по паре логина и пароля (basic auth);\n- PostgreSQL;\n- ASP.NET.\n\n## Chapter III\n### Проект: Крестики-Нолики\nИспользуй проект для серверной части с предыдущей недели Т03.\n\n## Задание 1. Добавление базы данных\n- Опиши подключение к базе данных PostgreSQL в application.properties.\n- Избавься от класса-хранилища.\n- Добавь специальные аннотации для классов, которые необходимо сохранять в базу данных.\n- Используй у репозиториев в качестве родителя CrudRepository.\n\n## Задание 2. Добавление авторизации\n- Добавь пользователей, у которых будет UUID, логин, пароль.\n- Реализуй поддержку пользователей на всех слоях.\n- Создай модель SignUpRequest, у которой будет логин и пароль.\n- Создай сервис авторизации, который использует UserService:\n    - метод регис"
+    },
+    {
+      "entity_id": "ent_5d774030df12",
+      "entity_type": "technology",
+      "value": "Spring",
+      "quote": "- Создай Spring Configuration, где:",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 97,
+        "line_end": 97
+      },
+      "context": "ин и пароль в виде base64(login:password) и возвращает UUID пользователя.\n- Создай контроллер авторизации, у которого будут следующие endpoint'ы:\n    - для регистрации пользователя;\n    - для авторизации пользователя.\n- Создай класс AuthFilter, сделай наследование от GenericFilterBean и реализуй метод doFilter:\n    - Провалидируй логин и пароль.\n    - Если валидация прошла успешно, то выполни запрос.\n    - Если валидация прошла с ошибкой, то добавь в ответ 401 код и не выполняй запрос.\n- Создай Spring Configuration, где:\n    - Опиши Bean для получения SecurityFilterChain.\n    - Разреши доступ без авторизации к endpoint'ам регистрации и авторизации.\n    - Для всех остальных endpoint'ов должна требоваться авторизация.\n    - Воспользуйся AuthFilter в качестве фильтра.\n\n## Задание 3. Добавление логики игры между двумя игроками\n- Добавь состояния для текущей игры:\n    - ожидание игроков;\n    - ход игрока с UUID;\n    - ничья;\n    - победа игрока с UUID.\n- Добавь информацию о значках, которыми буду"
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "fnd_014a8e63aca7",
+      "unit_id": "ap1_jv_t04b_id_1421426_master__a88e0c31",
+      "branch": "AP1_Jv_T04B.ID_1421426-master (1)",
+      "criterion": "actuality",
+      "severity": "info",
+      "verdict": "unknown",
+      "confidence": 0.55,
+      "quote": null,
+      "location": null,
+      "evidence": [
+        {
+          "title": "Кандидаты на проверку",
+          "detail": "Найдено 2 сущностей: Java, GitLab",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": "не проверялось",
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Включить модельный контур, чтобы получить источник, статус поддержки и рекомендуемую версию.",
+      "needs_human_review": true,
+      "checker_name": "tech_freshness_checker",
+      "extra": {
+        "candidate_count": 2,
+        "sample_values": [
+          "Java",
+          "GitLab"
+        ]
+      }
+    },
+    {
+      "finding_id": "fnd_1d7b2cc1d6f6",
+      "unit_id": "ap1_jv_t04b_id_1421426_master__a88e0c31",
+      "branch": "AP1_Jv_T04B.ID_1421426-master (1)",
+      "criterion": "checklist_alignment",
+      "severity": "major",
+      "verdict": "warning",
+      "confidence": 0.82,
+      "quote": null,
+      "location": {
+        "file_path": "check-list.yml",
+        "line_start": null,
+        "line_end": null
+      },
+      "evidence": [
+        {
+          "title": "Связность README и чек-листа",
+          "detail": "Сильных совпадений: 3 из 4; слабых совпадений: 0 из 4; не сопоставлено: 1 из 4. Развёрнутых описаний: 0 из 4. Не сопоставлены: Respect the rules:. Недостаточно описаны: Respect the rules:, Task 1. Adding a Database, Task 2. Adding Authorization, Task 3. Adding Game Logic Between Two Players.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Добавить развёрнутые описания пунктов: критерии приёмки, ожидаемые артефакты и примеры.",
+      "needs_human_review": false,
+      "checker_name": "checklist_checker",
+      "extra": {
+        "matched_ratio": 0.75,
+        "strong_matched": 3,
+        "weak_matched": 0,
+        "strong_matched_questions": [
+          "Task 1. Adding a Database",
+          "Task 2. Adding Authorization",
+          "Task 3. Adding Game Logic Between Two Players"
+        ],
+        "weak_matched_questions": [],
+        "unmatched_questions": [
+          "Respect the rules:"
+        ],
+        "description_ratio": 0.0,
+        "complete_description_questions": [],
+        "incomplete_questions": [
+          "Respect the rules:",
+          "Task 1. Adding a Database",
+          "Task 2. Adding Authorization",
+          "Task 3. Adding Game Logic Between Two Players"
+        ],
+        "grounding_issues": [],
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_2794384587e8",
+      "unit_id": "ap1_jv_t04b_id_1421426_master__a88e0c31",
+      "branch": "AP1_Jv_T04B.ID_1421426-master (1)",
+      "criterion": "actuality",
+      "severity": "info",
+      "verdict": "unknown",
+      "confidence": 0.5,
+      "quote": "Существуют и [другие способы авторизации](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#authentication_schemes).",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 65,
+        "line_end": 65
+      },
+      "evidence": [
+        {
+          "title": "Сеть отключена",
+          "detail": "Ссылка не проверялась: https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#authentication_schemes",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#authentication_schemes"
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Запустить проверку с доступом к сети, чтобы подтвердить доступность ссылки.",
+      "needs_human_review": true,
+      "checker_name": "link_checker",
+      "extra": {}
+    },
+    {
+      "finding_id": "fnd_3a0a05f29be5",
+      "unit_id": "ap1_jv_t04b_id_1421426_master__a88e0c31",
+      "branch": "AP1_Jv_T04B.ID_1421426-master (1)",
+      "criterion": "actuality",
+      "severity": "info",
+      "verdict": "unknown",
+      "confidence": 0.5,
+      "quote": "Клиент отправляет запрос на сервер и получает в виде ответа сообщение «Unauthorized» вместе с информацией о порядке авторизации. После успешного прохождения авторизации в каждый последующий запрос клиента автоматически добавляется заголовок «Authorization» ([формирование заголовка авторизации](https://datatracker.ietf…",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 59,
+        "line_end": 59
+      },
+      "evidence": [
+        {
+          "title": "Сеть отключена",
+          "detail": "Ссылка не проверялась: https://datatracker.ietf.org/doc/html/rfc7617",
+          "url": "https://datatracker.ietf.org/doc/html/rfc7617"
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Запустить проверку с доступом к сети, чтобы подтвердить доступность ссылки.",
+      "needs_human_review": true,
+      "checker_name": "link_checker",
+      "extra": {}
+    },
+    {
+      "finding_id": "fnd_5357586854de",
+      "unit_id": "ap1_jv_t04b_id_1421426_master__a88e0c31",
+      "branch": "AP1_Jv_T04B.ID_1421426-master (1)",
+      "criterion": "checklist_alignment",
+      "severity": "major",
+      "verdict": "warning",
+      "confidence": 0.82,
+      "quote": null,
+      "location": {
+        "file_path": "check-list_RUS.yml",
+        "line_start": null,
+        "line_end": null
+      },
+      "evidence": [
+        {
+          "title": "Связность README и чек-листа",
+          "detail": "Сильных совпадений: 3 из 4; слабых совпадений: 0 из 4; не сопоставлено: 1 из 4. Развёрнутых описаний: 0 из 4. Не сопоставлены: Уважай правила:. Недостаточно описаны: Уважай правила:, Задание 1. Добавление базы данных, Задание 2. Добавление авторизации, Задание 3. Добавление логики игры между двумя игроками.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Добавить развёрнутые описания пунктов: критерии приёмки, ожидаемые артефакты и примеры.",
+      "needs_human_review": false,
+      "checker_name": "checklist_checker",
+      "extra": {
+        "matched_ratio": 0.75,
+        "strong_matched": 3,
+        "weak_matched": 0,
+        "strong_matched_questions": [
+          "Задание 1. Добавление базы данных",
+          "Задание 2. Добавление авторизации",
+          "Задание 3. Добавление логики игры между двумя игроками"
+        ],
+        "weak_matched_questions": [],
+        "unmatched_questions": [
+          "Уважай правила:"
+        ],
+        "description_ratio": 0.0,
+        "complete_description_questions": [],
+        "incomplete_questions": [
+          "Уважай правила:",
+          "Задание 1. Добавление базы данных",
+          "Задание 2. Добавление авторизации",
+          "Задание 3. Добавление логики игры между двумя игроками"
+        ],
+        "grounding_issues": [],
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_6ae776bb0667",
+      "unit_id": "ap1_jv_t04b_id_1421426_master__a88e0c31",
+      "branch": "AP1_Jv_T04B.ID_1421426-master (1)",
+      "criterion": "market_fit",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.75,
+      "quote": null,
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 59,
+        "line_end": 59
+      },
+      "evidence": [
+        {
+          "title": "Проверка соответствия рынку",
+          "detail": "Работа с реальными данными: есть (README_RUS.md:59: Клиент отправляет запрос на сервер и получает в виде ответа сообщение «Unauthorized» вместе с информацией о порядке авторизации. После успешного прохождения авторизации в каждый последующий запрос клиента автоматически д); Бизнес-контекст: нет; Бизнес-метрики или требования: нет",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Усилить прикладной контекст: описать бизнес-проблему, заказчика или целевую аудиторию; зафиксировать бизнес-метрики, ограничения или требования к результату.",
+      "needs_human_review": false,
+      "checker_name": "market_fit_checker",
+      "extra": {
+        "market_fit_score": 1,
+        "sub_checks": {
+          "real_data": {
+            "present": true,
+            "matches": [
+              {
+                "file_path": "README_RUS.md",
+                "line_start": 59,
+                "text": "Клиент отправляет запрос на сервер и получает в виде ответа сообщение «Unauthorized» вместе с информацией о порядке авторизации. После успешного прохождения авторизации в каждый последующий запрос клиента автоматически д"
+              }
+            ],
+            "source": "rules"
+          },
+          "business_context": {
+            "present": false,
+            "matches": [],
+            "source": "rules"
+          },
+          "success_metrics": {
+            "present": false,
+            "matches": [],
+            "source": "rules"
+          }
+        },
+        "model_refined": false,
+        "cache_hit": false,
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_edbd7d0e1833",
+      "unit_id": "ap1_jv_t04b_id_1421426_master__a88e0c31",
+      "branch": "AP1_Jv_T04B.ID_1421426-master (1)",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.9,
+      "quote": "ASP.NET",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 68,
+        "line_end": 68
+      },
+      "evidence": [
+        {
+          "title": "Редакторская проверка",
+          "detail": "В Java-проекте упомянут ASP.NET; это выглядит как ошибочная или нерелевантная технология в списке материалов.",
+          "url": null
+        },
+        {
+          "title": "Языковые дубли",
+          "detail": "Схлопнуто 2 строк: README.md, README_RUS.md.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Заменить ASP.NET на релевантный Java-материал или явно пояснить, зачем здесь сравнение с ASP.NET.",
+      "needs_human_review": false,
+      "checker_name": "spelling_wording_checker",
+      "extra": {
+        "issue_type": "wording",
+        "source_kind": "rule",
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля.",
+        "merged_language_duplicates": 1,
+        "affected_files": [
+          "README.md",
+          "README_RUS.md"
+        ]
+      }
+    },
+    {
+      "finding_id": "fnd_fc0c560f8f8d",
+      "unit_id": "ap1_jv_t04b_id_1421426_master__a88e0c31",
+      "branch": "AP1_Jv_T04B.ID_1421426-master (1)",
+      "criterion": "actuality",
+      "severity": "info",
+      "verdict": "unknown",
+      "confidence": 0.5,
+      "quote": "💡 *[Click here](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624) to share your feedback on this project.* It’s anonymous and will help our team improve the training. We recommend filling out the survey right after completing the project.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 5,
+        "line_end": 5
+      },
+      "evidence": [
+        {
+          "title": "Сеть отключена",
+          "detail": "Ссылка не проверялась: https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624",
+          "url": "https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624"
+        },
+        {
+          "title": "Языковые дубли",
+          "detail": "Схлопнуто 2 строк: README.md, README_RUS.md.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Запустить проверку с доступом к сети, чтобы подтвердить доступность ссылки.",
+      "needs_human_review": true,
+      "checker_name": "link_checker",
+      "extra": {
+        "merged_language_duplicates": 1,
+        "affected_files": [
+          "README.md",
+          "README_RUS.md"
+        ]
+      }
+    }
+  ]
+}

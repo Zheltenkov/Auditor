@@ -1,0 +1,394 @@
+{
+  "evaluated_criteria": [
+    "correctness",
+    "readability"
+  ],
+  "gold_total": 3,
+  "predicted_total": 2,
+  "true_positive": 0,
+  "false_positive": 2,
+  "false_negative": 3,
+  "precision": 0.0,
+  "recall": 0.0,
+  "f1_score": 0.0,
+  "macro_precision": 0.0,
+  "macro_recall": 0.0,
+  "macro_f1_score": 0.0,
+  "overview_gold_total": 2,
+  "overview_predicted_total": 5,
+  "overview_true_positive": 2,
+  "overview_false_positive": 3,
+  "overview_false_negative": 0,
+  "overview_precision": 0.4,
+  "overview_recall": 1.0,
+  "overview_f1_score": 0.5714,
+  "overview_macro_precision": 0.4,
+  "overview_macro_recall": 0.4,
+  "overview_macro_f1_score": 0.4,
+  "gold_scope_predicted_total": 2,
+  "gold_scope_true_positive": 0,
+  "gold_scope_false_positive": 2,
+  "gold_scope_false_negative": 3,
+  "gold_scope_precision": 0.0,
+  "gold_scope_recall": 0.0,
+  "gold_scope_f1_score": 0.0,
+  "gold_scope_macro_precision": 0.0,
+  "gold_scope_macro_recall": 0.0,
+  "gold_scope_macro_f1_score": 0.0,
+  "per_criterion": [
+    {
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_total": 1,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 1,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "readability",
+      "label": "Грамотность и читаемость текста",
+      "gold_total": 2,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 2,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    }
+  ],
+  "overview_per_criterion": [
+    {
+      "criterion": "actuality",
+      "label": "Актуальность",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "checklist_alignment",
+      "label": "Соответствие заданий проекта чек-листу",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_total": 1,
+      "predicted_total": 1,
+      "true_positive": 1,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0
+    },
+    {
+      "criterion": "market_fit",
+      "label": "Соответствие рынку",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "readability",
+      "label": "Грамотность и читаемость текста",
+      "gold_total": 1,
+      "predicted_total": 1,
+      "true_positive": 1,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0
+    }
+  ],
+  "checker_metrics": [
+    {
+      "slice_name": "curriculum_relevance_checker",
+      "label": "curriculum_relevance_checker",
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "precision": 0.0,
+      "false_positive_share": 0.5
+    },
+    {
+      "slice_name": "spelling_wording_checker",
+      "label": "spelling_wording_checker",
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "precision": 0.0,
+      "false_positive_share": 0.5
+    }
+  ],
+  "checker_group_metrics": [
+    {
+      "slice_name": "editorial_rules",
+      "label": "Редакторские правила",
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "precision": 0.0,
+      "false_positive_share": 0.5
+    },
+    {
+      "slice_name": "methodology",
+      "label": "Методические критерии",
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "precision": 0.0,
+      "false_positive_share": 0.5
+    }
+  ],
+  "actionable_metrics": {
+    "slice_name": "actionable",
+    "label": "Действенные находки",
+    "predicted_total": 2,
+    "true_positive": 0,
+    "false_positive": 2,
+    "precision": 0.0,
+    "false_positive_share": 1.0
+  },
+  "cost_quality": {
+    "model_calls": 0,
+    "cache_hits": 0,
+    "total_tokens": 0,
+    "cost_usd": 0.0,
+    "cost_per_gold_true_positive": null,
+    "cost_per_prediction": 0.0,
+    "cost_per_actionable_true_positive": null
+  },
+  "false_negative_reason_counts": {
+    "deterministic_possible": 1,
+    "model_possible": 1,
+    "out_of_scope_or_needs_review": 1
+  },
+  "false_negative_analysis": [
+    {
+      "project": "AP1_Jv_T04B.ID_1421426-master",
+      "project_id": "ap1_jv_t04b_id_1421426_master__a88e0c31",
+      "criterion": "readability",
+      "label": "Грамотность и читаемость текста",
+      "gold_line_range": "",
+      "gold_text": "Видимо опечатка, так как у нас курс по Java, а в README.md рекомендуют ознакомиться с ASP.NET.",
+      "nearest_finding_id": "fnd_edbd7d0e1833",
+      "nearest_checker": "spelling_wording_checker",
+      "nearest_match_type": "criterion_only",
+      "nearest_score": 0.3889,
+      "reason_code": "deterministic_possible",
+      "reason_label": "Можно ловить правилом",
+      "next_step": "Добавить или расширить детерминированный чекер с тестом на этот паттерн."
+    },
+    {
+      "project": "AP1_Jv_T04B.ID_1421426-master",
+      "project_id": "ap1_jv_t04b_id_1421426_master__a88e0c31",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_line_range": "",
+      "gold_text": "Тут тоже показалось, что можно было в качестве подсказки предложить готовый контракт и диаграммы последовательности, его поясняющие.",
+      "nearest_finding_id": "fnd_5ae54ce0bb42",
+      "nearest_checker": "curriculum_relevance_checker",
+      "nearest_match_type": "criterion_only",
+      "nearest_score": 0.15,
+      "reason_code": "model_possible",
+      "reason_label": "Нужен смысловой анализ",
+      "next_step": "Добавить модельный/семантический слой с проверяемым JSON-контрактом и примерами."
+    },
+    {
+      "project": "AP1_Jv_T04B.ID_1421426-master",
+      "project_id": "ap1_jv_t04b_id_1421426_master__a88e0c31",
+      "criterion": "readability",
+      "label": "Грамотность и читаемость текста",
+      "gold_line_range": "",
+      "gold_text": "Тут тоже показалось, что можно было в качестве подсказки предложить готовый контракт и диаграммы последовательности, его поясняющие.",
+      "nearest_finding_id": "fnd_edbd7d0e1833",
+      "nearest_checker": "spelling_wording_checker",
+      "nearest_match_type": "criterion_only",
+      "nearest_score": 0.15,
+      "reason_code": "out_of_scope_or_needs_review",
+      "reason_label": "Требуется ручной разбор области применимости",
+      "next_step": "Решить, должна ли локальная проверка ловить этот класс ошибок."
+    }
+  ],
+  "gold_items": [
+    {
+      "row_number": 2,
+      "raw_project": "AP1-Jv-T04B",
+      "matched_project": "AP1_Jv_T04B.ID_1421426-master",
+      "project_id": "ap1_jv_t04b_id_1421426_master__a88e0c31",
+      "raw_problem": "ошибка в задании",
+      "details": "\"Видимо опечатка, так как у нас курс по Java, а в README.md рекомендуют ознакомиться с ASP.NET.\nТут тоже показалось, что можно было в качестве подсказки предложить готовый контракт и диаграммы последовательности, его поясняющие.",
+      "criteria": [
+        "correctness",
+        "readability"
+      ]
+    }
+  ],
+  "gold_cases": [
+    {
+      "case_id": "gold_2_readability_1",
+      "row_number": 2,
+      "raw_project": "AP1-Jv-T04B",
+      "matched_project": "AP1_Jv_T04B.ID_1421426-master",
+      "project_id": "ap1_jv_t04b_id_1421426_master__a88e0c31",
+      "criterion": "readability",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "Видимо опечатка, так как у нас курс по Java, а в README.md рекомендуют ознакомиться с ASP.NET."
+    },
+    {
+      "case_id": "gold_2_correctness_2",
+      "row_number": 2,
+      "raw_project": "AP1-Jv-T04B",
+      "matched_project": "AP1_Jv_T04B.ID_1421426-master",
+      "project_id": "ap1_jv_t04b_id_1421426_master__a88e0c31",
+      "criterion": "correctness",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "Тут тоже показалось, что можно было в качестве подсказки предложить готовый контракт и диаграммы последовательности, его поясняющие."
+    },
+    {
+      "case_id": "gold_2_readability_2",
+      "row_number": 2,
+      "raw_project": "AP1-Jv-T04B",
+      "matched_project": "AP1_Jv_T04B.ID_1421426-master",
+      "project_id": "ap1_jv_t04b_id_1421426_master__a88e0c31",
+      "criterion": "readability",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "Тут тоже показалось, что можно было в качестве подсказки предложить готовый контракт и диаграммы последовательности, его поясняющие."
+    }
+  ],
+  "matches": [
+    {
+      "project": "AP1_Jv_T04B.ID_1421426-master",
+      "project_id": "ap1_jv_t04b_id_1421426_master__a88e0c31",
+      "criterion": "readability",
+      "label": "Грамотность и читаемость текста",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "Видимо опечатка, так как у нас курс по Java, а в README.md рекомендуют ознакомиться с ASP.NET.",
+      "found_finding_id": "fnd_edbd7d0e1833",
+      "found_checker": "spelling_wording_checker",
+      "found_line_range": "README.md:68",
+      "found_text": "ASP.NET | В Java-проекте упомянут ASP.NET; это выглядит как ошибочная или нерелевантная технология в списке материалов. | Схлопнуто 2 строк: README.md, README_RUS.md. | Заменить ASP.NET на релевантный Java-материал или явно пояснить, зачем здесь сравнение с ASP.NET. | wording",
+      "match_type": "criterion_only",
+      "match_score": 0.3889,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    },
+    {
+      "project": "AP1_Jv_T04B.ID_1421426-master",
+      "project_id": "ap1_jv_t04b_id_1421426_master__a88e0c31",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "Тут тоже показалось, что можно было в качестве подсказки предложить готовый контракт и диаграммы последовательности, его поясняющие.",
+      "found_finding_id": "fnd_5ae54ce0bb42",
+      "found_checker": "curriculum_relevance_checker",
+      "found_line_range": "README.md:68",
+      "found_text": "- ASP.NET. | В Java-проекте упомянут ASP.NET как технологический ориентир. | Схлопнуто 2 строк: README.md, README_RUS.md. | Проверить стек задания и заменить ASP.NET на релевантный Java-инструмент или явно объяснить сравнение. | inappropriate_tool",
+      "match_type": "criterion_only",
+      "match_score": 0.15,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    },
+    {
+      "project": "AP1_Jv_T04B.ID_1421426-master",
+      "project_id": "ap1_jv_t04b_id_1421426_master__a88e0c31",
+      "criterion": "readability",
+      "label": "Грамотность и читаемость текста",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "Тут тоже показалось, что можно было в качестве подсказки предложить готовый контракт и диаграммы последовательности, его поясняющие.",
+      "found_finding_id": "fnd_edbd7d0e1833",
+      "found_checker": "spelling_wording_checker",
+      "found_line_range": "README.md:68",
+      "found_text": "ASP.NET | В Java-проекте упомянут ASP.NET; это выглядит как ошибочная или нерелевантная технология в списке материалов. | Схлопнуто 2 строк: README.md, README_RUS.md. | Заменить ASP.NET на релевантный Java-материал или явно пояснить, зачем здесь сравнение с ASP.NET. | wording",
+      "match_type": "criterion_only",
+      "match_score": 0.15,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    }
+  ],
+  "detailed_false_positive_items": [
+    {
+      "finding_id": "fnd_5ae54ce0bb42",
+      "project_id": "ap1_jv_t04b_id_1421426_master__a88e0c31",
+      "project": "AP1_Jv_T04B.ID_1421426-master",
+      "criterion": "correctness",
+      "checker_name": "curriculum_relevance_checker",
+      "line_start": 68,
+      "line_end": 68,
+      "file_path": "README.md",
+      "severity": "major",
+      "verdict": "warning",
+      "confidence": 0.86,
+      "issue_type": "inappropriate_tool",
+      "found_text": "- ASP.NET. | В Java-проекте упомянут ASP.NET как технологический ориентир. | Схлопнуто 2 строк: README.md, README_RUS.md. | Проверить стек задания и заменить ASP.NET на релевантный Java-инструмент или явно объяснить сравнение. | inappropriate_tool"
+    },
+    {
+      "finding_id": "fnd_edbd7d0e1833",
+      "project_id": "ap1_jv_t04b_id_1421426_master__a88e0c31",
+      "project": "AP1_Jv_T04B.ID_1421426-master",
+      "criterion": "readability",
+      "checker_name": "spelling_wording_checker",
+      "line_start": 68,
+      "line_end": 68,
+      "file_path": "README.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.9,
+      "issue_type": "wording",
+      "found_text": "ASP.NET | В Java-проекте упомянут ASP.NET; это выглядит как ошибочная или нерелевантная технология в списке материалов. | Схлопнуто 2 строк: README.md, README_RUS.md. | Заменить ASP.NET на релевантный Java-материал или явно пояснить, зачем здесь сравнение с ASP.NET. | wording"
+    }
+  ],
+  "false_positive_items": [
+    {
+      "project_id": "ap1_jv_t04b_id_1421426_master__a88e0c31",
+      "criterion": "actuality"
+    },
+    {
+      "project_id": "ap1_jv_t04b_id_1421426_master__a88e0c31",
+      "criterion": "checklist_alignment"
+    },
+    {
+      "project_id": "ap1_jv_t04b_id_1421426_master__a88e0c31",
+      "criterion": "market_fit"
+    }
+  ],
+  "false_negative_items": [],
+  "project_mapping": {
+    "AP1-Jv-T04B": "AP1_Jv_T04B.ID_1421426-master"
+  },
+  "notes": [
+    "Основное сравнение выполняется на уровне атомарных ошибок: проект, критерий, строка/диапазон и текст.",
+    "В строгую метрику не входят диагностические строки: низкоуверенные unknown, непроверенные ссылки и общие ресурсные предупреждения без имени файла.",
+    "Старая метрика проект × критерий сохранена только как обзорная в overview_* полях.",
+    "Excel-разметка нормализуется эвристически из колонок 'Проблема' и 'Детали'."
+  ]
+}

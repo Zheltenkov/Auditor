@@ -1,0 +1,2 @@
+﻿projects_total,projects_ok,projects_error,gold_total,predicted_total,true_positive,false_positive,false_negative,micro_precision,micro_recall,micro_f1_score,macro_precision_by_project,macro_recall_by_project,macro_f1_by_project,model_calls,cache_hits,total_tokens,cost_usd,actionable_predicted_total,actionable_true_positive,actionable_false_positive,actionable_precision,cost_per_gold_true_positive
+17,17,0,98,263,18,244,80,0.0687,0.1837,0.1,0.0307,0.1422,0.0495,348,58,514120,1.237908,176,18,158,0.1023,0.068773

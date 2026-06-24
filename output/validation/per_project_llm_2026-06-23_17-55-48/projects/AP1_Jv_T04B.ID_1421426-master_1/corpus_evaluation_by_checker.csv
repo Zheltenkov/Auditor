@@ -1,0 +1,5 @@
+﻿slice_name,label,predicted_total,true_positive,false_positive,precision,false_positive_share
+curriculum_relevance_checker,curriculum_relevance_checker,1,0,1,0.0,0.0435
+fact_checker_perplexity,fact_checker_perplexity,4,0,4,0.0,0.1739
+readme_fact_actuality_checker,readme_fact_actuality_checker,1,0,1,0.0,0.0435
+spelling_wording_checker,spelling_wording_checker,17,0,17,0.0,0.7391

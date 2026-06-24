@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>Recall-first отчёт по валидации аудитора</title>
+  <style>
+    :root {
+      --bg: #f7f4ee;
+      --card: #fffdf8;
+      --text: #1d2a2d;
+      --muted: #647174;
+      --line: #ded8cd;
+      --green: #159b76;
+      --blue: #2c6ebd;
+      --red: #bc4b4b;
+      --amber: #a66f00;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 32px;
+      background: var(--bg);
+      color: var(--text);
+      font: 15px/1.5 Arial, sans-serif;
+    }
+    main { max-width: 1280px; margin: 0 auto; }
+    h1 { margin: 0 0 8px; font-size: 30px; }
+    h2 { margin: 28px 0 12px; font-size: 22px; }
+    p { margin: 6px 0; }
+    .muted { color: var(--muted); }
+    .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 22px 0; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow: 0 10px 30px rgba(31, 29, 23, .06);
+    }
+    .metric { font-size: 34px; font-weight: 800; color: var(--green); }
+    .bad { color: var(--red); }
+    .warn { color: var(--amber); }
+    .section {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 16px 0;
+    }
+    table { width: 100%; border-collapse: collapse; background: var(--card); }
+    th, td { padding: 10px 12px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    th { color: var(--muted); font-size: 13px; }
+    .pill {
+      display: inline-block;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: #e6f1ff;
+      color: var(--blue);
+      font-weight: 700;
+      margin-right: 6px;
+    }
+    .callout {
+      border-left: 5px solid var(--green);
+      padding: 12px 16px;
+      background: #eef8f3;
+      border-radius: 8px;
+      margin: 14px 0;
+    }
+    ol { margin-top: 8px; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Валидация аудитора: приоритет полноты</h1>
+  <p class="muted">Сетевой прогон с LLM/Perplexity по 17 проектам. Главная метрика — сколько ошибок из человеческой разметки найдено. Точность здесь означает нагрузку на методолога, а не основной критерий качества.</p>
+
+  <div class="grid">
+    <div class="card"><div class="metric">18.4%</div><strong>recall</strong><p class="muted">18 из 98 эталонных ошибок найдены строго.</p></div>
+    <div class="card"><div class="metric bad">80</div><strong>пропущено</strong><p class="muted">Это основной резерв роста.</p></div>
+    <div class="card"><div class="metric warn">263</div><strong>находок всего</strong><p class="muted">Лишние находки допустимы, если методологи готовы их просматривать.</p></div>
+    <div class="card"><div class="metric">6.9%</div><strong>precision</strong><p class="muted">Цена просмотра: доля строгих совпадений среди всех находок.</p></div>
+  </div>
+
+  <div class="callout">
+    <strong>Вывод:</strong> система уже хорошо ловит редакторско-структурные ошибки на AP1 Go, но пока слабо покрывает смысловые, доменные и междокументные дефекты. Для цели «найти всё, что заметили люди» нужно расширять recall, а не ужимать поток находок.
+  </div>
+
+  <h2>Recall по критериям</h2>
+  <table><thead><tr><th>Критерий</th><th>Эталон</th><th>Найдено</th><th>Пропущено</th><th>Recall</th><th>Находок системы</th></tr></thead><tbody><tr><td>Грамотность и читаемость текста</td><td>25</td><td>13</td><td>12</td><td>52.0%</td><td>140</td></tr><tr><td>Соответствие заданий проекта чек-листу</td><td>8</td><td>1</td><td>7</td><td>12.5%</td><td>15</td></tr><tr><td>Точность и корректность</td><td>40</td><td>3</td><td>37</td><td>7.5%</td><td>79</td></tr><tr><td>Актуальность</td><td>25</td><td>1</td><td>24</td><td>4.0%</td><td>29</td></tr></tbody></table>
+
+  <h2>Recall по проектам</h2>
+  <table><thead><tr><th>Проект</th><th>Эталон</th><th>Найдено</th><th>Пропущено</th><th>Recall</th><th>Находок системы</th></tr></thead><tbody><tr><td>CbS4_Networking_basics_Part_4.ID_1521091-master</td><td>1</td><td>1</td><td>0</td><td>100.0%</td><td>4</td></tr><tr><td>AP1_Go_T01.ID_1375359-master</td><td>20</td><td>15</td><td>5</td><td>75.0%</td><td>71</td></tr><tr><td>AP1_Go_T02.ID_1375360-master</td><td>3</td><td>2</td><td>1</td><td>66.7%</td><td>34</td></tr><tr><td>A1_Maze_Java.ID_1391854-master (1)</td><td>2</td><td>0</td><td>2</td><td>0.0%</td><td>9</td></tr><tr><td>AP1_Jv_T04B.ID_1421426-master (1)</td><td>3</td><td>0</td><td>3</td><td>0.0%</td><td>23</td></tr><tr><td>BSA08_UseCase.ID_1361452-master</td><td>2</td><td>0</td><td>2</td><td>0.0%</td><td>7</td></tr><tr><td>BSA13_RequirementsManagements.ID_1361460-master</td><td>14</td><td>0</td><td>14</td><td>0.0%</td><td>2</td></tr><tr><td>C2_SimpleBashUtils.ID_353513-master (1)</td><td>8</td><td>0</td><td>8</td><td>0.0%</td><td>17</td></tr><tr><td>CbS11_Enterprise_IT_landscape.ID_1573765-master</td><td>1</td><td>0</td><td>1</td><td>0.0%</td><td>20</td></tr><tr><td>DSB2_Syntax_Semantics.ID_886511-master (1)</td><td>6</td><td>0</td><td>6</td><td>0.0%</td><td>17</td></tr><tr><td>FEB1_JS.ID_883439-master</td><td>3</td><td>0</td><td>3</td><td>0.0%</td><td>7</td></tr><tr><td>p01d06-id_239620-master (1)</td><td>8</td><td>0</td><td>8</td><td>0.0%</td><td>13</td></tr><tr><td>SQLB11_Functions_and_procs.ID_574108-master (1)</td><td>2</td><td>0</td><td>2</td><td>0.0%</td><td>2</td></tr><tr><td>SQLB1_Basics.ID_574086-master (1)</td><td>2</td><td>0</td><td>2</td><td>0.0%</td><td>21</td></tr><tr><td>SQLB3_Retrieving_data.ID_574089-master (1)</td><td>3</td><td>0</td><td>3</td><td>0.0%</td><td>2</td></tr><tr><td>t03d03-id_239611-master (1)</td><td>15</td><td>0</td><td>15</td><td>0.0%</td><td>11</td></tr><tr><td>t05d08-id_239624-master (1)</td><td>5</td><td>0</td><td>5</td><td>0.0%</td><td>3</td></tr></tbody></table>
+
+  <h2>Почему пропустили</h2>
+  <div class="grid">
+    <div class="section"><table><thead><tr><th>Класс пропуска</th><th>Кол-во</th></tr></thead><tbody><tr><td>model_possible</td><td>46</td></tr><tr><td>out_of_scope_or_needs_review</td><td>21</td></tr><tr><td>deterministic_possible</td><td>11</td></tr><tr><td>needs_external_data</td><td>1</td></tr><tr><td>near_miss_matching</td><td>1</td></tr></tbody></table></div>
+    <div class="section"><table><thead><tr><th>Критерий</th><th>Пропущено</th></tr></thead><tbody><tr><td>Точность и корректность</td><td>37</td></tr><tr><td>Актуальность</td><td>24</td></tr><tr><td>Грамотность и читаемость текста</td><td>12</td></tr><tr><td>Соответствие заданий проекта чек-листу</td><td>7</td></tr></tbody></table></div>
+  </div>
+
+  <h2>Куда вкладываться для роста recall</h2>
+  <div class="section">
+    <ol>
+      <li><strong>Смысловой слой README:</strong> 46 пропусков помечены как model_possible. Это логика, факты внутри текста, методические рассинхроны, неудачные формулировки, которые правилами ловятся плохо.</li>
+      <li><strong>Детерминированные правила:</strong> 11 пропусков можно закрыть обычным кодом: точечные паттерны пунктуации, структуры, имён файлов и локальных ресурсов.</li>
+      <li><strong>Актуальность:</strong> 24 пропуска по критерию актуальности. Нужны отдельные проверки ролей ссылок, дат обновления, стеков технологий и доступности сервисов.</li>
+      <li><strong>Чек-лист ↔ README:</strong> 7 пропусков. Нужен направленный смысловой матчинг требований, артефактов и ожидаемых выходов, а не только лексика.</li>
+      <li><strong>Спорные/внешние случаи:</strong> 21 пропуск требует ручной политики или внешних данных. Их надо отделить от реально автоматизируемого recall.</li>
+    </ol>
+  </div>
+
+  <h2>Пропуски, которые можно закрыть правилами</h2>
+  <table><thead><tr><th>Проект</th><th>Критерий</th><th>Строка</th><th>Эталонная ошибка</th><th>Следующий шаг</th></tr></thead><tbody><tr><td>A1_Maze_Java.ID_1391854-master</td><td>Актуальность</td><td></td><td>Нормально ли то, что в материалах ссылка на C++ code style, а код предлагается писать на Java?</td><td>Добавить или расширить детерминированный чекер с тестом на этот паттерн.</td></tr><tr><td>AP1_Go_T01.ID_1375359-master</td><td>Грамотность и читаемость текста</td><td>192</td><td>192 - Кавычки вокруг «Empty intersection» — в остальных местах ошибки пишутся с обычными скобочками или бэктиками - привести в один вид</td><td>Добавить или расширить детерминированный чекер с тестом на этот паттерн.</td></tr><tr><td>AP1_Go_T01.ID_1375359-master</td><td>Грамотность и читаемость текста</td><td>192-193</td><td>192–193 - Нумерация сбита: после блока 1) идут 1) и 2) - Продолжить как 6) и 7)</td><td>Добавить или расширить детерминированный чекер с тестом на этот паттерн.</td></tr><tr><td>AP1_Go_T02.ID_1375360-master</td><td>Грамотность и читаемость текста</td><td>60</td><td>60 - Заголовок «Chapter II» — с учётом ошибки выше, фактически это уже третья глава - «Chapter III»</td><td>Добавить или расширить детерминированный чекер с тестом на этот паттерн.</td></tr><tr><td>AP1_Jv_T04B.ID_1421426-master</td><td>Грамотность и читаемость текста</td><td></td><td>Видимо опечатка, так как у нас курс по Java, а в README.md рекомендуют ознакомиться с ASP.NET.</td><td>Добавить или расширить детерминированный чекер с тестом на этот паттерн.</td></tr><tr><td>CbS11_Enterprise_IT_landscape.ID_1573765-master</td><td>Грамотность и читаемость текста</td><td></td><td>На схеме в задании у половины хостов домен &quot;COMPANY&quot;, а у другой половины - &quot;COMANY&quot; (буква P пропущена) - выглядит как опечатка</td><td>Добавить или расширить детерминированный чекер с тестом на этот паттерн.</td></tr><tr><td>DSB2_Syntax_Semantics.ID_886511-master</td><td>Грамотность и читаемость текста</td><td></td><td>Опечатка в упражнении 08, DSB2</td><td>Добавить или расширить детерминированный чекер с тестом на этот паттерн.</td></tr><tr><td>DSB2_Syntax_Semantics.ID_886511-master</td><td>Грамотность и читаемость текста</td><td></td><td>:small_blue_diamond: Description: Проект DSB2_Syntax&amp;Semantics, упражнение 08.</td><td>Добавить или расширить детерминированный чекер с тестом на этот паттерн.</td></tr><tr><td>DSB2_Syntax_Semantics.ID_886511-master</td><td>Грамотность и читаемость текста</td><td></td><td>Исправить нумерацию задач на 1, 2, 3.</td><td>Добавить или расширить детерминированный чекер с тестом на этот паттерн.</td></tr><tr><td>DSB2_Syntax_Semantics.ID_886511-master</td><td>Грамотность и читаемость текста</td><td></td><td>В тексте задания 1 написано название поля таблицы Email, а в примере E-mail (через дефис). Привести к одному названию.</td><td>Добавить или расширить детерминированный чекер с тестом на этот паттерн.</td></tr><tr><td>DSB2_Syntax_Semantics.ID_886511-master</td><td>Грамотность и читаемость текста</td><td></td><td>В тексте письма допущена опечатка &quot;... в компании работались ...&quot; корректно &quot;работали</td><td>Добавить или расширить детерминированный чекер с тестом на этот паттерн.</td></tr></tbody></table>
+
+  <h2>Пропуски для смыслового LLM-слоя</h2>
+  <table><thead><tr><th>Проект</th><th>Критерий</th><th>Строка</th><th>Эталонная ошибка</th><th>Следующий шаг</th></tr></thead><tbody><tr><td>A1_Maze_Java.ID_1391854-master</td><td>Точность и корректность</td><td></td><td>Нормально ли требование сборки с помощью Makefile?</td><td>Добавить модельный/семантический слой с проверяемым JSON-контрактом и примерами.</td></tr><tr><td>AP1_Go_T01.ID_1375359-master</td><td>Точность и корректность</td><td>83</td><td>83 - «Все 3 ссылки статичны» — поменять местами 83 и 85</td><td>Добавить модельный/семантический слой с проверяемым JSON-контрактом и примерами.</td></tr><tr><td>AP1_Jv_T04B.ID_1421426-master</td><td>Точность и корректность</td><td></td><td>Тут тоже показалось, что можно было в качестве подсказки предложить готовый контракт и диаграммы последовательности, его поясняющие.</td><td>Добавить модельный/семантический слой с проверяемым JSON-контрактом и примерами.</td></tr><tr><td>BSA08_UseCase.ID_1361452-master</td><td>Соответствие заданий проекта чек-листу</td><td></td><td>Разнятся рекомендуемые названия в файлах в условии проекта и в чек-листе</td><td>Добавить модельный/семантический слой с проверяемым JSON-контрактом и примерами.</td></tr><tr><td>BSA08_UseCase.ID_1361452-master</td><td>Соответствие заданий проекта чек-листу</td><td></td><td>:small_blue_diamond: Description: В проекте BSA08 в readme и readme_rus рекомендуется называть файлы xxx_UC.dox, в чек-листе же xxx_usecase.dox</td><td>Добавить модельный/семантический слой с проверяемым JSON-контрактом и примерами.</td></tr><tr><td>BSA13_RequirementsManagements.ID_1361460-master</td><td>Точность и корректность</td><td></td><td>По-моему, это максимально необязательный (а то и бесполезный) проект.</td><td>Добавить модельный/семантический слой с проверяемым JSON-контрактом и примерами.</td></tr><tr><td>BSA13_RequirementsManagements.ID_1361460-master</td><td>Актуальность</td><td></td><td>Идентификация и трассировка требований должна выполняться по мере создания требований, а не отдельно. К тому же это и так выполняется в рамках других проектов, поэтому непонятно зачем добавлять это снова.</td><td>Добавить модельный/семантический слой с проверяемым JSON-контрактом и примерами.</td></tr><tr><td>BSA13_RequirementsManagements.ID_1361460-master</td><td>Точность и корректность</td><td></td><td>Идентификация и трассировка требований должна выполняться по мере создания требований, а не отдельно. К тому же это и так выполняется в рамках других проектов, поэтому непонятно зачем добавлять это снова.</td><td>Добавить модельный/семантический слой с проверяемым JSON-контрактом и примерами.</td></tr><tr><td>BSA13_RequirementsManagements.ID_1361460-master</td><td>Точность и корректность</td><td></td><td>Создание тест-кейсов не является обязанностью аналитика. Тестировщику должно быть достаточно правильно написанного тест-кейса и описания выполняемых проверок, остальное он сделает сам или придет за уточнениями. Поэтому тоже необязательная часть.</td><td>Добавить модельный/семантический слой с проверяемым JSON-контрактом и примерами.</td></tr><tr><td>BSA13_RequirementsManagements.ID_1361460-master</td><td>Актуальность</td><td></td><td>Управление задачами в таск-трекере это, как говорится, not a rocket science. Если ученик разобрался с gitlab, чтобы работать на проекте, как поставить задачу в JIRA разберется сам. Тем более что на каждом проекте жизненный цикл задачи и способ связи требования и задачи будет своим.</td><td>Добавить модельный/семантический слой с проверяемым JSON-контрактом и примерами.</td></tr><tr><td>BSA13_RequirementsManagements.ID_1361460-master</td><td>Точность и корректность</td><td></td><td>Управление задачами в таск-трекере это, как говорится, not a rocket science. Если ученик разобрался с gitlab, чтобы работать на проекте, как поставить задачу в JIRA разберется сам. Тем более что на каждом проекте жизненный цикл задачи и способ связи требования и задачи будет своим.</td><td>Добавить модельный/семантический слой с проверяемым JSON-контрактом и примерами.</td></tr><tr><td>BSA13_RequirementsManagements.ID_1361460-master</td><td>Точность и корректность</td><td></td><td>Задания по созданию тест-кейса комментировать не буду, обычно это примерно тот же формат что и Use Case + см. выше.</td><td>Добавить модельный/семантический слой с проверяемым JSON-контрактом и примерами.</td></tr></tbody></table>
+
+  <h2>Precision как нагрузка, не цель</h2>
+  <p>Приоритет recall означает, что ложные дополнительные находки не считаются критическим провалом, если они не скрывают важные ошибки. Но их всё равно нужно контролировать как нагрузку на методолога.</p>
+  <table><thead><tr><th>Группа чекеров</th><th>Находок</th><th>Строгих совпадений</th><th>Лишних</th><th>Precision</th></tr></thead><tbody><tr><td>Чек-лист и артефакты</td><td>15</td><td>1</td><td>14</td><td>6.7%</td></tr><tr><td>Детерминированные правила</td><td>15</td><td>10</td><td>5</td><td>66.7%</td></tr><tr><td>Редакторские правила</td><td>128</td><td>7</td><td>121</td><td>5.5%</td></tr><tr><td>Фактчек и актуальность</td><td>76</td><td>1</td><td>75</td><td>1.3%</td></tr><tr><td>Ссылки и ресурсы</td><td>12</td><td>0</td><td>12</td><td>0.0%</td></tr><tr><td>Методические критерии</td><td>17</td><td>0</td><td>17</td><td>0.0%</td></tr></tbody></table>
+
+  <p class="muted">Файлы детализации рядом: false_negative_analysis_all.csv, false_positive_detailed_all.csv, by_project.csv, aggregate_by_criterion.csv.</p>
+</main>
+</body>
+</html>

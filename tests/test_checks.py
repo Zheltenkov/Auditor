@@ -170,12 +170,7 @@ def test_language_checker_flags_single_language(workspace_tmp_path: Path) -> Non
 
     findings = LanguageCoverageChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
 
-    assert findings[0].verdict == Verdict.INFO
-    assert findings[0].severity == Severity.INFO
-    assert findings[0].extra["languages"] == ["RUS"]
-    assert findings[0].extra["expected_languages"] == ["RUS", "ENG", "UZ", "TG"]
-    assert findings[0].extra["missing_languages"] == ["ENG", "UZ", "TG"]
-    assert findings[0].needs_human_review is False
+    assert findings == []
 
 
 def test_language_checker_passes_when_expected_languages_are_present(workspace_tmp_path: Path) -> None:
@@ -188,9 +183,7 @@ def test_language_checker_passes_when_expected_languages_are_present(workspace_t
 
     findings = LanguageCoverageChecker().check(unit, [], CheckContext(settings))
 
-    assert findings[0].verdict == Verdict.PASS
-    assert findings[0].extra["coverage_ratio"] == 1.0
-    assert findings[0].extra["missing_languages"] == []
+    assert findings == []
 
 
 def test_language_checker_cross_checks_suffix_with_content(workspace_tmp_path: Path) -> None:
@@ -206,8 +199,9 @@ def test_language_checker_cross_checks_suffix_with_content(workspace_tmp_path: P
     findings = LanguageCoverageChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
 
     assert any(finding.evidence[0].title == "Несовпадение языка" for finding in findings)
-    assert findings[0].extra["mismatches"][0]["expected"] == "RUS"
-    assert findings[0].extra["mismatches"][0]["detected"] == "ENG"
+    assert findings[0].extra["expected"] == "RUS"
+    assert findings[0].extra["detected"] == "ENG"
+    assert findings[0].extra["missing_languages"] == ["ENG", "UZ", "TG"]
 
 
 def test_readability_checker_does_not_flag_long_lines_without_model(workspace_tmp_path: Path) -> None:
@@ -428,6 +422,8 @@ def test_full_audit_includes_local_consistency_checker() -> None:
     checker_names = [checker.name for checker in default_checkers(use_model=True)]
 
     assert "local_consistency_checker" in checker_names
+    assert "readability_checker" not in checker_names
+    assert "spelling_wording_checker" in checker_names
 
 
 def test_resource_availability_checker_flags_unconfirmed_environment_path(workspace_tmp_path: Path) -> None:
@@ -741,15 +737,16 @@ def test_market_fit_checker_does_not_count_generic_technical_data_as_market_fit(
 
     findings = MarketFitChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
 
-    assert findings[0].extra["market_fit_score"] == 0
-    assert findings[0].severity == Severity.MAJOR
-    assert findings[0].verdict == Verdict.WARNING
+    assert findings == []
 
 
 def test_market_fit_checker_uses_model_to_refine_weak_signals(workspace_tmp_path: Path) -> None:
     project = workspace_tmp_path / "unit"
     project.mkdir()
-    (project / "README.md").write_text("Проект помогает аналитикам принимать решения по заявкам.\n", encoding="utf-8")
+    (project / "README.md").write_text(
+        "Пользовательский сценарий: аналитики принимают решения по заявкам.\n",
+        encoding="utf-8",
+    )
     unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=2000)
     fake_client = _FakeJsonClient(
         {
@@ -977,7 +974,14 @@ def test_fact_checker_skips_navigation_and_course_requirements(workspace_tmp_pat
     project.mkdir()
     (project / "README.md").write_text(
         "- [Python 3.10 supports structural pattern matching since the 2021 release](#python-310)\n"
+        "Read more [here](https://docs.python.org/3/whatsnew/3.10.html).\n"
         "Python scripts should be placed in src according to the project rules.\n"
+        "The program is built with Docker and Bash scripts in src.\n"
+        "Before starting, clone the project repository.\n"
+        "To store data, define a structure in src.\n"
+        "We recommend installing the latest Docker version.\n"
+        "Your code should follow Google style.\n"
+        "| Python 3.10 | should not be checked from a table |\n"
         "Python 3.10 supports structural pattern matching since the 2021 release.\n",
         encoding="utf-8",
     )
@@ -998,6 +1002,42 @@ def test_fact_checker_skips_navigation_and_course_requirements(workspace_tmp_pat
     assert fake_client.calls == 1
     assert len(findings) == 1
     assert "structural pattern matching" in findings[0].quote
+    assert "program is built" not in fake_client.user_prompt
+    assert "Read more" not in fake_client.user_prompt
+    assert "clone the project" not in fake_client.user_prompt
+    assert "define a structure" not in fake_client.user_prompt
+    assert "recommend installing" not in fake_client.user_prompt
+    assert "Your code" not in fake_client.user_prompt
+    assert "should not be checked" not in fake_client.user_prompt
+
+
+def test_fact_checker_keeps_fact_lines_that_start_with_technical_words(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text(
+        "Use of structural pattern matching was added in Python 3.10.\n"
+        "Run-time errors are checked by the Python runtime.\n",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=2000)
+    fake_client = _FakeJsonClient(
+        {
+            "verdict": "pass",
+            "confidence": 0.9,
+            "evidence": "Утверждение подтверждается документацией Go.",
+            "sources": [{"title": "Go docs", "url": "https://go.dev/doc/"}],
+            "recommendation": "Действий не требуется.",
+        }
+    )
+    context = CheckContext(_settings(workspace_tmp_path, project), fact_model_client=fake_client)
+
+    findings = FactCheckerPerplexity().check(unit, [], context)
+    prompt_text = "\n".join(fake_client.user_prompts)
+
+    assert fake_client.calls == 2
+    assert len(findings) == 2
+    assert "Use of structural pattern matching was added in Python 3.10" in prompt_text
+    assert "Run-time errors are checked by the Python runtime" in prompt_text
 
 
 def test_readme_fact_actuality_checker_only_reads_main_and_russian_readme(workspace_tmp_path: Path) -> None:
@@ -1053,6 +1093,14 @@ def test_readme_fact_actuality_checker_skips_exercise_options_and_task_requireme
     (project / "README.md").write_text(
         "## Chapter III\n"
         "REST is an architectural style for distributed systems.\n"
+        "Use of structural pattern matching was added in Python 3.10.\n"
+        "Run-time errors are checked by the Python runtime.\n"
+        "Read more [here](https://go.dev/doc/).\n"
+        "The program is built with Docker and Bash scripts in src.\n"
+        "Before starting, clone the project repository.\n"
+        "To store data, define a structure in src.\n"
+        "We recommend installing the latest Docker version.\n"
+        "Your code should follow Google style.\n"
         "## Chapter V\n"
         "### Exercise 00 — Terminology\n"
         "1) The ability of a system to increase performance without adding resources.\n"
@@ -1068,6 +1116,14 @@ def test_readme_fact_actuality_checker_skips_exercise_options_and_task_requireme
     assert findings == []
     assert fake_client.calls == 1
     assert "REST is an architectural style" in fake_client.user_prompt
+    assert "Use of structural pattern matching was added in Python 3.10" in fake_client.user_prompt
+    assert "Run-time errors are checked by the Python runtime" in fake_client.user_prompt
+    assert "program is built" not in fake_client.user_prompt
+    assert "Read more" not in fake_client.user_prompt
+    assert "clone the project" not in fake_client.user_prompt
+    assert "define a structure" not in fake_client.user_prompt
+    assert "recommend installing" not in fake_client.user_prompt
+    assert "Your code" not in fake_client.user_prompt
     assert "without adding resources" not in fake_client.user_prompt
     assert "notify clients" not in fake_client.user_prompt
 
@@ -1120,6 +1176,57 @@ def test_curriculum_relevance_checker_flags_makefile_for_java_without_model(work
     assert findings[0].criterion == Criterion.CORRECTNESS
     assert findings[0].severity == Severity.MINOR
     assert findings[0].extra["issue_type"] == "language_tooling_conflict"
+
+
+def test_curriculum_relevance_checker_flags_cpp_style_for_c_without_model(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    src = project / "src"
+    src.mkdir()
+    (src / "main.c").write_text("int main(void) { return 0; }\n", encoding="utf-8")
+    (project / "README.md").write_text(
+        "Follow the Google C++ Style Guide for formatting rules.\n",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+
+    findings = CurriculumRelevanceChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
+
+    assert len(findings) == 1
+    assert findings[0].criterion == Criterion.CORRECTNESS
+    assert findings[0].severity == Severity.MINOR
+    assert findings[0].extra["issue_type"] == "language_material_conflict"
+
+
+def test_curriculum_relevance_checker_drops_model_tool_mentions_without_conflict(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text("Follow the Google C++ Style Guide.\n", encoding="utf-8")
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+    fake_client = _FakeJsonClient(
+        {
+            "findings": [
+                {
+                    "criterion": "correctness",
+                    "issue_type": "language_material_conflict",
+                    "severity": "minor",
+                    "verdict": "warning",
+                    "confidence": 0.9,
+                    "quote": "Follow the Google C++ Style Guide.",
+                    "file_path": "README.md",
+                    "line_start": 1,
+                    "evidence": "Упомянут Google C++ Style Guide.",
+                    "recommendation": "Проверить стиль.",
+                }
+            ]
+        }
+    )
+    context = CheckContext(_settings(workspace_tmp_path, project), model_client=fake_client)
+
+    findings = CurriculumRelevanceChecker().check(unit, [], context)
+
+    assert fake_client.calls == 1
+    assert findings == []
 
 
 def test_curriculum_relevance_checker_uses_model_for_missing_key_topic(workspace_tmp_path: Path) -> None:
@@ -1228,8 +1335,38 @@ def test_model_rubric_checker_only_keeps_workload_findings(workspace_tmp_path: P
 
     findings = ModelRubricChecker().check(unit, [], context)
 
+    assert findings == []
+
+
+def test_model_rubric_checker_keeps_concrete_workload_findings(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text("# Проект\n", encoding="utf-8")
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+    fake_client = _FakeJsonClient(
+        {
+            "findings": [
+                {
+                    "criterion": "workload",
+                    "severity": "minor",
+                    "verdict": "warning",
+                    "confidence": 0.85,
+                    "quote": "Выполните 25 больших заданий за один день.",
+                    "file_path": "README.md",
+                    "line_start": 1,
+                    "evidence": "Трудоёмкость выглядит завышенной для одного учебного дня.",
+                    "recommendation": "Разбить задания на несколько этапов или дать ориентир по времени.",
+                }
+            ]
+        }
+    )
+    context = CheckContext(_settings(workspace_tmp_path, project), model_client=fake_client)
+
+    findings = ModelRubricChecker().check(unit, [], context)
+
     assert len(findings) == 1
     assert findings[0].criterion == Criterion.WORKLOAD
+    assert findings[0].location.file_path == "README.md"
 
 
 def test_regional_availability_checker_uses_curated_ru_rules(workspace_tmp_path: Path) -> None:
@@ -1471,6 +1608,93 @@ def test_full_audit_runs_new_rules_in_priority_order() -> None:
     positions = [checker_names.index(checker_name) for checker_name in priority]
 
     assert positions == sorted(positions)
+
+
+def test_spelling_checker_scans_drawio_artifacts_for_rule_typos(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README.md").write_text("Diagram is attached.\n", encoding="utf-8")
+    (project / "network.drawio").write_text(
+        '<mxCell value="COMANY\\A.Sidorova" />\n'
+        '<mxCell value="COMPANY\\O.Krivov" />\n',
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+
+    findings = SpellingAndWordingChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
+
+    assert len(findings) == 1
+    assert findings[0].quote == "COMANY"
+    assert findings[0].location.file_path == "network.drawio"
+
+
+def test_spelling_checker_flags_asp_net_in_java_project_as_wording_issue(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "AP1_Jv_T04B"
+    project.mkdir()
+    (project / "README.md").write_text("Recommended materials:\n- ASP.NET.\n", encoding="utf-8")
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+
+    findings = SpellingAndWordingChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
+
+    assert len(findings) == 1
+    assert findings[0].criterion == Criterion.READABILITY
+    assert findings[0].quote == "ASP.NET"
+    assert findings[0].extra["issue_type"] == "wording"
+
+
+def test_resource_checker_flags_vm_guide_without_environment_image(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    materials = project / "materials"
+    materials.mkdir(parents=True)
+    (project / "README.md").write_text("Set up the database environment.\n", encoding="utf-8")
+    (materials / "Инструкция по настройке VBox.pdf").write_bytes(b"%PDF-1.4")
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+
+    findings = ResourceAvailabilityChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
+
+    assert len(findings) == 1
+    assert findings[0].extra["issue_type"] == "environment_guide_without_image"
+    assert findings[0].criterion == Criterion.CORRECTNESS
+
+
+def test_local_consistency_checker_flags_function_length_range_conflict(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    materials = project / "materials"
+    materials.mkdir(parents=True)
+    (project / "README.md").write_text(
+        "Functions must be compact and take no more than 20-30 lines.\n",
+        encoding="utf-8",
+    )
+    (materials / "principles.md").write_text(
+        "Функции должны занимать 40-50 строк кода.\n",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+
+    findings = LocalConsistencyChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
+
+    assert len(findings) == 1
+    assert findings[0].extra["issue_type"] == "function_length_range_conflict"
+
+
+def test_curriculum_checker_flags_c_style_and_missing_preprocessor_topic(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "c_intro"
+    src = project / "src"
+    src.mkdir(parents=True)
+    (project / "README.md").write_text(
+        "Quest 1. Write C code with GCC and Google C++ Style Guide.\n"
+        "Quest 2. Work with int, char and float data types.\n"
+        "Quest 3. Continue exercises.\n",
+        encoding="utf-8",
+    )
+    (src / "main.c").write_text("#include <stdio.h>\n#define NMAX 10\n", encoding="utf-8")
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+
+    findings = CurriculumRelevanceChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
+
+    issue_types = {finding.extra["issue_type"] for finding in findings}
+    assert "language_material_conflict" in issue_types
+    assert "missing_key_topic" in issue_types
 
 
 def test_link_checker_blocks_private_ip_before_network(workspace_tmp_path: Path) -> None:

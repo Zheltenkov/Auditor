@@ -11,7 +11,7 @@ from content_audit.evaluation import write_evaluation
 from content_audit.exporters import write_report
 from content_audit.orchestrator import AuditRunner
 
-DEFAULT_OPENROUTER_MODEL = "openai/gpt-4o-mini"
+DEFAULT_OPENROUTER_MODEL = "openai/gpt-5.4-mini"
 DEFAULT_OPENROUTER_FACT_MODEL = "perplexity/sonar"
 DEFAULT_OPENROUTER_TECH_MODEL = "qwen/qwen3-coder"
 

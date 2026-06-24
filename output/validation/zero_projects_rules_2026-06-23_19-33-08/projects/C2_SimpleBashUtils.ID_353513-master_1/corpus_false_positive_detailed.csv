@@ -1,0 +1,2 @@
+﻿проект,project_id,критерий,критерий_код,найденная строка/диапазон,найденная ошибка,finding_id,checker
+C2_SimpleBashUtils.ID_353513-master,c2_simplebashutils_id_353513_master__1794aa11,Актуальность,actuality,materials/7 principles of structural programming.md:20,![goto](../misc/eng/images/GOTO.png) | Файл не найден: ../misc/eng/images/GOTO.png | Исправить путь к локальному ресурсу или добавить отсутствующий файл.,fnd_7dc1d5b2caaf,local_link_checker

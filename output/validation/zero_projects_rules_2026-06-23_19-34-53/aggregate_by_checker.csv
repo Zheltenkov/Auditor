@@ -1,0 +1,6 @@
+﻿slice_name,label,predicted_total,true_positive,false_positive,precision,false_positive_share
+checklist_checker,checklist_checker,11,0,11,0.0,0.2619
+curriculum_relevance_checker,curriculum_relevance_checker,11,1,10,0.0909,0.2381
+local_link_checker,local_link_checker,1,0,1,0.0,0.0238
+resource_availability_checker,resource_availability_checker,10,0,10,0.0,0.2381
+spelling_wording_checker,spelling_wording_checker,11,1,10,0.0909,0.2381

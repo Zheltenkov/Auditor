@@ -1,0 +1,103 @@
+{
+  "started_at": "2026-06-23T18:15:03.677095Z",
+  "finished_at": "2026-06-23T18:17:21.412766Z",
+  "input_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\per_project_llm_metrics_2026-06-23_17-55-48\\CbS11_Enterprise_IT_landscape.ID_1573765-master",
+  "units_total": 1,
+  "files_total": 6,
+  "findings_total": 27,
+  "affected_units_total": 1,
+  "by_severity": {
+    "minor": 26,
+    "major": 1
+  },
+  "by_criterion": {
+    "readability": 20,
+    "correctness": 4,
+    "market_fit": 1,
+    "checklist_alignment": 1,
+    "actuality": 1
+  },
+  "by_branch": {
+    "CbS11_Enterprise_IT_landscape.ID_1573765-master": 27
+  },
+  "by_unit": {
+    "cbs11_enterprise_it_landscape_id_1573765_master__b612154a": 27
+  },
+  "model_usage": {
+    "calls_total": 15,
+    "cache_hits": 1,
+    "prompt_tokens": 16907,
+    "completion_tokens": 5976,
+    "total_tokens": 22883,
+    "cost_usd": 0.06358875,
+    "by_model": {
+      "openai/gpt-5.4-mini": {
+        "calls_total": 7,
+        "prompt_tokens": 13173,
+        "completion_tokens": 2730,
+        "total_tokens": 15903,
+        "cost_usd": 0.02216475
+      },
+      "qwen/qwen3-coder": {
+        "calls_total": 1,
+        "prompt_tokens": 766,
+        "completion_tokens": 207,
+        "total_tokens": 973,
+        "cost_usd": 0.000424
+      },
+      "perplexity/sonar": {
+        "calls_total": 7,
+        "prompt_tokens": 2968,
+        "completion_tokens": 3039,
+        "total_tokens": 6007,
+        "cost_usd": 0.040999999999999995
+      }
+    }
+  },
+  "prompt_versions": {
+    "spelling_wording_checker": "spelling_wording_checker:v1",
+    "market_fit_checker": "market_fit_checker:v1",
+    "tech_freshness_checker": "tech_freshness_checker:v1",
+    "readme_fact_actuality_checker": "readme_fact_actuality_checker:v1",
+    "fact_checker_perplexity": "fact_checker_perplexity:v1",
+    "curriculum_relevance_checker": "curriculum_relevance_checker:v1",
+    "model_rubric_checker": "model_rubric_checker:v1"
+  },
+  "steps": [
+    {
+      "name": "Загрузка файлов",
+      "status": "ok",
+      "started_at": "2026-06-23T18:15:03.677097Z",
+      "finished_at": "2026-06-23T18:15:03.685024Z",
+      "duration_ms": 7,
+      "detail": "Единиц: 1"
+    },
+    {
+      "name": "Подготовка проверок",
+      "status": "ok",
+      "started_at": "2026-06-23T18:15:03.685043Z",
+      "finished_at": "2026-06-23T18:15:03.694626Z",
+      "duration_ms": 9,
+      "detail": "Модулей: 22, совпадений кода: 0"
+    },
+    {
+      "name": "Извлечение и проверки",
+      "status": "ok",
+      "started_at": "2026-06-23T18:15:03.694655Z",
+      "finished_at": "2026-06-23T18:17:21.407364Z",
+      "duration_ms": 137712,
+      "detail": "Сущностей: 10"
+    },
+    {
+      "name": "Сборка отчёта",
+      "status": "ok",
+      "started_at": "2026-06-23T18:17:21.407379Z",
+      "finished_at": "2026-06-23T18:17:21.412708Z",
+      "duration_ms": 5,
+      "detail": "Случаев: 27"
+    }
+  ],
+  "model_used": true,
+  "network_used": true,
+  "warnings": []
+}

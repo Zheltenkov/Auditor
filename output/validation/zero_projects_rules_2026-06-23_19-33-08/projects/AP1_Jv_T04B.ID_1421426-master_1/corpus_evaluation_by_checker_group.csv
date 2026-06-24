@@ -1,0 +1,2 @@
+﻿slice_name,label,predicted_total,true_positive,false_positive,precision,false_positive_share
+editorial_rules,Редакторские правила,1,0,1,0.0,1.0

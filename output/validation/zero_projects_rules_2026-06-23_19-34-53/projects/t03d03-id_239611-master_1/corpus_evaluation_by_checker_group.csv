@@ -1,0 +1,2 @@
+﻿slice_name,label,predicted_total,true_positive,false_positive,precision,false_positive_share
+methodology,Методические критерии,3,1,2,0.3333,1.0

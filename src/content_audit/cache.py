@@ -43,7 +43,17 @@ class AuditCache:
         """Записываем кэш рядом с отчётами."""
 
         self.path.parent.mkdir(parents=True, exist_ok=True)
-        self.path.write_text(json.dumps(self._payload, ensure_ascii=False, indent=2), encoding="utf-8")
+        payload_text = json.dumps(self._payload, ensure_ascii=False, indent=2)
+        temp_path = self.path.with_name(f"{self.path.name}.tmp")
+        try:
+            temp_path.write_text(payload_text, encoding="utf-8")
+            temp_path.replace(self.path)
+        except OSError:
+            try:
+                self.path.write_text(payload_text, encoding="utf-8")
+            except OSError:
+                # Кэш ускоряет и удешевляет повторные прогоны, но не должен останавливать аудит.
+                return
 
     @staticmethod
     def _cache_key(namespace: str, key: str) -> str:

@@ -1,0 +1,3 @@
+﻿criterion,label,gold_total,predicted_total,true_positive,false_positive,false_negative,precision,recall,f1_score
+actuality,Актуальность,4,0,0,0,4,0.0,0.0,0.0
+correctness,Точность и корректность,11,0,0,0,11,0.0,0.0,0.0

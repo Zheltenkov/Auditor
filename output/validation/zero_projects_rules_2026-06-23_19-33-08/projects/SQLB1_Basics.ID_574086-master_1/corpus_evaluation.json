@@ -1,0 +1,473 @@
+{
+  "evaluated_criteria": [
+    "correctness"
+  ],
+  "gold_total": 2,
+  "predicted_total": 10,
+  "true_positive": 0,
+  "false_positive": 10,
+  "false_negative": 2,
+  "precision": 0.0,
+  "recall": 0.0,
+  "f1_score": 0.0,
+  "macro_precision": 0.0,
+  "macro_recall": 0.0,
+  "macro_f1_score": 0.0,
+  "overview_gold_total": 1,
+  "overview_predicted_total": 7,
+  "overview_true_positive": 1,
+  "overview_false_positive": 6,
+  "overview_false_negative": 0,
+  "overview_precision": 0.1429,
+  "overview_recall": 1.0,
+  "overview_f1_score": 0.2501,
+  "overview_macro_precision": 0.1429,
+  "overview_macro_recall": 0.1429,
+  "overview_macro_f1_score": 0.1429,
+  "gold_scope_predicted_total": 10,
+  "gold_scope_true_positive": 0,
+  "gold_scope_false_positive": 10,
+  "gold_scope_false_negative": 2,
+  "gold_scope_precision": 0.0,
+  "gold_scope_recall": 0.0,
+  "gold_scope_f1_score": 0.0,
+  "gold_scope_macro_precision": 0.0,
+  "gold_scope_macro_recall": 0.0,
+  "gold_scope_macro_f1_score": 0.0,
+  "per_criterion": [
+    {
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_total": 2,
+      "predicted_total": 10,
+      "true_positive": 0,
+      "false_positive": 10,
+      "false_negative": 2,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    }
+  ],
+  "overview_per_criterion": [
+    {
+      "criterion": "actuality",
+      "label": "Актуальность",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "checklist_alignment",
+      "label": "Соответствие заданий проекта чек-листу",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_total": 1,
+      "predicted_total": 1,
+      "true_positive": 1,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0
+    },
+    {
+      "criterion": "image_quality",
+      "label": "Качество изображений",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "market_fit",
+      "label": "Соответствие рынку",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "readability",
+      "label": "Грамотность и читаемость текста",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "rights",
+      "label": "Оригинальность и права использования ресурсов",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    }
+  ],
+  "checker_metrics": [
+    {
+      "slice_name": "resource_availability_checker",
+      "label": "resource_availability_checker",
+      "predicted_total": 10,
+      "true_positive": 0,
+      "false_positive": 10,
+      "precision": 0.0,
+      "false_positive_share": 1.0
+    }
+  ],
+  "checker_group_metrics": [
+    {
+      "slice_name": "links_and_resources",
+      "label": "Ссылки и ресурсы",
+      "predicted_total": 10,
+      "true_positive": 0,
+      "false_positive": 10,
+      "precision": 0.0,
+      "false_positive_share": 1.0
+    }
+  ],
+  "actionable_metrics": {
+    "slice_name": "actionable",
+    "label": "Действенные находки",
+    "predicted_total": 10,
+    "true_positive": 0,
+    "false_positive": 10,
+    "precision": 0.0,
+    "false_positive_share": 1.0
+  },
+  "cost_quality": {
+    "model_calls": 0,
+    "cache_hits": 0,
+    "total_tokens": 0,
+    "cost_usd": 0.0,
+    "cost_per_gold_true_positive": null,
+    "cost_per_prediction": 0.0,
+    "cost_per_actionable_true_positive": null
+  },
+  "false_negative_reason_counts": {
+    "model_possible": 2
+  },
+  "false_negative_analysis": [
+    {
+      "project": "SQLB1_Basics.ID_574086-master",
+      "project_id": "sqlb1_basics_id_574086_master__8bfacdb4",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_line_range": "",
+      "gold_text": "Отсутствует ВМ для выполнения SQLB1_Basics",
+      "nearest_finding_id": "fnd_184b75b9e063",
+      "nearest_checker": "resource_availability_checker",
+      "nearest_match_type": "criterion_only",
+      "nearest_score": 0.15,
+      "reason_code": "model_possible",
+      "reason_label": "Нужен смысловой анализ",
+      "next_step": "Добавить модельный/семантический слой с проверяемым JSON-контрактом и примерами."
+    },
+    {
+      "project": "SQLB1_Basics.ID_574086-master",
+      "project_id": "sqlb1_basics_id_574086_master__8bfacdb4",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_line_range": "",
+      "gold_text": ":small_blue_diamond: Description: В инструкции из папки materials приведен путь /opt/source21, откуда нужно импортировать ВМ для выполнения задания. По факту директория source21 отсутствует.",
+      "nearest_finding_id": "fnd_184b75b9e063",
+      "nearest_checker": "resource_availability_checker",
+      "nearest_match_type": "criterion_only",
+      "nearest_score": 0.1667,
+      "reason_code": "model_possible",
+      "reason_label": "Нужен смысловой анализ",
+      "next_step": "Добавить модельный/семантический слой с проверяемым JSON-контрактом и примерами."
+    }
+  ],
+  "gold_items": [
+    {
+      "row_number": 2,
+      "raw_project": "SQLB1_Basics",
+      "matched_project": "SQLB1_Basics.ID_574086-master",
+      "project_id": "sqlb1_basics_id_574086_master__8bfacdb4",
+      "raw_problem": "ошибка в доп материалах",
+      "details": "Отсутствует ВМ для выполнения SQLB1_Basics\n:small_blue_diamond: Description: В инструкции из папки materials приведен путь /opt/source21, откуда нужно импортировать ВМ для выполнения задания. По факту директория source21 отсутствует. \n Предложение по решению: \n1) Создать директорию и выложить туда образ или внести правки в инструкию, указав корректный путь.\n2) В обоих случаях убедиться, что импорт отрабатывает корректно на школьных ПК.",
+      "criteria": [
+        "correctness"
+      ]
+    }
+  ],
+  "gold_cases": [
+    {
+      "case_id": "gold_2_correctness_1",
+      "row_number": 2,
+      "raw_project": "SQLB1_Basics",
+      "matched_project": "SQLB1_Basics.ID_574086-master",
+      "project_id": "sqlb1_basics_id_574086_master__8bfacdb4",
+      "criterion": "correctness",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "Отсутствует ВМ для выполнения SQLB1_Basics"
+    },
+    {
+      "case_id": "gold_2_correctness_2",
+      "row_number": 2,
+      "raw_project": "SQLB1_Basics",
+      "matched_project": "SQLB1_Basics.ID_574086-master",
+      "project_id": "sqlb1_basics_id_574086_master__8bfacdb4",
+      "criterion": "correctness",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": ":small_blue_diamond: Description: В инструкции из папки materials приведен путь /opt/source21, откуда нужно импортировать ВМ для выполнения задания. По факту директория source21 отсутствует."
+    }
+  ],
+  "matches": [
+    {
+      "project": "SQLB1_Basics.ID_574086-master",
+      "project_id": "sqlb1_basics_id_574086_master__8bfacdb4",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "Отсутствует ВМ для выполнения SQLB1_Basics",
+      "found_finding_id": "fnd_184b75b9e063",
+      "found_checker": "resource_availability_checker",
+      "found_line_range": "README_RUS.md:170",
+      "found_text": "day00_ex04.sql | В инструкции указан локальный ресурс `day00_ex04.sql`, но среди файлов проекта он не найден. | Добавить ресурс в материалы проекта или указать рабочую ссылку/путь, откуда его получить. | missing_local_resource",
+      "match_type": "criterion_only",
+      "match_score": 0.15,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    },
+    {
+      "project": "SQLB1_Basics.ID_574086-master",
+      "project_id": "sqlb1_basics_id_574086_master__8bfacdb4",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": ":small_blue_diamond: Description: В инструкции из папки materials приведен путь /opt/source21, откуда нужно импортировать ВМ для выполнения задания. По факту директория source21 отсутствует.",
+      "found_finding_id": "fnd_184b75b9e063",
+      "found_checker": "resource_availability_checker",
+      "found_line_range": "README_RUS.md:170",
+      "found_text": "day00_ex04.sql | В инструкции указан локальный ресурс `day00_ex04.sql`, но среди файлов проекта он не найден. | Добавить ресурс в материалы проекта или указать рабочую ссылку/путь, откуда его получить. | missing_local_resource",
+      "match_type": "criterion_only",
+      "match_score": 0.1667,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    }
+  ],
+  "detailed_false_positive_items": [
+    {
+      "finding_id": "fnd_b49401cbd350",
+      "project_id": "sqlb1_basics_id_574086_master__8bfacdb4",
+      "project": "SQLB1_Basics.ID_574086-master",
+      "criterion": "correctness",
+      "checker_name": "resource_availability_checker",
+      "line_start": 121,
+      "line_end": 121,
+      "file_path": "README_RUS.md",
+      "severity": "major",
+      "verdict": "fail",
+      "confidence": 0.9,
+      "issue_type": "missing_local_resource",
+      "found_text": "day00_ex00.sql | В инструкции указан локальный ресурс `day00_ex00.sql`, но среди файлов проекта он не найден. | Добавить ресурс в материалы проекта или указать рабочую ссылку/путь, откуда его получить. | missing_local_resource"
+    },
+    {
+      "finding_id": "fnd_22dbd908025e",
+      "project_id": "sqlb1_basics_id_574086_master__8bfacdb4",
+      "project": "SQLB1_Basics.ID_574086-master",
+      "criterion": "correctness",
+      "checker_name": "resource_availability_checker",
+      "line_start": 132,
+      "line_end": 132,
+      "file_path": "README_RUS.md",
+      "severity": "major",
+      "verdict": "fail",
+      "confidence": 0.9,
+      "issue_type": "missing_local_resource",
+      "found_text": "day00_ex01.sql | В инструкции указан локальный ресурс `day00_ex01.sql`, но среди файлов проекта он не найден. | Добавить ресурс в материалы проекта или указать рабочую ссылку/путь, откуда его получить. | missing_local_resource"
+    },
+    {
+      "finding_id": "fnd_3ea04a6765fa",
+      "project_id": "sqlb1_basics_id_574086_master__8bfacdb4",
+      "project": "SQLB1_Basics.ID_574086-master",
+      "criterion": "correctness",
+      "checker_name": "resource_availability_checker",
+      "line_start": 143,
+      "line_end": 143,
+      "file_path": "README_RUS.md",
+      "severity": "major",
+      "verdict": "fail",
+      "confidence": 0.9,
+      "issue_type": "missing_local_resource",
+      "found_text": "day00_ex02.sql | В инструкции указан локальный ресурс `day00_ex02.sql`, но среди файлов проекта он не найден. | Добавить ресурс в материалы проекта или указать рабочую ссылку/путь, откуда его получить. | missing_local_resource"
+    },
+    {
+      "finding_id": "fnd_563d3c8d56b6",
+      "project_id": "sqlb1_basics_id_574086_master__8bfacdb4",
+      "project": "SQLB1_Basics.ID_574086-master",
+      "criterion": "correctness",
+      "checker_name": "resource_availability_checker",
+      "line_start": 157,
+      "line_end": 157,
+      "file_path": "README_RUS.md",
+      "severity": "major",
+      "verdict": "fail",
+      "confidence": 0.9,
+      "issue_type": "missing_local_resource",
+      "found_text": "day00_ex03.sql | В инструкции указан локальный ресурс `day00_ex03.sql`, но среди файлов проекта он не найден. | Добавить ресурс в материалы проекта или указать рабочую ссылку/путь, откуда его получить. | missing_local_resource"
+    },
+    {
+      "finding_id": "fnd_184b75b9e063",
+      "project_id": "sqlb1_basics_id_574086_master__8bfacdb4",
+      "project": "SQLB1_Basics.ID_574086-master",
+      "criterion": "correctness",
+      "checker_name": "resource_availability_checker",
+      "line_start": 170,
+      "line_end": 170,
+      "file_path": "README_RUS.md",
+      "severity": "major",
+      "verdict": "fail",
+      "confidence": 0.9,
+      "issue_type": "missing_local_resource",
+      "found_text": "day00_ex04.sql | В инструкции указан локальный ресурс `day00_ex04.sql`, но среди файлов проекта он не найден. | Добавить ресурс в материалы проекта или указать рабочую ссылку/путь, откуда его получить. | missing_local_resource"
+    },
+    {
+      "finding_id": "fnd_874f02706898",
+      "project_id": "sqlb1_basics_id_574086_master__8bfacdb4",
+      "project": "SQLB1_Basics.ID_574086-master",
+      "criterion": "correctness",
+      "checker_name": "resource_availability_checker",
+      "line_start": 185,
+      "line_end": 185,
+      "file_path": "README_RUS.md",
+      "severity": "major",
+      "verdict": "fail",
+      "confidence": 0.9,
+      "issue_type": "missing_local_resource",
+      "found_text": "day00_ex05.sql | В инструкции указан локальный ресурс `day00_ex05.sql`, но среди файлов проекта он не найден. | Добавить ресурс в материалы проекта или указать рабочую ссылку/путь, откуда его получить. | missing_local_resource"
+    },
+    {
+      "finding_id": "fnd_238209a43c67",
+      "project_id": "sqlb1_basics_id_574086_master__8bfacdb4",
+      "project": "SQLB1_Basics.ID_574086-master",
+      "criterion": "correctness",
+      "checker_name": "resource_availability_checker",
+      "line_start": 207,
+      "line_end": 207,
+      "file_path": "README_RUS.md",
+      "severity": "major",
+      "verdict": "fail",
+      "confidence": 0.9,
+      "issue_type": "missing_local_resource",
+      "found_text": "day00_ex06.sql | В инструкции указан локальный ресурс `day00_ex06.sql`, но среди файлов проекта он не найден. | Добавить ресурс в материалы проекта или указать рабочую ссылку/путь, откуда его получить. | missing_local_resource"
+    },
+    {
+      "finding_id": "fnd_ccb36b4bbdaf",
+      "project_id": "sqlb1_basics_id_574086_master__8bfacdb4",
+      "project": "SQLB1_Basics.ID_574086-master",
+      "criterion": "correctness",
+      "checker_name": "resource_availability_checker",
+      "line_start": 223,
+      "line_end": 223,
+      "file_path": "README_RUS.md",
+      "severity": "major",
+      "verdict": "fail",
+      "confidence": 0.9,
+      "issue_type": "missing_local_resource",
+      "found_text": "day00_ex07.sql | В инструкции указан локальный ресурс `day00_ex07.sql`, но среди файлов проекта он не найден. | Добавить ресурс в материалы проекта или указать рабочую ссылку/путь, откуда его получить. | missing_local_resource"
+    },
+    {
+      "finding_id": "fnd_e1b81a9b98e5",
+      "project_id": "sqlb1_basics_id_574086_master__8bfacdb4",
+      "project": "SQLB1_Basics.ID_574086-master",
+      "criterion": "correctness",
+      "checker_name": "resource_availability_checker",
+      "line_start": 242,
+      "line_end": 242,
+      "file_path": "README_RUS.md",
+      "severity": "major",
+      "verdict": "fail",
+      "confidence": 0.9,
+      "issue_type": "missing_local_resource",
+      "found_text": "day00_ex08.sql | В инструкции указан локальный ресурс `day00_ex08.sql`, но среди файлов проекта он не найден. | Добавить ресурс в материалы проекта или указать рабочую ссылку/путь, откуда его получить. | missing_local_resource"
+    },
+    {
+      "finding_id": "fnd_32acf175a3d3",
+      "project_id": "sqlb1_basics_id_574086_master__8bfacdb4",
+      "project": "SQLB1_Basics.ID_574086-master",
+      "criterion": "correctness",
+      "checker_name": "resource_availability_checker",
+      "line_start": 255,
+      "line_end": 255,
+      "file_path": "README_RUS.md",
+      "severity": "major",
+      "verdict": "fail",
+      "confidence": 0.9,
+      "issue_type": "missing_local_resource",
+      "found_text": "day00_ex09.sql | В инструкции указан локальный ресурс `day00_ex09.sql`, но среди файлов проекта он не найден. | Добавить ресурс в материалы проекта или указать рабочую ссылку/путь, откуда его получить. | missing_local_resource"
+    }
+  ],
+  "false_positive_items": [
+    {
+      "project_id": "sqlb1_basics_id_574086_master__8bfacdb4",
+      "criterion": "actuality"
+    },
+    {
+      "project_id": "sqlb1_basics_id_574086_master__8bfacdb4",
+      "criterion": "checklist_alignment"
+    },
+    {
+      "project_id": "sqlb1_basics_id_574086_master__8bfacdb4",
+      "criterion": "image_quality"
+    },
+    {
+      "project_id": "sqlb1_basics_id_574086_master__8bfacdb4",
+      "criterion": "market_fit"
+    },
+    {
+      "project_id": "sqlb1_basics_id_574086_master__8bfacdb4",
+      "criterion": "readability"
+    },
+    {
+      "project_id": "sqlb1_basics_id_574086_master__8bfacdb4",
+      "criterion": "rights"
+    }
+  ],
+  "false_negative_items": [],
+  "project_mapping": {
+    "SQLB1_Basics": "SQLB1_Basics.ID_574086-master"
+  },
+  "notes": [
+    "Основное сравнение выполняется на уровне атомарных ошибок: проект, критерий, строка/диапазон и текст.",
+    "В строгую метрику не входят диагностические строки: низкоуверенные unknown, непроверенные ссылки и общие ресурсные предупреждения без имени файла.",
+    "Старая метрика проект × критерий сохранена только как обзорная в overview_* полях.",
+    "Excel-разметка нормализуется эвристически из колонок 'Проблема' и 'Детали'."
+  ]
+}

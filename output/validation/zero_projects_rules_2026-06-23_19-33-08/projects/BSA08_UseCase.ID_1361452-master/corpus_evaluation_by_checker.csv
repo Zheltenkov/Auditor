@@ -1,0 +1,2 @@
+﻿slice_name,label,predicted_total,true_positive,false_positive,precision,false_positive_share
+checklist_checker,checklist_checker,7,0,7,0.0,1.0

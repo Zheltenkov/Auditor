@@ -1,0 +1,76 @@
+{
+  "started_at": "2026-06-23T19:34:54.680049Z",
+  "finished_at": "2026-06-23T19:34:54.904037Z",
+  "input_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-34-53\\AP1_Jv_T04B.ID_1421426-master_1",
+  "units_total": 1,
+  "files_total": 7,
+  "findings_total": 9,
+  "affected_units_total": 1,
+  "by_severity": {
+    "info": 4,
+    "major": 3,
+    "minor": 2
+  },
+  "by_criterion": {
+    "actuality": 4,
+    "checklist_alignment": 2,
+    "correctness": 1,
+    "market_fit": 1,
+    "readability": 1
+  },
+  "by_branch": {
+    "AP1_Jv_T04B.ID_1421426-master (1)": 9
+  },
+  "by_unit": {
+    "ap1_jv_t04b_id_1421426_master__a88e0c31": 9
+  },
+  "model_usage": {
+    "calls_total": 0,
+    "cache_hits": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "total_tokens": 0,
+    "cost_usd": 0.0,
+    "by_model": {}
+  },
+  "prompt_versions": {},
+  "steps": [
+    {
+      "name": "Загрузка файлов",
+      "status": "ok",
+      "started_at": "2026-06-23T19:34:54.680054Z",
+      "finished_at": "2026-06-23T19:34:54.690659Z",
+      "duration_ms": 10,
+      "detail": "Единиц: 1"
+    },
+    {
+      "name": "Подготовка проверок",
+      "status": "ok",
+      "started_at": "2026-06-23T19:34:54.690697Z",
+      "finished_at": "2026-06-23T19:34:54.697948Z",
+      "duration_ms": 7,
+      "detail": "Модулей: 19, совпадений кода: 0"
+    },
+    {
+      "name": "Извлечение и проверки",
+      "status": "ok",
+      "started_at": "2026-06-23T19:34:54.697991Z",
+      "finished_at": "2026-06-23T19:34:54.901135Z",
+      "duration_ms": 203,
+      "detail": "Сущностей: 33"
+    },
+    {
+      "name": "Сборка отчёта",
+      "status": "ok",
+      "started_at": "2026-06-23T19:34:54.901163Z",
+      "finished_at": "2026-06-23T19:34:54.903950Z",
+      "duration_ms": 2,
+      "detail": "Случаев: 9"
+    }
+  ],
+  "model_used": false,
+  "network_used": false,
+  "warnings": [
+    "Постобработка: 3 языковых дублей схлопнуты в базовые строки."
+  ]
+}

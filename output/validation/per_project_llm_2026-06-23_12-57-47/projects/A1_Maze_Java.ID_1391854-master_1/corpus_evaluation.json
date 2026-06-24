@@ -1,0 +1,395 @@
+{
+  "evaluated_criteria": [
+    "actuality",
+    "correctness"
+  ],
+  "gold_total": 2,
+  "predicted_total": 10,
+  "true_positive": 0,
+  "false_positive": 10,
+  "false_negative": 2,
+  "precision": 0.0,
+  "recall": 0.0,
+  "f1_score": 0.0,
+  "macro_precision": 0.0,
+  "macro_recall": 0.0,
+  "macro_f1_score": 0.0,
+  "overview_gold_total": 1,
+  "overview_predicted_total": 6,
+  "overview_true_positive": 1,
+  "overview_false_positive": 5,
+  "overview_false_negative": 0,
+  "overview_precision": 0.1667,
+  "overview_recall": 1.0,
+  "overview_f1_score": 0.2858,
+  "overview_macro_precision": 0.1667,
+  "overview_macro_recall": 0.1667,
+  "overview_macro_f1_score": 0.1667,
+  "gold_scope_predicted_total": 10,
+  "gold_scope_true_positive": 0,
+  "gold_scope_false_positive": 10,
+  "gold_scope_false_negative": 2,
+  "gold_scope_precision": 0.0,
+  "gold_scope_recall": 0.0,
+  "gold_scope_f1_score": 0.0,
+  "gold_scope_macro_precision": 0.0,
+  "gold_scope_macro_recall": 0.0,
+  "gold_scope_macro_f1_score": 0.0,
+  "per_criterion": [
+    {
+      "criterion": "actuality",
+      "label": "Актуальность",
+      "gold_total": 1,
+      "predicted_total": 2,
+      "true_positive": 0,
+      "false_positive": 2,
+      "false_negative": 1,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_total": 1,
+      "predicted_total": 8,
+      "true_positive": 0,
+      "false_positive": 8,
+      "false_negative": 1,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    }
+  ],
+  "overview_per_criterion": [
+    {
+      "criterion": "actuality",
+      "label": "Актуальность",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "checklist_alignment",
+      "label": "Соответствие заданий проекта чек-листу",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_total": 1,
+      "predicted_total": 1,
+      "true_positive": 1,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0
+    },
+    {
+      "criterion": "image_quality",
+      "label": "Качество изображений",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "readability",
+      "label": "Грамотность и читаемость текста",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "rights",
+      "label": "Оригинальность и права использования ресурсов",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    }
+  ],
+  "gold_items": [
+    {
+      "row_number": 2,
+      "raw_project": "A1_Maze_Java",
+      "matched_project": "A1_Maze_Java.ID_1391854-master",
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "raw_problem": "ошибка в задании",
+      "details": "\"1. Нормально ли то, что в материалах ссылка на C++ code style, а код предлагается писать на Java?\n2. Нормально ли требование сборки с помощью Makefile?\"",
+      "criteria": [
+        "correctness"
+      ]
+    }
+  ],
+  "gold_cases": [
+    {
+      "case_id": "gold_2_actuality_1",
+      "row_number": 2,
+      "raw_project": "A1_Maze_Java",
+      "matched_project": "A1_Maze_Java.ID_1391854-master",
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "criterion": "actuality",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "Нормально ли то, что в материалах ссылка на C++ code style, а код предлагается писать на Java?"
+    },
+    {
+      "case_id": "gold_2_correctness_2",
+      "row_number": 2,
+      "raw_project": "A1_Maze_Java",
+      "matched_project": "A1_Maze_Java.ID_1391854-master",
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "criterion": "correctness",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "Нормально ли требование сборки с помощью Makefile?"
+    }
+  ],
+  "matches": [
+    {
+      "project": "A1_Maze_Java.ID_1391854-master",
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "criterion": "actuality",
+      "label": "Актуальность",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "Нормально ли то, что в материалах ссылка на C++ code style, а код предлагается писать на Java?",
+      "found_finding_id": "fnd_5870834148b2",
+      "found_checker": "tech_freshness_checker",
+      "found_line_range": "materials/instructions_for_testing.md:24",
+      "found_text": "Google Style: https://google.github.io/styleguide/cppguide.html | В материалах указана версия clang-format 14.0.5 для Mac и 13.0.1 для Linux, тогда как на дату проверки актуальная версия составляет 18.1.3. Указанные в материалах версии устарели, но функционально могут быть приемлемы. | Рекомендуется обновить версии clang-format в материалах до актуальной стабильной версии 18.1.3 для соответствия современным стандартам и получения актуальных возможностей форматирования кода.",
+      "match_type": "criterion_only",
+      "match_score": 0.25,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    },
+    {
+      "project": "A1_Maze_Java.ID_1391854-master",
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "Нормально ли требование сборки с помощью Makefile?",
+      "found_finding_id": "fnd_8376efa0b7ad",
+      "found_checker": "curriculum_relevance_checker",
+      "found_line_range": "README.md:151",
+      "found_text": "- The program must be built with Makefile which contains standard set of targets for GNU-programs: all, install, uninstall, clean, dvi, dist, tests. Installation directory could be arbitrary, except the building one | Требование Makefile для Java-проекта методически спорно: оно уводит акцент с типичного Java-инструментария и может восприниматься как обязательный, хотя он не является естественным выбором для обучения Java-сборке. | Схлопнуто 2 строк: README.md, README_RUS.md. | Явно обосновать учебную роль Makefile либо заменить её на Maven/Gradle, если курс не посвящён именно Makefile. | inappropriate_tool",
+      "match_type": "criterion_only",
+      "match_score": 0.4286,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    }
+  ],
+  "detailed_false_positive_items": [
+    {
+      "finding_id": "fnd_67f1a21e0b76",
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "project": "A1_Maze_Java.ID_1391854-master",
+      "criterion": "actuality",
+      "checker_name": "tech_freshness_checker",
+      "line_start": 17,
+      "line_end": 17,
+      "file_path": "materials/instructions_for_testing.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.9,
+      "issue_type": "",
+      "found_text": "or if you have root rights (for Ubuntu / Linux Mint / Debian) \\ | В тексте упоминается Ubuntu в контексте установки инструментов командой apt, что актуально для поддерживаемых версий Ubuntu. Однако конкретная версия не указана, и упомянутые версии clang-format (13.0.1 и 14.0.5) устарели, что может быть связано с использованием старых репозиториев. | Рекомендуется использовать актуальные LTS-версии Ubuntu (22.04 или 24.04) и обновить версии инструментов, таких как clang-format, до последних стабильных релизов из официальных репозиториев."
+    },
+    {
+      "finding_id": "fnd_5870834148b2",
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "project": "A1_Maze_Java.ID_1391854-master",
+      "criterion": "actuality",
+      "checker_name": "tech_freshness_checker",
+      "line_start": 24,
+      "line_end": 24,
+      "file_path": "materials/instructions_for_testing.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.9,
+      "issue_type": "",
+      "found_text": "Google Style: https://google.github.io/styleguide/cppguide.html | В материалах указана версия clang-format 14.0.5 для Mac и 13.0.1 для Linux, тогда как на дату проверки актуальная версия составляет 18.1.3. Указанные в материалах версии устарели, но функционально могут быть приемлемы. | Рекомендуется обновить версии clang-format в материалах до актуальной стабильной версии 18.1.3 для соответствия современным стандартам и получения актуальных возможностей форматирования кода."
+    },
+    {
+      "finding_id": "fnd_5eb029d25061",
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "project": "A1_Maze_Java.ID_1391854-master",
+      "criterion": "correctness",
+      "checker_name": "fact_checker_perplexity",
+      "line_start": 6,
+      "line_end": 6,
+      "file_path": "materials/instructions_for_testing.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.7,
+      "issue_type": "",
+      "found_text": "**Style tests.** To check how much the beauty of your code meets the standards, for example, you can test your code | The phrase \"style tests\" is not a standard industry term; organisations usually refer to this as \"style checking\", \"linting\", or \"code formatting\" (e.g., using tools like Checkstyle, Pylint, Clang-Tidy, etc.). The meaning of the sentence is understandable (checking that code conforms to a coding style guide), but the wording is informal and potentially misleading for learners. Sources such as Checkstyle’s own description and guides on code‑quality tools explicitly describe these activities as static‑analysis or linting checks, not as tests in the usual unit/integration sense. | Consider rephrasing to standard terminology, e.g., replace \"Style tests. To check how much the beauty of your code meets the standards\" with something like \"Style checking. To check that your code conforms to the agreed coding standard, for example, you can use a linter or static‑analysis tool (such as Checkstyle or Pylint).\" This will be clearer and more aligned with industry practice."
+    },
+    {
+      "finding_id": "fnd_47e8a82ad99e",
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "project": "A1_Maze_Java.ID_1391854-master",
+      "criterion": "correctness",
+      "checker_name": "curriculum_relevance_checker",
+      "line_start": 24,
+      "line_end": 24,
+      "file_path": "materials/instructions_for_testing.md",
+      "severity": "major",
+      "verdict": "warning",
+      "confidence": 0.86,
+      "issue_type": "language_material_conflict",
+      "found_text": "Google Style: https://google.github.io/styleguide/cppguide.html | Рекомендован C++ style guide, хотя проект относится к Java. | Схлопнуто 2 строк: materials/instructions_for_testing.md, materials/instructions_for_testing_rus.md. | Заменить рекомендацию на стиль и материалы для фактического языка проекта. | language_material_conflict"
+    },
+    {
+      "finding_id": "fnd_eaa176e53520",
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "project": "A1_Maze_Java.ID_1391854-master",
+      "criterion": "correctness",
+      "checker_name": "curriculum_relevance_checker",
+      "line_start": 49,
+      "line_end": 49,
+      "file_path": "check-list.yml",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.86,
+      "issue_type": "language_tooling_conflict",
+      "found_text": "- The program is built using Makefile with standard set of targets for GNU-programs: all, install, uninstall, clean,  dvi, dist, tests. | Для Java-проекта Makefile как обязательный способ сборки требует отдельного методического обоснования. | Проверить, почему не используется стандартный для Java инструмент сборки вроде Maven или Gradle, либо явно объяснить учебную причину Makefile. | language_tooling_conflict"
+    },
+    {
+      "finding_id": "fnd_eaa176e53520",
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "project": "A1_Maze_Java.ID_1391854-master",
+      "criterion": "correctness",
+      "checker_name": "curriculum_relevance_checker",
+      "line_start": 49,
+      "line_end": 49,
+      "file_path": "check-list.yml",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.96,
+      "issue_type": "inappropriate_tool",
+      "found_text": "- The program is built using Makefile with standard set of targets for GNU-programs: all, install, uninstall, clean,  dvi, dist, tests. | Для Java-проекта Makefile как обязательный способ сборки выглядит методически неестественно: в учебной практике Java обычно осваивают через Maven или Gradle, а не через GNU-ориентированный Makefile. Это может отвлекать от основной цели задания, если сборщик не является отдельной темой курса. | Либо заменить требование на стандартный для Java инструмент сборки, либо явно зафиксировать, что использование Makefile здесь — осознанная учебная цель и отдельно объяснить её студентам. | inappropriate_tool"
+    },
+    {
+      "finding_id": "fnd_8378de636c71",
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "project": "A1_Maze_Java.ID_1391854-master",
+      "criterion": "correctness",
+      "checker_name": "fact_checker_perplexity",
+      "line_start": 109,
+      "line_end": 109,
+      "file_path": "README_RUS.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.85,
+      "issue_type": "",
+      "found_text": "При подобной генерации используется идея, схожая с уже знакомой тебе игрой «Жизнь». | Игра «Жизнь» Конвея действительно является клеточным автоматом, и её принципы (переходы состояний клеток по фиксированному набору локальных правил) часто используются как основа для процедурной генерации локаций, например, пещер. Однако в общем виде такие генераторы могут использовать модифицированные правила, расширенные алфавиты состояний и другие идеи, так что корректнее говорить не о «идеи, схожей» как копирование правил «Жизни», а о заимствовании идеи клеточного автомата (локальные правила перехода на основе соседей). Поэтому формулировка утверждения частично неточна и требует уточнения, но не является грубо ошибочной. | Уточните формулировку: например, замените «идея, схожая с уже знакомой тебе игрой «Жизнь»» на что-то вроде «ного автомата, построенного по принципам, близким к игре «Жизнь» (локальные правила перехода на основе соседей)». Это устранит недоумение у читателей, знакомых с оригинальной игрой «Жизнь» Конвея."
+    },
+    {
+      "finding_id": "fnd_7cd9f4fa8786",
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "project": "A1_Maze_Java.ID_1391854-master",
+      "criterion": "correctness",
+      "checker_name": "fact_checker_perplexity",
+      "line_start": 150,
+      "line_end": 150,
+      "file_path": "README.md",
+      "severity": "major",
+      "verdict": "fail",
+      "confidence": 0.85,
+      "issue_type": "",
+      "found_text": "When writing code it is necessary to follow the Google style | Google publishes multiple language‑specific style guides (JavaScript, C++, Go, etc.) and developer documentation style guides, but explicitly states that project‑specific guidelines should be prioritized over general style guides and that clarity and consistency for a given domain or project justify deviation. The claim that one is *required* to follow the Google style is therefore stronger than what Google’s own documentation recommends. | Переформулируйте утверждение, чтобы отразить, что Google Style является одним из возможных стандартов, а не обязательным правилом для всех проектов (например: \"Рекомендуется следовать Google Style, если это принято в проекте\")."
+    },
+    {
+      "finding_id": "fnd_8376efa0b7ad",
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "project": "A1_Maze_Java.ID_1391854-master",
+      "criterion": "correctness",
+      "checker_name": "curriculum_relevance_checker",
+      "line_start": 151,
+      "line_end": 151,
+      "file_path": "README.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.86,
+      "issue_type": "language_tooling_conflict",
+      "found_text": "- The program must be built with Makefile which contains standard set of targets for GNU-programs: all, install, uninstall, clean, dvi, dist, tests. Installation directory could be arbitrary, except the building one | Для Java-проекта Makefile как обязательный способ сборки требует отдельного методического обоснования. | Схлопнуто 2 строк: README.md, README_RUS.md. | Проверить, почему не используется стандартный для Java инструмент сборки вроде Maven или Gradle, либо явно объяснить учебную причину Makefile. | language_tooling_conflict"
+    },
+    {
+      "finding_id": "fnd_8376efa0b7ad",
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "project": "A1_Maze_Java.ID_1391854-master",
+      "criterion": "correctness",
+      "checker_name": "curriculum_relevance_checker",
+      "line_start": 151,
+      "line_end": 151,
+      "file_path": "README.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.95,
+      "issue_type": "inappropriate_tool",
+      "found_text": "- The program must be built with Makefile which contains standard set of targets for GNU-programs: all, install, uninstall, clean, dvi, dist, tests. Installation directory could be arbitrary, except the building one | Требование Makefile для Java-проекта методически спорно: оно уводит акцент с типичного Java-инструментария и может восприниматься как обязательный, хотя он не является естественным выбором для обучения Java-сборке. | Схлопнуто 2 строк: README.md, README_RUS.md. | Явно обосновать учебную роль Makefile либо заменить её на Maven/Gradle, если курс не посвящён именно Makefile. | inappropriate_tool"
+    }
+  ],
+  "false_positive_items": [
+    {
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "criterion": "actuality"
+    },
+    {
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "criterion": "checklist_alignment"
+    },
+    {
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "criterion": "image_quality"
+    },
+    {
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "criterion": "readability"
+    },
+    {
+      "project_id": "a1_maze_java_id_1391854_master__29d502a1",
+      "criterion": "rights"
+    }
+  ],
+  "false_negative_items": [],
+  "project_mapping": {
+    "A1_Maze_Java": "A1_Maze_Java.ID_1391854-master"
+  },
+  "notes": [
+    "Основное сравнение выполняется на уровне атомарных ошибок: проект, критерий, строка/диапазон и текст.",
+    "В строгую метрику не входят диагностические строки: низкоуверенные unknown, непроверенные ссылки и общие ресурсные предупреждения без имени файла.",
+    "Старая метрика проект × критерий сохранена только как обзорная в overview_* полях.",
+    "Excel-разметка нормализуется эвристически из колонок 'Проблема' и 'Детали'."
+  ]
+}

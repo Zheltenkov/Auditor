@@ -1,0 +1,20 @@
+{
+  "projects_total": 17,
+  "projects_ok": 17,
+  "projects_error": 0,
+  "gold_total": 98,
+  "predicted_total": 272,
+  "true_positive": 16,
+  "false_positive": 254,
+  "false_negative": 82,
+  "micro_precision": 0.0593,
+  "micro_recall": 0.1633,
+  "micro_f1_score": 0.087,
+  "macro_precision_by_project": 0.028,
+  "macro_recall_by_project": 0.1196,
+  "macro_f1_by_project": 0.0448,
+  "model_calls": 332,
+  "cache_hits": 75,
+  "total_tokens": 492915,
+  "cost_usd": 1.184214
+}

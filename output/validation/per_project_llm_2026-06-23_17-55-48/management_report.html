@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Сетевой LLM-прогон аудитора контента</title>
+  <style>
+    :root {
+      --bg:#f7f4ee; --panel:#fff; --ink:#142124; --muted:#66757a; --line:#ddd6ca;
+      --green:#1f9d7a; --green-dark:#11745e; --red:#b94a48; --amber:#b98218; --blue:#2f6fb5;
+      --soft-green:#e5f4ef; --soft-red:#f7e5e2; --soft-amber:#f7edd2; --soft-blue:#e5eef9;
+      --shadow:0 12px 28px rgba(38,33,25,.08);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Arial,sans-serif}
+    .wrap{max-width:1180px;margin:0 auto;padding:32px 24px 56px}
+    header{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:start;padding-bottom:22px;border-bottom:1px solid var(--line);margin-bottom:24px}
+    h1{margin:0 0 8px;font-size:34px;line-height:1.1}
+    h2{margin:34px 0 14px;font-size:24px;line-height:1.2}
+    h3{margin:0 0 8px;font-size:16px}
+    p{margin:0 0 10px}.muted{color:var(--muted)}
+    .badge{display:inline-flex;align-items:center;min-height:30px;padding:4px 12px;border-radius:999px;background:var(--soft-blue);color:var(--blue);font-weight:700;white-space:nowrap}
+    .status{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+    .grid{display:grid;gap:16px}.cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:18px}
+    .metric{display:flex;flex-direction:column;gap:6px;min-height:126px}.metric .value{font-size:34px;font-weight:800;line-height:1;color:var(--green-dark)}.metric .label{font-weight:700;color:#34464b}.metric .note{color:var(--muted);font-size:13px}
+    .callout{border-left:5px solid var(--green);background:var(--soft-green);padding:14px 16px;border-radius:10px}
+    .table-wrap{overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow)}
+    table{width:100%;border-collapse:collapse;min-width:760px}th,td{padding:12px 14px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{background:#efe9de;color:#45565c;font-size:13px}tr:last-child td{border-bottom:0}.num{text-align:right;font-variant-numeric:tabular-nums}
+    .pill{display:inline-block;padding:3px 9px;border-radius:999px;font-weight:700;font-size:12px}.good{background:var(--soft-green);color:var(--green-dark)}.warn{background:var(--soft-amber);color:var(--amber)}.bad{background:var(--soft-red);color:var(--red)}
+    .bar{height:10px;background:#eee8dd;border-radius:999px;overflow:hidden;margin-top:6px}.fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--green-dark),var(--green))}.fill.warn{background:linear-gradient(90deg,#b98218,#d6a447)}.fill.bad{background:linear-gradient(90deg,#b94a48,#d56a60)}
+    ul{margin:8px 0 0;padding-left:20px}li{margin:6px 0}.footer{margin-top:34px;color:var(--muted);font-size:13px;border-top:1px solid var(--line);padding-top:18px}
+    @media(max-width:900px){header{grid-template-columns:1fr}.status{justify-content:flex-start}.cols-4,.cols-3,.cols-2{grid-template-columns:1fr}h1{font-size:28px}}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header>
+      <div>
+        <h1>Сетевой LLM-прогон аудитора контента</h1>
+        <p class="muted">Корпус: 17 тестовых проектов из папки <strong>metrics</strong>. Прогон с OpenRouter/Perplexity и сетевой проверкой ссылок.</p>
+      </div>
+      <div class="status">
+        <span class="badge">проекты: 17/17</span>
+        <span class="badge">сеть: включена</span>
+        <span class="badge">модели: включены</span>
+      </div>
+    </header>
+
+    <section class="callout">
+      <strong>Итог:</strong> сетевой прогон успешно завершён по всем 17 проектам. Последний проект был добит отдельным запуском из-за сбоя записи общего кэша, агрегаты пересобраны.
+    </section>
+
+    <h2>Краткий итог</h2>
+    <section class="grid cols-4">
+      <article class="card metric"><div class="value">98</div><div class="label">эталонных ошибок</div><div class="note">атомарные случаи из Excel-разметки</div></article>
+      <article class="card metric"><div class="value">263</div><div class="label">найденных случаев</div><div class="note">в рамках критериев, где есть эталон</div></article>
+      <article class="card metric"><div class="value">18 / 244 / 80</div><div class="label">TP / FP / FN</div><div class="note">найдено / лишнее / пропущено</div></article>
+      <article class="card metric"><div class="value">0.100</div><div class="label">F1</div><div class="note">precision 0.069, recall 0.184</div></article>
+    </section>
+
+    <section class="grid cols-3" style="margin-top:16px">
+      <article class="card metric"><div class="value">0.102</div><div class="label">действенная точность</div><div class="note">18 TP из 176 действенных находок</div></article>
+      <article class="card metric"><div class="value">$1.24</div><div class="label">стоимость прогона</div><div class="note">348 модельных вызовов, 514 120 токенов</div></article>
+      <article class="card metric"><div class="value">$0.069</div><div class="label">стоимость одного TP</div><div class="note">по строгой gold-метрике</div></article>
+    </section>
+
+    <h2>Метрики по критериям</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Критерий</th><th class="num">Gold</th><th class="num">Найдено</th><th class="num">TP</th><th class="num">FP</th><th class="num">FN</th><th class="num">Precision</th><th class="num">Recall</th><th class="num">F1</th></tr></thead>
+        <tbody>
+          <tr><td>Актуальность</td><td class="num">25</td><td class="num">29</td><td class="num">1</td><td class="num">28</td><td class="num">24</td><td class="num"><span class="pill bad">0.035</span></td><td class="num">0.040</td><td class="num">0.037</td></tr>
+          <tr><td>Соответствие чек-листу</td><td class="num">8</td><td class="num">15</td><td class="num">1</td><td class="num">14</td><td class="num">7</td><td class="num"><span class="pill bad">0.067</span></td><td class="num">0.125</td><td class="num">0.087</td></tr>
+          <tr><td>Точность и корректность</td><td class="num">40</td><td class="num">79</td><td class="num">3</td><td class="num">76</td><td class="num">37</td><td class="num"><span class="pill bad">0.038</span></td><td class="num">0.075</td><td class="num">0.050</td></tr>
+          <tr><td>Грамотность и читаемость</td><td class="num">25</td><td class="num">140</td><td class="num">13</td><td class="num">126</td><td class="num">12</td><td class="num"><span class="pill bad">0.094</span></td><td class="num">0.520</td><td class="num">0.159</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Качество по группам проверок</h2>
+    <section class="grid cols-2">
+      <article class="card"><h3>Детерминированные правила</h3><p><strong>15</strong> находок, <strong>10</strong> подтверждений, precision <strong>0.667</strong>.</p><div class="bar"><div class="fill" style="width:66.7%"></div></div><p class="muted">Лучший слой: URL-синтаксис, подписи, локальная логика, структура Markdown.</p></article>
+      <article class="card"><h3>Редакторские правила</h3><p><strong>128</strong> находок, <strong>7</strong> подтверждений, precision <strong>0.055</strong>.</p><div class="bar"><div class="fill bad" style="width:5.5%"></div></div><p class="muted">Основной источник “ложных” по gold, но требует адъюдикации: gold неполный по мелкой редактуре.</p></article>
+      <article class="card"><h3>Фактчек и актуальность</h3><p><strong>76</strong> находок, <strong>1</strong> подтверждение, precision <strong>0.013</strong>.</p><div class="bar"><div class="fill bad" style="width:1.3%"></div></div><p class="muted">Самая дорогая и шумная зона. Нужны более строгие входные фильтры и ручная оценка полезности.</p></article>
+      <article class="card"><h3>Чек-лист и артефакты</h3><p><strong>15</strong> находок, <strong>1</strong> подтверждение, precision <strong>0.067</strong>.</p><div class="bar"><div class="fill bad" style="width:6.7%"></div></div><p class="muted">Нужна калибровка смыслового сопоставления README ↔ check-list.</p></article>
+    </section>
+
+    <h2>Чекеры с наибольшим вкладом в шум</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Чекер</th><th class="num">Найдено</th><th class="num">TP</th><th class="num">FP</th><th class="num">Precision</th><th>Комментарий</th></tr></thead>
+        <tbody>
+          <tr><td>spelling_wording_checker</td><td class="num">128</td><td class="num">7</td><td class="num">121</td><td class="num"><span class="pill bad">0.055</span></td><td>Половина всех FP по gold. Нужна ручная адъюдикация, не простое подавление.</td></tr>
+          <tr><td>readme_fact_actuality_checker</td><td class="num">32</td><td class="num">1</td><td class="num">31</td><td class="num"><span class="pill bad">0.031</span></td><td>Фактчек README слишком широко берёт утверждения.</td></tr>
+          <tr><td>fact_checker_perplexity</td><td class="num">30</td><td class="num">0</td><td class="num">30</td><td class="num"><span class="pill bad">0.000</span></td><td>Высокая стоимость при слабом попадании в текущий gold.</td></tr>
+          <tr><td>curriculum_relevance_checker</td><td class="num">17</td><td class="num">0</td><td class="num">17</td><td class="num"><span class="pill bad">0.000</span></td><td>Методические находки могут быть полезны, но gold их почти не покрывает.</td></tr>
+          <tr><td>markdown_structure_checker</td><td class="num">10</td><td class="num">5</td><td class="num">5</td><td class="num"><span class="pill warn">0.500</span></td><td>Хороший кандидат для дальнейшего усиления.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Вывод</h2>
+    <section class="card">
+      <p>LLM-прогон повышает recall относительно офлайна, но резко добавляет шум в редакторском и фактологическом слоях. Наиболее надёжным остаётся детерминированный слой: precision 0.667.</p>
+      <p>Следующий рациональный шаг — не добавлять новые общие LLM-проверки, а калибровать три источника шума: <strong>spelling_wording_checker</strong>, <strong>readme_fact_actuality_checker</strong> и <strong>fact_checker_perplexity</strong>. Для редакторского слоя нужна адъюдикация, для фактчека — более строгий фильтр входных утверждений.</p>
+    </section>
+
+    <div class="footer">
+      Источники: <code>aggregate_summary.json</code>, <code>aggregate_by_criterion.csv</code>, <code>aggregate_by_checker.csv</code>, <code>aggregate_by_checker_group.csv</code> в папке <code>output/validation/per_project_llm_2026-06-23_17-55-48</code>.
+    </div>
+  </main>
+</body>
+</html>

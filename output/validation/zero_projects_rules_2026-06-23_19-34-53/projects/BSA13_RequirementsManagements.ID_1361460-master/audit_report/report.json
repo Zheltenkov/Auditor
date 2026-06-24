@@ -1,0 +1,1142 @@
+{
+  "summary": {
+    "started_at": "2026-06-23T19:34:55.678547Z",
+    "finished_at": "2026-06-23T19:34:56.028628Z",
+    "input_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-34-53\\BSA13_RequirementsManagements.ID_1361460-master",
+    "units_total": 1,
+    "files_total": 8,
+    "findings_total": 17,
+    "affected_units_total": 1,
+    "by_severity": {
+      "minor": 11,
+      "info": 6
+    },
+    "by_criterion": {
+      "image_quality": 2,
+      "actuality": 6,
+      "market_fit": 1,
+      "readability": 6,
+      "rights": 1,
+      "checklist_alignment": 1
+    },
+    "by_branch": {
+      "BSA13_RequirementsManagements.ID_1361460-master": 17
+    },
+    "by_unit": {
+      "bsa13_requirementsmanagements_id_1361460_master__a41877f1": 17
+    },
+    "model_usage": {
+      "calls_total": 0,
+      "cache_hits": 0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "cost_usd": 0.0,
+      "by_model": {}
+    },
+    "prompt_versions": {},
+    "steps": [
+      {
+        "name": "Загрузка файлов",
+        "status": "ok",
+        "started_at": "2026-06-23T19:34:55.678550Z",
+        "finished_at": "2026-06-23T19:34:55.690921Z",
+        "duration_ms": 12,
+        "detail": "Единиц: 1"
+      },
+      {
+        "name": "Подготовка проверок",
+        "status": "ok",
+        "started_at": "2026-06-23T19:34:55.690950Z",
+        "finished_at": "2026-06-23T19:34:55.698055Z",
+        "duration_ms": 7,
+        "detail": "Модулей: 19, совпадений кода: 0"
+      },
+      {
+        "name": "Извлечение и проверки",
+        "status": "ok",
+        "started_at": "2026-06-23T19:34:55.698089Z",
+        "finished_at": "2026-06-23T19:34:56.026724Z",
+        "duration_ms": 328,
+        "detail": "Сущностей: 24"
+      },
+      {
+        "name": "Сборка отчёта",
+        "status": "ok",
+        "started_at": "2026-06-23T19:34:56.026759Z",
+        "finished_at": "2026-06-23T19:34:56.028573Z",
+        "duration_ms": 1,
+        "detail": "Случаев: 17"
+      }
+    ],
+    "model_used": false,
+    "network_used": false,
+    "warnings": [
+      "Постобработка: 9 языковых дублей схлопнуты в базовые строки."
+    ]
+  },
+  "units": [
+    {
+      "unit_id": "bsa13_requirementsmanagements_id_1361460_master__a41877f1",
+      "name": "BSA13_RequirementsManagements.ID_1361460-master",
+      "root_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-34-53\\BSA13_RequirementsManagements.ID_1361460-master\\BSA13_RequirementsManagements.ID_1361460-master\\BSA13_RequirementsManagements.ID_1361460-master",
+      "relative_path": "BSA13_RequirementsManagements.ID_1361460-master/BSA13_RequirementsManagements.ID_1361460-master",
+      "branch": "BSA13_RequirementsManagements.ID_1361460-master",
+      "files": [
+        {
+          "relative_path": "CHANGELOG",
+          "absolute_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-34-53\\BSA13_RequirementsManagements.ID_1361460-master\\BSA13_RequirementsManagements.ID_1361460-master\\BSA13_RequirementsManagements.ID_1361460-master\\CHANGELOG",
+          "kind": "text",
+          "text": "",
+          "size_bytes": 0
+        },
+        {
+          "relative_path": "check-list.yml",
+          "absolute_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-34-53\\BSA13_RequirementsManagements.ID_1361460-master\\BSA13_RequirementsManagements.ID_1361460-master\\BSA13_RequirementsManagements.ID_1361460-master\\check-list.yml",
+          "kind": "checklist",
+          "text": "introduction: >\n  - The School 21 methodology can lead to high eduse caseational results only if peer-to-peer assessment is done as responsibly as possible. Please read the instruse casetions carefully before starting the check.\n\n   - Be friendly and polite. Be respectful of the other person and the work they have done. Be construse casetive when giving feedback.\n\n   - When reviewing the work, notice for yourself any incorrect or possibly controversial moments. Discuss them with the author of the solution.\n\n   - Try to be open to a different opinion or way of interpreting the task. It is possible that both your approach and the approach of another may be correct.    \n  \n   - If you haven't finished the project yourself, be sure to read it completely before reviewing it.\n\nguidelines: >\n  - Evaluate only the files that are in the GIT repository of the student or group.\n\n  -\tStart reviewing a group project only when all team members are present.\n\n  -\tUse the special flags in the end of the checklist, for example, \"EMPTY_WORK\", if the repository does not contain the student's (or group's) work in the src directory of the develop branch, or \"CHEAT\" in the case of plagiarism or if the student (or anyone from the group being reviewed) cannot explain their decision at any time during the review. Also, the \"CHEAT\" flag is applicable if the following two points are not fulfilled. If one of the flags at the end of the checklist applies, the project will be considered a failure. However, except for a case of cheating, you are encouraged to continue reviewing the project and try to work with another student to figure out the problem that led to the failed solution.  \n  \n  -\tDoublecheck that the GIT repository is the one corresponding to the student or the group. \n  \n  -\tMeticulously check that nothing malicious has been used to mislead you.\n  \n  -\tIn controversial cases, keep in mind that the checklist only defines the general order of the review. The final decision remains with the reviewer.\n\nquick_actions:\n  - EMPTY_WORK\n  - CHEAT\n\nlanguage: en\ncomment: \"\"\nname: BSA13_RequirementsManagements\nsections:\n  - kind: \"1\"\n    name: Main part\n    description: \"\"\n    questions:\n      - name: Exercise 00 — Identification of Requirement Types\n        description: |-\n          Groups of requirements (by their types) that need to be tracked are written out and requirement attributes are defined for application for Task 1.\n          - Types of requirements are defined.\n            - Four types of requirements are selected:\n              - Business requirements: product goals, objectives, business rules;\n              - User (stakeholder) requirements: UC, US, business process diagrams and descriptions, DB schemas, etc.\n              - Functional system requirements (system specifications, interfaces);\n              - Non-functional system requirements (quality attributes).\n            - Each type of requirements is assigned a three-letter identifier.\n          - The requirements attributes defined for each type are.\n            - State:\n              - Date, time of creation;\n              - Date, time when the requirement was transferred to its current state;\n              - Status of the requirement;\n              - Priority of the requirement;\n              - Product version in which the requirement is contained;\n              - Patch (Sprint, Release) in which the requirement is included.\n            - Description and Rationale:\n              - A brief title of the requirement (no more than 50 characters);\n              - Description of the requirement (no more than 150 characters);\n              - Placement of the requirement materials (description, diagram, other) — reference;\n              - Method of verification or acceptance criterion;\n              - Source of requirement, superior requirement (except business requirements);\n              - Relationship of the requirement.\n            - Responsible Persons:\n              - Current executor;\n              - The decision maker of the requirement;\n              - The author of the requirement (who registered).\n          - The statuses of the requirements are defined as:\n            - New;\n            - Under analysis;\n            - In development;\n            - In testing;\n            - Included in Patch;\n            - Rejected;\n            - Postponed;\n            - Completed.\n          - A personalized instance of WEEEK (or another service) has been deployed ()\n          - The requirements listed above are created in WEEEK (or another service).\n          - Scaning of WEEEK (or another service) is performed and the scan is placed in the response.\n\n        rating: \"6\"\n\n      - name: Exercise 01 — Creation of Requirements and Registration\n        description: |-\n          The requirements are described in terms of the highlighted record of Тask 1. Registered in WEEEK (or another service) personal instance and specified parameters.\n          - Stakeholder requirements are described in terms of user stories and registered in service. The one highlighted by the cursor is decomposed:\n            - The manager informs the client about the service appointment;\n            - The client receiving the information about the service appointment;\n            - Interactions on the information channels;\n            - Creation of the information schedule.\n          - System functionality requirements are described and recorded in service to meet business requirements for\n            - Setting up a schedule;\n            - Automatically sending reminders.\n          - System interface requirements are described and registered in service to meet business requirements for:\n            - Set up a schedule;\n            - Automatically send reminders.\n          - Requirements are prioritized.\n          - Specify dependencies between different types of requirements in the Source attribute in service.\n          - Horizontal relationships between requirements are specified in the Relationships attribute in service.\n          - The service is scanned and placed in the response.\n\n        rating: \"6\"\n\n      - name: Exercise 02 — Creating a Positive Test Case\n        description: |-\n          For Task 1, positive test cases are developed for UC02.\n          - The following are specified for test cases:\n            - Alphanumeric identifier;\n            - Test short name;\n            - Priority;\n            - Precondition (if necessary)\n            - Select a manager person from the Employee entity who has the role of Manager in the Employee Role entity;\n            - Execution steps (instructions, simple and unambiguous, specifying the correct values of the required parameters when executed);\n            - Expected Result (ER);\n            - Postconditions (how to restore the state before the check);\n            - Actual Result (ER);\n            - Each case corresponds to the principle of repeatability (F.I. Repeatable S.T.);\n            - Each case corresponds to the principle of Atomicity/Independence (F.Independent.S.T.);\n            - Presented in tabular form.\n\n        rating: \"6\"\n\n      - name: Exercise 03 — Creating a Negative Test Case\n        description: |-\n          For Task 1, negative test cases for UC02 are developed.\n          - The following is specified for each test case\n            - Alphanumeric identifier;\n            - Test short name;\n            - Priority;\n            - Precondition, if necessary;\n            - Select a manager person from the Employee entity who has the role of Manager in the Employee Role entity;\n            - Execution steps (instructions, simple and unambiguous, specifying the correct values of the required parameters when executed);\n            - Expected Result (ER);\n            - Postconditions (how to restore the state before the check);\n            - Actual Result (ER);\n            - Each case corresponds to the principle of Repeatability (F.I. Repeatable S.T.);\n            - Each case corresponds to the principle of Atomicity/Independence (F.Independent.S.T);\n            - Presented in tabular form.\n\n\n        rating: \"6\"\n\n      - name: Exercise 04 — Result Evaluation\n        description: |-\n          For Task 1 UC02, the results of the positive test case are discussed.\n          - The result of the test case is determined and an issue report is created if necessary.\n          - After completing steps 1, 2:\n            - The system reports that the selected slot is booked in the system by the client. However, when contacting the client, the client denies having booked this slot.\n            - The system reports that the selected slot is not booked in the system by the client.\n          - After completing steps 1-5:\n            - The system assigns the slot to the master, the slot does not appear in the list of free slots during further work;\n            - the system does not assign the slot to a Master. This slot can also be selected from the list of free slots for further work.\n          - In case of a negative test case result:\n            - An error report is created. The following is described:\n              - Defect identifier (alphanumeric);\n              - Brief description (one sentence, \"what, where, when?\");\n              - *Prerequisite (if necessary);\n              - Steps to reproduce the defect (not necessarily the same as the text case steps);\n              - Expected Result (ER): the positive result of the test case that was expected after testing;\n              - Actual Result (AR): the result obtained from the execution, highlighting what makes it different from the ER;\n              - *Postconditions (how to restore the state before testing);\n              - *Environment (description of the environment: operating system, browser, screen resolution, etc.);\n              - Priority (urgency of fixing the bug);\n              - *Importance (criticality to execution);\n              - Description;\n              - Supporting documentation (screenshots, logs, documents, etc.).\n            - The AR column contains a negative result mark and the reported defect identifier.\n          - In the case of a positive test case result, the AR column contains a positive case pass mark.\n\n        rating: \"6\"\n",
+          "size_bytes": 10269
+        },
+        {
+          "relative_path": "LICENSE",
+          "absolute_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-34-53\\BSA13_RequirementsManagements.ID_1361460-master\\BSA13_RequirementsManagements.ID_1361460-master\\BSA13_RequirementsManagements.ID_1361460-master\\LICENSE",
+          "kind": "text",
+          "text": "# School 21 License",
+          "size_bytes": 19
+        },
+        {
+          "relative_path": "materials/topics-list.md",
+          "absolute_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-34-53\\BSA13_RequirementsManagements.ID_1361460-master\\BSA13_RequirementsManagements.ID_1361460-master\\BSA13_RequirementsManagements.ID_1361460-master\\materials\\topics-list.md",
+          "kind": "material",
+          "text": "Hello, School21 student! 😉\n\nTo help you navigate through the material, we have prepared a list of topics that you will learn in this project.\n\nWe will learn:\n- Requirements Management;\n- Software Testing;\n- Task Management.\n\nNow that you know what to expect in this project, you can slowly begin to study the topics listed above. 😇\n\nWe have also prepared a list of recommended software:\n- Microsoft Office;\n- Trello.\n\nOr you can use Microsoft Office analogues, for example, programs from the LibreOffice package.\n",
+          "size_bytes": 519
+        },
+        {
+          "relative_path": "materials/topics-list_RUS.md",
+          "absolute_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-34-53\\BSA13_RequirementsManagements.ID_1361460-master\\BSA13_RequirementsManagements.ID_1361460-master\\BSA13_RequirementsManagements.ID_1361460-master\\materials\\topics-list_RUS.md",
+          "kind": "material",
+          "text": "Привет, участник «Школы 21»! 😉\n\nЧтобы тебе было проще, мы подготовили список тем, на которые следует обратить особое внимание при выполнении данного проекта:\n- Управление требованиями;\n- Тестирование;\n- Управление задачами.\n\nТеперь, когда ты известен список тем, знания которых потребуются в проекте, можешь смело приступать к изучению. 😇\n\nА также прикладываем список рекомендованного ПО:\n- Microsoft Office;\n- WEEEK.\n\nИли же можно использовать аналоги Microsoft Office, например, программы из пакета LibreOffice. \n",
+          "size_bytes": 887
+        },
+        {
+          "relative_path": "README.md",
+          "absolute_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-34-53\\BSA13_RequirementsManagements.ID_1361460-master\\BSA13_RequirementsManagements.ID_1361460-master\\BSA13_RequirementsManagements.ID_1361460-master\\README.md",
+          "kind": "readme",
+          "text": "## Requirements, quality, task management\n\nSummary:\nIn this project, you will examine the process of requirements management, product quality management, and task management. You will learn how to identify requirements, establish relationships between them, and track the status of requirements. You will also learn the rules and approaches of quality management, understanding what to test for and how to do it.\n\n💡 [Tap here](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624) **to leave your feedback on the project**. It's anonymous and will help our team make your educational experience better. We recommend completing the survey immediately after the project.\n\n## Contents\n\n1. [Chapter I](#chapter-i) \\\n   1.1. [Preamble](#11)\n2. [Chapter II](#chapter-ii) \\\n   2.1. [General Rules](#21)\n3. [Chapter III](#chapter-iii) \\\n   3.1. [Requirements Management](#31) \\\n   3.2. [Testing](#32) \\\n   3.3. [Task Management](#33)\n4. [Chapter IV](#chapter-iv) \\\n   4.1. [Task 1. Haircut Appointment](#41)\n5. [Chapter V](#chapter-v) \\\n   5.1. [Exercise 00 — Identification of Requirement Types](#51) \\\n   5.2. [Exercise 01 — Creation of Requirements and Registration](#52) \\\n   5.3. [Exercise 02 — Creating a Positive Test Case](#53) \\\n   5.4. [Exercise 03 — Creating a Negative Test Case](#53) \\\n   5.5. [Exercise 04 — Result Evaluation](#55)\n\n## Instructions \n\nHow to learn at “School 21”:\n\n- Here, you’ll find a unique learning experience with a lot of freedom. You’re given a task and left to find your own way to solve it, using whatever resources work best for you — whether that’s the Internet or AI tools like GigaChat. Just be mindful of information quality: verify, think critically, analyze, and compare.\n- Peer-to-peer (P2P) learning is the exchange of knowledge and experience with peers, where everyone acts as both mentor and student. This approach allows you to gain a deeper understanding of the material by learning from one another.\n- Feel free to ask for help: around you are peers who are also navigating this path for the first time. Share your own experience and ideas with others.  Join Rocket.Chat to stay updated with the latest community announcements. \n- Your learning is meaningless if you just copy someone else’s solutions. When receiving help from others, always make sure you fully understand the “why”, “how”, and “purpose” behind the solution. Don’t be afraid to make mistakes. \n- Does the task seem impossible? Take a break, get some fresh air and clear your mind — this has helped many people. Maybe after that, the solution will come to you naturally.\n- The learning process is just as important as the result. It’s not just about completing the task — it’s about understanding HOW to solve it.\n\n## Chapter I <div id=\"chapter-i\"></div>\n\n![Illustration](misc/images/IMG_1814.jpg)\n\n### Preamble <div id=\"11\"></div>\n\nIn the survey and design phases, you have been identifying requirements. For the next stages of development, you should determine the order in which certain requirements will be developed, which functional requirements meet key stakeholder goals, business requirements, and stakeholder requirements. And what state they are in: developed, tested, or not yet in the release, not scheduled for implementation. This is what you will be dealing with in the current project. \n\nThe analyst defines stakeholder requirements, identifies business needs, key stakeholder objectives, and formulates success criteria. After coordinating with the customer, the analyst creates functional requirements for the system, and developers implement the software according to those requirements. Testers then test the software. After defects are corrected, testing is performed, and if the customer is satisfied with the test results, the system is put into production. \n\nIn order for the customer to confirm that the system does what it is supposed to do, it is recommended that the tests be performed by someone who has discussed the design with the customer. Or who can explain the consistency between design and implementation. In both the first and second cases, this is the analyst. In addition, the analyst advises both developers and testers during the work process.\n\n### Literature\n\n1. Karl Wiegers, Joy Beatty, \"Software Requirements\", 3rd edition, amplified. \n2. Philippe Kruchten \"The Rational Unified Process: An Introduction\". \n3. \"Requirements management tools: software and everything you need to know\"  <https://businessyield.com/ru/management/requirements-management-tools/>.\n4. Manual for [Jira Software](https://www.atlassian.com/ru/software/jira/guides/getting-started/introduction).\n5. Manual for <https://weeek.net/ru/help>.\n\n## Chapter II <div id=\"chapter-ii\"></div>\n\n### General Rules <div id=\"21\"></div>\n\nBefore starting, clone the project from GitLab into a repository with the same name.\n\n1. Along the way, you may feel a sense of uncertainty and a severe lack of information: that's OK. Remember, the information in the repository and on Google is always with you. So are your peers and Rocket.Chat. Communicate. Search. Use common sense. Don't be afraid to make mistakes.\n2. Pay attention to sources of information. Check. Think. Analyse. Compare. \n3. Look at the text of each assignment. Read it several times. \n4. Read the examples carefully. There may be something in them that is not explicitly stated in the task itself.\n5. You may find inconsistencies where something new in the terms of the task or examples conflicts with something you already know. If you come across such an inconsistency, try to work it out. If not, write it down as an open question and find out as you work. Do not leave open questions unanswered. \n6. If a task seems confusing or impossible, it only seems that way. Try to break it down. It is likely that some parts will become clear. \n7. There will be several tasks. Those marked with an asterisk (\\*) are for the more meticulous students. These tasks are more difficult and are not compulsory. But doing them will give you extra experience and knowledge.\n8. Don't try to fool the system or the people around you. You will fool yourself first.\n9. Got a question? Ask your neighbour to the right. If that doesn't help, ask your neighbour on the left.\n10. When you use help, you should always understand why and how. Otherwise the help is useless.\n11. Always push only to the _develop_ branch! The master branch will be ignored. Work in the _src_ directory.\n12. There should be no files in your directory other than those specified in the tasks.\n\n## Chapter III <div id=\"chapter-iii\"></div>\n\n### 1. Requirements Management <div id=\"31\"></div>\n\nIn the BSA02 project, you learned about the different types of requirements, their levels, and the relationships between them. \n\n![](misc/images/img1_eng.png)\n\nIn the next projects, we identified and developed different types of requirements:\n\n1) Business requirements; \n2) Stakeholder requirements;\n3) Functional requirements for the system;\n4) Non-functional requirements.\n\nThe requirements of the different levels are interrelated. The following shows how stakeholder requirements for separation of user functions are implemented by functional requirements for access rights to functions. \n\nExample: User access rights management should be developed. This requirement is described as a stakeholder requirement (which role should perform which functions):\n\n1) which roles interact with the system; \n2) which operations on which entities a role performs on which entities.\n\nBut the access control mechanism itself is also described as a functional requirement, and possibly as several different requirements: \n\n1) where access rights information is located in the system (read access rights of roles); \n2) what the management mechanism is (applying access rights).\n\nFor this purpose, stakeholder requirements for the distribution of access rights must be linked to functional requirements describing access rights management. \n\nThe requirements can also be interdependent at the same level. For example, as we saw in the BSA11 project, system functions are related to screen interfaces. Or in BSA12 — quality attributes (non-functional requirements) are related to specific functions.\n\nIn addition, even functional requirements should be developed in a certain order so that you don't have to redesign the previously developed requirements during implementation. \n\nTherefore, you should specify and control the dependencies of requirements and prioritize their development. \n\nThe general scheme of the requirements management process is well illustrated in the book by F. Krachten, Chapter 9 \"Requirements Management Process Flowchart\". Each requirement has an identifier to provide control over requirements, relationships between requirements (tracing), status of work with requirements, and their implementation. \n\nTypically, an alphanumeric identifier is used where the letters identify a group of requirements by their types (e.g., business requirements, user requirements, functional requirements, interface requirements, non-functional requirements) and the numeric part of constant length identifies the numbering within the group. \n\nFor example, the Business Requirement Document (BRD) identifier is often used for business requirements. An example of a complete business requirement identifier is BRD000017 (not BRD17). You should also define the characteristics (attributes) and states (statuses) of the requirements. The statuses and attributes of different groups of requirements may be different. The approach to identifying and assigning attributes and states of requirements is well described in chapter 27 of K. Wiegers' book. \n\nThe description of requirements, their identifiers, attributes and states can be stored in a table or database, but it is more useful to store them in a task management tool such as Jira, WEEK or, most effectively, in a requirements management system such as DOORS, ArchiMate and the Russian development, SUTr.  An overview of requirements management systems is given in the article \"Requirements management tools: software and everything you need to know\" <https://businessyield.com/ru/management/requirements-management-tools/>.\n\nIn the current project, you will identify groups of requirements, define their attributes and statuses. Describe the requirements for our tasks and perform tracking for them. \n\n### 2. Testing <div id=\"32\"></div>\n\nQuality management and testing is a separate major area in software development. The purpose of testing is not to guarantee the quality of the product, but to evaluate it and provide information that can be used to improve the quality. That is, to find and report bugs. \n\nSince an analyst understands better than other development participants how the system should work, under what conditions what result is expected, they should understand how to prepare data for product quality testing (test cases), how to perform quality testing, and how to describe a defect in the software.\n\n**Software testing** is the examination of the correspondence between the real behavior of a program and its expected behavior. It is performed on a finite set of tests selected in a particular way.\n\n**The purpose of testing** is to confirm or detect software conformance with requirements; to identify defects that should be eliminated before they are discovered by program users.\n\n**Error** is a human action that produces an incorrect result. \n\n**Failure** is the deviation of a component or system from expected performance, operation, or result.\n\n**Defect** is a flaw in a component or system that may cause the component or system to fail to perform a required function. A defect discovered during execution may cause the component or system to fail.\n\n### 3. Task Management <div id=\"33\"></div>\n\nIn addition to requirements management, task management systems (Jira, WEEEK, etc.) are used to manage tasks assigned to executors (analysts, developers, testers). An analyst must be able to read and work on a task assigned to him/her, pass the results to the next executor in the work chain, assign a task to another executor, for example a developer and a tester, register a requirement or an error (defect).\n\n## Chapter IV <div id=\"chapter-iv\"></div>\n\n### Description of tasks\n\n### Task 1. Haircut Appointment <div id=\"41\"></div>\n\nThe management of a chain of barbershops decided to implement an online booking system. The main objective is to develop the business by expanding the customer base through the possibility of online registration, as well as to reduce employee labour costs and manual labour by automatically informing customers through communication channels. \n\nBoth registered and unregistered visitors can book an appointment on the website. When making an appointment, they can select the type of service: hairdressing or cosmetology, as well as the service itself, the master and the time from the available intervals. The system should provide automatic sending of reminders to clients through the communication channel chosen by the client (Telegram, WhatsApp, VK, SMS) according to the schedule set by the manager. After receiving a service, the system offers the client to evaluate the service and write suggestions on how to improve the work.\n\nThe schedule of masters and the services provided by each master should be entered by the manager, who may be more than one person. This person is also responsible for keeping the schedule up to date and adjusting it if necessary, communicating with customers manually, marking the service, charging and accepting payment, sending the payment data to the accounting department. The manager can also receive reports on completed services and view customer feedback.\n\nEach master has the ability to view the schedule and appointments for their services, as well as customer reviews.\n\nLet's look at the requirements related to the following description in the task:\n\n*The system should provide automatic sending of reminders to clients via communication channels chosen by the client (Telegram, WhatsApp, VK, SMS) according to the schedule set by the manager.* \n\n**Problem:** Some clients forget that they have an appointment at a barbershop.\n\n**Manager Need:** Remind clients in advance of barbershop appointments.\n\n**Client need**: To be reminded in advance of a barbshop appointment.\n\n**Business Requirement:** Increase the number of clients who sign up for services. Reduce the number of times clients forget the time of their service appointment.\n\n## Chapter V <div id=\"chapter-v\"></div>\n\n### Exercise 00 — Identification of Requirement Types <div id=\"51\"></div>\n\nTo apply to Task 1, write out the groups of requirements (by their types) that need to be tracked and define the attributes of the requirements.\n\n1) Identify the types of requirements:\n   1) Choose 4 types of requirements:\n      1) Business requirements: product goals, objectives, product purpose, business rules; \n      2) User (stakeholder) requirements: UC, US, business process diagrams and descriptions, DB schemas, etc.;\n      3) Functional system requirements (system specifications, interfaces);\n      4) Non-functional system requirements (quality attributes). \n   2) Assign a three-letter identifier to each requirement type.\n\n2. Define the requirement attributes for each type.\n   1) State:\n      1) Date, time of creation;\n      2) Date, time the requirement was transferred to its current state;\n      3) Requirement Status;\n      4) Requirement Priority;\n      5) Product version in which the requirement is included;\n      6) Patch (Sprint, Release) in which the requirement is included. \n   2) Description and Rationale:\n      1) Short name of the requirement (no more than 50 characters);\n      2) Description of the requirement (150 characters maximum); \n      3) Placement of requirement materials (description, schematic, other) — reference;\n      4) Verification method or acceptance criterion;\n      5) Source of the requirement, superior requirement (except for business requirements);\n      6) Relationship of the requirement. \n   3) Responsible parties:\n      1) Current implementer;\n      2) Decision maker of the requirement;\n      3) Author of the requirement (who registered it).\n3. Determine the statuses of the requirement:\n   1) New;\n   2) Under Analysis;\n   3) In development;\n   4) In testing;\n   5) Included in Patch;\n   6) Rejected;\n   7) Postponed;\n   8) Completed.\n4. Deploy a personalized instance of https://weeek.net/ru.\n5. Create the above requirements in WEEEK.  \n6. Run a scan of WEEEK and place it in the answer.\n\n**Scale from 1 to 5**\n\n### Exercise 01 – Creation of Requirements and Registration <div id=\"52\"></div>\n\nDescribe the requirements within the highlighted portion of the sentence in Task 1. Sign up for a personal WEEEK instance and set the parameters. \n\n1. Describe the stakeholder requirements as UserStores and register them in WEEEK. Decompose the highlighted by cursor into:\n   1. the manager informs the customer about the service appointment;\n   2. customer's receipt of information about the service appointment;\n   3. interactions on notification channels;\n   4. customization of the notification schedule. \n2. Describe and register in WEEEK the requirements for system functionality to meet the business requirements for:\n   1. customize schedules;\n   2. automatically sending reminders.\n3. Describe and store in WEEEK the requirements for system interfaces to meet the business requirements for:\n   1. customize schedules;\n   2. automatically send reminders.\n4. Prioritize the requirements.\n5. Specify dependencies between different requirement types in WEEEK's Source attribute.\n6. In WEEEK, specify the horizontal relationships between requirements in the Relationships attribute.\n7. Perform a scan of the WEEEK and place it in the response.\n\n**Scale from 1 to 5**\n\n### Exercise 02 – Creating a Positive Test Case <div id=\"53\"></div>\n\nFor Task 1, develop positive test cases for UC02.\n\nFor the test case, specify:\n\n1. Alphanumeric identifier;\n2. Short name of the test;\n3. Priority;\n4. Prerequisite (if necessary);\n5. Select a Manager — a person from the Employee entity who has a Manager role in the Employee Role entity;\n6. Execution steps (instruction, simple and unambiguous, specifying the correct values of the required parameters when executed);\n7. Expected Result (ER);\n8. Postconditions (how to restore the state before the check);\n9. Actual Result (ER).\n10. Each case must comply with the principle of repeatability (F.I. Repeatable S.T.).\n11. Each case must comply with the principle of Atomicity/Independence (F.Independent.S.T).\n12. Presented in tabular form, stored in the cloud.\n13. Register a task for testing in WEEEK, provide a link to the test case.\n\n**Scale from 1 to 5**\n\n### Exercise 03 — Creating a Negative Test Case <div id=\"54\"></div>\n\nFor Task 1, develop negative test cases for UC02.\n\nFor each test case, specify:\n\n1. Alphanumeric identifier;\n2. Brief name of the test case;\n3. Priority;\n4. Precondition, if necessary;\n5. Select a manager — a person from the Employee entity who has a manager role in the Employee Role entity;\n6. Execution steps (instructions, simple and unambiguous, specifying the correct values of the required parameters when executing);\n7. Expected Result (ER);\n8. Postconditions (how to restore the state before the check);\n9. Actual Result (ER).\n10. Each case must comply with the principle of repeatability (F.I. Repeatable S.T.).\n11. Each case must comply with the principle of atomicity (F.Independent.S.T).\n12. Presented in tabular form, stored in the cloud.\n13. Register a task for testing in WEEEK, provide a link to the test case.\n\n**Scale from 1 to 5**\n\n### Exercise 04 – Result Evaluation <div id=\"55\"></div>\n\n\nFor UC02 Task 1, review the results of a successful test case. \n\nDetermine the outcome of the test case and create a defect report if necessary. \n\n1. After performing steps 1, 2:\n   1. The system reports that the selected slot is booked in the system by the client. However, when contacting the client, the client denies having booked that slot.\n   2. The system reports that the selected slot is not booked in the system by the client.\n2. After performing steps 1-5:\n   1. The system assigns the slot to the master, the slot does not appear in the list of available slots;\n   2. The system does not assign the slot to the master. This slot can also be selected from the list of free slots during further work.\n3. If the result of the test case is negative:\n   1. Create a defect report. Describe:\n      1. The defect identifier (alphanumeric);\n      2. Brief description (one sentence, \"what, where, when?\");\n      3. ** Precondition (if applicable);\n      4. Steps to reproduce the bug, not necessarily the same as the text case steps;\n      5. Expected Result (ER): the positive result of the test case that is expected after testing;\n      6. Actual Result (AR): the resulting performance, highlighting what is different from the ER;\n      7. \\*Postconditions (how to restore the state before testing);\n      8. \\*Environment (description of the environment: operating system, browser, screen resolution, etc.);\n      9. Priority (urgency of fixing the bug);\n      10. \\*Importance (criticality for fulfillment);\n      11. Description;\n      12. Additional materials (screenshots, logs, documents, etc.).\n   2. Note the negative result in the AR column and specify the identifier of the registered defect.\n4. In case of a positive result of the test case, enter the positive case resolution identifier in the AR column.\n\n**Scale from 1 to 5**\n",
+          "size_bytes": 21705
+        },
+        {
+          "relative_path": "README_RUS.md",
+          "absolute_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-34-53\\BSA13_RequirementsManagements.ID_1361460-master\\BSA13_RequirementsManagements.ID_1361460-master\\BSA13_RequirementsManagements.ID_1361460-master\\README_RUS.md",
+          "kind": "readme",
+          "text": "## Управление требованиями, качеством, задачами\n\nРезюме:\nВ настоящем проекте ты рассмотришь процесс управления требованиями и качеством продукта, научишься идентифицировать требования, устанавливать связи между ними и отслеживать состояния требований, а также узнаешь правила и подходы к управлению качеством.\n\n💡 [Нажми сюда](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624), **чтобы поделиться с нами обратной связью на этот проект**. Это анонимно и поможет нашей команде сделать обучение лучше. Рекомендуем заполнить опрос сразу после выполнения проекта.\n\n## Contents\n\n1. [Chapter I](#chapter-i) \\\n    1.1. [Preamble](#11)\n2. [Chapter II](#chapter-ii) \\\n    2.1. [General Rules](#21)\n3. [Chapter III](#chapter-iii) \\\n    3.1. [Управление требованиями](#31) \\\n    3.2. [Тестирование](#32) \\\n    3.3. [Управление задачами](#33)\n4. [Chapter IV](#chapter-iv) \\\n    4.1. [Задача 1. Запись на стрижку (Sign up for a haircut)](#41)\n5. [Chapter V](#chapter-v) \\\n    5.1. [Exercise 00 — Выделение типов требований](#51) \\\n    5.2. [Exercise 01 — Создание требований и регистрация](#52) \\\n    5.3. [Exercise 02 — Создание позитивного тест-кейса](#53) \\\n    5.4. [Exercise 03 — Создание негативного тест-кейса](#53) \\\n    5.5. [Exercise 04 — Оценка результата](#55)\n\n## Инструкции\n\nКак учиться в «Школе 21»:\n\n- Здесь тебя ждет уникальный образовательный опыт с большим количеством свободы. Ты получаешь задачу и самостоятельно ищешь пути решения, используя любые удобные способы поиска информации — ресурсы Интернета или нейросети (например, GigaChat). Но внимательно относись к качеству информации: проверяй, думай, анализируй, сравнивай.\n- Взаимообучение (Peer-to-Peer, P2P) — это обмен знаниями и опытом с другими пирами, где каждый выступает и учителем, и учеником. Такой подход позволяет глубже понять материал, учась друг у друга.\n- Чувствуй себя свободно и проси о помощи — вокруг тебя те, кто тоже впервые проходят этот путь. Делись своим опытом и идеями с другими. Присоединяйся к Rocket.Chat, чтобы быть в курсе всех новостей от нашего сообщества.\n- Твое обучение не будет иметь никакого смысла, если ты будешь копировать чужие решения. Если пользуешься помощью других — всегда разбирайся до конца, почему, как и зачем. Не бойся ошибиться.\n- Кажется, что задача невыполнима? Сделай перерыв, проветрись, перезагрузи голову — это помогало многим. Возможно, после этого решение придет само собой.\n- Важен не только результат обучения, но и сам процесс. Нужно не просто решить задачу, а понять, КАК ее решить.\n\n## Chapter I <div id=\"chapter-i\"></div>\n\n![Иллюстрация к проекту](misc/images/IMG_1814.jpg)\n\n### Preamble <div id=\"11\"></div>\n\nНа этапах обследования и проектирования ты занимался выявлением требований. Для следующих этапов разработки следует определить, в каком порядке разрабатывать те или иные требования, выявить, какие функциональные требования обеспечивают выполнение целей ключевых стейкхолдеров, бизнес-требований и требований заинтересованных сторон.\n\nАналитик определяет требования заинтересованных сторон, выявляет бизнес-требования, цели ключевых стейкхолдеров, формулирует критерии успеха. После согласования с Заказчиком аналитик создает функциональные требования к системе и по этим требованиям разработчики реализуют ПО. Далее тестировщики тестируют ПО. После исправления дефектов проводят испытания и, если Заказчика удовлетворяют результаты испытаний, передают систему в эксплуатацию. \n\nЧтобы Заказчик подтвердил, что система выполняет то, что было задумано, желательно проводить испытания вместе с тем, кто вместе с Заказчиком обсуждал замысел. Или можно объяснить соответствие замысла и реализации. И в первом, и во втором случае это аналитик. Кроме того, аналитик в процессе работы оказывает консультации как разработчикам, так и тестировщикам. \n\n### Литература\n\n1. Карл Вигерс, Джой Битти, «Разработка требований к программному обеспечению», издание третье, дополненное. \n2. Филипп Кратчен «Введение в Rational Unified Process».\n3. «Инструменты управления требованиями: программное обеспечение и все, что вам нужно знать» <https://businessyield.com/ru/management/requirements-management-tools/>.\n4. Индивидуальное руководство по [Jira Software](https://www.atlassian.com/ru/software/jira/guides/getting-started/introduction).\n5. Руководство по <https://weeek.net/ru/help>.\n\n## Chapter II <div id=\"chapter-ii\"></div>\n\n### General Rules <div id=\"21\"></div>\n\nПеред выполнением проект необходимо склонировать с GitLab в одноименный репозиторий.\n\n1. На протяжении всего курса тебя будет сопровождать чувство неопределенности и острого дефицита информации — это нормально. Не забывай, что информация в репозитории и Google всегда с тобой. Как и пиры, и Rocket.Chat. Общайся. Ищи. Опирайся на здравый смысл. Не бойся ошибиться.\n2. Будь внимателен к источникам информации. Проверяй. Думай. Анализируй. Сравнивай. \n3. Внимательно читай задания. Перечитай несколько раз. \n4. Читать примеры тоже лучше внимательно. В них может быть что-то, что не указано в явном виде в самом задании.\n5. Тебе могут встретиться несоответствия, когда что-то новое в условиях задачи или примере противоречит уже известному. Если встретилось такое — попробуй разобраться. Если не получилось — запиши вопрос в открытые вопросы и выясни в процессе работы. Не оставляй открытые вопросы неразрешенными. \n6. Если задание кажется непонятным или невыполнимым — так только кажется. Попробуй его декомпозировать. Скорее всего, отдельные части станут понятными. \n7. На пути тебе встретятся самые разные задания. Те, что помечены звездочкой (\\*), подходят для более дотошных. Они повышенной сложности и необязательны к выполнению. Но если ты их сделаешь, то получишь дополнительный опыт и знания.\n8. Не пытайся обмануть систему и окружающих. В первую очередь ты обманешь себя.\n9. Есть вопрос? Спроси своего соседа справа. Если это не помогло — соседа слева.\n10. Когда пользуешься помощью — всегда разбирайся до конца: почему, как и зачем. Иначе помощь не будет иметь смысла.\n11. Всегда делай push только в ветку _develop_! Ветка master будет проигнорирована. Работай в директории _src_.\n12. В твоей директории не должно быть иных файлов, кроме тех, что обозначены в заданиях.\n\n## Chapter III <div id=\"chapter-iii\"></div>\n\n### 1. Управление требованиями <div id=\"31\"></div>\n\nВ проекте BSA02 ты познакомился с разными видами требований, их уровнями и связями между ними. \n\n![](misc/images/img1.png)\n\nВ следующих проектах выявляли, разрабатывали разные типы требований:\n\n1) Бизнес-требования; \n2) Требования заинтересованных сторон;\n3) Функциональные требования к системе;\n4) Нефункциональные требования.\n\nТребования разных уровней связаны между собой. Ниже показано, как требования заинтересованных сторон к разделению функций пользователей реализуются функциональными требованиями к правам доступа к функциям. \n\nПример: следует разработать управление правами доступа пользователей. Это требование описано как требование заинтересованных сторон (какая роль должна выполнять какие функции):\n\n1) какие роли работают с системой; \n2) какие операции над какими сущностями выполняет та или иная роль.\n\nНо и сам механизм управления доступом описан как функциональные требования и, возможно, как несколько разных требований: \n\n1) где в системе размещена информация о правах доступа (прочитать права доступа ролей); \n2) каков механизм управления (применить права доступа).\n\nДля этого требования заинтересованных сторон о распределении прав доступа должны быть связаны с функциональными требованиями, описывающими управление правами доступа. \n\nТакже требования могут быть зависимы друг от друга на одном уровне. Например, как мы видели в проекте BSA11, функции системы связаны с экранными интерфейсами. Или в BSA12 — атрибуты качества (нефункциональные требования) связаны с конкретными функциями.\n\nПричем даже функциональные требования разрабатывать надо в определенном порядке, чтобы при реализации не пришлось переделывать ранее разработанное. \n\nПоэтому следует указать и контролировать зависимости требований и приоритизировать разработку требований. \n\nОбщая схема процесса управления требованиями хорошо показана в книге Ф. Кратчена, глава 9 «Технологический процесс управления требованиями». Для обеспечения контроля над требованиями, связей между требованиями (трассировки), статуса работ с требованиями и их реализацией каждое требование имеет идентификатор. \n\nОбычно применяют буквенно-цифровой идентификатор, где буквы обозначают группу требований по их типам (например, бизнес-требования, требования пользователей, функциональные требования, требования к интерфейсам, нефункциональные требования), а цифровая часть постоянной длины — нумерацию внутри группы. \n\nНапример, для бизнес-требований часто применяют идентификатор BRD (Business Requirement Document). Пример полного идентификатора бизнес-требования: BRD000017 (а не BRD17). Также следует определить характеристики (атрибуты) и состояния (статусы) требований. Статусы и атрибуты разных групп требований могут отличаться. Подход к выделению и назначению атрибутов и состояний требований хорошо описан в главе 27 книги К. Вигерса. \n\nОписание требований, их идентификаторы, атрибуты и состояния можно хранить в таблице или базе данных, но более полезно — в инструменте управления заданиями, например, Jira, WEEEК или, что наиболее эффективно, — в системе управления требованиями, например, DOORS, ArchiMate и российская разработка — СУТр. Обзор систем управления требованиями приведен в статье «Инструменты управления требованиями: программное обеспечение и всё, что вам нужно знать» <https://businessyield.com/ru/management/requirements-management-tools/>.\n\nВ текущем проекте ты выделишь группы требований, определишь их атрибуты и статусы. А затем опишешь требования к нашим задачам и выполнишь отслеживание за ними. \n\n### 2. Тестирование <div id=\"32\"></div>\n\nУправление качеством и тестирование — отдельная большая область в разработке программного обеспечения. Задача тестирования — не гарантировать качество продукта, а оценить его и обеспечить информирование о том, а за счет чего можно исправить качество. То есть найти ошибки и сообщить о них. \n\nПоскольку аналитик лучше других участников разработки понимает, как должна работать система, при каких условиях, какой результат ожидается, то он должен понимать, как подготовить данные для проверки качества продукта (тест-кейсы), как выполнить проверку качества, как описать дефект в программном обеспечении.\n\n**Тестирование ПО** — проверка соответствия между реальным поведением программы и её ожидаемым поведением. Проводится на конечном наборе тестов, выбранном определенным образом.\n\n**Цель тестирования** — подтвердить соответствие или выявить несоответствие ПО предъявляемым требованиям; определить ошибки, которые должны быть устранены до того, как их обнаружат пользователи программы.\n\n**Ошибка (error)** — действие человека, которое приводит к неправильному результату. \n\n**Отказ (failure):** отклонение компонента или системы от ожидаемого выполнения, эксплуатации или результата.\n\n**Дефект (defect):** изъян в компоненте или системе, который может привести компонент или систему к невозможности выполнить требуемую функцию. Дефект, обнаруженный во время выполнения, может привести к отказам компонента или системы.\n\n### 3. Управление задачами <div id=\"33\"></div>\n\nКроме ведения требований, системы управления заданиями (Jira, WEEEК, иные) применяются для ведения задач, назначенных исполнителям (аналитикам, разработчикам, тестировщикам). Аналитик должен уметь прочитать и взять в работу назначенную на него задачу, передать результаты выполнения следующему исполнителю в цепочке работ, назначить задачу на другого исполнителя, например, разработчика и тестировщика; зарегистрировать требование или ошибку (дефект).\n\n## Chapter IV <div id=\"chapter-iv\"></div>\n\n### Description of tasks\n\n### Задача 1. Запись на стрижку (Sign up for a haircut) <div id=\"41\"></div>\n\nРуководство сети барбершопов приняло решение о внедрении системы, обеспечивающей онлайн-запись на прием. Основная цель — развитие бизнеса путем расширения клиентской базы за счет возможности онлайн-записи, а также снижение трудозатрат сотрудников и уменьшение ручного труда за счет автоматического информирования клиентов по каналам связи. \n\nЗапись может осуществлять как зарегистрированный, так и незарегистрированный посетитель сайта. При записи можно выбрать услугу, мастера и время из свободных интервалов. *Система должна обеспечивать автоматическую отправку напоминаний клиентам через выбранный клиентом канал связи (Telegram, WhatsApp, VK, СМС) по настроенному менеджером расписанию.* После получения услуги система предлагает клиенту оценить услугу и написать предложения по улучшению работы.\n\nРасписание мастеров и выполняемые каждым мастером услуги должен вводить менеджер, возможно, это будет не один человек. Он же отвечает за актуальность расписания и при необходимости корректирует его, осуществляет связь с клиентами в ручном режиме, проставляет отметку о выполнении услуги, начисляет и принимает оплату, передает данные об оплате в бухгалтерию. Также менеджер может получать отчеты о выполненных услугах и просматривать отзывы клиентов.\n\nЛюбой мастер имеет возможность посмотреть расписание и запись на свои услуги, отзывы клиентов.\n\nРассмотрим требования, относящиеся к следующему описанию в задаче:\n\n*Система должна обеспечивать автоматическую отправку напоминаний клиентам через выбранный клиентом канал связи (Telegram, WhatsApp, VK, СМС) по настроенному менеджером расписанию.* \n\n**Проблема:** некоторые клиенты забывают о том, что записаны на определенное время в барбершоп.\n\n**Потребность менеджера:** заранее напоминать клиентам о записи в барбешоп.\n\n**Потребность клиента**: заранее получать напоминание о записи в барбешоп.\n\n**Бизнес-требование:** повысить посещаемость клиентов, записанных на услуги. Снизить случаи, когда клиенты забывают о времени записи на услугу.\n\n## Chapter V <div id=\"chapter-v\"></div>\n\n### Exercise 00 — Выделение типов требований <div id=\"51\"></div>\n\nЭтот проект групповой, так что ты будешь выполнять его в команде. \n\nДля применения к задачам 1 выпишите группы требований (по их типам), требующие отслеживания, и определите атрибуты требований.\n\n1. Определите типы требований. \n   1) Выберите 4 типа требований:\n      1) Бизнес-требования: цели, задачи продукта, бизнес-правила; \n      2) Требования пользователей (заинтересованных сторон): UC, US, схемы и описания бизнес-процессов, схемы БД и др.; \n      3) Функциональные требования к системе (спецификации к системе, интерфейсы); \n      4) Нефункциональные требования к системе (атрибуты качества). \n   2) Каждому типу требований назначьте трехбуквенный идентификатор.\n2. Для каждого типа определите атрибуты требований.\n   1) Состояние:\n      1) Дата, время создания;\n      2) Дата, время перевода требования в текущее состояние;\n      3) Статус требования;\n      4) Приоритет требования;\n      5) Версия продукта, в которую включено требование;\n      6) Патч (спринт, выпуск), в который включено требование. \n   2) Описание и обоснование:\n      1) Краткое наименование требования (не более 50 символов);\n      2) Описание требования (не более 150 символов); \n      3) Размещение материалов требования (описание, схема, иное) — ссылка;\n      4) Метод проверки или критерий приемки;\n      5) Источник требования, вышестоящее требование (кроме бизнес-требований);\n      6) Связи требования. \n   3) Ответственные лица:\n      1) Текущий исполнитель;\n      2) Лицо, принимающее решение по требованию;\n      3) Автор требования (кто зарегистрировал).\n3. Определите статусы требований:\n   1) Новое;\n   2) На анализе;\n   3) В разработке;\n   4) На тестировании;\n   5) Включено в патч;\n   6) Отклонено;\n   7) Отложено;\n   8) Завершено.\n4. Разверните персональный экземпляр на платформе для управления задачами, проектами и командной работой (например, https://weeek.net/ru, либо используйте аналогичные сервисы).\n5. Создайте перечисленные выше требования.  \n6. Выполните скан и разместите в ответе.\n* Если ранее вами была выполнена работа в Trello, то это допустимо. При желании данные из Trello можно экспортировать в WEEEК.\n\n**Шкала от 1 до 5**\n\n### Exercise 01 — Создание требований и регистрация <div id=\"52\"></div>\n\nОпишите требования в части выделенного курсором предложения задачи 1.  Зарегистрируйте в персональном экземпляре на выбранной платформе и укажите параметры. \n\n1. Опишите в виде UserStores и зарегистрируйте требования заинтересованных лиц. Декомпозируйте выделенное курсором на:\n   1. информирование менеджером клиентов о записи на услугу;\n   2. получение клиентом информирования о записи на услугу;\n   3. взаимодействия по каналам информирования;\n   4. настройке расписания информирования. \n2. Опишите и зарегистрируйте требования к функциям системы для выполнения бизнес-требований по:\n   1. настройке расписания;\n   2. автоматической отправки напоминаний.\n3. Опишите и зарегистрируйте требования к интерфейсам системы для выполнения бизнес-требований по:\n   1. настройке расписания;\n   2. автоматической отправке напоминаний.\n4. Укажите приоритеты требований.\n5. Укажите зависимости между разными типами требований в атрибуте «Источник».\n6. Укажите горизонтальные связи между требованиями в атрибуте «Связи».\n7. Выполните скан и разместите в ответе.\n* При выполнении задачи рекомендовано использовать WEEEК, но допустимо использование иных аналогичных сервисов.\n\n\n**Шкала от 1 до 5**\n\n### Exercise 02 — Создание позитивного тест-кейса <div id=\"53\"></div>\n\nДля задачи 1 разработайте кейсы позитивного тестирования для UC02.\n\nДля тест-кейса укажите:\n\n1. Буквенно-цифровой идентификатор;\n2. Краткое название теста;\n3. Приоритет;\n4. Предусловие (при необходимости);\n5. Выберите менеджера — лицо из сущности «Сотрудник», имеющее роль менеджера в сущности «Роль сотрудника»;\n6. Шаги выполнения (инструкция, просто и однозначно, указывая при выполнении корректные значения нужных параметров);\n7. Ожидаемый результат (ОР);\n8. Постусловия (как восстановить состояние до проверки);\n9. Фактический результат (ФР).\n10. Каждый кейс должен соответствовать принципу Повторяемость (F.I. Repeatable S.T.).\n11. Каждый кейс должен соответствовать принципу Атомарность/Независимость (F.Independent.S.T.).\n12. Представьте в табличном виде, разместите в облачном хранилище.\n13. Зарегистрируйте в WEEEK задачу на тестирование, укажите ссылку на размещение тест-кейса.\n\n**Шкала от 1 до 5**\n\n### Exercise 03 — Создание негативного тест-кейса <div id=\"54\"></div>\n\nДля задачи 1 разработайте кейсы негативного тестирования для UC02.\n\nДля каждого тест-кейса укажите:\n\n1. Буквенно-цифровой идентификатор;\n2. Краткое название теста;\n3. Приоритет;\n4. Предусловие, при необходимости;\n5. Выберите менеджера — лицо из сущности «Сотрудник», имеющее роль менеджера в сущности «Роль сотрудника»;\n6. Шаги выполнения (инструкция, просто и однозначно, указывая при выполнении корректные значения нужных параметров);\n7. Ожидаемый результат (ОР);\n8. Постусловия (как восстановить состояние до проверки);\n9. Фактический результат (ФР).\n10. Каждый кейс должен соответствовать принципу Повторяемость (F.I. Repeatable S.T.).\n11. Каждый кейс должен соответствовать принципу Атомарность/Независимость (F.Independent.S.T.).\n12. Представьте в табличном виде, разместите в облачном хранилище.\n13. Зарегистрируйте в WEEEK задачу на тестирование, укажите ссылку на размещение тест-кейса.\n\n**Шкала от 1 до 5**\n\n### Exercise 04 — Оценка результата <div id=\"55\"></div>\n\nДля задачи 1 UC02 рассмотрите результаты выполнения позитивного тест-кейса. \n\nОпределите результат тест-кейса и при необходимости создайте отчет о дефекте. \n\n1. После выполнения п.п. 1, 2:\n   1. Система сообщает, что выбранный слот забронирован в системе клиентом. Однако при обращении к клиенту тот отрицает, что забронировал этот слот.\n   2. Система сообщает, что выбранный слот не забронирован в системе клиентом.\n2. После выполнения п.п.1-5:\n   1. Система выполняет закрепление слота за мастером, при дальнейшей работе слот не отражается в списке свободных;\n   2. Система не выполняет закрепление слота за мастером. При дальнейшей работе этот слот также можно выбрать из списка свободных.\n3. В случае отрицательного результата тест-кейса:\n   1. Создай отчет о дефекте. Опиши:\n      1. Идентификатор дефекта (буквенно-цифровой);\n      2. Краткое описание (одно предложение: «что, где, когда?»);\n      3. \\*Предусловие (при необходимости);\n      4. Шаги воспроизведения дефекта (необязательно совпадает с шагами тест-кейса);\n      5. Ожидаемый результат (ОР): позитивный результат тест-кейса, который ожидали после тестирования; \n      6. Фактический результат (ФР): полученный результат выполнения (подчеркни, что отличает от ОР); \n      7. \\*Постусловия (как восстановить состояние до проверки);\n      8. \\*Окружение (описание среды: операционная система, браузер, разрешение экрана и пр.);\n      9. Приоритет (срочность исправления дефекта);\n      10. \\*Важность (критичность для выполнения);\n      11. Описание;\n      12. Дополнительные материалы (скриншоты, логи, документы и пр.).\n   2. Укажите в графе ФР отметку об отрицательном результате и идентификатор зарегистрированного дефекта.\n4. В случае положительного результата тест-кейса укажите в графе ФР отметку о положительном выполнении кейса.\n\n**Шкала от 1 до 5**\n",
+          "size_bytes": 36733
+        },
+        {
+          "relative_path": "TAGS_FILES.txt",
+          "absolute_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-34-53\\BSA13_RequirementsManagements.ID_1361460-master\\BSA13_RequirementsManagements.ID_1361460-master\\BSA13_RequirementsManagements.ID_1361460-master\\TAGS_FILES.txt",
+          "kind": "text",
+          "text": "0:\n\n\n*********************************************************************\n\n1:\n\n\n*********************************************************************\n\n2:\n\n\n*********************************************************************\n\n3:\n\n\n*********************************************************************\n\n4:\n\n\n*********************************************************************\n\n5:\n\n\n*********************************************************************\n\n6:\n\n\n*********************************************************************\n\n7:\n\n\n*********************************************************************\n\n8:\n\n\n*********************************************************************\n\n9:\n\n\n*********************************************************************\n\n",
+          "size_bytes": 760
+        }
+      ]
+    }
+  ],
+  "entities": [
+    {
+      "entity_id": "ent_007d5d382ce8",
+      "entity_type": "link",
+      "value": "https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624",
+      "quote": "💡 [Tap here](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624) **to leave your feedback on the project**. It's anonymous and will help our team make your educational experience better. We recommend completing the survey immediately after the project.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 6,
+        "line_end": 6
+      },
+      "context": "## Requirements, quality, task management\n\nSummary:\nIn this project, you will examine the process of requirements management, product quality management, and task management. You will learn how to identify requirements, establish relationships between them, and track the status of requirements. You will also learn the rules and approaches of quality management, understanding what to test for and how to do it.\n\n💡 [Tap here](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624) **to leave your feedback on the project**. It's anonymous and will help our team make your educational experience better. We recommend completing the survey immediately after the project.\n\n## Contents\n\n1. [Chapter I](#chapter-i) \\\n   1.1. [Preamble](#11)\n2. [Chapter II](#chapter-ii) \\\n   2.1. [General Rules](#21)\n3. [Chapter III](#chapter-iii) \\\n   3.1. [Requirements Management](#31) \\\n   3.2. [Testing](#32) \\\n   3.3. [Task Management](#33)\n4. [Chapter IV](#chapter-iv) \\\n   4.1. [Task 1. Hairc"
+    },
+    {
+      "entity_id": "ent_b6f967a6f37e",
+      "entity_type": "link",
+      "value": "https://businessyield.com/ru/management/requirements-management-tools/",
+      "quote": "3. \"Requirements management tools: software and everything you need to know\" <https://businessyield.com/ru/management/requirements-management-tools/>.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 54,
+        "line_end": 54
+      },
+      "context": "discussed the design with the customer. Or who can explain the consistency between design and implementation. In both the first and second cases, this is the analyst. In addition, the analyst advises both developers and testers during the work process.\n\n### Literature\n\n1. Karl Wiegers, Joy Beatty, \"Software Requirements\", 3rd edition, amplified. \n2. Philippe Kruchten \"The Rational Unified Process: An Introduction\". \n3. \"Requirements management tools: software and everything you need to know\"  <https://businessyield.com/ru/management/requirements-management-tools/>.\n4. Manual for [Jira Software](https://www.atlassian.com/ru/software/jira/guides/getting-started/introduction).\n5. Manual for <https://weeek.net/ru/help>.\n\n## Chapter II <div id=\"chapter-ii\"></div>\n\n### General Rules <div id=\"21\"></div>\n\nBefore starting, clone the project from GitLab into a repository with the same name.\n\n1. Along the way, you may feel a sense of uncertainty and a severe lack of information: that's OK. Remember, the information in the repository and on Google is always with yo"
+    },
+    {
+      "entity_id": "ent_7743f0c55567",
+      "entity_type": "link",
+      "value": "https://www.atlassian.com/ru/software/jira/guides/getting-started/introduction",
+      "quote": "4. Manual for [Jira Software](https://www.atlassian.com/ru/software/jira/guides/getting-started/introduction).",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 55,
+        "line_end": 55
+      },
+      "context": "tation. In both the first and second cases, this is the analyst. In addition, the analyst advises both developers and testers during the work process.\n\n### Literature\n\n1. Karl Wiegers, Joy Beatty, \"Software Requirements\", 3rd edition, amplified. \n2. Philippe Kruchten \"The Rational Unified Process: An Introduction\". \n3. \"Requirements management tools: software and everything you need to know\"  <https://businessyield.com/ru/management/requirements-management-tools/>.\n4. Manual for [Jira Software](https://www.atlassian.com/ru/software/jira/guides/getting-started/introduction).\n5. Manual for <https://weeek.net/ru/help>.\n\n## Chapter II <div id=\"chapter-ii\"></div>\n\n### General Rules <div id=\"21\"></div>\n\nBefore starting, clone the project from GitLab into a repository with the same name.\n\n1. Along the way, you may feel a sense of uncertainty and a severe lack of information: that's OK. Remember, the information in the repository and on Google is always with you. So are your peers and Rocket.Chat. Communicate. Search. Use common sense. Don't be afraid to make mistakes."
+    },
+    {
+      "entity_id": "ent_ebb651d14904",
+      "entity_type": "link",
+      "value": "https://weeek.net/ru/help",
+      "quote": "5. Manual for <https://weeek.net/ru/help>.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 56,
+        "line_end": 56
+      },
+      "context": "s both developers and testers during the work process.\n\n### Literature\n\n1. Karl Wiegers, Joy Beatty, \"Software Requirements\", 3rd edition, amplified. \n2. Philippe Kruchten \"The Rational Unified Process: An Introduction\". \n3. \"Requirements management tools: software and everything you need to know\"  <https://businessyield.com/ru/management/requirements-management-tools/>.\n4. Manual for [Jira Software](https://www.atlassian.com/ru/software/jira/guides/getting-started/introduction).\n5. Manual for <https://weeek.net/ru/help>.\n\n## Chapter II <div id=\"chapter-ii\"></div>\n\n### General Rules <div id=\"21\"></div>\n\nBefore starting, clone the project from GitLab into a repository with the same name.\n\n1. Along the way, you may feel a sense of uncertainty and a severe lack of information: that's OK. Remember, the information in the repository and on Google is always with you. So are your peers and Rocket.Chat. Communicate. Search. Use common sense. Don't be afraid to make mistakes.\n2. Pay attention to sources of information."
+    },
+    {
+      "entity_id": "ent_850359d6498d",
+      "entity_type": "link",
+      "value": "https://businessyield.com/ru/management/requirements-management-tools/",
+      "quote": "The description of requirements, their identifiers, attributes and states can be stored in a table or database, but it is more useful to store them in a task management tool such as Jira, WEEK or, most effectively, in a requirements management system such as DOORS, ArchiMate and the Russian development, SUTr. An overv…",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 118,
+        "line_end": 118
+      },
+      "context": "ibed in chapter 27 of K. Wiegers' book. \n\nThe description of requirements, their identifiers, attributes and states can be stored in a table or database, but it is more useful to store them in a task management tool such as Jira, WEEK or, most effectively, in a requirements management system such as DOORS, ArchiMate and the Russian development, SUTr.  An overview of requirements management systems is given in the article \"Requirements management tools: software and everything you need to know\" <https://businessyield.com/ru/management/requirements-management-tools/>.\n\nIn the current project, you will identify groups of requirements, define their attributes and statuses. Describe the requirements for our tasks and perform tracking for them. \n\n### 2. Testing <div id=\"32\"></div>\n\nQuality management and testing is a separate major area in software development. The purpose of testing is not to guarantee the quality of the product, but to evaluate it and provide information that can be used to improve the quality. That is, to find and report bugs. \n\nSince an an"
+    },
+    {
+      "entity_id": "ent_55e531fe0502",
+      "entity_type": "link",
+      "value": "https://weeek.net/ru",
+      "quote": "4. Deploy a personalized instance of https://weeek.net/ru.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 210,
+        "line_end": 210
+      },
+      "context": "equirement, superior requirement (except for business requirements);\n      6) Relationship of the requirement. \n   3) Responsible parties:\n      1) Current implementer;\n      2) Decision maker of the requirement;\n      3) Author of the requirement (who registered it).\n3. Determine the statuses of the requirement:\n   1) New;\n   2) Under Analysis;\n   3) In development;\n   4) In testing;\n   5) Included in Patch;\n   6) Rejected;\n   7) Postponed;\n   8) Completed.\n4. Deploy a personalized instance of https://weeek.net/ru.\n5. Create the above requirements in WEEEK.  \n6. Run a scan of WEEEK and place it in the answer.\n\n**Scale from 1 to 5**\n\n### Exercise 01 – Creation of Requirements and Registration <div id=\"52\"></div>\n\nDescribe the requirements within the highlighted portion of the sentence in Task 1. Sign up for a personal WEEEK instance and set the parameters. \n\n1. Describe the stakeholder requirements as UserStores and register them in WEEEK. Decompose the highlighted by cursor into:\n   1. the manager informs"
+    },
+    {
+      "entity_id": "ent_9b3e5493fd18",
+      "entity_type": "image",
+      "value": "misc/images/IMG_1814.jpg",
+      "quote": "![Illustration](misc/images/IMG_1814.jpg)",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 40,
+        "line_end": 40
+      },
+      "context": "from others, always make sure you fully understand the “why”, “how”, and “purpose” behind the solution. Don’t be afraid to make mistakes. \n- Does the task seem impossible? Take a break, get some fresh air and clear your mind — this has helped many people. Maybe after that, the solution will come to you naturally.\n- The learning process is just as important as the result. It’s not just about completing the task — it’s about understanding HOW to solve it.\n\n## Chapter I <div id=\"chapter-i\"></div>\n\n![Illustration](misc/images/IMG_1814.jpg)\n\n### Preamble <div id=\"11\"></div>\n\nIn the survey and design phases, you have been identifying requirements. For the next stages of development, you should determine the order in which certain requirements will be developed, which functional requirements meet key stakeholder goals, business requirements, and stakeholder requirements. And what state they are in: developed, tested, or not yet in the release, not scheduled for implementation. This is what you will be dealing with in the current pro"
+    },
+    {
+      "entity_id": "ent_eacb039e3a4e",
+      "entity_type": "image",
+      "value": "misc/images/img1_eng.png",
+      "quote": "![](misc/images/img1_eng.png)",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 83,
+        "line_end": 83
+      },
+      "context": ", you should always understand why and how. Otherwise the help is useless.\n11. Always push only to the _develop_ branch! The master branch will be ignored. Work in the _src_ directory.\n12. There should be no files in your directory other than those specified in the tasks.\n\n## Chapter III <div id=\"chapter-iii\"></div>\n\n### 1. Requirements Management <div id=\"31\"></div>\n\nIn the BSA02 project, you learned about the different types of requirements, their levels, and the relationships between them. \n\n![](misc/images/img1_eng.png)\n\nIn the next projects, we identified and developed different types of requirements:\n\n1) Business requirements; \n2) Stakeholder requirements;\n3) Functional requirements for the system;\n4) Non-functional requirements.\n\nThe requirements of the different levels are interrelated. The following shows how stakeholder requirements for separation of user functions are implemented by functional requirements for access rights to functions. \n\nExample: User access rights management should be developed. This"
+    },
+    {
+      "entity_id": "ent_c7956c272c36",
+      "entity_type": "technology",
+      "value": "GigaChat",
+      "quote": "- Here, you’ll find a unique learning experience with a lot of freedom. You’re given a task and left to find your own way to solve it, using whatever resources work best for you — whether that’s the Internet or AI tools like GigaChat. Just be mindful of information quality: verify, think critically, analyze, and compa…",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 31,
+        "line_end": 31
+      },
+      "context": "e 01 — Creation of Requirements and Registration](#52) \\\n   5.3. [Exercise 02 — Creating a Positive Test Case](#53) \\\n   5.4. [Exercise 03 — Creating a Negative Test Case](#53) \\\n   5.5. [Exercise 04 — Result Evaluation](#55)\n\n## Instructions \n\nHow to learn at “School 21”:\n\n- Here, you’ll find a unique learning experience with a lot of freedom. You’re given a task and left to find your own way to solve it, using whatever resources work best for you — whether that’s the Internet or AI tools like GigaChat. Just be mindful of information quality: verify, think critically, analyze, and compare.\n- Peer-to-peer (P2P) learning is the exchange of knowledge and experience with peers, where everyone acts as both mentor and student. This approach allows you to gain a deeper understanding of the material by learning from one another.\n- Feel free to ask for help: around you are peers who are also navigating this path for the first time. Share your own experience and ideas with others.  Join Rocket.Chat to"
+    },
+    {
+      "entity_id": "ent_08eb84ea2e7e",
+      "entity_type": "technology",
+      "value": "Rocket.Chat",
+      "quote": "- Feel free to ask for help: around you are peers who are also navigating this path for the first time. Share your own experience and ideas with others. Join Rocket.Chat to stay updated with the latest community announcements.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 33,
+        "line_end": 33
+      },
+      "context": "s like GigaChat. Just be mindful of information quality: verify, think critically, analyze, and compare.\n- Peer-to-peer (P2P) learning is the exchange of knowledge and experience with peers, where everyone acts as both mentor and student. This approach allows you to gain a deeper understanding of the material by learning from one another.\n- Feel free to ask for help: around you are peers who are also navigating this path for the first time. Share your own experience and ideas with others.  Join Rocket.Chat to stay updated with the latest community announcements. \n- Your learning is meaningless if you just copy someone else’s solutions. When receiving help from others, always make sure you fully understand the “why”, “how”, and “purpose” behind the solution. Don’t be afraid to make mistakes. \n- Does the task seem impossible? Take a break, get some fresh air and clear your mind — this has helped many people. Maybe after that, the solution will come to you naturally.\n- The learning process is just a"
+    },
+    {
+      "entity_id": "ent_5ac1dee649ad",
+      "entity_type": "technology",
+      "value": "GitLab",
+      "quote": "Before starting, clone the project from GitLab into a repository with the same name.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 62,
+        "line_end": 62
+      },
+      "context": "2. Philippe Kruchten \"The Rational Unified Process: An Introduction\". \n3. \"Requirements management tools: software and everything you need to know\"  <https://businessyield.com/ru/management/requirements-management-tools/>.\n4. Manual for [Jira Software](https://www.atlassian.com/ru/software/jira/guides/getting-started/introduction).\n5. Manual for <https://weeek.net/ru/help>.\n\n## Chapter II <div id=\"chapter-ii\"></div>\n\n### General Rules <div id=\"21\"></div>\n\nBefore starting, clone the project from GitLab into a repository with the same name.\n\n1. Along the way, you may feel a sense of uncertainty and a severe lack of information: that's OK. Remember, the information in the repository and on Google is always with you. So are your peers and Rocket.Chat. Communicate. Search. Use common sense. Don't be afraid to make mistakes.\n2. Pay attention to sources of information. Check. Think. Analyse. Compare. \n3. Look at the text of each assignment. Read it several times. \n4. Read the examples carefully. Th"
+    },
+    {
+      "entity_id": "ent_f03c3d3f2966",
+      "entity_type": "technology",
+      "value": "Rocket.Chat",
+      "quote": "1. Along the way, you may feel a sense of uncertainty and a severe lack of information: that's OK. Remember, the information in the repository and on Google is always with you. So are your peers and Rocket.Chat. Communicate. Search. Use common sense. Don't be afraid to make mistakes.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 64,
+        "line_end": 64
+      },
+      "context": "ftware](https://www.atlassian.com/ru/software/jira/guides/getting-started/introduction).\n5. Manual for <https://weeek.net/ru/help>.\n\n## Chapter II <div id=\"chapter-ii\"></div>\n\n### General Rules <div id=\"21\"></div>\n\nBefore starting, clone the project from GitLab into a repository with the same name.\n\n1. Along the way, you may feel a sense of uncertainty and a severe lack of information: that's OK. Remember, the information in the repository and on Google is always with you. So are your peers and Rocket.Chat. Communicate. Search. Use common sense. Don't be afraid to make mistakes.\n2. Pay attention to sources of information. Check. Think. Analyse. Compare. \n3. Look at the text of each assignment. Read it several times. \n4. Read the examples carefully. There may be something in them that is not explicitly stated in the task itself.\n5. You may find inconsistencies where something new in the terms of the task or examples conflicts with something you already know. If you come across such an inconsistenc"
+    },
+    {
+      "entity_id": "ent_a85c4070a48f",
+      "entity_type": "link",
+      "value": "https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624",
+      "quote": "💡 [Нажми сюда](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624), **чтобы поделиться с нами обратной связью на этот проект**. Это анонимно и поможет нашей команде сделать обучение лучше. Рекомендуем заполнить опрос сразу после выполнения проекта.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 6,
+        "line_end": 6
+      },
+      "context": "## Управление требованиями, качеством, задачами\n\nРезюме:\nВ настоящем проекте ты рассмотришь процесс управления требованиями и качеством продукта, научишься идентифицировать требования, устанавливать связи между ними и отслеживать состояния требований, а также узнаешь правила и подходы к управлению качеством.\n\n💡 [Нажми сюда](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624), **чтобы поделиться с нами обратной связью на этот проект**. Это анонимно и поможет нашей команде сделать обучение лучше. Рекомендуем заполнить опрос сразу после выполнения проекта.\n\n## Contents\n\n1. [Chapter I](#chapter-i) \\\n    1.1. [Preamble](#11)\n2. [Chapter II](#chapter-ii) \\\n    2.1. [General Rules](#21)\n3. [Chapter III](#chapter-iii) \\\n    3.1. [Управление требованиями](#31) \\\n    3.2. [Тестирование](#32) \\\n    3.3. [Управление задачами](#33)\n4. [Chapter IV](#chapter-iv) \\\n    4.1. [Зада"
+    },
+    {
+      "entity_id": "ent_7bc4e7dfdf59",
+      "entity_type": "link",
+      "value": "https://businessyield.com/ru/management/requirements-management-tools/",
+      "quote": "3. «Инструменты управления требованиями: программное обеспечение и все, что вам нужно знать» <https://businessyield.com/ru/management/requirements-management-tools/>.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 54,
+        "line_end": 54
+      },
+      "context": "обсуждал замысел. Или можно объяснить соответствие замысла и реализации. И в первом, и во втором случае это аналитик. Кроме того, аналитик в процессе работы оказывает консультации как разработчикам, так и тестировщикам. \n\n### Литература\n\n1. Карл Вигерс, Джой Битти, «Разработка требований к программному обеспечению», издание третье, дополненное. \n2. Филипп Кратчен «Введение в Rational Unified Process».\n3. «Инструменты управления требованиями: программное обеспечение и все, что вам нужно знать» <https://businessyield.com/ru/management/requirements-management-tools/>.\n4. Индивидуальное руководство по [Jira Software](https://www.atlassian.com/ru/software/jira/guides/getting-started/introduction).\n5. Руководство по <https://weeek.net/ru/help>.\n\n## Chapter II <div id=\"chapter-ii\"></div>\n\n### General Rules <div id=\"21\"></div>\n\nПеред выполнением проект необходимо склонировать с GitLab в одноименный репозиторий.\n\n1. На протяжении всего курса тебя будет сопровождать чувство неопределенности и острого дефицита информации — это нормально. Не забывай, что информация"
+    },
+    {
+      "entity_id": "ent_3bd4aedeb699",
+      "entity_type": "link",
+      "value": "https://www.atlassian.com/ru/software/jira/guides/getting-started/introduction",
+      "quote": "4. Индивидуальное руководство по [Jira Software](https://www.atlassian.com/ru/software/jira/guides/getting-started/introduction).",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 55,
+        "line_end": 55
+      },
+      "context": "ме того, аналитик в процессе работы оказывает консультации как разработчикам, так и тестировщикам. \n\n### Литература\n\n1. Карл Вигерс, Джой Битти, «Разработка требований к программному обеспечению», издание третье, дополненное. \n2. Филипп Кратчен «Введение в Rational Unified Process».\n3. «Инструменты управления требованиями: программное обеспечение и все, что вам нужно знать» <https://businessyield.com/ru/management/requirements-management-tools/>.\n4. Индивидуальное руководство по [Jira Software](https://www.atlassian.com/ru/software/jira/guides/getting-started/introduction).\n5. Руководство по <https://weeek.net/ru/help>.\n\n## Chapter II <div id=\"chapter-ii\"></div>\n\n### General Rules <div id=\"21\"></div>\n\nПеред выполнением проект необходимо склонировать с GitLab в одноименный репозиторий.\n\n1. На протяжении всего курса тебя будет сопровождать чувство неопределенности и острого дефицита информации — это нормально. Не забывай, что информация в репозитории и Google всегда с тобой. Как и пиры, и Rocket.Chat. Общайся. Ищи. Опирайся на здравый смысл. Не бойся ошибиться.\n2."
+    },
+    {
+      "entity_id": "ent_2688389b153e",
+      "entity_type": "link",
+      "value": "https://weeek.net/ru/help",
+      "quote": "5. Руководство по <https://weeek.net/ru/help>.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 56,
+        "line_end": 56
+      },
+      "context": "### Литература\n\n1. Карл Вигерс, Джой Битти, «Разработка требований к программному обеспечению», издание третье, дополненное. \n2. Филипп Кратчен «Введение в Rational Unified Process».\n3. «Инструменты управления требованиями: программное обеспечение и все, что вам нужно знать» <https://businessyield.com/ru/management/requirements-management-tools/>.\n4. Индивидуальное руководство по [Jira Software](https://www.atlassian.com/ru/software/jira/guides/getting-started/introduction).\n5. Руководство по <https://weeek.net/ru/help>.\n\n## Chapter II <div id=\"chapter-ii\"></div>\n\n### General Rules <div id=\"21\"></div>\n\nПеред выполнением проект необходимо склонировать с GitLab в одноименный репозиторий.\n\n1. На протяжении всего курса тебя будет сопровождать чувство неопределенности и острого дефицита информации — это нормально. Не забывай, что информация в репозитории и Google всегда с тобой. Как и пиры, и Rocket.Chat. Общайся. Ищи. Опирайся на здравый смысл. Не бойся ошибиться.\n2. Будь внимателен к источникам информации. Прове"
+    },
+    {
+      "entity_id": "ent_bd1da04a1c0c",
+      "entity_type": "link",
+      "value": "https://businessyield.com/ru/management/requirements-management-tools/",
+      "quote": "Описание требований, их идентификаторы, атрибуты и состояния можно хранить в таблице или базе данных, но более полезно — в инструменте управления заданиями, например, Jira, WEEEК или, что наиболее эффективно, — в системе управления требованиями, например, DOORS, ArchiMate и российская разработка — СУТр. Обзор систем у…",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 118,
+        "line_end": 118
+      },
+      "context": "ний хорошо описан в главе 27 книги К. Вигерса. \n\nОписание требований, их идентификаторы, атрибуты и состояния можно хранить в таблице или базе данных, но более полезно — в инструменте управления заданиями, например, Jira, WEEEК или, что наиболее эффективно, — в системе управления требованиями, например, DOORS, ArchiMate и российская разработка — СУТр. Обзор систем управления требованиями приведен в статье «Инструменты управления требованиями: программное обеспечение и всё, что вам нужно знать» <https://businessyield.com/ru/management/requirements-management-tools/>.\n\nВ текущем проекте ты выделишь группы требований, определишь их атрибуты и статусы. А затем опишешь требования к нашим задачам и выполнишь отслеживание за ними. \n\n### 2. Тестирование <div id=\"32\"></div>\n\nУправление качеством и тестирование — отдельная большая область в разработке программного обеспечения. Задача тестирования — не гарантировать качество продукта, а оценить его и обеспечить информирование о том, а за счет чего можно исправить качество. То есть найти ошибки и сообщить о них. \n\nП"
+    },
+    {
+      "entity_id": "ent_808514bf996a",
+      "entity_type": "link",
+      "value": "https://weeek.net/ru",
+      "quote": "4. Разверните персональный экземпляр на платформе для управления задачами, проектами и командной работой (например, https://weeek.net/ru, либо используйте аналогичные сервисы).",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 211,
+        "line_end": 211
+      },
+      "context": "бизнес-требований);\n      6) Связи требования. \n   3) Ответственные лица:\n      1) Текущий исполнитель;\n      2) Лицо, принимающее решение по требованию;\n      3) Автор требования (кто зарегистрировал).\n3. Определите статусы требований:\n   1) Новое;\n   2) На анализе;\n   3) В разработке;\n   4) На тестировании;\n   5) Включено в патч;\n   6) Отклонено;\n   7) Отложено;\n   8) Завершено.\n4. Разверните персональный экземпляр на платформе для управления задачами, проектами и командной работой (например, https://weeek.net/ru, либо используйте аналогичные сервисы).\n5. Создайте перечисленные выше требования.  \n6. Выполните скан и разместите в ответе.\n* Если ранее вами была выполнена работа в Trello, то это допустимо. При желании данные из Trello можно экспортировать в WEEEК.\n\n**Шкала от 1 до 5**\n\n### Exercise 01 — Создание требований и регистрация <div id=\"52\"></div>\n\nОпишите требования в части выделенного курсором предложения задачи 1.  Зарегистрируйте в персональном экземпляре на выбранной платформе и укажите параме"
+    },
+    {
+      "entity_id": "ent_0e8f488fa4ef",
+      "entity_type": "image",
+      "value": "misc/images/IMG_1814.jpg",
+      "quote": "![Иллюстрация к проекту](misc/images/IMG_1814.jpg)",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 40,
+        "line_end": 40
+      },
+      "context": "- Твое обучение не будет иметь никакого смысла, если ты будешь копировать чужие решения. Если пользуешься помощью других — всегда разбирайся до конца, почему, как и зачем. Не бойся ошибиться.\n- Кажется, что задача невыполнима? Сделай перерыв, проветрись, перезагрузи голову — это помогало многим. Возможно, после этого решение придет само собой.\n- Важен не только результат обучения, но и сам процесс. Нужно не просто решить задачу, а понять, КАК ее решить.\n\n## Chapter I <div id=\"chapter-i\"></div>\n\n![Иллюстрация к проекту](misc/images/IMG_1814.jpg)\n\n### Preamble <div id=\"11\"></div>\n\nНа этапах обследования и проектирования ты занимался выявлением требований. Для следующих этапов разработки следует определить, в каком порядке разрабатывать те или иные требования, выявить, какие функциональные требования обеспечивают выполнение целей ключевых стейкхолдеров, бизнес-требований и требований заинтересованных сторон.\n\nАналитик определяет требования заинтересованных сторон, выявляет бизнес-требования, цели ключевых стейкхолдеров, формулирует крите"
+    },
+    {
+      "entity_id": "ent_71c86e0dc75c",
+      "entity_type": "image",
+      "value": "misc/images/img1.png",
+      "quote": "![](misc/images/img1.png)",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 83,
+        "line_end": 83
+      },
+      "context": "ьзуешься помощью — всегда разбирайся до конца: почему, как и зачем. Иначе помощь не будет иметь смысла.\n11. Всегда делай push только в ветку _develop_! Ветка master будет проигнорирована. Работай в директории _src_.\n12. В твоей директории не должно быть иных файлов, кроме тех, что обозначены в заданиях.\n\n## Chapter III <div id=\"chapter-iii\"></div>\n\n### 1. Управление требованиями <div id=\"31\"></div>\n\nВ проекте BSA02 ты познакомился с разными видами требований, их уровнями и связями между ними. \n\n![](misc/images/img1.png)\n\nВ следующих проектах выявляли, разрабатывали разные типы требований:\n\n1) Бизнес-требования; \n2) Требования заинтересованных сторон;\n3) Функциональные требования к системе;\n4) Нефункциональные требования.\n\nТребования разных уровней связаны между собой. Ниже показано, как требования заинтересованных сторон к разделению функций пользователей реализуются функциональными требованиями к правам доступа к функциям. \n\nПример: следует разработать управление правами доступа пользователей. Это требование"
+    },
+    {
+      "entity_id": "ent_75ffee60ffac",
+      "entity_type": "technology",
+      "value": "GigaChat",
+      "quote": "- Здесь тебя ждет уникальный образовательный опыт с большим количеством свободы. Ты получаешь задачу и самостоятельно ищешь пути решения, используя любые удобные способы поиска информации — ресурсы Интернета или нейросети (например, GigaChat). Но внимательно относись к качеству информации: проверяй, думай, анализируй,…",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 31,
+        "line_end": 31
+      },
+      "context": "01 — Создание требований и регистрация](#52) \\\n    5.3. [Exercise 02 — Создание позитивного тест-кейса](#53) \\\n    5.4. [Exercise 03 — Создание негативного тест-кейса](#53) \\\n    5.5. [Exercise 04 — Оценка результата](#55)\n\n## Инструкции\n\nКак учиться в «Школе 21»:\n\n- Здесь тебя ждет уникальный образовательный опыт с большим количеством свободы. Ты получаешь задачу и самостоятельно ищешь пути решения, используя любые удобные способы поиска информации — ресурсы Интернета или нейросети (например, GigaChat). Но внимательно относись к качеству информации: проверяй, думай, анализируй, сравнивай.\n- Взаимообучение (Peer-to-Peer, P2P) — это обмен знаниями и опытом с другими пирами, где каждый выступает и учителем, и учеником. Такой подход позволяет глубже понять материал, учась друг у друга.\n- Чувствуй себя свободно и проси о помощи — вокруг тебя те, кто тоже впервые проходят этот путь. Делись своим опытом и идеями с другими. Присоединяйся к Rocket.Chat, чтобы быть в курсе всех новостей от нашего сооб"
+    },
+    {
+      "entity_id": "ent_d4881de350e9",
+      "entity_type": "technology",
+      "value": "Rocket.Chat",
+      "quote": "- Чувствуй себя свободно и проси о помощи — вокруг тебя те, кто тоже впервые проходят этот путь. Делись своим опытом и идеями с другими. Присоединяйся к Rocket.Chat, чтобы быть в курсе всех новостей от нашего сообщества.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 33,
+        "line_end": 33
+      },
+      "context": "рмации — ресурсы Интернета или нейросети (например, GigaChat). Но внимательно относись к качеству информации: проверяй, думай, анализируй, сравнивай.\n- Взаимообучение (Peer-to-Peer, P2P) — это обмен знаниями и опытом с другими пирами, где каждый выступает и учителем, и учеником. Такой подход позволяет глубже понять материал, учась друг у друга.\n- Чувствуй себя свободно и проси о помощи — вокруг тебя те, кто тоже впервые проходят этот путь. Делись своим опытом и идеями с другими. Присоединяйся к Rocket.Chat, чтобы быть в курсе всех новостей от нашего сообщества.\n- Твое обучение не будет иметь никакого смысла, если ты будешь копировать чужие решения. Если пользуешься помощью других — всегда разбирайся до конца, почему, как и зачем. Не бойся ошибиться.\n- Кажется, что задача невыполнима? Сделай перерыв, проветрись, перезагрузи голову — это помогало многим. Возможно, после этого решение придет само собой.\n- Важен не только результат обучения, но и сам процесс. Нужно не просто решить задачу, а понять,"
+    },
+    {
+      "entity_id": "ent_ae6c56765875",
+      "entity_type": "technology",
+      "value": "GitLab",
+      "quote": "Перед выполнением проект необходимо склонировать с GitLab в одноименный репозиторий.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 62,
+        "line_end": 62
+      },
+      "context": "nal Unified Process».\n3. «Инструменты управления требованиями: программное обеспечение и все, что вам нужно знать» <https://businessyield.com/ru/management/requirements-management-tools/>.\n4. Индивидуальное руководство по [Jira Software](https://www.atlassian.com/ru/software/jira/guides/getting-started/introduction).\n5. Руководство по <https://weeek.net/ru/help>.\n\n## Chapter II <div id=\"chapter-ii\"></div>\n\n### General Rules <div id=\"21\"></div>\n\nПеред выполнением проект необходимо склонировать с GitLab в одноименный репозиторий.\n\n1. На протяжении всего курса тебя будет сопровождать чувство неопределенности и острого дефицита информации — это нормально. Не забывай, что информация в репозитории и Google всегда с тобой. Как и пиры, и Rocket.Chat. Общайся. Ищи. Опирайся на здравый смысл. Не бойся ошибиться.\n2. Будь внимателен к источникам информации. Проверяй. Думай. Анализируй. Сравнивай. \n3. Внимательно читай задания. Перечитай несколько раз. \n4. Читать примеры тоже лучше внимательно. В них мож"
+    },
+    {
+      "entity_id": "ent_1503c7e25750",
+      "entity_type": "technology",
+      "value": "Rocket.Chat",
+      "quote": "1. На протяжении всего курса тебя будет сопровождать чувство неопределенности и острого дефицита информации — это нормально. Не забывай, что информация в репозитории и Google всегда с тобой. Как и пиры, и Rocket.Chat. Общайся. Ищи. Опирайся на здравый смысл. Не бойся ошибиться.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 64,
+        "line_end": 64
+      },
+      "context": "tps://www.atlassian.com/ru/software/jira/guides/getting-started/introduction).\n5. Руководство по <https://weeek.net/ru/help>.\n\n## Chapter II <div id=\"chapter-ii\"></div>\n\n### General Rules <div id=\"21\"></div>\n\nПеред выполнением проект необходимо склонировать с GitLab в одноименный репозиторий.\n\n1. На протяжении всего курса тебя будет сопровождать чувство неопределенности и острого дефицита информации — это нормально. Не забывай, что информация в репозитории и Google всегда с тобой. Как и пиры, и Rocket.Chat. Общайся. Ищи. Опирайся на здравый смысл. Не бойся ошибиться.\n2. Будь внимателен к источникам информации. Проверяй. Думай. Анализируй. Сравнивай. \n3. Внимательно читай задания. Перечитай несколько раз. \n4. Читать примеры тоже лучше внимательно. В них может быть что-то, что не указано в явном виде в самом задании.\n5. Тебе могут встретиться несоответствия, когда что-то новое в условиях задачи или примере противоречит уже известному. Если встретилось такое — попробуй разобраться. Если не получилос"
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "fnd_0593ae722920",
+      "unit_id": "bsa13_requirementsmanagements_id_1361460_master__a41877f1",
+      "branch": "BSA13_RequirementsManagements.ID_1361460-master",
+      "criterion": "image_quality",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.85,
+      "quote": "![](misc/images/img1_eng.png)",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 83,
+        "line_end": 83
+      },
+      "evidence": [
+        {
+          "title": "Размер изображения",
+          "detail": "595x282, минимум 640x360.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Заменить изображение на более качественное или подтвердить, что малый размер допустим.",
+      "needs_human_review": false,
+      "checker_name": "image_quality_checker",
+      "extra": {
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_34c2aba4e9a8",
+      "unit_id": "bsa13_requirementsmanagements_id_1361460_master__a41877f1",
+      "branch": "BSA13_RequirementsManagements.ID_1361460-master",
+      "criterion": "image_quality",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.85,
+      "quote": "![](misc/images/img1.png)",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 83,
+        "line_end": 83
+      },
+      "evidence": [
+        {
+          "title": "Размер изображения",
+          "detail": "628x297, минимум 640x360.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Заменить изображение на более качественное или подтвердить, что малый размер допустим.",
+      "needs_human_review": false,
+      "checker_name": "image_quality_checker",
+      "extra": {
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_382b4b1e93c1",
+      "unit_id": "bsa13_requirementsmanagements_id_1361460_master__a41877f1",
+      "branch": "BSA13_RequirementsManagements.ID_1361460-master",
+      "criterion": "actuality",
+      "severity": "info",
+      "verdict": "unknown",
+      "confidence": 0.5,
+      "quote": "4. Deploy a personalized instance of https://weeek.net/ru.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 210,
+        "line_end": 210
+      },
+      "evidence": [
+        {
+          "title": "Сеть отключена",
+          "detail": "Ссылка не проверялась: https://weeek.net/ru",
+          "url": "https://weeek.net/ru"
+        },
+        {
+          "title": "Языковые дубли",
+          "detail": "Схлопнуто 2 строк: README.md, README_RUS.md.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Запустить проверку с доступом к сети, чтобы подтвердить доступность ссылки.",
+      "needs_human_review": true,
+      "checker_name": "link_checker",
+      "extra": {
+        "merged_language_duplicates": 1,
+        "affected_files": [
+          "README.md",
+          "README_RUS.md"
+        ]
+      }
+    },
+    {
+      "finding_id": "fnd_40175723a8ae",
+      "unit_id": "bsa13_requirementsmanagements_id_1361460_master__a41877f1",
+      "branch": "BSA13_RequirementsManagements.ID_1361460-master",
+      "criterion": "market_fit",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.8500000000000001,
+      "quote": null,
+      "location": {
+        "file_path": "README.md",
+        "line_start": 44,
+        "line_end": 44
+      },
+      "evidence": [
+        {
+          "title": "Проверка соответствия рынку",
+          "detail": "Работа с реальными данными: нет; Бизнес-контекст: есть (README.md:44: In the survey and design phases, you have been identifying requirements. For the next stages of development, you should determine the order in which certain requirements will be developed, which functional requirements m); Бизнес-метрики или требования: есть (README.md:116: For example, the Business Requirement Document (BRD) identifier is often used for business requirements. An example of a complete business requirement identifier is BRD000017 (not BRD17). You should also define the chara)",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Усилить прикладной контекст: добавить датасет или ссылку на реальные данные.",
+      "needs_human_review": false,
+      "checker_name": "market_fit_checker",
+      "extra": {
+        "market_fit_score": 2,
+        "sub_checks": {
+          "real_data": {
+            "present": false,
+            "matches": [],
+            "source": "rules"
+          },
+          "business_context": {
+            "present": true,
+            "matches": [
+              {
+                "file_path": "README.md",
+                "line_start": 44,
+                "text": "In the survey and design phases, you have been identifying requirements. For the next stages of development, you should determine the order in which certain requirements will be developed, which functional requirements m"
+              }
+            ],
+            "source": "rules"
+          },
+          "success_metrics": {
+            "present": true,
+            "matches": [
+              {
+                "file_path": "README.md",
+                "line_start": 116,
+                "text": "For example, the Business Requirement Document (BRD) identifier is often used for business requirements. An example of a complete business requirement identifier is BRD000017 (not BRD17). You should also define the chara"
+              }
+            ],
+            "source": "rules"
+          }
+        },
+        "model_refined": false,
+        "cache_hit": false,
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_5453faf6212f",
+      "unit_id": "bsa13_requirementsmanagements_id_1361460_master__a41877f1",
+      "branch": "BSA13_RequirementsManagements.ID_1361460-master",
+      "criterion": "actuality",
+      "severity": "info",
+      "verdict": "unknown",
+      "confidence": 0.55,
+      "quote": null,
+      "location": null,
+      "evidence": [
+        {
+          "title": "Кандидаты на проверку",
+          "detail": "Найдено 1 сущностей: GitLab",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": "не проверялось",
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Включить модельный контур, чтобы получить источник, статус поддержки и рекомендуемую версию.",
+      "needs_human_review": true,
+      "checker_name": "tech_freshness_checker",
+      "extra": {
+        "candidate_count": 1,
+        "sample_values": [
+          "GitLab"
+        ]
+      }
+    },
+    {
+      "finding_id": "fnd_6a97549e6fb7",
+      "unit_id": "bsa13_requirementsmanagements_id_1361460_master__a41877f1",
+      "branch": "BSA13_RequirementsManagements.ID_1361460-master",
+      "criterion": "actuality",
+      "severity": "info",
+      "verdict": "unknown",
+      "confidence": 0.5,
+      "quote": "3. \"Requirements management tools: software and everything you need to know\" <https://businessyield.com/ru/management/requirements-management-tools/>.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 54,
+        "line_end": 54
+      },
+      "evidence": [
+        {
+          "title": "Сеть отключена",
+          "detail": "Ссылка не проверялась: https://businessyield.com/ru/management/requirements-management-tools/",
+          "url": "https://businessyield.com/ru/management/requirements-management-tools/"
+        },
+        {
+          "title": "Языковые дубли",
+          "detail": "Схлопнуто 4 строк: README.md, README_RUS.md.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Запустить проверку с доступом к сети, чтобы подтвердить доступность ссылки.",
+      "needs_human_review": true,
+      "checker_name": "link_checker",
+      "extra": {
+        "merged_language_duplicates": 3,
+        "affected_files": [
+          "README.md",
+          "README_RUS.md"
+        ]
+      }
+    },
+    {
+      "finding_id": "fnd_6f1a262c234b",
+      "unit_id": "bsa13_requirementsmanagements_id_1361460_master__a41877f1",
+      "branch": "BSA13_RequirementsManagements.ID_1361460-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.88,
+      "quote": "1. информирование менеджером клиентов о записи на услугу;",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 223,
+        "line_end": 223
+      },
+      "evidence": [
+        {
+          "title": "Структура Markdown",
+          "detail": "После пункта 1) на строке 222 идёт пункт 1), ожидается 2).",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Исправить ручную нумерацию списка, чтобы номера шли последовательно внутри одного блока.",
+      "needs_human_review": false,
+      "checker_name": "markdown_structure_checker",
+      "extra": {
+        "issue_type": "numbered_list_reset",
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_7fd8042f015a",
+      "unit_id": "bsa13_requirementsmanagements_id_1361460_master__a41877f1",
+      "branch": "BSA13_RequirementsManagements.ID_1361460-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.88,
+      "quote": "1. Система сообщает, что выбранный слот забронирован в системе клиентом. Однако при обращении к клиенту тот отрицает, что забронировал этот слот.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 293,
+        "line_end": 293
+      },
+      "evidence": [
+        {
+          "title": "Структура Markdown",
+          "detail": "После пункта 1) на строке 292 идёт пункт 1), ожидается 2).",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Исправить ручную нумерацию списка, чтобы номера шли последовательно внутри одного блока.",
+      "needs_human_review": false,
+      "checker_name": "markdown_structure_checker",
+      "extra": {
+        "issue_type": "numbered_list_reset",
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_8e7c6430b403",
+      "unit_id": "bsa13_requirementsmanagements_id_1361460_master__a41877f1",
+      "branch": "BSA13_RequirementsManagements.ID_1361460-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.88,
+      "quote": "1. the manager informs the customer about the service appointment;",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 221,
+        "line_end": 221
+      },
+      "evidence": [
+        {
+          "title": "Структура Markdown",
+          "detail": "После пункта 1) на строке 220 идёт пункт 1), ожидается 2).",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Исправить ручную нумерацию списка, чтобы номера шли последовательно внутри одного блока.",
+      "needs_human_review": false,
+      "checker_name": "markdown_structure_checker",
+      "extra": {
+        "issue_type": "numbered_list_reset",
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_b4f9f413dbcd",
+      "unit_id": "bsa13_requirementsmanagements_id_1361460_master__a41877f1",
+      "branch": "BSA13_RequirementsManagements.ID_1361460-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.88,
+      "quote": "1. The system reports that the selected slot is booked in the system by the client. However, when contacting the client, the client denies having booked that slot.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 290,
+        "line_end": 290
+      },
+      "evidence": [
+        {
+          "title": "Структура Markdown",
+          "detail": "После пункта 1) на строке 289 идёт пункт 1), ожидается 2).",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Исправить ручную нумерацию списка, чтобы номера шли последовательно внутри одного блока.",
+      "needs_human_review": false,
+      "checker_name": "markdown_structure_checker",
+      "extra": {
+        "issue_type": "numbered_list_reset",
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_cd57e373ba6e",
+      "unit_id": "bsa13_requirementsmanagements_id_1361460_master__a41877f1",
+      "branch": "BSA13_RequirementsManagements.ID_1361460-master",
+      "criterion": "rights",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.65,
+      "quote": "![Illustration](misc/images/IMG_1814.jpg)",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 40,
+        "line_end": 40
+      },
+      "evidence": [
+        {
+          "title": "Изображение без подтверждённых прав",
+          "detail": "У значимого изображения нет локальных метаданных об авторе/лицензии: misc/images/IMG_1814.jpg",
+          "url": null
+        },
+        {
+          "title": "Языковые дубли",
+          "detail": "Схлопнуто 3 строк: README.md, README_RUS.md.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Добавить источник, автора и лицензию изображения или подтвердить права вручную.",
+      "needs_human_review": true,
+      "checker_name": "rights_originality_checker",
+      "extra": {
+        "kind": "image_provenance",
+        "risk": "no_source",
+        "deterministic": true,
+        "merged_language_duplicates": 2,
+        "affected_files": [
+          "README.md",
+          "README_RUS.md"
+        ]
+      }
+    },
+    {
+      "finding_id": "fnd_d6d8c983a28c",
+      "unit_id": "bsa13_requirementsmanagements_id_1361460_master__a41877f1",
+      "branch": "BSA13_RequirementsManagements.ID_1361460-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.88,
+      "quote": "1) Choose 4 types of requirements:",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 175,
+        "line_end": 175
+      },
+      "evidence": [
+        {
+          "title": "Структура Markdown",
+          "detail": "После пункта 1) на строке 174 идёт пункт 1), ожидается 2).",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Исправить ручную нумерацию списка, чтобы номера шли последовательно внутри одного блока.",
+      "needs_human_review": false,
+      "checker_name": "markdown_structure_checker",
+      "extra": {
+        "issue_type": "numbered_list_reset",
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_e29191072216",
+      "unit_id": "bsa13_requirementsmanagements_id_1361460_master__a41877f1",
+      "branch": "BSA13_RequirementsManagements.ID_1361460-master",
+      "criterion": "actuality",
+      "severity": "info",
+      "verdict": "unknown",
+      "confidence": 0.5,
+      "quote": "5. Manual for <https://weeek.net/ru/help>.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 56,
+        "line_end": 56
+      },
+      "evidence": [
+        {
+          "title": "Сеть отключена",
+          "detail": "Ссылка не проверялась: https://weeek.net/ru/help",
+          "url": "https://weeek.net/ru/help"
+        },
+        {
+          "title": "Языковые дубли",
+          "detail": "Схлопнуто 2 строк: README.md, README_RUS.md.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Запустить проверку с доступом к сети, чтобы подтвердить доступность ссылки.",
+      "needs_human_review": true,
+      "checker_name": "link_checker",
+      "extra": {
+        "merged_language_duplicates": 1,
+        "affected_files": [
+          "README.md",
+          "README_RUS.md"
+        ]
+      }
+    },
+    {
+      "finding_id": "fnd_f17278116ae8",
+      "unit_id": "bsa13_requirementsmanagements_id_1361460_master__a41877f1",
+      "branch": "BSA13_RequirementsManagements.ID_1361460-master",
+      "criterion": "checklist_alignment",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.72,
+      "quote": null,
+      "location": {
+        "file_path": "check-list.yml",
+        "line_start": null,
+        "line_end": null
+      },
+      "evidence": [
+        {
+          "title": "Связность README и чек-листа",
+          "detail": "Сильных совпадений: 5 из 5; слабых совпадений: 0 из 5; не сопоставлено: 0 из 5. Развёрнутых описаний: 3 из 5. Недостаточно описаны: Exercise 00 — Identification of Requirement Types, Exercise 01 — Creation of Requirements and Registration.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Доработать пункты без критериев приёмки, ожидаемых артефактов или примеров.",
+      "needs_human_review": false,
+      "checker_name": "checklist_checker",
+      "extra": {
+        "matched_ratio": 1.0,
+        "strong_matched": 5,
+        "weak_matched": 0,
+        "strong_matched_questions": [
+          "Exercise 00 — Identification of Requirement Types",
+          "Exercise 01 — Creation of Requirements and Registration",
+          "Exercise 02 — Creating a Positive Test Case",
+          "Exercise 03 — Creating a Negative Test Case",
+          "Exercise 04 — Result Evaluation"
+        ],
+        "weak_matched_questions": [],
+        "unmatched_questions": [],
+        "description_ratio": 0.6,
+        "complete_description_questions": [
+          "Exercise 02 — Creating a Positive Test Case",
+          "Exercise 03 — Creating a Negative Test Case",
+          "Exercise 04 — Result Evaluation"
+        ],
+        "incomplete_questions": [
+          "Exercise 00 — Identification of Requirement Types",
+          "Exercise 01 — Creation of Requirements and Registration"
+        ],
+        "grounding_issues": [],
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_f99740db7684",
+      "unit_id": "bsa13_requirementsmanagements_id_1361460_master__a41877f1",
+      "branch": "BSA13_RequirementsManagements.ID_1361460-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.88,
+      "quote": "1) Выберите 4 типа требований:",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 177,
+        "line_end": 177
+      },
+      "evidence": [
+        {
+          "title": "Структура Markdown",
+          "detail": "После пункта 1) на строке 176 идёт пункт 1), ожидается 2).",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Исправить ручную нумерацию списка, чтобы номера шли последовательно внутри одного блока.",
+      "needs_human_review": false,
+      "checker_name": "markdown_structure_checker",
+      "extra": {
+        "issue_type": "numbered_list_reset",
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_f9e4e2198148",
+      "unit_id": "bsa13_requirementsmanagements_id_1361460_master__a41877f1",
+      "branch": "BSA13_RequirementsManagements.ID_1361460-master",
+      "criterion": "actuality",
+      "severity": "info",
+      "verdict": "unknown",
+      "confidence": 0.5,
+      "quote": "💡 [Tap here](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624) **to leave your feedback on the project**. It's anonymous and will help our team make your educational experience better. We recommend completing the survey immediately after the project.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 6,
+        "line_end": 6
+      },
+      "evidence": [
+        {
+          "title": "Сеть отключена",
+          "detail": "Ссылка не проверялась: https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624",
+          "url": "https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624"
+        },
+        {
+          "title": "Языковые дубли",
+          "detail": "Схлопнуто 2 строк: README.md, README_RUS.md.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Запустить проверку с доступом к сети, чтобы подтвердить доступность ссылки.",
+      "needs_human_review": true,
+      "checker_name": "link_checker",
+      "extra": {
+        "merged_language_duplicates": 1,
+        "affected_files": [
+          "README.md",
+          "README_RUS.md"
+        ]
+      }
+    },
+    {
+      "finding_id": "fnd_fccb50325f05",
+      "unit_id": "bsa13_requirementsmanagements_id_1361460_master__a41877f1",
+      "branch": "BSA13_RequirementsManagements.ID_1361460-master",
+      "criterion": "actuality",
+      "severity": "info",
+      "verdict": "unknown",
+      "confidence": 0.5,
+      "quote": "4. Manual for [Jira Software](https://www.atlassian.com/ru/software/jira/guides/getting-started/introduction).",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 55,
+        "line_end": 55
+      },
+      "evidence": [
+        {
+          "title": "Сеть отключена",
+          "detail": "Ссылка не проверялась: https://www.atlassian.com/ru/software/jira/guides/getting-started/introduction",
+          "url": "https://www.atlassian.com/ru/software/jira/guides/getting-started/introduction"
+        },
+        {
+          "title": "Языковые дубли",
+          "detail": "Схлопнуто 2 строк: README.md, README_RUS.md.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Запустить проверку с доступом к сети, чтобы подтвердить доступность ссылки.",
+      "needs_human_review": true,
+      "checker_name": "link_checker",
+      "extra": {
+        "merged_language_duplicates": 1,
+        "affected_files": [
+          "README.md",
+          "README_RUS.md"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+﻿slice_name,label,predicted_total,true_positive,false_positive,precision,false_positive_share
+factcheck,Фактчек и актуальность,10,0,10,0.0,0.4762
+links_and_resources,Ссылки и ресурсы,10,0,10,0.0,0.4762
+methodology,Методические критерии,1,0,1,0.0,0.0476

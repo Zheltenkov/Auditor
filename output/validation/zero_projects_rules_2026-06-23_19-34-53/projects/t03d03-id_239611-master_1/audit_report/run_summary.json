@@ -1,0 +1,77 @@
+{
+  "started_at": "2026-06-23T19:35:01.382130Z",
+  "finished_at": "2026-06-23T19:35:02.034863Z",
+  "input_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-34-53\\t03d03-id_239611-master_1",
+  "units_total": 1,
+  "files_total": 26,
+  "findings_total": 11,
+  "affected_units_total": 1,
+  "by_severity": {
+    "minor": 9,
+    "info": 2
+  },
+  "by_criterion": {
+    "image_quality": 1,
+    "correctness": 3,
+    "rights": 2,
+    "market_fit": 1,
+    "checklist_alignment": 1,
+    "readability": 1,
+    "actuality": 2
+  },
+  "by_branch": {
+    "t03d03-id_239611-master (1)": 11
+  },
+  "by_unit": {
+    "t03d03_id_239611_master__7020e229": 11
+  },
+  "model_usage": {
+    "calls_total": 0,
+    "cache_hits": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "total_tokens": 0,
+    "cost_usd": 0.0,
+    "by_model": {}
+  },
+  "prompt_versions": {},
+  "steps": [
+    {
+      "name": "Загрузка файлов",
+      "status": "ok",
+      "started_at": "2026-06-23T19:35:01.382135Z",
+      "finished_at": "2026-06-23T19:35:01.423690Z",
+      "duration_ms": 41,
+      "detail": "Единиц: 1"
+    },
+    {
+      "name": "Подготовка проверок",
+      "status": "ok",
+      "started_at": "2026-06-23T19:35:01.423723Z",
+      "finished_at": "2026-06-23T19:35:01.456488Z",
+      "duration_ms": 32,
+      "detail": "Модулей: 19, совпадений кода: 0"
+    },
+    {
+      "name": "Извлечение и проверки",
+      "status": "ok",
+      "started_at": "2026-06-23T19:35:01.456527Z",
+      "finished_at": "2026-06-23T19:35:02.033158Z",
+      "duration_ms": 576,
+      "detail": "Сущностей: 58"
+    },
+    {
+      "name": "Сборка отчёта",
+      "status": "ok",
+      "started_at": "2026-06-23T19:35:02.033176Z",
+      "finished_at": "2026-06-23T19:35:02.034818Z",
+      "duration_ms": 1,
+      "detail": "Случаев: 11"
+    }
+  ],
+  "model_used": false,
+  "network_used": false,
+  "warnings": [
+    "Постобработка: 7 языковых дублей схлопнуты в базовые строки."
+  ]
+}

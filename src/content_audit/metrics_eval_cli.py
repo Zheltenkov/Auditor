@@ -97,6 +97,20 @@ def _print_summary(summary, output_dir: Path) -> None:
     print(f"Precision: {summary.precision}")
     print(f"Recall: {summary.recall}")
     print(f"F1-score: {summary.f1_score}")
+    if summary.actionable_metrics is not None:
+        print(
+            "Actionable precision: "
+            f"{summary.actionable_metrics.precision} "
+            f"({summary.actionable_metrics.true_positive}/{summary.actionable_metrics.predicted_total})"
+        )
+    if summary.cost_quality is not None:
+        print(
+            "Cost per gold TP: "
+            f"{summary.cost_quality.cost_per_gold_true_positive}; "
+            f"total cost: ${summary.cost_quality.cost_usd}"
+        )
+    if summary.false_negative_reason_counts:
+        print(f"FN reasons: {summary.false_negative_reason_counts}")
     print(f"Macro precision/recall/F1: {summary.macro_precision}/{summary.macro_recall}/{summary.macro_f1_score}")
     print("Overview project × criterion metric:")
     print(

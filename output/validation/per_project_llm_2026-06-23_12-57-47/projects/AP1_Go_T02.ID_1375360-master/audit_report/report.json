@@ -1,0 +1,2030 @@
+{
+  "summary": {
+    "started_at": "2026-06-23T13:04:49.870079Z",
+    "finished_at": "2026-06-23T13:05:43.986984Z",
+    "input_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\per_project_llm_metrics_2026-06-23_12-57-47\\AP1_Go_T02.ID_1375360-master",
+    "units_total": 1,
+    "files_total": 7,
+    "findings_total": 39,
+    "affected_units_total": 1,
+    "by_severity": {
+      "minor": 38,
+      "major": 1
+    },
+    "by_criterion": {
+      "readability": 35,
+      "checklist_alignment": 2,
+      "actuality": 1,
+      "correctness": 1
+    },
+    "by_branch": {
+      "AP1_Go_T02.ID_1375360-master": 39
+    },
+    "by_unit": {
+      "ap1_go_t02_id_1375360_master__2369287e": 39
+    },
+    "model_usage": {
+      "calls_total": 12,
+      "cache_hits": 4,
+      "prompt_tokens": 18711,
+      "completion_tokens": 3554,
+      "total_tokens": 22265,
+      "cost_usd": 0.04029625,
+      "by_model": {
+        "openai/gpt-5.4-mini": {
+          "calls_total": 10,
+          "prompt_tokens": 17491,
+          "completion_tokens": 3544,
+          "total_tokens": 21035,
+          "cost_usd": 0.029066250000000002
+        },
+        "perplexity/sonar": {
+          "calls_total": 2,
+          "prompt_tokens": 1220,
+          "completion_tokens": 10,
+          "total_tokens": 1230,
+          "cost_usd": 0.01123
+        }
+      }
+    },
+    "prompt_versions": {
+      "spelling_wording_checker": "spelling_wording_checker:v1",
+      "tech_freshness_checker": "tech_freshness_checker:v1",
+      "readme_fact_actuality_checker": "readme_fact_actuality_checker:v1",
+      "fact_checker_perplexity": "fact_checker_perplexity:v1",
+      "curriculum_relevance_checker": "curriculum_relevance_checker:v1",
+      "model_rubric_checker": "model_rubric_checker:v1"
+    },
+    "steps": [
+      {
+        "name": "Загрузка файлов",
+        "status": "ok",
+        "started_at": "2026-06-23T13:04:49.870082Z",
+        "finished_at": "2026-06-23T13:04:49.876134Z",
+        "duration_ms": 6,
+        "detail": "Единиц: 1"
+      },
+      {
+        "name": "Подготовка проверок",
+        "status": "ok",
+        "started_at": "2026-06-23T13:04:49.876150Z",
+        "finished_at": "2026-06-23T13:04:49.880450Z",
+        "duration_ms": 4,
+        "detail": "Модулей: 22, совпадений кода: 0"
+      },
+      {
+        "name": "Извлечение и проверки",
+        "status": "ok",
+        "started_at": "2026-06-23T13:04:49.880475Z",
+        "finished_at": "2026-06-23T13:05:43.984017Z",
+        "duration_ms": 54103,
+        "detail": "Сущностей: 28"
+      },
+      {
+        "name": "Сборка отчёта",
+        "status": "ok",
+        "started_at": "2026-06-23T13:05:43.984032Z",
+        "finished_at": "2026-06-23T13:05:43.986923Z",
+        "duration_ms": 2,
+        "detail": "Случаев: 39"
+      }
+    ],
+    "model_used": true,
+    "network_used": true,
+    "warnings": []
+  },
+  "units": [
+    {
+      "unit_id": "ap1_go_t02_id_1375360_master__2369287e",
+      "name": "AP1_Go_T02.ID_1375360-master",
+      "root_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\per_project_llm_metrics_2026-06-23_12-57-47\\AP1_Go_T02.ID_1375360-master\\AP1_Go_T02.ID_1375360-master\\AP1_Go_T02.ID_1375360-master",
+      "relative_path": "AP1_Go_T02.ID_1375360-master/AP1_Go_T02.ID_1375360-master",
+      "branch": "AP1_Go_T02.ID_1375360-master",
+      "files": [
+        {
+          "relative_path": "CHANGELOG",
+          "absolute_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\per_project_llm_metrics_2026-06-23_12-57-47\\AP1_Go_T02.ID_1375360-master\\AP1_Go_T02.ID_1375360-master\\AP1_Go_T02.ID_1375360-master\\CHANGELOG",
+          "kind": "text",
+          "text": "",
+          "size_bytes": 0
+        },
+        {
+          "relative_path": "check-list.yml",
+          "absolute_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\per_project_llm_metrics_2026-06-23_12-57-47\\AP1_Go_T02.ID_1375360-master\\AP1_Go_T02.ID_1375360-master\\AP1_Go_T02.ID_1375360-master\\check-list.yml",
+          "kind": "checklist",
+          "text": "introduction: >-\n  - The methodology of \"School 21\" can lead to high educational outcomes only if peer-to-peer assessment is conducted with the utmost responsibility. This document is designed to help you with that.\n  \n  - Be kind and polite. Treat others and their work with respect. When providing feedback, be constructive.\n  \n  - While reviewing someone else's work, take note of ambiguous or potentially incorrect points. Discuss them with the author of the solution—perhaps you are the one who is mistaken.\n  \n  - Strive to remain open to different perspectives or ways of interpreting the task. It’s possible that both your approach and the other person’s approach are equally valid.\nguidelines: >\n  - Only the files that a student or a group has uploaded to the GIT repository are subject to evaluation.\n  \n  - Make sure you haven’t mixed anything up and that the repository belongs to the student or group you are reviewing.\n  \n  - If you haven’t yet completed the assignment yourself, be sure to reread it before starting the review.\n  \n  - Below, you will find special tags for different cases: missing solution, non‐working solution, and plagiarism. In these cases, the participant receives 0 points. If plagiarism is not detected, we still encourage you to continue the review and try to identify the issue together with the student whose solution is not working.\n  \n  - Do not stop the review after encountering the first incorrectly completed exercise if the rest are done correctly.\n\nquick_actions:  \n  - EMPTY_WORK\n  - CHEATING\n  - FORBIDDEN_FUNCTION\n  - INVALID_COMPILATION\nlanguage: en\ncomment: \"\"\nname: AP1_Go. Project 02\nsections:\n  - kind: \"1\"\n    name: Main part\n    description: \"\"\n    questions:\n      - name: \"Task 1. Stopwatch for Asynchronous Tasks\"\n        description: |-\n          -\tThe program reads launch arguments N and M.\n          -\tThe parameters N and M are passed as arguments when launching the program.\n          -\tThe program launches N goroutines, each of which sleeps (time.Sleep) for a random time from 1 to M milliseconds.\n          -\tThe program outputs a list to the console consisting of pairs <goroutine number, sleep time>, sorted in descending order of sleep time.\n          -\tThe goroutine number is the iteration index of the loop in which the goroutine was launched.\n\n        rating: \"6\"\n\n      - name: \"Task 2. Square Number Generator\"\n        description: |-\n          -\tThe program reads the launch arguments K and N. The parameters K and N are passed as arguments when the program is run.\n          -\tThe program launches two functions: a generator and a squaring function.\n          -\tThe generator function starts a goroutine and returns channel 1. Inside the goroutine, numbers from K to N (inclusive) are generated and sent to channel 1.\n          -\tThe squaring function starts a goroutine and returns channel 2. Inside the goroutine, numbers are read from channel 1, squared, and sent to channel 2.\n          -\tThe main program reads numbers from channel 2 and prints them to the console.\n          -\tThe squaring function must accept channel 1 as a read-only channel obtained from the generator function.\n          -\tThe generator and squaring function must run concurrently. Squaring must occur sequentially. After reading a number from channel 1, it must be squared and sent forward before processing the next number.\n        rating: \"6\"\n\n      - name: \"Task 3. Ticker\"\n        description: |-\n          -\tThe program reads the launch argument K.\n          -\tThe parameter K is passed as an argument when the program is run.\n          -\tK sets the ticker interval in seconds and is of type uint.\n          -\tThe program prints to stdout the message Tick <i> since <time>, where <i> is the tick number and <time> is the time elapsed since the ticker started (in seconds).\n          -\tThe program terminates when it receives one of the signals: SIGTERM or SIGINT.\n          -\tAfter receiving a signal, the program stops the ticker and prints the message Termination.\n          -\tThe ticker works asynchronously, uses time.Sleep in its implementation, and must not use any other functions from the time package.\n        rating: \"6\"\n  - kind: \"2\"\n    name: Bonus part\n    description: \"\"\n    questions:\n      - name: \"Bonus Task 4. LRU Cache with Generics\"\n        description: |-\n          -\tA package is implemented containing the Cache structure that uses the LRU (Least Recently Used) algorithm.\n          -\tA constructor function is implemented that takes the element type and capacity, and returns a pointer to the Cache structure.\n          -\tThe Cache provides the following methods:\n            -\tSet — add an element with a specific key;\n            -\tGet — retrieve an element by key;\n            -\tClear — delete all elements from the cache.\n          -\tThe complexity of Set and Get operations is O(1).\n          - LRU logic:\n            - On addition:\n              -\tIf the element is already in the cache, its position is moved to the front.\n              -\tIf the element is not in the cache and the capacity is not exceeded, it is added to the front.\n              -\tIf the element is not in the cache and the capacity is exceeded, it is added to the front and the last element is removed.\n            - On retrieval:\n              -\tIf the element is found, it is moved to the front and returned to the user along with an additional true flag.\n              -\tIf the element is not found, the user receives the zero-value for the element’s type and an additional false flag.\n          -\tThe Cache must only work with the element type specified when calling the constructor (using Golang generics).\n          -\tThe Cache must be thread-safe, meaning that concurrent access from different goroutines must not result in race conditions.\n          -\tTests must be implemented to cover the following scenarios:\n            -\tRarely used elements are evicted from the cache.\n            -\tWhen the cache exceeds its capacity, the least recently used elements are evicted.\n\n\n        rating: \"6\"\n",
+          "size_bytes": 6092
+        },
+        {
+          "relative_path": "check-list_RUS.yml",
+          "absolute_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\per_project_llm_metrics_2026-06-23_12-57-47\\AP1_Go_T02.ID_1375360-master\\AP1_Go_T02.ID_1375360-master\\AP1_Go_T02.ID_1375360-master\\check-list_RUS.yml",
+          "kind": "checklist",
+          "text": "introduction: > \n  Это задание является индивидуальным, поэтому выполняй его самостоятельно. Методология «Школы 21» способна приводить к высоким образовательным результатам, только если peer-to-peer оценка производится максимально ответственно. Этот документ призван помочь тебе в этом.\n\n  - Будь доброжелательными, вежливыми. Относись с уважением к другому человеку и проделанной им работе. Будь конструктивен, давая обратную связь.\n\n  - Проверяя работу другого, отмечай для себя спорные и потенциально неверные моменты. Обсуди их с автором решения. Возможно, неправ ты, а не он.\n\n  - Старайся быть открытыми к другому мнению или способу интерпретировать задание. Возможно, и твой подход, и подход другого имеют право на жизнь.\n\nguidelines: >  \n  - Подлежат оцениванию только те файлы, которые учащийся или группа выложили в GIT-репозиторий.  \n\n  - В конце чек-листа есть специальные флаги: EMPTY WORK, если репозиторий пустой или решение запушено не в ветку develop, либо ветка develop отсутствует;  CHEAT, если ты уверен, что участник не сам выполнил работу (например, не может объяснить решение). Во всех этих случаях участник получит 0 баллов. В случае отсутствия плагиата мы призываем всё равно продолжить проверку и попытаться вместе с другим учащимся выяснить проблему, приведшую к подобному решению, в управление проектами как нигде важна коллективная работа.\n\n  - Убедись в том, что ты не перепутал, и репозиторий является репозиторием учащегося или группы, которых ты проверяешь.  \n\n  - Если ты сам ещё не закончил работу над заданием, обязательно перечитай его ещё раз перед проверкой.\nquick_actions:  \n  - EMPTY_WORK\n  - CHEATING\n  - FORBIDDEN_FUNCTION\n  - INVALID_COMPILATION\nlanguage: ru\ncomment: \"\"\nname: AP1_Go. Project 02\nsections:\n  - kind: \"1\"\n    name: Main part\n    description: \"\"\n    questions:\n      - name: \"Задание 1. Секундомер асинхронных задач\"\n        description: > \n          - Программа считывает из аргументов запуска команды N и M.\n               \n          - Параметры N и M задаются через аргументы при запуске программы.\n          \n          - Программа запускает N горутин, каждая из которых спит (time.Sleep) рандомное время от 1 до M миллисекунд.\n          \n          - Программа выводит в консоль список, состоящий из пар <номер горутины, время сна>, отсортированный в **порядке убывания** времени сна.\n          \n          - Номер горутины — итерация цикла, в которой запущена горутина.\n\n        rating: \"6\"\n\n      - name: \"Задание 2. Генератор квадратов числа\"\n        description: > \n          - Программа считывает из аргументов запуска команды K и N.\n\n          - Параметры K и N задаются через аргументы при вызове программы.\n\n          - Программа запускает 2 функции: **генератор** и **функцию возведения в квадрат**.\n\n          - Функция-генератор запускает горутину и возвращает канал 1. Внутри горутины генерируются числа от K до N (включительно) и отправляются в канал 1.\n\n          - Функция возведения в квадрат запускает горутину и возвращает канал 2. Внутри горутины вычитываются числа из канала 1, каждое возводится в квадрат, результат отправляется в канал 2.\n\n          - Основная программа вычитывает числа из канала 2 и печатает их в консоль.\n\n          - Функция возведения в квадрат должна принимать канал 1 **на чтение**, полученный из функции генератор.\n\n          - Возведение в квадрат и генератор должны быть запущены конкурентно.\n\n          - Возведение числа в квадрат должно происходить последовательно. После чтения числа из канала 1 его необходимо сразу возводить в квадрат и отправлять дальше, и после этого обрабатывать другое число.\n        rating: \"6\"\n\n      - name: \"Задание 3. Тикер\"\n        description: > \n          - Программа считывает из аргументов запуска команды параметр K.\n          \n          - Параметр K задается через аргументы при вызове программы.\n          \n          - K задаёт шаг тикера в секундах и имеет тип uint.\n          \n          - Программа выводит в stdout сообщение «Tick `<i>` since `<time>`», где `<i>` — номер тика, а `<time>` — время, прошедшее с начала запуска тикера в секундах.\n          \n          - Программа завершается отправкой одного из сигналов: `SIGTERM` или `SIGINT`.\n          \n          - После получения одного из сигналов программа завершает тикер и выводит сообщение «Termination».\n          \n          - Тикер работает асинхронно, использует в реализации функцию time.Sleep и не применяет другие функции пакета time.\n        rating: \"6\"\n  - kind: \"2\"\n    name: Bonus part\n    description: \"\"\n    questions:\n      - name: \"Бонусное задание 4. LRU-Cache с использованием Generics\"\n        description: > \n          - Реализован пакет, содержащий структуру Cache, использующую алгоритм LRU.\n\n          - Реализована функция-конструктор, которая принимает тип элементов и ёмкость,  возвращает указатель на структуру Cache.\n\n          - Cache имеет следующие методы:\n            \n            - Set — добавить элемент с определённым ключом;\n            \n            - Get — получить элемент по определённому ключу;\n            \n            - Clear — удаление всех элементов в кэше.\n\n          - Сложность операций Set и Get — О(1).\n\n          - Логика LRU.\n            \n            - При добавлении:\n                \n                - Если элемент присутствует в кэше, то его позиция изменится на начальную.\n                \n                - Если элемента нет и ёмкость не превышена, то он будет добавлен в начало.\n                \n                - Если элемента нет и ёмкость превышена, то он будет добавлен в начало, а последний элемент будет удалён.\n            \n            - При получении:\n                \n                - Если элемент присутствует, то он будет передвинут в начало и возвращён пользователю с дополнительным аргументом true.\n                \n                - Если элемент отсутствует, то пользователю будет возвращен zero-value для данного типа и дополнительный аргумент false.\n\n          - Cache работает только с тем типом элементов, который задан при вызове функции-конструктора (использован golang generics).\n\n          - Cache является потокобезопасным, это значит, что обращение к Cache из разных горутин не приводит к состоянию гонки.\n\n          - Реализованы тесты для проверки сценариев:\n            \n            - Редко используемые элементы удаляются из кэша.\n            \n            - При превышении ёмкости кэша редко используемые элементы будут удалены.\n\n        rating: \"6\"\n",
+          "size_bytes": 10312
+        },
+        {
+          "relative_path": "LICENSE",
+          "absolute_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\per_project_llm_metrics_2026-06-23_12-57-47\\AP1_Go_T02.ID_1375360-master\\AP1_Go_T02.ID_1375360-master\\AP1_Go_T02.ID_1375360-master\\LICENSE",
+          "kind": "text",
+          "text": "# School 21 License",
+          "size_bytes": 19
+        },
+        {
+          "relative_path": "README.md",
+          "absolute_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\per_project_llm_metrics_2026-06-23_12-57-47\\AP1_Go_T02.ID_1375360-master\\AP1_Go_T02.ID_1375360-master\\AP1_Go_T02.ID_1375360-master\\README.md",
+          "kind": "readme",
+          "text": "# Project 02 — Go_Bootcamp\n\n**Summary:** In this project, you will get familiar with the concurrency mechanisms in Go. You will learn to use channels for synchronizing goroutines and for data exchange between them. You will also study the sync package, which provides an extended set of synchronization tools, such as WaitGroup, Mutex, Once, and RWMutex.\n\n💡 [Click here](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624) to leave feedback on this project. It’s anonymous and will help our team improve the quality of your education. We recommend filling out the form right after finishing the project.\n\n## Contents\n\n  - [Chapter I](#chapter-i)\n    - [Instructions](#instructions)\n  - [Chapter II](#chapter-ii)\n    - [General Information](#general-information)\n  - [Chapter III](#chapter-iii)\n  - [Project “Concurrent Execution”](#project-concurrent-execution)\n    - [Task 1. Stopwatch for Asynchronous Tasks](#task-1-stopwatch-for-asynchronous-tasks)\n    - [Task 2. Square Number Generator](#task-2-square-number-generator)\n    - [Task 3. Ticker](#task-3-ticker)\n    - [Bonus Task 4. LRU Cache Using Generics](#bonus-task-4-lru-cache-using-generics)\n\n\n## Chapter I\n\n### Instructions\n\nHow to learn at “School 21”:\n\n- Here, you’ll find a unique learning experience with a lot of freedom. You’re given a task and left to find your own way to solve it, using whatever resources work best for you — whether that’s the Internet or AI tools like GigaChat. Just be mindful of information quality: verify, think critically, analyze, and compare.\n- Peer-to-peer (P2P) learning is the exchange of knowledge and experience with peers, where everyone acts as both mentor and student. This approach allows you to gain a deeper understanding of the material by learning from one another.\n- Feel free to ask for help: around you are peers who are also navigating this path for the first time. Share your own experience and ideas with others.  Join Rocket.Chat to stay updated with the latest community announcements. \n- Your learning is meaningless if you just copy someone else’s solutions. When receiving help from others, always make sure you fully understand the “why”, “how”, and “purpose” behind the solution. Don’t be afraid to make mistakes. \n- Does the task seem impossible? Take a break, get some fresh air and clear your mind — this has helped many people. Maybe after that, the solution will come to you naturally.\n- The learning process is just as important as the result. It’s not just about completing the task — it’s about understanding HOW to solve it. \n\nHow to work with the project:\n\n- Before starting, clone the project from GitLab into a repository with the same name.\n- All files should be created inside the _src/_ folder of the cloned repository.\n- After cloning the project, create a _develop_ branch and do all your development there. Then, push the _develop_ branch to GitLab.\n- Your directory should not contain any files other than those specified in the assignments.\n\n## Chapter II\n\n### General Information\n\nIn Go, a program can consist of multiple simultaneously running subtasks that communicate with each other via channels.\n\nThe concurrency model in Go is based on the following abstractions:\n\n- **Goroutine** — a lightweight thread that uses much less memory than an OS thread (on average, 4 KB). The Go runtime can run multiple goroutines on a single OS thread by quickly switching between them due to their small size.\n- **Channel** — the second key element of concurrency in Go. Channels form the basis for data exchange and synchronization between threads. Goroutines can send data into a channel, and other goroutines can receive that data from the channel.\n\nThe Go runtime scheduler manages all created goroutines. It creates queues, each bound to an OS thread. During execution, the next goroutine is taken from a queue and, along with its context, is dispatched to an OS thread.\n\nThe **preemptive scheduler** attempts to evenly distribute CPU time among goroutines. This creates the illusion of parallel execution even when the number of goroutines far exceeds the number of available system threads.\n\n**Concurrency issues** arise when multiple threads access shared data or memory areas. The most common issue is a **race condition**. All arithmetic and logical operations in code are **non-atomic**. If multiple threads run on different processor cores and write data to the same memory area, a race occurs: one thread might copy an outdated version of the data into its register, another overwrites it, and so on. To handle race conditions, we recommend using primitives from the sync package, such as sync.Atomic, sync.Mutex, and sync.RWMutex.\n\n**Tip:** Before starting, we recommend studying how the Go scheduler works.  \n[A three-part article series is available.](https://habr.com/ru/articles/478168/)  \nFor learning channels, check out the following [article](https://habr.com/ru/articles/490336/).\n\n## Chapter III\n\n## Project “Concurrent Execution”\n\n### Task 1. Stopwatch for Asynchronous Tasks\n\n1. The program reads two launch arguments: `N` and `M`.\n1. The parameters `N` and `M` are of type `int`.\n1. Parameters `N` and `M` are passed as arguments when launching the program.\n1. The program launches `N` goroutines, each of which sleeps (`time.Sleep`) for a random duration of up to `M` milliseconds.\n1. The program waits for all goroutines to finish.\n1. The program prints a list to the console consisting of pairs `<goroutine number, sleep time>`, sorted in descending order of sleep time.\n1. The goroutine number is the iteration index of the loop in which the goroutine was launched.\n1. The sleep time is the number of milliseconds the goroutine slept.\n\n**The use of channels is not allowed.**\n\n**Hint:** Use the sync package. Wait for all goroutines to complete before starting the output. Use the flag package for parsing arguments.\n\n### Task 2. Square Number Generator\n\n1. The program reads two arguments from the command line: `K` and `N`.\n2. The parameters `K` and `N` are passed via command-line arguments.\n3. The program launches two functions: a generator and a squaring function.\n4. The parameters `K` and `N` are of type `int`.\n5. The generator function starts a goroutine and returns channel 1. Inside the goroutine, numbers from `K` to `N` (inclusive) are generated and sent into channel 1.\n6. The squaring function starts a goroutine and returns channel 2. Inside the goroutine, numbers are read from channel 1, squared, and the result is sent to channel 2.\n7. The main program (`main`) reads numbers from channel 2 and prints them to the console.\n8. The squaring function must accept channel 1 as a read-only channel, which is returned by the generator function.\n9. Both the squaring and generator functions must run concurrently.\n10. Squaring must occur sequentially. After reading a number from channel 1, it must immediately be squared and sent to the next channel, and only then should the next number be processed.\n\n**Hint:**  \nChannels must be created inside the functions, and returned with read/write restrictions applied.  \nChannels must be closed once the function finishes its work.  \nThe generator and squaring functions must operate concurrently.\n\n### Task 3. Ticker\n\n1. The program reads the parameter `K` from the command-line arguments.\n2. The parameter `K` is passed through the arguments when launching the program.\n3. `K` defines the ticker interval in seconds and must be of type `uint`.\n4. The program prints to stdout the message Tick `<i>` since `<time>`, where `<i>` is the tick number and `<time>` is the time in seconds since the ticker started.\n5. The program runs until the user sends a SIGTERM or SIGINT signal.\n6. Upon receiving one of these signals, the program stops the ticker and prints the message Termination.\n7. The ticker must operate asynchronously. It is forbidden to use functions from the `time` package such as `time.After` or `time.Ticker`.  \n    You are allowed to use constants from the `time` package and the `Sleep` function.\n\n### Bonus Task 4. LRU Cache Using Generics\n\n1. You need to implement a package that contains a Cache structure using the **LRU** (Least Recently Used) algorithm.\n2. A constructor function is required, which accepts the element type and cache capacity, and returns a pointer to the Cache structure.\n3. The `Cache` should provide the following methods:\n    - `Set` — add an item with a given key;\n    - `Get` — retrieve an item by key;\n    - `Clear` — delete all items in the cache.\n4. The time complexity for `Set` and `Get` operations must be **O(1)**.\n5. **LRU logic:**\n    - When adding an item:\n        - If the item is already in the cache, its position moves to the front.\n        - If the item is not in the cache and capacity is not exceeded, it is added to the front.\n        - If the item is not in the cache and capacity is exceeded, it is added to the front, and the last (least recently used) item is removed.\n    - When retrieving an item:\n        - If the item exists, it is moved to the front and returned along with an additional `true` flag.\n        - If the item does not exist, return the type’s zero value and the `false` flag.\n6. The cache must only work with the type specified when the constructor function is called (use **Golang generics**).\n7. The cache must be **thread-safe**, meaning concurrent access from different goroutines must not lead to race conditions.\n8. You must implement tests for the following scenarios:\n    - Rarely used items are removed from the cache.\n    - If capacity is exceeded, rarely used items should be evicted.",
+          "size_bytes": 9672
+        },
+        {
+          "relative_path": "README_RUS.md",
+          "absolute_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\per_project_llm_metrics_2026-06-23_12-57-47\\AP1_Go_T02.ID_1375360-master\\AP1_Go_T02.ID_1375360-master\\AP1_Go_T02.ID_1375360-master\\README_RUS.md",
+          "kind": "readme",
+          "text": "# Project 02 — Go_Bootcamp\n\nРезюме: в этом проекте ты познакомишься с механизмами конкурентности в Go. Научишься работать с каналами для синхронизации горутин, а также для обмена данными между ними. Изучишь пакет sync, который предоставляет расширенный набор инструментов синхронизации, таких как WaitGroup, Mutex, Once, RWMutex.\n\n💡 [Нажмите здесь](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624) **чтобы оставить свой отзыв о проекте**. Он анонимный и поможет нашей команде улучшить качество вашего обучения. Мы рекомендуем заполнить анкету сразу после завершения проекта.\n\n## Содержание\n\n- [Chapter I](#chapter-i)   \n     - [Инструкция](#инструкция) \n- [Chapter II](#chapter-ii)\n   - [Общая информация](#общая-информация)\n- [Chapter II](#chapter-ii)\n    - [Проект «Конкурентное выполнение»](#проект-конкурентное-выполнение)\n        - [Задание 1. Секундомер асинхронных задач](#задание-1-секундомер-асинхронных-задач)\n        - [Задание 2. Генератор квадратов числа](#задание-2-генератор-квадратов-числа)\n        - [Задание 3. Тикер](#задание-3-тикер)\n        - [Задание 4\\*. LRU-Cache с использованием Generics](#задание-4-lru-cache-с-использованием-generics)\n\n## Chapter I\n## Инструкция\nКак учиться в «Школе 21»:\n\n- Здесь тебя ждет уникальный образовательный опыт с большим количеством свободы. Ты получаешь задачу и самостоятельно ищешь пути решения, используя любые удобные способы поиска информации — ресурсы Интернета или нейросети (например, GigaChat). Но внимательно относись к качеству информации: проверяй, думай, анализируй, сравнивай.\n- Взаимообучение (Peer-to-Peer, P2P) — это обмен знаниями и опытом с другими пирами, где каждый выступает и учителем, и учеником. Такой подход позволяет глубже понять материал, учась друг у друга.\n- Чувствуй себя свободно и проси о помощи — вокруг тебя те, кто тоже впервые проходят этот путь. Делись своим опытом и идеями с другими. Присоединяйся к Rocket.Chat, чтобы быть в курсе всех новостей от нашего сообщества.\n- Твое обучение не будет иметь никакого смысла, если ты будешь копировать чужие решения. Если пользуешься помощью других — всегда разбирайся до конца, почему, как и зачем. Не бойся ошибиться.\n- Кажется, что задача невыполнима? Сделай перерыв, проветрись, перезагрузи голову — это помогало многим. Возможно, после этого решение придет само собой.\n- Важен не только результат обучения, но и сам процесс. Нужно не просто решить задачу, а понять, КАК ее решить.\n\nКак работать с проектом:\n\n- Перед выполнением проект необходимо склонировать с GitLab в одноименный репозиторий.\n- Все файлы необходимо создавать в папке _src/_ склонированного репозитория.\n- После клонирования проекта необходимо создать ветку _develop_ и вести разработку в ней. После этого пушить в GitLab также нужно ветку _develop_.\n- В твоей директории не должно быть иных файлов, кроме тех, что обозначены в заданиях.\n\n## Chapter I\n### Общая информация\n\nВ Go программа может представлять собой множество одновременно работающих подзадач, которые общаются друг с другом с помощью каналов связи.\n\nВ Go модель конкурентности реализована следующими абстракциями:\n\n- Горутина (goroutine) — это легковесный поток, который занимает гораздо меньше памяти, чем поток ОС (в среднем 4 Кб). Среда выполнения Go (рантайм) может выполнять несколько горутин на одном потоке операционной системы за счёт быстрого переключения с выполнения одной горутины на другую благодаря их малому размеру.\n- Канал (channel) — это второй ключевой элемент в многопоточности на Go. На каналах построены все механизмы обмена данными и синхронизации потоков в Go. Горутины могут записывать данные в канал, другие горутины, соответственно, могут получить эти данные из канала.\n\nПланировщик рантайма Go управляет всеми создаваемыми горутинами. Он формирует очереди, каждая из которых привязана к потоку операционной системы. При работе программы очередная горутина берётся из очереди и вместе со своим контекстом отправляется на выполнение в поток ОС.\n\nВытесняющий планировщик старается равномерно распределять процессорное время между горутинами. Таким образом достигается иллюзия параллельности выполнения задач при количестве горутин, многократно превышающем количество доступных системных потоков.\n\nПроблемы с многопоточностью возникают, когда несколько потоков работают с общими данными: обращаются к одной и той же памяти внутри процесса. Самая частая проблема — состояние гонки (race condition). Все арифметические и логические действия в коде — это неатомарные операции. Если несколько потоков одновременно запустятся на разных ядрах процессора и начнут записывать данные в одну и ту же область памяти, возникнет конкуренция потоков. Один поток скопирует в свой регистр устаревшую копию данных, другой поток перезапишет данные и поменяет на свою версию и так далее. Для борьбы с состоянием гонки рекомендуем использовать такие примитивы из пакета sync, как sync.Atomic, sync.Mutex, sync.RWMutex.\n\nРекомендуем перед началом изучить принципы работы планировщика Go.\n\n[Цикл из 3 статей](https://habr.com/ru/articles/478168/).\n\nДля изучения каналов рекомендуем ознакомиться со следующей [статьей](https://habr.com/ru/articles/490336/).\n\n## Chapter II\n## Проект «Конкурентное выполнение»\n\n### Задание 1. Секундомер асинхронных задач\n\n1) Программа считывает из аргументов запуска команды `N` и `M`.\n1) Параметры `N` и `M` имеют тип `int`.\n1) Параметры `N` и `M` задаются через аргументы при запуске программы.\n1) Программа запускает `N` горутин, каждая из которых спит (`time.Sleep`) рандомное время до `M` миллисекунд.\n1) Программа дожидается завершения всех горутин.\n1) Программа выводит в консоль список, состоящий из пар <номер горутины, время сна>, отсортированный в **порядке убывания** времени сна.\n1) Номер горутины — итерация цикла, в которой запущена горутина.\n1) Время сна — количество миллисекунд сна.\n\nНЕ допускается использование каналов.\n\n*Подсказка:* используй пакет sync. Для начала вывода необходимо дождаться завершения всех горутин. Используй пакет flag.\n\n### Задание 2. Генератор квадратов числа\n\n1) Программа считывает из аргументов запуска команды `K` и `N`.\n1) Параметры `K` и `N` задаются через аргументы при вызове программы.\n1) Программа запускает 2 функции: **генератор**, и **функцию возведения в квадрат**.\n1) Параметры `K` и `N` имеют тип `int`.\n1) Функция генератор запускает горутину и возвращает канал 1. Внутри горутины генерируются числа от `K` до `N` (включительно) и отправляются в канал 1.\n1) Функция возведения в квадрат запускает горутину и возвращает канал 2. Внутри горутины вычитываются числа из канала 1, каждое возводится в квадрат, результат отправляется в канал 2.\n1) Основная программа (`main`) вычитывает числа из канала 2 и печатает его в консоль.\n1) Функция возведения в квадрат должна принимать канал 1 **на чтение**, полученный из функции генератор.\n1) Возведение в квадрат и генератор должны быть запущены конкурентно.\n1) Возведение числа в квадрат должно происходить последовательно. После чтения числа из канала 1 его необходимо сразу возводить в квадрат и отправлять дальше, и после этого обрабатывать другое число.\n\n*Подсказка*: каналы необходимо создавать в функциях, возвращать канал с ограничением на операцию чтения/записи. Каналы необходимо закрывать после завершения работы функции. Функции генератор и возведения в квадрат должны работать конкурентно.\n\n### Задание 3. Тикер\n\n1) Программа считывает из аргументов запуска команды параметр `K`.\n1) Параметр `K` задаётся через аргументы при вызове программы. \n1) `K` задаёт шаг тикера в секундах и имеет тип `uint`.\n1) Программа выводит в stdout сообщение «Tick `<i>` since `<time>`», где `<i>` — номер тика, а `<time>` — время, прошедшее с начала запуска тикера в секундах.\n1) Программа работает до тех пор, пока пользователь не отправит программе сигналы SIGTERM или SIGINT. \n1) После получения одного из сигналов программа завершает тикер и выводит сообщение «Termination».\n1) Тикер работает асинхронно, запрещено использовать функции пакета `time` (например, `time.After` или `time.Ticker`). Допускается использование констант из пакета `time`, и функцию `Sleep`.\n\n*Подсказка*: используй константы для сигналов из пакета os, а также функцию `signal.Notify` для работы с сигналами.\n\n### Бонусное задание 4. LRU-Cache с использованием Generics\n\n1. Необходимо реализовать пакет, содержащий структуру Cache, использующую алгоритм LRU.\n1. Необходима функция-конструктор, которая принимает тип элементов и ёмкость, возвращает указатель на структуру `Cache`.\n1. `Cache` имеет следующие методы: \\\n   a. `Set` — добавить элемент с определённым ключом; \\\n   b. `Get` — получить элемент по определённому ключу; \\\n   c. `Clear` — удаление всех элементов в кэше.\n1) Сложность операций `Set` и `Get` должна быть О(1).\n1) Логика LRU.\n\n   **При добавлении:**\n      - Если элемент присутствует в кэше, то его позиция изменится на начальную.\n      - Если элемента нет и ёмкость не превышена, то он будет добавлен в начало.\n      -  Если элемента нет и ёмкость превышена, то он будет добавлен в начало, а последний элемент будет удалён.\n\n   **При получении:**\n      - Если элемент присутствует, то он будет передвинут в начало и возвращён пользователю с дополнительным аргументом `true`.\n      - Если элемент отсутствует, то пользователю будет возвращён zero-value для данного типа и дополнительный аргумент `false`.\n2) Cache должен работать только с тем типом элементов, который задан при вызове функции-конструктора (используй golang generics).\n3) Cache должен быть потокобезопасным, это значит, что обращение к Cache из разных горутин не породит состояние гонки.\n4) Необходимо реализовать тесты для проверки сценариев:\n   - Редко используемые элементы удаляются из кэша.\n   - При превышении ёмкости кэша редко используемые элементы будут удалены.",
+          "size_bytes": 16785
+        },
+        {
+          "relative_path": "TAGS_FILES.txt",
+          "absolute_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\per_project_llm_metrics_2026-06-23_12-57-47\\AP1_Go_T02.ID_1375360-master\\AP1_Go_T02.ID_1375360-master\\AP1_Go_T02.ID_1375360-master\\TAGS_FILES.txt",
+          "kind": "text",
+          "text": "0:\n\n\n*********************************************************************\n\n1:\n\n\n*********************************************************************\n\n10:\n\n\n*********************************************************************\n\n11:\n\n\n*********************************************************************\n\n12:\n\n\n*********************************************************************\n\n2:\n\n\n*********************************************************************\n\n3:\n\n\n*********************************************************************\n\n4:\n\n\n*********************************************************************\n\n5:\n\n\n*********************************************************************\n\n6:\n\n\n*********************************************************************\n\n7:\n\n\n*********************************************************************\n\n8:\n\n\n*********************************************************************\n\n9:\n\n\n*********************************************************************\n\n",
+          "size_bytes": 991
+        }
+      ]
+    }
+  ],
+  "entities": [
+    {
+      "entity_id": "ent_ff7c383da324",
+      "entity_type": "link",
+      "value": "https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624",
+      "quote": "💡 [Click here](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624) to leave feedback on this project. It’s anonymous and will help our team improve the quality of your education. We recommend filling out the form right after finishing the project.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 5,
+        "line_end": 5
+      },
+      "context": "# Project 02 — Go_Bootcamp\n\n**Summary:** In this project, you will get familiar with the concurrency mechanisms in Go. You will learn to use channels for synchronizing goroutines and for data exchange between them. You will also study the sync package, which provides an extended set of synchronization tools, such as WaitGroup, Mutex, Once, and RWMutex.\n\n💡 [Click here](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624) to leave feedback on this project. It’s anonymous and will help our team improve the quality of your education. We recommend filling out the form right after finishing the project.\n\n## Contents\n\n  - [Chapter I](#chapter-i)\n    - [Instructions](#instructions)\n  - [Chapter II](#chapter-ii)\n    - [General Information](#general-information)\n  - [Chapter III](#chapter-iii)\n  - [Project “Concurrent Execution”](#project-concurrent-execution)\n    - [Task 1. Stopwatch for Asynchronous Tasks](#task-1-st"
+    },
+    {
+      "entity_id": "ent_039efb85ea98",
+      "entity_type": "link",
+      "value": "https://habr.com/ru/articles/478168/",
+      "quote": "[A three-part article series is available.](https://habr.com/ru/articles/478168/)",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 59,
+        "line_end": 59
+      },
+      "context": "ns in code are **non-atomic**. If multiple threads run on different processor cores and write data to the same memory area, a race occurs: one thread might copy an outdated version of the data into its register, another overwrites it, and so on. To handle race conditions, we recommend using primitives from the sync package, such as sync.Atomic, sync.Mutex, and sync.RWMutex.\n\n**Tip:** Before starting, we recommend studying how the Go scheduler works.  \n[A three-part article series is available.](https://habr.com/ru/articles/478168/)  \nFor learning channels, check out the following [article](https://habr.com/ru/articles/490336/).\n\n## Chapter III\n\n## Project “Concurrent Execution”\n\n### Task 1. Stopwatch for Asynchronous Tasks\n\n1. The program reads two launch arguments: `N` and `M`.\n1. The parameters `N` and `M` are of type `int`.\n1. Parameters `N` and `M` are passed as arguments when launching the program.\n1. The program launches `N` goroutines, each of which sleeps (`time.Sleep`) for a random duration of up to `M` millisec"
+    },
+    {
+      "entity_id": "ent_7f7ceaa52b84",
+      "entity_type": "link",
+      "value": "https://habr.com/ru/articles/490336/",
+      "quote": "For learning channels, check out the following [article](https://habr.com/ru/articles/490336/).",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 60,
+        "line_end": 60
+      },
+      "context": "a to the same memory area, a race occurs: one thread might copy an outdated version of the data into its register, another overwrites it, and so on. To handle race conditions, we recommend using primitives from the sync package, such as sync.Atomic, sync.Mutex, and sync.RWMutex.\n\n**Tip:** Before starting, we recommend studying how the Go scheduler works.  \n[A three-part article series is available.](https://habr.com/ru/articles/478168/)  \nFor learning channels, check out the following [article](https://habr.com/ru/articles/490336/).\n\n## Chapter III\n\n## Project “Concurrent Execution”\n\n### Task 1. Stopwatch for Asynchronous Tasks\n\n1. The program reads two launch arguments: `N` and `M`.\n1. The parameters `N` and `M` are of type `int`.\n1. Parameters `N` and `M` are passed as arguments when launching the program.\n1. The program launches `N` goroutines, each of which sleeps (`time.Sleep`) for a random duration of up to `M` milliseconds.\n1. The program waits for all goroutines to finish.\n1. The program prints a list to the cons"
+    },
+    {
+      "entity_id": "ent_c647969de6a7",
+      "entity_type": "technology",
+      "value": "Go",
+      "quote": "**Summary:** In this project, you will get familiar with the concurrency mechanisms in Go. You will learn to use channels for synchronizing goroutines and for data exchange between them. You will also study the sync package, which provides an extended set of synchronization tools, such as WaitGroup, Mutex, Once, and R…",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 3,
+        "line_end": 3
+      },
+      "context": "# Project 02 — Go_Bootcamp\n\n**Summary:** In this project, you will get familiar with the concurrency mechanisms in Go. You will learn to use channels for synchronizing goroutines and for data exchange between them. You will also study the sync package, which provides an extended set of synchronization tools, such as WaitGroup, Mutex, Once, and RWMutex.\n\n💡 [Click here](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624) to leave feedback on this project. It’s anonymous and will help our team improve the quality of your education. We recommend filling out the form right after finishing the project.\n\n## C"
+    },
+    {
+      "entity_id": "ent_8e068766359a",
+      "entity_type": "technology",
+      "value": "GigaChat",
+      "quote": "- Here, you’ll find a unique learning experience with a lot of freedom. You’re given a task and left to find your own way to solve it, using whatever resources work best for you — whether that’s the Internet or AI tools like GigaChat. Just be mindful of information quality: verify, think critically, analyze, and compa…",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 27,
+        "line_end": 27
+      },
+      "context": "nous-tasks)\n    - [Task 2. Square Number Generator](#task-2-square-number-generator)\n    - [Task 3. Ticker](#task-3-ticker)\n    - [Bonus Task 4. LRU Cache Using Generics](#bonus-task-4-lru-cache-using-generics)\n\n\n## Chapter I\n\n### Instructions\n\nHow to learn at “School 21”:\n\n- Here, you’ll find a unique learning experience with a lot of freedom. You’re given a task and left to find your own way to solve it, using whatever resources work best for you — whether that’s the Internet or AI tools like GigaChat. Just be mindful of information quality: verify, think critically, analyze, and compare.\n- Peer-to-peer (P2P) learning is the exchange of knowledge and experience with peers, where everyone acts as both mentor and student. This approach allows you to gain a deeper understanding of the material by learning from one another.\n- Feel free to ask for help: around you are peers who are also navigating this path for the first time. Share your own experience and ideas with others.  Join Rocket.Chat to"
+    },
+    {
+      "entity_id": "ent_9fed0d93929f",
+      "entity_type": "technology",
+      "value": "Rocket.Chat",
+      "quote": "- Feel free to ask for help: around you are peers who are also navigating this path for the first time. Share your own experience and ideas with others. Join Rocket.Chat to stay updated with the latest community announcements.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 29,
+        "line_end": 29
+      },
+      "context": "s like GigaChat. Just be mindful of information quality: verify, think critically, analyze, and compare.\n- Peer-to-peer (P2P) learning is the exchange of knowledge and experience with peers, where everyone acts as both mentor and student. This approach allows you to gain a deeper understanding of the material by learning from one another.\n- Feel free to ask for help: around you are peers who are also navigating this path for the first time. Share your own experience and ideas with others.  Join Rocket.Chat to stay updated with the latest community announcements. \n- Your learning is meaningless if you just copy someone else’s solutions. When receiving help from others, always make sure you fully understand the “why”, “how”, and “purpose” behind the solution. Don’t be afraid to make mistakes. \n- Does the task seem impossible? Take a break, get some fresh air and clear your mind — this has helped many people. Maybe after that, the solution will come to you naturally.\n- The learning process is just a"
+    },
+    {
+      "entity_id": "ent_cdf1bc8507e3",
+      "entity_type": "technology",
+      "value": "GitLab",
+      "quote": "- Before starting, clone the project from GitLab into a repository with the same name.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 36,
+        "line_end": 36
+      },
+      "context": "fully understand the “why”, “how”, and “purpose” behind the solution. Don’t be afraid to make mistakes. \n- Does the task seem impossible? Take a break, get some fresh air and clear your mind — this has helped many people. Maybe after that, the solution will come to you naturally.\n- The learning process is just as important as the result. It’s not just about completing the task — it’s about understanding HOW to solve it. \n\nHow to work with the project:\n\n- Before starting, clone the project from GitLab into a repository with the same name.\n- All files should be created inside the _src/_ folder of the cloned repository.\n- After cloning the project, create a _develop_ branch and do all your development there. Then, push the _develop_ branch to GitLab.\n- Your directory should not contain any files other than those specified in the assignments.\n\n## Chapter II\n\n### General Information\n\nIn Go, a program can consist of multiple simultaneously running subtasks that communicate with each other via cha"
+    },
+    {
+      "entity_id": "ent_0efa2e37645c",
+      "entity_type": "technology",
+      "value": "GitLab",
+      "quote": "- After cloning the project, create a _develop_ branch and do all your development there. Then, push the _develop_ branch to GitLab.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 38,
+        "line_end": 38
+      },
+      "context": "on will come to you naturally.\n- The learning process is just as important as the result. It’s not just about completing the task — it’s about understanding HOW to solve it. \n\nHow to work with the project:\n\n- Before starting, clone the project from GitLab into a repository with the same name.\n- All files should be created inside the _src/_ folder of the cloned repository.\n- After cloning the project, create a _develop_ branch and do all your development there. Then, push the _develop_ branch to GitLab.\n- Your directory should not contain any files other than those specified in the assignments.\n\n## Chapter II\n\n### General Information\n\nIn Go, a program can consist of multiple simultaneously running subtasks that communicate with each other via channels.\n\nThe concurrency model in Go is based on the following abstractions:\n\n- **Goroutine** — a lightweight thread that uses much less memory than an OS thread (on average, 4 KB). The Go runtime can run multiple goroutines on a single OS thread by qu"
+    },
+    {
+      "entity_id": "ent_808512908c43",
+      "entity_type": "technology",
+      "value": "Go",
+      "quote": "In Go, a program can consist of multiple simultaneously running subtasks that communicate with each other via channels.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 45,
+        "line_end": 45
+      },
+      "context": "derstanding HOW to solve it. \n\nHow to work with the project:\n\n- Before starting, clone the project from GitLab into a repository with the same name.\n- All files should be created inside the _src/_ folder of the cloned repository.\n- After cloning the project, create a _develop_ branch and do all your development there. Then, push the _develop_ branch to GitLab.\n- Your directory should not contain any files other than those specified in the assignments.\n\n## Chapter II\n\n### General Information\n\nIn Go, a program can consist of multiple simultaneously running subtasks that communicate with each other via channels.\n\nThe concurrency model in Go is based on the following abstractions:\n\n- **Goroutine** — a lightweight thread that uses much less memory than an OS thread (on average, 4 KB). The Go runtime can run multiple goroutines on a single OS thread by quickly switching between them due to their small size.\n- **Channel** — the second key element of concurrency in Go. Channels form the basis fo"
+    },
+    {
+      "entity_id": "ent_a51167c7290d",
+      "entity_type": "technology",
+      "value": "Go",
+      "quote": "The concurrency model in Go is based on the following abstractions:",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 47,
+        "line_end": 47
+      },
+      "context": "name.\n- All files should be created inside the _src/_ folder of the cloned repository.\n- After cloning the project, create a _develop_ branch and do all your development there. Then, push the _develop_ branch to GitLab.\n- Your directory should not contain any files other than those specified in the assignments.\n\n## Chapter II\n\n### General Information\n\nIn Go, a program can consist of multiple simultaneously running subtasks that communicate with each other via channels.\n\nThe concurrency model in Go is based on the following abstractions:\n\n- **Goroutine** — a lightweight thread that uses much less memory than an OS thread (on average, 4 KB). The Go runtime can run multiple goroutines on a single OS thread by quickly switching between them due to their small size.\n- **Channel** — the second key element of concurrency in Go. Channels form the basis for data exchange and synchronization between threads. Goroutines can send data into a channel, and other goroutines can receive that data from t"
+    },
+    {
+      "entity_id": "ent_5c4331335e20",
+      "entity_type": "technology",
+      "value": "Go",
+      "quote": "- **Goroutine** — a lightweight thread that uses much less memory than an OS thread (on average, 4 KB). The Go runtime can run multiple goroutines on a single OS thread by quickly switching between them due to their small size.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 49,
+        "line_end": 49
+      },
+      "context": "your development there. Then, push the _develop_ branch to GitLab.\n- Your directory should not contain any files other than those specified in the assignments.\n\n## Chapter II\n\n### General Information\n\nIn Go, a program can consist of multiple simultaneously running subtasks that communicate with each other via channels.\n\nThe concurrency model in Go is based on the following abstractions:\n\n- **Goroutine** — a lightweight thread that uses much less memory than an OS thread (on average, 4 KB). The Go runtime can run multiple goroutines on a single OS thread by quickly switching between them due to their small size.\n- **Channel** — the second key element of concurrency in Go. Channels form the basis for data exchange and synchronization between threads. Goroutines can send data into a channel, and other goroutines can receive that data from the channel.\n\nThe Go runtime scheduler manages all created goroutines. It creates queues, each bound to an OS thread. During execution, the next goroutin"
+    },
+    {
+      "entity_id": "ent_582ea9db5a7e",
+      "entity_type": "technology",
+      "value": "Go",
+      "quote": "- **Channel** — the second key element of concurrency in Go. Channels form the basis for data exchange and synchronization between threads. Goroutines can send data into a channel, and other goroutines can receive that data from the channel.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 50,
+        "line_end": 50
+      },
+      "context": "### General Information\n\nIn Go, a program can consist of multiple simultaneously running subtasks that communicate with each other via channels.\n\nThe concurrency model in Go is based on the following abstractions:\n\n- **Goroutine** — a lightweight thread that uses much less memory than an OS thread (on average, 4 KB). The Go runtime can run multiple goroutines on a single OS thread by quickly switching between them due to their small size.\n- **Channel** — the second key element of concurrency in Go. Channels form the basis for data exchange and synchronization between threads. Goroutines can send data into a channel, and other goroutines can receive that data from the channel.\n\nThe Go runtime scheduler manages all created goroutines. It creates queues, each bound to an OS thread. During execution, the next goroutine is taken from a queue and, along with its context, is dispatched to an OS thread.\n\nThe **preemptive scheduler** attempts to evenly distribute CPU time among goroutines. This c"
+    },
+    {
+      "entity_id": "ent_286dfde3dc08",
+      "entity_type": "technology",
+      "value": "Go",
+      "quote": "The Go runtime scheduler manages all created goroutines. It creates queues, each bound to an OS thread. During execution, the next goroutine is taken from a queue and, along with its context, is dispatched to an OS thread.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 52,
+        "line_end": 52
+      },
+      "context": "following abstractions:\n\n- **Goroutine** — a lightweight thread that uses much less memory than an OS thread (on average, 4 KB). The Go runtime can run multiple goroutines on a single OS thread by quickly switching between them due to their small size.\n- **Channel** — the second key element of concurrency in Go. Channels form the basis for data exchange and synchronization between threads. Goroutines can send data into a channel, and other goroutines can receive that data from the channel.\n\nThe Go runtime scheduler manages all created goroutines. It creates queues, each bound to an OS thread. During execution, the next goroutine is taken from a queue and, along with its context, is dispatched to an OS thread.\n\nThe **preemptive scheduler** attempts to evenly distribute CPU time among goroutines. This creates the illusion of parallel execution even when the number of goroutines far exceeds the number of available system threads.\n\n**Concurrency issues** arise when multiple threads access sh"
+    },
+    {
+      "entity_id": "ent_dc4cc7741508",
+      "entity_type": "technology",
+      "value": "Go",
+      "quote": "**Tip:** Before starting, we recommend studying how the Go scheduler works.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 58,
+        "line_end": 58
+      },
+      "context": "issue is a **race condition**. All arithmetic and logical operations in code are **non-atomic**. If multiple threads run on different processor cores and write data to the same memory area, a race occurs: one thread might copy an outdated version of the data into its register, another overwrites it, and so on. To handle race conditions, we recommend using primitives from the sync package, such as sync.Atomic, sync.Mutex, and sync.RWMutex.\n\n**Tip:** Before starting, we recommend studying how the Go scheduler works.  \n[A three-part article series is available.](https://habr.com/ru/articles/478168/)  \nFor learning channels, check out the following [article](https://habr.com/ru/articles/490336/).\n\n## Chapter III\n\n## Project “Concurrent Execution”\n\n### Task 1. Stopwatch for Asynchronous Tasks\n\n1. The program reads two launch arguments: `N` and `M`.\n1. The parameters `N` and `M` are of type `int`.\n1. Parameters `N` and `M` are passed as arguments when launching the program.\n1. The program laun"
+    },
+    {
+      "entity_id": "ent_8404d8104096",
+      "entity_type": "link",
+      "value": "https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624",
+      "quote": "💡 [Нажмите здесь](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624) **чтобы оставить свой отзыв о проекте**. Он анонимный и поможет нашей команде улучшить качество вашего обучения. Мы рекомендуем заполнить анкету сразу после завершения проекта.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 5,
+        "line_end": 5
+      },
+      "context": "# Project 02 — Go_Bootcamp\n\nРезюме: в этом проекте ты познакомишься с механизмами конкурентности в Go. Научишься работать с каналами для синхронизации горутин, а также для обмена данными между ними. Изучишь пакет sync, который предоставляет расширенный набор инструментов синхронизации, таких как WaitGroup, Mutex, Once, RWMutex.\n\n💡 [Нажмите здесь](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624) **чтобы оставить свой отзыв о проекте**. Он анонимный и поможет нашей команде улучшить качество вашего обучения. Мы рекомендуем заполнить анкету сразу после завершения проекта.\n\n## Содержание\n\n- [Chapter I](#chapter-i)   \n     - [Инструкция](#инструкция) \n- [Chapter II](#chapter-ii)\n   - [Общая информация](#общая-информация)\n- [Chapter II](#chapter-ii)\n    - [Проект «Конкурентное выполнение»](#проект-конкурентное-выполнение)\n        - [Задание 1. Секундомер асинхронных задач](#задание-1-секунд"
+    },
+    {
+      "entity_id": "ent_8ca3af1707b9",
+      "entity_type": "link",
+      "value": "https://habr.com/ru/articles/478168/",
+      "quote": "[Цикл из 3 статей](https://habr.com/ru/articles/478168/).",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 56,
+        "line_end": 56
+      },
+      "context": "о потоков одновременно запустятся на разных ядрах процессора и начнут записывать данные в одну и ту же область памяти, возникнет конкуренция потоков. Один поток скопирует в свой регистр устаревшую копию данных, другой поток перезапишет данные и поменяет на свою версию и так далее. Для борьбы с состоянием гонки рекомендуем использовать такие примитивы из пакета sync, как sync.Atomic, sync.Mutex, sync.RWMutex.\n\nРекомендуем перед началом изучить принципы работы планировщика Go.\n\n[Цикл из 3 статей](https://habr.com/ru/articles/478168/).\n\nДля изучения каналов рекомендуем ознакомиться со следующей [статьей](https://habr.com/ru/articles/490336/).\n\n## Chapter II\n## Проект «Конкурентное выполнение»\n\n### Задание 1. Секундомер асинхронных задач\n\n1) Программа считывает из аргументов запуска команды `N` и `M`.\n1) Параметры `N` и `M` имеют тип `int`.\n1) Параметры `N` и `M` задаются через аргументы при запуске программы.\n1) Программа запускает `N` горутин, каждая из которых спит (`time.Sleep`) рандомное время до `M` миллисекунд.\n1) Про"
+    },
+    {
+      "entity_id": "ent_8172a8ce1a95",
+      "entity_type": "link",
+      "value": "https://habr.com/ru/articles/490336/",
+      "quote": "Для изучения каналов рекомендуем ознакомиться со следующей [статьей](https://habr.com/ru/articles/490336/).",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 58,
+        "line_end": 58
+      },
+      "context": "ь памяти, возникнет конкуренция потоков. Один поток скопирует в свой регистр устаревшую копию данных, другой поток перезапишет данные и поменяет на свою версию и так далее. Для борьбы с состоянием гонки рекомендуем использовать такие примитивы из пакета sync, как sync.Atomic, sync.Mutex, sync.RWMutex.\n\nРекомендуем перед началом изучить принципы работы планировщика Go.\n\n[Цикл из 3 статей](https://habr.com/ru/articles/478168/).\n\nДля изучения каналов рекомендуем ознакомиться со следующей [статьей](https://habr.com/ru/articles/490336/).\n\n## Chapter II\n## Проект «Конкурентное выполнение»\n\n### Задание 1. Секундомер асинхронных задач\n\n1) Программа считывает из аргументов запуска команды `N` и `M`.\n1) Параметры `N` и `M` имеют тип `int`.\n1) Параметры `N` и `M` задаются через аргументы при запуске программы.\n1) Программа запускает `N` горутин, каждая из которых спит (`time.Sleep`) рандомное время до `M` миллисекунд.\n1) Программа дожидается завершения всех горутин.\n1) Программа выводит в консоль список, состоящий из пар <номер гор"
+    },
+    {
+      "entity_id": "ent_6a4288826c04",
+      "entity_type": "technology",
+      "value": "Go",
+      "quote": "Резюме: в этом проекте ты познакомишься с механизмами конкурентности в Go. Научишься работать с каналами для синхронизации горутин, а также для обмена данными между ними. Изучишь пакет sync, который предоставляет расширенный набор инструментов синхронизации, таких как WaitGroup, Mutex, Once, RWMutex.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 3,
+        "line_end": 3
+      },
+      "context": "# Project 02 — Go_Bootcamp\n\nРезюме: в этом проекте ты познакомишься с механизмами конкурентности в Go. Научишься работать с каналами для синхронизации горутин, а также для обмена данными между ними. Изучишь пакет sync, который предоставляет расширенный набор инструментов синхронизации, таких как WaitGroup, Mutex, Once, RWMutex.\n\n💡 [Нажмите здесь](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624) **чтобы оставить свой отзыв о проекте**. Он анонимный и поможет нашей команде улучшить качество вашего обучения. Мы рекомендуем заполнить анкету сразу после завершения проекта.\n\n## Содержание"
+    },
+    {
+      "entity_id": "ent_a589c3dc9b0e",
+      "entity_type": "technology",
+      "value": "GigaChat",
+      "quote": "- Здесь тебя ждет уникальный образовательный опыт с большим количеством свободы. Ты получаешь задачу и самостоятельно ищешь пути решения, используя любые удобные способы поиска информации — ресурсы Интернета или нейросети (например, GigaChat). Но внимательно относись к качеству информации: проверяй, думай, анализируй,…",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 24,
+        "line_end": 24
+      },
+      "context": "квадратов числа](#задание-2-генератор-квадратов-числа)\n        - [Задание 3. Тикер](#задание-3-тикер)\n        - [Задание 4\\*. LRU-Cache с использованием Generics](#задание-4-lru-cache-с-использованием-generics)\n\n## Chapter I\n## Инструкция\nКак учиться в «Школе 21»:\n\n- Здесь тебя ждет уникальный образовательный опыт с большим количеством свободы. Ты получаешь задачу и самостоятельно ищешь пути решения, используя любые удобные способы поиска информации — ресурсы Интернета или нейросети (например, GigaChat). Но внимательно относись к качеству информации: проверяй, думай, анализируй, сравнивай.\n- Взаимообучение (Peer-to-Peer, P2P) — это обмен знаниями и опытом с другими пирами, где каждый выступает и учителем, и учеником. Такой подход позволяет глубже понять материал, учась друг у друга.\n- Чувствуй себя свободно и проси о помощи — вокруг тебя те, кто тоже впервые проходят этот путь. Делись своим опытом и идеями с другими. Присоединяйся к Rocket.Chat, чтобы быть в курсе всех новостей от нашего сооб"
+    },
+    {
+      "entity_id": "ent_b0ab14f1b28d",
+      "entity_type": "technology",
+      "value": "Rocket.Chat",
+      "quote": "- Чувствуй себя свободно и проси о помощи — вокруг тебя те, кто тоже впервые проходят этот путь. Делись своим опытом и идеями с другими. Присоединяйся к Rocket.Chat, чтобы быть в курсе всех новостей от нашего сообщества.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 26,
+        "line_end": 26
+      },
+      "context": "рмации — ресурсы Интернета или нейросети (например, GigaChat). Но внимательно относись к качеству информации: проверяй, думай, анализируй, сравнивай.\n- Взаимообучение (Peer-to-Peer, P2P) — это обмен знаниями и опытом с другими пирами, где каждый выступает и учителем, и учеником. Такой подход позволяет глубже понять материал, учась друг у друга.\n- Чувствуй себя свободно и проси о помощи — вокруг тебя те, кто тоже впервые проходят этот путь. Делись своим опытом и идеями с другими. Присоединяйся к Rocket.Chat, чтобы быть в курсе всех новостей от нашего сообщества.\n- Твое обучение не будет иметь никакого смысла, если ты будешь копировать чужие решения. Если пользуешься помощью других — всегда разбирайся до конца, почему, как и зачем. Не бойся ошибиться.\n- Кажется, что задача невыполнима? Сделай перерыв, проветрись, перезагрузи голову — это помогало многим. Возможно, после этого решение придет само собой.\n- Важен не только результат обучения, но и сам процесс. Нужно не просто решить задачу, а понять,"
+    },
+    {
+      "entity_id": "ent_58e48087e318",
+      "entity_type": "technology",
+      "value": "GitLab",
+      "quote": "- Перед выполнением проект необходимо склонировать с GitLab в одноименный репозиторий.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 33,
+        "line_end": 33
+      },
+      "context": "о смысла, если ты будешь копировать чужие решения. Если пользуешься помощью других — всегда разбирайся до конца, почему, как и зачем. Не бойся ошибиться.\n- Кажется, что задача невыполнима? Сделай перерыв, проветрись, перезагрузи голову — это помогало многим. Возможно, после этого решение придет само собой.\n- Важен не только результат обучения, но и сам процесс. Нужно не просто решить задачу, а понять, КАК ее решить.\n\nКак работать с проектом:\n\n- Перед выполнением проект необходимо склонировать с GitLab в одноименный репозиторий.\n- Все файлы необходимо создавать в папке _src/_ склонированного репозитория.\n- После клонирования проекта необходимо создать ветку _develop_ и вести разработку в ней. После этого пушить в GitLab также нужно ветку _develop_.\n- В твоей директории не должно быть иных файлов, кроме тех, что обозначены в заданиях.\n\n## Chapter I\n### Общая информация\n\nВ Go программа может представлять собой множество одновременно работающих подзадач, которые общаются друг с другом с помощью"
+    },
+    {
+      "entity_id": "ent_b36b9a719b98",
+      "entity_type": "technology",
+      "value": "GitLab",
+      "quote": "- После клонирования проекта необходимо создать ветку _develop_ и вести разработку в ней. После этого пушить в GitLab также нужно ветку _develop_.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 35,
+        "line_end": 35
+      },
+      "context": "агрузи голову — это помогало многим. Возможно, после этого решение придет само собой.\n- Важен не только результат обучения, но и сам процесс. Нужно не просто решить задачу, а понять, КАК ее решить.\n\nКак работать с проектом:\n\n- Перед выполнением проект необходимо склонировать с GitLab в одноименный репозиторий.\n- Все файлы необходимо создавать в папке _src/_ склонированного репозитория.\n- После клонирования проекта необходимо создать ветку _develop_ и вести разработку в ней. После этого пушить в GitLab также нужно ветку _develop_.\n- В твоей директории не должно быть иных файлов, кроме тех, что обозначены в заданиях.\n\n## Chapter I\n### Общая информация\n\nВ Go программа может представлять собой множество одновременно работающих подзадач, которые общаются друг с другом с помощью каналов связи.\n\nВ Go модель конкурентности реализована следующими абстракциями:\n\n- Горутина (goroutine) — это легковесный поток, который занимает гораздо меньше памяти, чем поток ОС (в среднем 4 Кб). Среда выполнения Go (р"
+    },
+    {
+      "entity_id": "ent_5c7deee13b2c",
+      "entity_type": "technology",
+      "value": "Go",
+      "quote": "В Go программа может представлять собой множество одновременно работающих подзадач, которые общаются друг с другом с помощью каналов связи.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 41,
+        "line_end": 41
+      },
+      "context": "ить задачу, а понять, КАК ее решить.\n\nКак работать с проектом:\n\n- Перед выполнением проект необходимо склонировать с GitLab в одноименный репозиторий.\n- Все файлы необходимо создавать в папке _src/_ склонированного репозитория.\n- После клонирования проекта необходимо создать ветку _develop_ и вести разработку в ней. После этого пушить в GitLab также нужно ветку _develop_.\n- В твоей директории не должно быть иных файлов, кроме тех, что обозначены в заданиях.\n\n## Chapter I\n### Общая информация\n\nВ Go программа может представлять собой множество одновременно работающих подзадач, которые общаются друг с другом с помощью каналов связи.\n\nВ Go модель конкурентности реализована следующими абстракциями:\n\n- Горутина (goroutine) — это легковесный поток, который занимает гораздо меньше памяти, чем поток ОС (в среднем 4 Кб). Среда выполнения Go (рантайм) может выполнять несколько горутин на одном потоке операционной системы за счёт быстрого переключения с выполнения одной горутины на другую благодаря"
+    },
+    {
+      "entity_id": "ent_9d6129da2996",
+      "entity_type": "technology",
+      "value": "Go",
+      "quote": "В Go модель конкурентности реализована следующими абстракциями:",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 43,
+        "line_end": 43
+      },
+      "context": "озиторий.\n- Все файлы необходимо создавать в папке _src/_ склонированного репозитория.\n- После клонирования проекта необходимо создать ветку _develop_ и вести разработку в ней. После этого пушить в GitLab также нужно ветку _develop_.\n- В твоей директории не должно быть иных файлов, кроме тех, что обозначены в заданиях.\n\n## Chapter I\n### Общая информация\n\nВ Go программа может представлять собой множество одновременно работающих подзадач, которые общаются друг с другом с помощью каналов связи.\n\nВ Go модель конкурентности реализована следующими абстракциями:\n\n- Горутина (goroutine) — это легковесный поток, который занимает гораздо меньше памяти, чем поток ОС (в среднем 4 Кб). Среда выполнения Go (рантайм) может выполнять несколько горутин на одном потоке операционной системы за счёт быстрого переключения с выполнения одной горутины на другую благодаря их малому размеру.\n- Канал (channel) — это второй ключевой элемент в многопоточности на Go. На каналах построены все механизмы обмена данными"
+    },
+    {
+      "entity_id": "ent_e898bd46b09b",
+      "entity_type": "technology",
+      "value": "Go",
+      "quote": "- Горутина (goroutine) — это легковесный поток, который занимает гораздо меньше памяти, чем поток ОС (в среднем 4 Кб). Среда выполнения Go (рантайм) может выполнять несколько горутин на одном потоке операционной системы за счёт быстрого переключения с выполнения одной горутины на другую благодаря их малому размеру.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 45,
+        "line_end": 45
+      },
+      "context": "itLab также нужно ветку _develop_.\n- В твоей директории не должно быть иных файлов, кроме тех, что обозначены в заданиях.\n\n## Chapter I\n### Общая информация\n\nВ Go программа может представлять собой множество одновременно работающих подзадач, которые общаются друг с другом с помощью каналов связи.\n\nВ Go модель конкурентности реализована следующими абстракциями:\n\n- Горутина (goroutine) — это легковесный поток, который занимает гораздо меньше памяти, чем поток ОС (в среднем 4 Кб). Среда выполнения Go (рантайм) может выполнять несколько горутин на одном потоке операционной системы за счёт быстрого переключения с выполнения одной горутины на другую благодаря их малому размеру.\n- Канал (channel) — это второй ключевой элемент в многопоточности на Go. На каналах построены все механизмы обмена данными и синхронизации потоков в Go. Горутины могут записывать данные в канал, другие горутины, соответственно, могут получить эти данные из канала.\n\nПланировщик рантайма Go управляет всеми создаваемыми го"
+    },
+    {
+      "entity_id": "ent_2d98abca51b5",
+      "entity_type": "technology",
+      "value": "Go",
+      "quote": "- Канал (channel) — это второй ключевой элемент в многопоточности на Go. На каналах построены все механизмы обмена данными и синхронизации потоков в Go. Горутины могут записывать данные в канал, другие горутины, соответственно, могут получить эти данные из канала.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 46,
+        "line_end": 46
+      },
+      "context": "общаются друг с другом с помощью каналов связи.\n\nВ Go модель конкурентности реализована следующими абстракциями:\n\n- Горутина (goroutine) — это легковесный поток, который занимает гораздо меньше памяти, чем поток ОС (в среднем 4 Кб). Среда выполнения Go (рантайм) может выполнять несколько горутин на одном потоке операционной системы за счёт быстрого переключения с выполнения одной горутины на другую благодаря их малому размеру.\n- Канал (channel) — это второй ключевой элемент в многопоточности на Go. На каналах построены все механизмы обмена данными и синхронизации потоков в Go. Горутины могут записывать данные в канал, другие горутины, соответственно, могут получить эти данные из канала.\n\nПланировщик рантайма Go управляет всеми создаваемыми горутинами. Он формирует очереди, каждая из которых привязана к потоку операционной системы. При работе программы очередная горутина берётся из очереди и вместе со своим контекстом отправляется на выполнение в поток ОС.\n\nВытесняющий планировщик старает"
+    },
+    {
+      "entity_id": "ent_a9f17a8c896c",
+      "entity_type": "technology",
+      "value": "Go",
+      "quote": "Планировщик рантайма Go управляет всеми создаваемыми горутинами. Он формирует очереди, каждая из которых привязана к потоку операционной системы. При работе программы очередная горутина берётся из очереди и вместе со своим контекстом отправляется на выполнение в поток ОС.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 48,
+        "line_end": 48
+      },
+      "context": "среднем 4 Кб). Среда выполнения Go (рантайм) может выполнять несколько горутин на одном потоке операционной системы за счёт быстрого переключения с выполнения одной горутины на другую благодаря их малому размеру.\n- Канал (channel) — это второй ключевой элемент в многопоточности на Go. На каналах построены все механизмы обмена данными и синхронизации потоков в Go. Горутины могут записывать данные в канал, другие горутины, соответственно, могут получить эти данные из канала.\n\nПланировщик рантайма Go управляет всеми создаваемыми горутинами. Он формирует очереди, каждая из которых привязана к потоку операционной системы. При работе программы очередная горутина берётся из очереди и вместе со своим контекстом отправляется на выполнение в поток ОС.\n\nВытесняющий планировщик старается равномерно распределять процессорное время между горутинами. Таким образом достигается иллюзия параллельности выполнения задач при количестве горутин, многократно превышающем количество доступных системных потоков."
+    },
+    {
+      "entity_id": "ent_dfa7b256027e",
+      "entity_type": "technology",
+      "value": "Go",
+      "quote": "Рекомендуем перед началом изучить принципы работы планировщика Go.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 54,
+        "line_end": 54
+      },
+      "context": "операции. Если несколько потоков одновременно запустятся на разных ядрах процессора и начнут записывать данные в одну и ту же область памяти, возникнет конкуренция потоков. Один поток скопирует в свой регистр устаревшую копию данных, другой поток перезапишет данные и поменяет на свою версию и так далее. Для борьбы с состоянием гонки рекомендуем использовать такие примитивы из пакета sync, как sync.Atomic, sync.Mutex, sync.RWMutex.\n\nРекомендуем перед началом изучить принципы работы планировщика Go.\n\n[Цикл из 3 статей](https://habr.com/ru/articles/478168/).\n\nДля изучения каналов рекомендуем ознакомиться со следующей [статьей](https://habr.com/ru/articles/490336/).\n\n## Chapter II\n## Проект «Конкурентное выполнение»\n\n### Задание 1. Секундомер асинхронных задач\n\n1) Программа считывает из аргументов запуска команды `N` и `M`.\n1) Параметры `N` и `M` имеют тип `int`.\n1) Параметры `N` и `M` задаются через аргументы при запуске программы.\n1) Программа запускает `N` горутин, каждая из которых спит"
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "fnd_0d6a535031c5",
+      "unit_id": "ap1_go_t02_id_1375360_master__2369287e",
+      "branch": "AP1_Go_T02.ID_1375360-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.9,
+      "quote": "Функция возведения в квадрат запускает горутину и возвращает канал 2.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 85,
+        "line_end": 85
+      },
+      "evidence": [
+        {
+          "title": "Редакторская проверка",
+          "detail": "Неудачное согласование: название функции здесь используется как существительное без нужного оформления.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": "2026-06-23T13:05:14.294098Z",
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": "spelling_wording_checker:v1",
+      "recommendation": "Функция «возведения в квадрат» запускает горутину и возвращает канал 2.",
+      "needs_human_review": false,
+      "checker_name": "spelling_wording_checker",
+      "extra": {
+        "issue_type": "wording",
+        "source_kind": "model",
+        "cache_hit": false,
+        "window_size": 25,
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_157b88bc6267",
+      "unit_id": "ap1_go_t02_id_1375360_master__2369287e",
+      "branch": "AP1_Go_T02.ID_1375360-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.77,
+      "quote": "Tick `<i>` since `<time>`",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 104,
+        "line_end": 104
+      },
+      "evidence": [
+        {
+          "title": "Редакторская проверка",
+          "detail": "Смешаны обычные кавычки и бэктики вокруг шаблона вывода; для одного типа цитирования лучше использовать единое оформление.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": "2026-06-23T13:04:57.735886Z",
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": "spelling_wording_checker:v1",
+      "recommendation": "оформить шаблон последовательно, например: `Tick <i> since <time>`",
+      "needs_human_review": false,
+      "checker_name": "spelling_wording_checker",
+      "extra": {
+        "issue_type": "quote_style",
+        "source_kind": "model",
+        "cache_hit": false,
+        "window_size": 25,
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_3c0b67e38dc8",
+      "unit_id": "ap1_go_t02_id_1375360_master__2369287e",
+      "branch": "AP1_Go_T02.ID_1375360-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.88,
+      "quote": "Rarely used items are removed from the cache.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 130,
+        "line_end": 130
+      },
+      "evidence": [
+        {
+          "title": "Редакторская проверка",
+          "detail": "Формулировка неудачна: «rarely used» здесь звучит неточно; в контексте LRU обычно говорят о «least recently used».",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": "2026-06-23T13:05:01.423829Z",
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": "spelling_wording_checker:v1",
+      "recommendation": "заменить на «Least recently used items are removed from the cache.»",
+      "needs_human_review": false,
+      "checker_name": "spelling_wording_checker",
+      "extra": {
+        "issue_type": "wording",
+        "source_kind": "model",
+        "cache_hit": false,
+        "window_size": 23,
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_3c6bc8147b4f",
+      "unit_id": "ap1_go_t02_id_1375360_master__2369287e",
+      "branch": "AP1_Go_T02.ID_1375360-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.93,
+      "quote": "перезапишет данные и поменяет на свою версию",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 52,
+        "line_end": 52
+      },
+      "evidence": [
+        {
+          "title": "Редакторская проверка",
+          "detail": "Нарушено управление: непонятно, что именно «поменяет» поток.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": "2026-06-23T13:05:06.529209Z",
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": "spelling_wording_checker:v1",
+      "recommendation": "перезапишет данные и заменит их на свою версию",
+      "needs_human_review": false,
+      "checker_name": "spelling_wording_checker",
+      "extra": {
+        "issue_type": "wording",
+        "source_kind": "model",
+        "cache_hit": false,
+        "window_size": 25,
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_3d2a770d3fd7",
+      "unit_id": "ap1_go_t02_id_1375360_master__2369287e",
+      "branch": "AP1_Go_T02.ID_1375360-master",
+      "criterion": "checklist_alignment",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.72,
+      "quote": null,
+      "location": {
+        "file_path": "check-list.yml",
+        "line_start": null,
+        "line_end": null
+      },
+      "evidence": [
+        {
+          "title": "Связность README и чек-листа",
+          "detail": "Сильных совпадений: 4 из 4; слабых совпадений: 0 из 4; не сопоставлено: 0 из 4. Развёрнутых описаний: 2 из 4. Недостаточно описаны: Task 1. Stopwatch for Asynchronous Tasks, Task 2. Square Number Generator.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Доработать пункты без критериев приёмки, ожидаемых артефактов или примеров.",
+      "needs_human_review": false,
+      "checker_name": "checklist_checker",
+      "extra": {
+        "matched_ratio": 1.0,
+        "strong_matched": 4,
+        "weak_matched": 0,
+        "strong_matched_questions": [
+          "Task 1. Stopwatch for Asynchronous Tasks",
+          "Task 2. Square Number Generator",
+          "Task 3. Ticker",
+          "Bonus Task 4. LRU Cache with Generics"
+        ],
+        "weak_matched_questions": [],
+        "unmatched_questions": [],
+        "description_ratio": 0.5,
+        "complete_description_questions": [
+          "Task 3. Ticker",
+          "Bonus Task 4. LRU Cache with Generics"
+        ],
+        "incomplete_questions": [
+          "Task 1. Stopwatch for Asynchronous Tasks",
+          "Task 2. Square Number Generator"
+        ],
+        "grounding_issues": [],
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_3e5f24f7d392",
+      "unit_id": "ap1_go_t02_id_1375360_master__2369287e",
+      "branch": "AP1_Go_T02.ID_1375360-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.67,
+      "quote": "sync.Atomic",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 52,
+        "line_end": 52
+      },
+      "evidence": [
+        {
+          "title": "Редакторская проверка",
+          "detail": "Название типа/пакета оформлено неточно: в тексте, вероятно, имеется в виду `sync/atomic` или `atomic` внутри пакета `sync`.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": "2026-06-23T13:05:06.529209Z",
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": "spelling_wording_checker:v1",
+      "recommendation": "sync/atomic",
+      "needs_human_review": true,
+      "checker_name": "spelling_wording_checker",
+      "extra": {
+        "issue_type": "typo",
+        "source_kind": "model",
+        "cache_hit": false,
+        "window_size": 25
+      }
+    },
+    {
+      "finding_id": "fnd_441e3994e4f6",
+      "unit_id": "ap1_go_t02_id_1375360_master__2369287e",
+      "branch": "AP1_Go_T02.ID_1375360-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.81,
+      "quote": "If capacity is exceeded, rarely used items should be evicted.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 131,
+        "line_end": 131
+      },
+      "evidence": [
+        {
+          "title": "Редакторская проверка",
+          "detail": "Смысл почти дублирует предыдущий пункт, из-за чего возникает тавтология.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": "2026-06-23T13:05:01.423829Z",
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": "spelling_wording_checker:v1",
+      "recommendation": "объединить с предыдущим пунктом или переформулировать, например: «If capacity is exceeded, the least recently used item is evicted.»",
+      "needs_human_review": false,
+      "checker_name": "spelling_wording_checker",
+      "extra": {
+        "issue_type": "tautology",
+        "source_kind": "model",
+        "cache_hit": false,
+        "window_size": 23,
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_4535cb8b6a1f",
+      "unit_id": "ap1_go_t02_id_1375360_master__2369287e",
+      "branch": "AP1_Go_T02.ID_1375360-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.83,
+      "quote": "Программа считывает из аргументов запуска команды `K` и `N`.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 80,
+        "line_end": 80
+      },
+      "evidence": [
+        {
+          "title": "Редакторская проверка",
+          "detail": "Неудачная формулировка: слово «команды» здесь употреблено лишне и мешает смыслу.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": "2026-06-23T13:05:14.294098Z",
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": "spelling_wording_checker:v1",
+      "recommendation": "Программа считывает из аргументов запуска `K` и `N`.",
+      "needs_human_review": false,
+      "checker_name": "spelling_wording_checker",
+      "extra": {
+        "issue_type": "wording",
+        "source_kind": "model",
+        "cache_hit": false,
+        "window_size": 25,
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_4597053a5e15",
+      "unit_id": "ap1_go_t02_id_1375360_master__2369287e",
+      "branch": "AP1_Go_T02.ID_1375360-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.84,
+      "quote": "returns channel 2",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 88,
+        "line_end": 88
+      },
+      "evidence": [
+        {
+          "title": "Редакторская проверка",
+          "detail": "Неудачная формулировка: здесь тоже лучше явно назвать канал, чтобы избежать двусмысленности.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": "2026-06-23T13:04:57.735886Z",
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": "spelling_wording_checker:v1",
+      "recommendation": "заменить на «returns the second channel» или «returns channel 2 (`ch2`)»",
+      "needs_human_review": false,
+      "checker_name": "spelling_wording_checker",
+      "extra": {
+        "issue_type": "wording",
+        "source_kind": "model",
+        "cache_hit": false,
+        "window_size": 25,
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_46bb34be0638",
+      "unit_id": "ap1_go_t02_id_1375360_master__2369287e",
+      "branch": "AP1_Go_T02.ID_1375360-master",
+      "criterion": "actuality",
+      "severity": "major",
+      "verdict": "warning",
+      "confidence": 0.89,
+      "quote": "The summary says the student will study channels and the sync package, which provides WaitGroup, Mutex, Once, and RWMutex.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 3,
+        "line_end": 3
+      },
+      "evidence": [
+        {
+          "title": "Методическая уместность",
+          "detail": "Проект заявлен как введение в конкурентность через каналы и пакет sync, но в задачах показаны только базовые паттерны producer-consumer и timer/ticker. Для полноценного понимания ожидаемого решения не хватает явного разбора отмены/завершения горутин, закрытия каналов и жизненного цикла конкурентных задач, без чего студенту трудно понять, как корректно завершать пайплайны и не допускать утечек горутин.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": "2026-06-23T13:05:38.980392Z",
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": "curriculum_relevance_checker:v1",
+      "recommendation": "Добавить в теоретическую часть отдельный подпункт про завершение конкурентных цепочек: закрытие каналов, сигналы остановки, корректное ожидание завершения goroutine и типичные ошибки с утечками.",
+      "needs_human_review": false,
+      "checker_name": "curriculum_relevance_checker",
+      "extra": {
+        "issue_type": "missing_key_topic",
+        "source": "model",
+        "cache_hit": false,
+        "model": "openai/gpt-5.4-mini",
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_4c0e621243d5",
+      "unit_id": "ap1_go_t02_id_1375360_master__2369287e",
+      "branch": "AP1_Go_T02.ID_1375360-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.78,
+      "quote": "в одноименный репозиторий",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 33,
+        "line_end": 33
+      },
+      "evidence": [
+        {
+          "title": "Редакторская проверка",
+          "detail": "Неудачное согласование: слово стоит в форме мужского рода, но с существительным «репозиторий» лучше использовать форму, согласованную с контекстом фразы.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": "2026-06-23T13:05:03.352495Z",
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": "spelling_wording_checker:v1",
+      "recommendation": "Перед выполнением проект необходимо склонировать с GitLab в одноимённый репозиторий.",
+      "needs_human_review": false,
+      "checker_name": "spelling_wording_checker",
+      "extra": {
+        "issue_type": "case",
+        "source_kind": "model",
+        "cache_hit": false,
+        "window_size": 25,
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_4dfdb8b6e975",
+      "unit_id": "ap1_go_t02_id_1375360_master__2369287e",
+      "branch": "AP1_Go_T02.ID_1375360-master",
+      "criterion": "correctness",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.8,
+      "quote": "Before starting, clone the project from GitLab into a repository with the same name.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 36,
+        "line_end": 36
+      },
+      "evidence": [
+        {
+          "title": "Фактологическая проверка",
+          "detail": "Рекомендация «клонировать проект из GitLab в репозиторий с тем же именем» частично корректна, но требует уточнения. Команда `git clone <URL>` автоматически создаёт локальную папку с именем репозитория, поэтому в большинстве случаев локальная директория будет «такой же» по имени, как и удалённый репозиторий. Однако в Git и GitLab нет жёсткого требования, чтобы имя локальной директории совпадало с именем удалённого репозитория — пользователь вполне может указать другое имя (`git clone <URL> <new_name>`). Таким образом, формулировка в задании слишком категоричная и может вводить в заблуждение относительно обязательности одинаковых имён.",
+          "url": "https://docs.gitlab.com/topics/git/clone/"
+        }
+      ],
+      "source": "https://docs.gitlab.com/topics/git/clone/ | https://www.geeksforgeeks.org/git/what-is-git-clone/ | https://github.com/git-guides/git-clone",
+      "checked_at": "2026-06-23T13:03:44.699310Z",
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": "fact_checker_perplexity:v1",
+      "recommendation": "Уточните формулировку: например, «склонируйте проект из GitLab; по умолчанию будет создана локальная папка с таким же именем, как у репозитория» или «клонируйте проект в локальную директорию с тем же именем, если требуется сохранить структуру проекта».",
+      "needs_human_review": false,
+      "checker_name": "fact_checker_perplexity",
+      "extra": {
+        "cache_hit": true,
+        "model": "perplexity/sonar",
+        "claim": "Before starting, clone the project from GitLab into a repository with the same name.",
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_58426c0aa403",
+      "unit_id": "ap1_go_t02_id_1375360_master__2369287e",
+      "branch": "AP1_Go_T02.ID_1375360-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.88,
+      "quote": "1) Параметры `K` и `N` задаются через аргументы при вызове программы.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 81,
+        "line_end": 81
+      },
+      "evidence": [
+        {
+          "title": "Структура Markdown",
+          "detail": "В одном списке несколько пунктов подряд имеют номер 1).",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Пронумеровать пункты последовательно: 1), 2), 3) и далее.",
+      "needs_human_review": false,
+      "checker_name": "markdown_structure_checker",
+      "extra": {
+        "issue_type": "repeated_numbered_list_items",
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_58744f7ca8fc",
+      "unit_id": "ap1_go_t02_id_1375360_master__2369287e",
+      "branch": "AP1_Go_T02.ID_1375360-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.99,
+      "quote": "Основная программа (`main`) вычитывает числа из канала 2 и печатает его в консоль.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 86,
+        "line_end": 86
+      },
+      "evidence": [
+        {
+          "title": "Редакторская проверка",
+          "detail": "Ошибка согласования: местоимение «его» относится к множественному числу «числа».",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": "2026-06-23T13:05:14.294098Z",
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": "spelling_wording_checker:v1",
+      "recommendation": "Основная программа (`main`) вычитывает числа из канала 2 и печатает их в консоль.",
+      "needs_human_review": false,
+      "checker_name": "spelling_wording_checker",
+      "extra": {
+        "issue_type": "typo",
+        "source_kind": "model",
+        "cache_hit": false,
+        "window_size": 25,
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_590a13f89bbb",
+      "unit_id": "ap1_go_t02_id_1375360_master__2369287e",
+      "branch": "AP1_Go_T02.ID_1375360-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.8,
+      "quote": "используй константы для сигналов из пакета os, а также функцию `signal.Notify` для работы с сигналами.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 103,
+        "line_end": 103
+      },
+      "evidence": [
+        {
+          "title": "Редакторская проверка",
+          "detail": "Имя пакета должно быть оформлено как кодовое обозначение, как и соседние элементы в тексте.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": "2026-06-23T13:05:14.294098Z",
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": "spelling_wording_checker:v1",
+      "recommendation": "используй константы для сигналов из пакета `os`, а также функцию `signal.Notify` для работы с сигналами.",
+      "needs_human_review": false,
+      "checker_name": "spelling_wording_checker",
+      "extra": {
+        "issue_type": "case",
+        "source_kind": "model",
+        "cache_hit": false,
+        "window_size": 25,
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_6881d1462756",
+      "unit_id": "ap1_go_t02_id_1375360_master__2369287e",
+      "branch": "AP1_Go_T02.ID_1375360-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.95,
+      "quote": "`Clear` — удаление всех элементов в кэше.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 112,
+        "line_end": 112
+      },
+      "evidence": [
+        {
+          "title": "Редакторская проверка",
+          "detail": "Неудачная формулировка: после названия метода лучше указать действие в той же грамматической форме, что и в соседних пунктах.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": "2026-06-23T13:05:18.725492Z",
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": "spelling_wording_checker:v1",
+      "recommendation": "`Clear` — удалить все элементы в кэше.",
+      "needs_human_review": false,
+      "checker_name": "spelling_wording_checker",
+      "extra": {
+        "issue_type": "wording",
+        "source_kind": "model",
+        "cache_hit": false,
+        "window_size": 20,
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_6dc1fbc12dfd",
+      "unit_id": "ap1_go_t02_id_1375360_master__2369287e",
+      "branch": "AP1_Go_T02.ID_1375360-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.97,
+      "quote": "Программа запускает 2 функции: **генератор**, и **функцию возведения в квадрат**.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 82,
+        "line_end": 82
+      },
+      "evidence": [
+        {
+          "title": "Редакторская проверка",
+          "detail": "Лишняя запятая перед союзом «и» и неудачное смешение наименований функций.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": "2026-06-23T13:05:14.294098Z",
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": "spelling_wording_checker:v1",
+      "recommendation": "Программа запускает 2 функции: **генератор** и **функцию возведения в квадрат**.",
+      "needs_human_review": false,
+      "checker_name": "spelling_wording_checker",
+      "extra": {
+        "issue_type": "wording",
+        "source_kind": "model",
+        "cache_hit": false,
+        "window_size": 25,
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_73cb5e4acc2e",
+      "unit_id": "ap1_go_t02_id_1375360_master__2369287e",
+      "branch": "AP1_Go_T02.ID_1375360-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.88,
+      "quote": "1) Параметр `K` задаётся через аргументы при вызове программы.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 96,
+        "line_end": 96
+      },
+      "evidence": [
+        {
+          "title": "Структура Markdown",
+          "detail": "В одном списке несколько пунктов подряд имеют номер 1).",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Пронумеровать пункты последовательно: 1), 2), 3) и далее.",
+      "needs_human_review": false,
+      "checker_name": "markdown_structure_checker",
+      "extra": {
+        "issue_type": "repeated_numbered_list_items",
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_741e7878197e",
+      "unit_id": "ap1_go_t02_id_1375360_master__2369287e",
+      "branch": "AP1_Go_T02.ID_1375360-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.91,
+      "quote": "Если элемент присутствует, то он будет передвинут в начало и возвращён пользователю с дополнительным аргументом `true`.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 122,
+        "line_end": 122
+      },
+      "evidence": [
+        {
+          "title": "Редакторская проверка",
+          "detail": "Слово «передвинут» звучит разговорно и неудачно для технического текста.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": "2026-06-23T13:05:18.725492Z",
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": "spelling_wording_checker:v1",
+      "recommendation": "Если элемент присутствует, то он будет перемещён в начало и возвращён пользователю с дополнительным аргументом `true`.",
+      "needs_human_review": false,
+      "checker_name": "spelling_wording_checker",
+      "extra": {
+        "issue_type": "wording",
+        "source_kind": "model",
+        "cache_hit": false,
+        "window_size": 20,
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_822fac117804",
+      "unit_id": "ap1_go_t02_id_1375360_master__2369287e",
+      "branch": "AP1_Go_T02.ID_1375360-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.84,
+      "quote": "returns channel 1",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 87,
+        "line_end": 87
+      },
+      "evidence": [
+        {
+          "title": "Редакторская проверка",
+          "detail": "Неудачная формулировка: можно понять как «возвращает канал номер 1», хотя речь о первом канале.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": "2026-06-23T13:04:57.735886Z",
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": "spelling_wording_checker:v1",
+      "recommendation": "заменить на «returns the first channel» или «returns channel 1 (`ch1`)»",
+      "needs_human_review": false,
+      "checker_name": "spelling_wording_checker",
+      "extra": {
+        "issue_type": "wording",
+        "source_kind": "model",
+        "cache_hit": false,
+        "window_size": 25,
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_823c607f9086",
+      "unit_id": "ap1_go_t02_id_1375360_master__2369287e",
+      "branch": "AP1_Go_T02.ID_1375360-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.98,
+      "quote": "Допускается использование констант из пакета `time`, и функцию `Sleep`.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 101,
+        "line_end": 101
+      },
+      "evidence": [
+        {
+          "title": "Редакторская проверка",
+          "detail": "Ошибка согласования: после «допускается использование» нужно однородное существительное, а не «функцию».",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": "2026-06-23T13:05:14.294098Z",
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": "spelling_wording_checker:v1",
+      "recommendation": "Допускается использование констант из пакета `time` и функции `Sleep`.",
+      "needs_human_review": false,
+      "checker_name": "spelling_wording_checker",
+      "extra": {
+        "issue_type": "wording",
+        "source_kind": "model",
+        "cache_hit": false,
+        "window_size": 25,
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_886401195dbd",
+      "unit_id": "ap1_go_t02_id_1375360_master__2369287e",
+      "branch": "AP1_Go_T02.ID_1375360-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.81,
+      "quote": "в среднем 4 Кб",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 45,
+        "line_end": 45
+      },
+      "evidence": [
+        {
+          "title": "Редакторская проверка",
+          "detail": "Неверное написание единицы измерения: в русском тексте лучше использовать «КБ» или «КБ» без смешения с латиницей.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": "2026-06-23T13:05:06.529209Z",
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": "spelling_wording_checker:v1",
+      "recommendation": "в среднем 4 КБ",
+      "needs_human_review": false,
+      "checker_name": "spelling_wording_checker",
+      "extra": {
+        "issue_type": "typo",
+        "source_kind": "model",
+        "cache_hit": false,
+        "window_size": 25,
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_88a376ce6221",
+      "unit_id": "ap1_go_t02_id_1375360_master__2369287e",
+      "branch": "AP1_Go_T02.ID_1375360-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.88,
+      "quote": "1) Логика LRU.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 114,
+        "line_end": 114
+      },
+      "evidence": [
+        {
+          "title": "Структура Markdown",
+          "detail": "После пункта 1) на строке 113 идёт пункт 1), ожидается 2).",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Исправить ручную нумерацию списка, чтобы номера шли последовательно внутри одного блока.",
+      "needs_human_review": false,
+      "checker_name": "markdown_structure_checker",
+      "extra": {
+        "issue_type": "numbered_list_reset",
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_8c8889bc8c93",
+      "unit_id": "ap1_go_t02_id_1375360_master__2369287e",
+      "branch": "AP1_Go_T02.ID_1375360-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.98,
+      "quote": "Если элемент отсутствует, то пользователю будет возвращён zero-value для данного типа и дополнительный аргумент `false`.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 123,
+        "line_end": 123
+      },
+      "evidence": [
+        {
+          "title": "Редакторская проверка",
+          "detail": "Смешение английского и русского в устойчивом выражении.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": "2026-06-23T13:05:18.725492Z",
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": "spelling_wording_checker:v1",
+      "recommendation": "Если элемент отсутствует, то пользователю будет возвращён нулевое значение для данного типа и дополнительный аргумент `false`.",
+      "needs_human_review": false,
+      "checker_name": "spelling_wording_checker",
+      "extra": {
+        "issue_type": "wording",
+        "source_kind": "model",
+        "cache_hit": false,
+        "window_size": 20,
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_8eec3564fd31",
+      "unit_id": "ap1_go_t02_id_1375360_master__2369287e",
+      "branch": "AP1_Go_T02.ID_1375360-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.88,
+      "quote": "Chapter I",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 38,
+        "line_end": 38
+      },
+      "evidence": [
+        {
+          "title": "Структура Markdown",
+          "detail": "Заголовок повторяется в этом же Markdown-файле.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Переименовать один из заголовков или объединить разделы; первый такой заголовок находится на строке 20.",
+      "needs_human_review": false,
+      "checker_name": "markdown_structure_checker",
+      "extra": {
+        "issue_type": "duplicate_heading",
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_8eec3564fd31",
+      "unit_id": "ap1_go_t02_id_1375360_master__2369287e",
+      "branch": "AP1_Go_T02.ID_1375360-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.88,
+      "quote": "Chapter I",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 38,
+        "line_end": 38
+      },
+      "evidence": [
+        {
+          "title": "Структура Markdown",
+          "detail": "Заголовок создаёт уже занятый Markdown-якорь `#chapter-i`.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Сделать заголовок уникальным; первый заголовок с таким якорем находится на строке 20.",
+      "needs_human_review": false,
+      "checker_name": "markdown_structure_checker",
+      "extra": {
+        "issue_type": "duplicate_anchor",
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_96aa9f3983b6",
+      "unit_id": "ap1_go_t02_id_1375360_master__2369287e",
+      "branch": "AP1_Go_T02.ID_1375360-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.88,
+      "quote": "Время сна — количество миллисекунд сна.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 72,
+        "line_end": 72
+      },
+      "evidence": [
+        {
+          "title": "Редакторская проверка",
+          "detail": "Неудачная формулировка: повторяется слово «сна», из-за чего фраза звучит тяжеловесно.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": "2026-06-23T13:05:14.294098Z",
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": "spelling_wording_checker:v1",
+      "recommendation": "Время сна — количество миллисекунд, в течение которых спит горутина.",
+      "needs_human_review": false,
+      "checker_name": "spelling_wording_checker",
+      "extra": {
+        "issue_type": "wording",
+        "source_kind": "model",
+        "cache_hit": false,
+        "window_size": 25,
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_a2ee580854f1",
+      "unit_id": "ap1_go_t02_id_1375360_master__2369287e",
+      "branch": "AP1_Go_T02.ID_1375360-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.87,
+      "quote": "Программа считывает из аргументов запуска команды параметр `K`.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 95,
+        "line_end": 95
+      },
+      "evidence": [
+        {
+          "title": "Редакторская проверка",
+          "detail": "Лишнее слово «команды» делает фразу неестественной.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": "2026-06-23T13:05:14.294098Z",
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": "spelling_wording_checker:v1",
+      "recommendation": "Программа считывает из аргументов запуска параметр `K`.",
+      "needs_human_review": false,
+      "checker_name": "spelling_wording_checker",
+      "extra": {
+        "issue_type": "wording",
+        "source_kind": "model",
+        "cache_hit": false,
+        "window_size": 25,
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_abe40b68a120",
+      "unit_id": "ap1_go_t02_id_1375360_master__2369287e",
+      "branch": "AP1_Go_T02.ID_1375360-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.88,
+      "quote": "1) Параметры `N` и `M` имеют тип `int`.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 66,
+        "line_end": 66
+      },
+      "evidence": [
+        {
+          "title": "Структура Markdown",
+          "detail": "В одном списке несколько пунктов подряд имеют номер 1).",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Пронумеровать пункты последовательно: 1), 2), 3) и далее.",
+      "needs_human_review": false,
+      "checker_name": "markdown_structure_checker",
+      "extra": {
+        "issue_type": "repeated_numbered_list_items",
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_afd6564d2a91",
+      "unit_id": "ap1_go_t02_id_1375360_master__2369287e",
+      "branch": "AP1_Go_T02.ID_1375360-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.72,
+      "quote": "Join Rocket.Chat to stay updated with the latest community announcements.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 29,
+        "line_end": 29
+      },
+      "evidence": [
+        {
+          "title": "Редакторская проверка",
+          "detail": "Фраза звучит неестественно: после приглашения поделиться опытом внезапно появляется отдельное указание без связки.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": "2026-06-23T13:04:51.886570Z",
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": "spelling_wording_checker:v1",
+      "recommendation": "Переформулировать как: «Join Rocket.Chat to stay updated on the latest community announcements.»",
+      "needs_human_review": false,
+      "checker_name": "spelling_wording_checker",
+      "extra": {
+        "issue_type": "wording",
+        "source_kind": "model",
+        "cache_hit": false,
+        "window_size": 25,
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_b9ef8fa7d33e",
+      "unit_id": "ap1_go_t02_id_1375360_master__2369287e",
+      "branch": "AP1_Go_T02.ID_1375360-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.86,
+      "quote": "*Подсказка*: каналы необходимо создавать в функциях, возвращать канал с ограничением на операцию чтения/записи.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 91,
+        "line_end": 91
+      },
+      "evidence": [
+        {
+          "title": "Редакторская проверка",
+          "detail": "Неудачная формулировка: «с ограничением на операцию чтения/записи» звучит канцелярски и неестественно.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": "2026-06-23T13:05:14.294098Z",
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": "spelling_wording_checker:v1",
+      "recommendation": "*Подсказка*: каналы необходимо создавать в функциях и возвращать канал только для чтения или только для записи.",
+      "needs_human_review": false,
+      "checker_name": "spelling_wording_checker",
+      "extra": {
+        "issue_type": "wording",
+        "source_kind": "model",
+        "cache_hit": false,
+        "window_size": 25,
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_bdf60ed83b13",
+      "unit_id": "ap1_go_t02_id_1375360_master__2369287e",
+      "branch": "AP1_Go_T02.ID_1375360-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.78,
+      "quote": "Параметры `K` и `N` задаются через аргументы при вызове программы.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 81,
+        "line_end": 81
+      },
+      "evidence": [
+        {
+          "title": "Редакторская проверка",
+          "detail": "Неудачная формулировка: «через аргументы при вызове программы» звучит громоздко и тавтологично.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": "2026-06-23T13:05:14.294098Z",
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": "spelling_wording_checker:v1",
+      "recommendation": "Параметры `K` и `N` задаются аргументами при вызове программы.",
+      "needs_human_review": false,
+      "checker_name": "spelling_wording_checker",
+      "extra": {
+        "issue_type": "wording",
+        "source_kind": "model",
+        "cache_hit": false,
+        "window_size": 25,
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_be0d3548d229",
+      "unit_id": "ap1_go_t02_id_1375360_master__2369287e",
+      "branch": "AP1_Go_T02.ID_1375360-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.88,
+      "quote": "другие горутины, соответственно, могут получить эти данные из канала",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 46,
+        "line_end": 46
+      },
+      "evidence": [
+        {
+          "title": "Редакторская проверка",
+          "detail": "Фраза звучит неестественно: вводное слово здесь лишнее и утяжеляет предложение.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": "2026-06-23T13:05:06.529209Z",
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": "spelling_wording_checker:v1",
+      "recommendation": "другие горутины могут получить эти данные из канала",
+      "needs_human_review": false,
+      "checker_name": "spelling_wording_checker",
+      "extra": {
+        "issue_type": "wording",
+        "source_kind": "model",
+        "cache_hit": false,
+        "window_size": 25,
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_c8c6c281d673",
+      "unit_id": "ap1_go_t02_id_1375360_master__2369287e",
+      "branch": "AP1_Go_T02.ID_1375360-master",
+      "criterion": "checklist_alignment",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.72,
+      "quote": null,
+      "location": {
+        "file_path": "check-list_RUS.yml",
+        "line_start": null,
+        "line_end": null
+      },
+      "evidence": [
+        {
+          "title": "Связность README и чек-листа",
+          "detail": "Сильных совпадений: 4 из 4; слабых совпадений: 0 из 4; не сопоставлено: 0 из 4. Развёрнутых описаний: 3 из 4. Недостаточно описаны: Задание 1. Секундомер асинхронных задач.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": null,
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": null,
+      "recommendation": "Доработать пункты без критериев приёмки, ожидаемых артефактов или примеров.",
+      "needs_human_review": false,
+      "checker_name": "checklist_checker",
+      "extra": {
+        "matched_ratio": 1.0,
+        "strong_matched": 4,
+        "weak_matched": 0,
+        "strong_matched_questions": [
+          "Задание 1. Секундомер асинхронных задач",
+          "Задание 2. Генератор квадратов числа",
+          "Задание 3. Тикер",
+          "Бонусное задание 4. LRU-Cache с использованием Generics"
+        ],
+        "weak_matched_questions": [],
+        "unmatched_questions": [],
+        "description_ratio": 0.75,
+        "complete_description_questions": [
+          "Задание 2. Генератор квадратов числа",
+          "Задание 3. Тикер",
+          "Бонусное задание 4. LRU-Cache с использованием Generics"
+        ],
+        "incomplete_questions": [
+          "Задание 1. Секундомер асинхронных задач"
+        ],
+        "grounding_issues": [],
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_d45e4303493e",
+      "unit_id": "ap1_go_t02_id_1375360_master__2369287e",
+      "branch": "AP1_Go_T02.ID_1375360-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.96,
+      "quote": "Функция генератор запускает горутину и возвращает канал 1.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 84,
+        "line_end": 84
+      },
+      "evidence": [
+        {
+          "title": "Редакторская проверка",
+          "detail": "Неудачное согласование: «функция генератор» звучит грамматически неполно.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": "2026-06-23T13:05:14.294098Z",
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": "spelling_wording_checker:v1",
+      "recommendation": "Функция-генератор запускает горутину и возвращает канал 1.",
+      "needs_human_review": false,
+      "checker_name": "spelling_wording_checker",
+      "extra": {
+        "issue_type": "wording",
+        "source_kind": "model",
+        "cache_hit": false,
+        "window_size": 25,
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_e31c53c35856",
+      "unit_id": "ap1_go_t02_id_1375360_master__2369287e",
+      "branch": "AP1_Go_T02.ID_1375360-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.95,
+      "quote": "Функция возведения в квадрат должна принимать канал 1 **на чтение**, полученный из функции генератор.",
+      "location": {
+        "file_path": "README_RUS.md",
+        "line_start": 87,
+        "line_end": 87
+      },
+      "evidence": [
+        {
+          "title": "Редакторская проверка",
+          "detail": "Неудачное согласование: «из функции генератор» требует оформления названия как имени собственно функции.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": "2026-06-23T13:05:14.294098Z",
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": "spelling_wording_checker:v1",
+      "recommendation": "Функция возведения в квадрат должна принимать канал 1 **на чтение**, полученный из функции-генератора.",
+      "needs_human_review": false,
+      "checker_name": "spelling_wording_checker",
+      "extra": {
+        "issue_type": "wording",
+        "source_kind": "model",
+        "cache_hit": false,
+        "window_size": 25,
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_f0c1497d548b",
+      "unit_id": "ap1_go_t02_id_1375360_master__2369287e",
+      "branch": "AP1_Go_T02.ID_1375360-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.78,
+      "quote": "a lightweight thread",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 49,
+        "line_end": 49
+      },
+      "evidence": [
+        {
+          "title": "Редакторская проверка",
+          "detail": "Формулировка неудачна: в контексте Go goroutine обычно не называют thread без уточнения, из-за чего фраза звучит неточно.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": "2026-06-23T13:04:54.903433Z",
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": "spelling_wording_checker:v1",
+      "recommendation": "заменить на «a lightweight concurrent unit of execution» или «a lightweight execution unit»",
+      "needs_human_review": false,
+      "checker_name": "spelling_wording_checker",
+      "extra": {
+        "issue_type": "wording",
+        "source_kind": "model",
+        "cache_hit": false,
+        "window_size": 25,
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_fa4e4711d74a",
+      "unit_id": "ap1_go_t02_id_1375360_master__2369287e",
+      "branch": "AP1_Go_T02.ID_1375360-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.93,
+      "quote": "Channels form the basis for data exchange and synchronization between threads.",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 50,
+        "line_end": 50
+      },
+      "evidence": [
+        {
+          "title": "Редакторская проверка",
+          "detail": "Неудачная формулировка: в Go обычно синхронизируются goroutines, а не threads, поэтому фраза звучит неточно.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": "2026-06-23T13:04:54.903433Z",
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": "spelling_wording_checker:v1",
+      "recommendation": "заменить на «Channels form the basis for data exchange and synchronization between goroutines.»",
+      "needs_human_review": false,
+      "checker_name": "spelling_wording_checker",
+      "extra": {
+        "issue_type": "wording",
+        "source_kind": "model",
+        "cache_hit": false,
+        "window_size": 25,
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    },
+    {
+      "finding_id": "fnd_fb93c453662d",
+      "unit_id": "ap1_go_t02_id_1375360_master__2369287e",
+      "branch": "AP1_Go_T02.ID_1375360-master",
+      "criterion": "readability",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.74,
+      "quote": "(use **Golang generics**)",
+      "location": {
+        "file_path": "README.md",
+        "line_start": 127,
+        "line_end": 127
+      },
+      "evidence": [
+        {
+          "title": "Редакторская проверка",
+          "detail": "Неудачная формулировка: сочетание звучит разговорно и не очень естественно для учебного текста.",
+          "url": null
+        }
+      ],
+      "source": null,
+      "checked_at": "2026-06-23T13:05:01.423829Z",
+      "support_status": null,
+      "latest_version": null,
+      "recommended_version": null,
+      "prompt_version": "spelling_wording_checker:v1",
+      "recommendation": "заменить на «(используйте generics в Go)» или «(используйте обобщения Go)»",
+      "needs_human_review": false,
+      "checker_name": "spelling_wording_checker",
+      "extra": {
+        "issue_type": "wording",
+        "source_kind": "model",
+        "cache_hit": false,
+        "window_size": 23,
+        "original_needs_human_review": true,
+        "postprocess_review": "Флаг ручного разбора пересчитан по вердикту, уверенности и типу модуля."
+      }
+    }
+  ]
+}

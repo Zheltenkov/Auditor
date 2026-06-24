@@ -1,0 +1,5 @@
+﻿project_id,criterion,label
+sqlb3_retrieving_data_id_574089_master__366810d2,correctness,Точность и корректность
+sqlb3_retrieving_data_id_574089_master__366810d2,image_quality,Качество изображений
+sqlb3_retrieving_data_id_574089_master__366810d2,readability,Грамотность и читаемость текста
+sqlb3_retrieving_data_id_574089_master__366810d2,rights,Оригинальность и права использования ресурсов

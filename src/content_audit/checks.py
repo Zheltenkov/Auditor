@@ -126,6 +126,36 @@ README_THEORY_SECTION_RE = re.compile(
 README_DEFINITION_LINE_RE = re.compile(r"^\s*(?:\*\*)?[A-ZА-ЯЁ][^:\n]{1,90}(?:\*\*)?\s*[:—-]\s+\S")
 README_EXERCISE_OPTION_RE = re.compile(r"^\s*(?:\d+[).]|[A-ZА-ЯЁ][).])\s+")
 README_FEEDBACK_LINE_RE = re.compile(r"(?i)(feedback|опрос|educational experience|оставить отзыв|leave your feedback)")
+MARKDOWN_TABLE_ROW_RE = re.compile(r"^\s*\|.+\|\s*$")
+REFERENCE_POINTER_RE = re.compile(
+    r"(?i)\[(?:here|there|link|source|documentation|docs|тут|здесь|сюда|ссылка|источник|документация)\]"
+    r"\s*\(\s*https?://[^)]+\)"
+)
+LOCAL_PROJECT_SPEC_RE = re.compile(
+    r"(?i)("
+    r"\b(?:program|project|application|solution|utility|script|service)\b.{0,100}"
+    r"\b(?:built|compiled|implemented|located|placed|stored|run|tested|uses?|contains?)\b"
+    r"|"
+    r"\b(?:программа|проект|приложение|решение|утилита|скрипт|сервис)\b.{0,100}"
+    r"\b(?:собирается|компилируется|реализуется|располагается|лежит|запускается|тестируется|использует|содержит)\b"
+    r"|"
+    r"\b(?:target|makefile target|turn-in|files to turn in|src/|tests?/|artifacts?)\b"
+    r"|"
+    r"\b(?:цель\s+сборки|таргет|файлы\s+для\s+сдачи|артефакт[а-я]*)\b"
+    r")"
+)
+_IMPERATIVE_VERB_PATTERN = (
+    r"(?:clone|install|define|store|create|implement|build|run|follow|write|download|configure|use|set|"
+    r"скопир|установ|создай|создайте|реализу|запуст|добав|склонир|настрой)"
+)
+LEAD_IMPERATIVE_RE = re.compile(
+    r"^(?:before|when|if|to|перед|когда|если|чтобы)\b[^,]*,\s*" + _IMPERATIVE_VERB_PATTERN + r"\b",
+    re.IGNORECASE,
+)
+SECOND_PERSON_RE = re.compile(
+    r"\byou (?:must|need|have to|should|can)\b|\byour (?:code|project|repository|program|solution)\b",
+    re.IGNORECASE,
+)
 REQUIREMENT_CLAIM_MARKERS = (
     " must ",
     " should ",
@@ -134,6 +164,9 @@ REQUIREMENT_CLAIM_MARKERS = (
     " required ",
     " requirement ",
     " have to ",
+    " we recommend ",
+    " it is necessary to ",
+    " recommended to ",
     "должен",
     "должна",
     "должны",
@@ -141,6 +174,7 @@ REQUIREMENT_CLAIM_MARKERS = (
     "необходимо",
     "требуется",
     "следует",
+    "рекоменду",
     "обязательно",
 )
 MODEL_RUBRIC_ALLOWED_CRITERIA = {Criterion.WORKLOAD}
@@ -958,6 +992,10 @@ class ResourceAvailabilityChecker(BaseChecker):
         re.IGNORECASE,
     )
     ABSOLUTE_ENV_PATH_RE = re.compile(r"(?<![\w/])/(?:opt|mnt|srv|var|home)/[A-Za-z0-9._/-]+")
+    ENVIRONMENT_GUIDE_RE = re.compile(
+        r"\b(?:virtualbox|vbox|vm|virtual\s+machine)\b|(?:виртуальн\w*|вм|машин\w*|образ\w*)",
+        re.IGNORECASE,
+    )
     URL_RE = re.compile(r"https?://\S+", re.IGNORECASE)
     REQUIRED_RESOURCE_RE = re.compile(
         r"\b(provided|attached|given|contains|included|download|load|open|analy[sz]e|dataset|dump|archive|"
@@ -1003,6 +1041,12 @@ class ResourceAvailabilityChecker(BaseChecker):
                         continue
                     seen.add(key)
                     findings.append(finding)
+        for finding in self._environment_guide_findings(unit, available):
+            key = self._dedupe_key(finding)
+            if key in seen:
+                continue
+            seen.add(key)
+            findings.append(finding)
         return findings
 
     def _missing_file_findings(
@@ -1154,6 +1198,49 @@ class ResourceAvailabilityChecker(BaseChecker):
         """Проверяет, приложен ли образ или архив окружения."""
 
         return any(ref.endswith((".ova", ".ovf", ".vmdk", ".qcow2", ".img", ".iso", ".zip", ".rar", ".7z")) for ref in available)
+
+    def _environment_guide_findings(self, unit: ContentUnit, available: set[str]) -> list[Finding]:
+        """Ловит ситуацию, когда инструкция по ВМ есть, а воспроизводимого образа окружения нет."""
+
+        if self._has_environment_evidence(available):
+            return []
+        findings: list[Finding] = []
+        for path in sorted(unit.root_path.rglob("*")):
+            if not path.is_file():
+                continue
+            try:
+                relative_path = path.relative_to(unit.root_path).as_posix()
+            except ValueError:
+                continue
+            name = path.name
+            if not self.ENVIRONMENT_GUIDE_RE.search(name):
+                continue
+            findings.append(
+                _finding(
+                    unit,
+                    self.name,
+                    Criterion.CORRECTNESS,
+                    Severity.MAJOR,
+                    Verdict.WARNING,
+                    0.84,
+                    name,
+                    TextLocation(file_path=relative_path),
+                    [
+                        Evidence(
+                            title="Локальное окружение",
+                            detail=(
+                                "В проекте есть инструкция или материал про виртуальную машину/VirtualBox, "
+                                "но не найден образ, архив или другой воспроизводимый ресурс окружения."
+                            ),
+                        )
+                    ],
+                    "Приложить образ ВМ/архив окружения или заменить инструкцию на воспроизводимый источник получения окружения.",
+                    True,
+                    extra={"issue_type": "environment_guide_without_image"},
+                )
+            )
+            break
+        return findings
 
     def _has_resource_of_kind(self, resource_kind: str, available: set[str]) -> bool:
         """Проверяет наличие файла нужного класса среди материалов проекта."""
@@ -1501,38 +1588,7 @@ class LanguageCoverageChecker(BaseChecker):
             if expected_languages
             else None
         )
-        verdict = Verdict.INFO if missing_languages or not expected_languages else Verdict.PASS
-        detail_parts = [f"Обнаружены: {', '.join(sorted(languages)) or 'не определены'}."]
-        if expected_languages:
-            detail_parts.append(f"Ожидались: {', '.join(expected_languages)}.")
-        if missing_languages:
-            detail_parts.append(f"Отсутствуют: {', '.join(missing_languages)}.")
-        elif expected_languages:
-            detail_parts.append("Ожидаемый набор языков найден.")
-        else:
-            detail_parts.append("Ожидаемый набор языков не задан; строка носит мониторинговый характер.")
-        findings = [
-            _finding(
-                unit,
-                self.name,
-                Criterion.LANGUAGE,
-                Severity.INFO,
-                verdict,
-                0.8,
-                None,
-                None,
-                [Evidence(title="Языковые версии", detail=" ".join(detail_parts))],
-                "Использовать как мониторинг языкового покрытия; добавлять языковые версии только если это требуется политикой платформы.",
-                False,
-                extra={
-                    "languages": sorted(languages),
-                    "expected_languages": list(expected_languages),
-                    "missing_languages": list(missing_languages),
-                    "coverage_ratio": coverage_ratio,
-                    "mismatches": mismatches,
-                },
-            )
-        ]
+        findings: list[Finding] = []
         for mismatch in mismatches:
             findings.append(
                 _finding(
@@ -1552,7 +1608,13 @@ class LanguageCoverageChecker(BaseChecker):
                     ],
                     "Проверить имя файла или содержимое языковой версии.",
                     True,
-                    extra=mismatch,
+                    extra={
+                        **mismatch,
+                        "languages": sorted(languages),
+                        "expected_languages": list(expected_languages),
+                        "missing_languages": list(missing_languages),
+                        "coverage_ratio": coverage_ratio,
+                    },
                 )
             )
         return findings
@@ -1568,36 +1630,8 @@ class ExamPresenceChecker(BaseChecker):
         markers = ("exam", "final", "экзамен", "финаль", "итогов")
         matched_paths = [file.relative_path for file in unit.files if any(marker in file.relative_path.lower() for marker in markers)]
         if matched_paths:
-            return [
-                _finding(
-                    unit,
-                    self.name,
-                    Criterion.EXAM,
-                    Severity.INFO,
-                    Verdict.PASS,
-                    0.8,
-                    None,
-                    None,
-                    [Evidence(title="Финальная проверка", detail=f"Найдены признаки: {', '.join(matched_paths[:5])}.")],
-                    "Действий не требуется; признак финальной проверки найден.",
-                    False,
-                )
-            ]
-        return [
-            _finding(
-                unit,
-                self.name,
-                Criterion.EXAM,
-                Severity.INFO,
-                Verdict.UNKNOWN,
-                0.55,
-                None,
-                None,
-                [Evidence(title="Финальная проверка", detail="В локальной папке нет явных признаков экзамена или финальной проверки.")],
-                "Если наличие экзамена определяется платформой, добавить внешний источник данных или поле в выгрузке.",
-                True,
-            )
-        ]
+            return []
+        return []
 
 
 class ImageQualityChecker(BaseChecker):
@@ -1813,6 +1847,9 @@ class SpellingAndWordingChecker(BaseChecker):
     min_model_confidence = 0.65
     max_model_findings_per_file = 20
     MODEL_ISSUE_TYPES = {"typo", "tautology", "case", "wording", "quote_style"}
+    RULE_ARTIFACT_SUFFIXES = {".drawio", ".xml", ".svg"}
+    MAX_RULE_ARTIFACT_BYTES = 1_000_000
+    ASP_NET_RE = re.compile(r"\basp\.?net\b", re.IGNORECASE)
     SYSTEM_PROMPT = """Ты редактор учебных материалов. Ищи только точечные дефекты текста:
 опечатки, тавтологию, ошибки падежа/согласования, неудачные формулировки и смешение кавычек/бэктиков.
 Не отмечай длинные строки, стиль заголовков, фактические ошибки, актуальность технологий, битые ссылки,
@@ -1861,6 +1898,12 @@ class SpellingAndWordingChecker(BaseChecker):
             "Ошибка падежного согласования в перечислении.",
             "Заменить «и дата визита» на «и дату визита».",
         ),
+        (
+            "case",
+            re.compile(r"(?i)\bв\s+компании\s+работались\b"),
+            "Ошибка согласования: компания не «работалась», в компании люди «работали».",
+            "Заменить на «в компании работали».",
+        ),
     )
     CODE_QUOTE_RE = re.compile(r"(«[A-Za-z][A-Za-z0-9 _./:-]{2,}»|\"[A-Za-z][A-Za-z0-9 _./:-]{2,}\")")
 
@@ -1883,6 +1926,44 @@ class SpellingAndWordingChecker(BaseChecker):
             model_findings, windows_used = self._model_findings(unit, file, lines, context, seen, remaining_windows)
             model_windows_used += windows_used
             findings.extend(model_findings)
+        findings.extend(self._artifact_rule_findings(unit, seen))
+        return findings
+
+    def _artifact_rule_findings(
+        self,
+        unit: ContentUnit,
+        seen: set[tuple[str, int, str, str]],
+    ) -> list[Finding]:
+        """Применяет строгие редакторские правила к тексту внутри диаграмм и XML-артефактов."""
+
+        findings: list[Finding] = []
+        loaded_paths = {file.relative_path.replace("\\", "/").lower() for file in unit.files}
+        for path in sorted(unit.root_path.rglob("*")):
+            if not path.is_file() or path.suffix.lower() not in self.RULE_ARTIFACT_SUFFIXES:
+                continue
+            try:
+                relative_path = path.relative_to(unit.root_path).as_posix()
+            except ValueError:
+                continue
+            if relative_path.lower() in loaded_paths:
+                continue
+            try:
+                if path.stat().st_size > self.MAX_RULE_ARTIFACT_BYTES:
+                    continue
+                text = path.read_text(encoding="utf-8", errors="ignore")
+            except OSError:
+                continue
+            synthetic_file = ContentFile(
+                relative_path=relative_path,
+                absolute_path=path,
+                kind="text",
+                text=text,
+                size_bytes=path.stat().st_size,
+            )
+            for line_number, line in enumerate(text.splitlines(), start=1):
+                if not line.strip():
+                    continue
+                findings.extend(self._rule_findings(unit, synthetic_file, line_number, line, seen))
         return findings
 
     def _rule_findings(
@@ -1905,6 +1986,22 @@ class SpellingAndWordingChecker(BaseChecker):
             if self._remember(seen, finding):
                 findings.append(finding)
 
+        asp_net_match = self.ASP_NET_RE.search(line)
+        if asp_net_match is not None and self._is_java_project(unit):
+            finding = self._build_finding(
+                unit,
+                file.relative_path,
+                line_number,
+                asp_net_match.group(0),
+                "wording",
+                "В Java-проекте упомянут ASP.NET; это выглядит как ошибочная или нерелевантная технология в списке материалов.",
+                "Заменить ASP.NET на релевантный Java-материал или явно пояснить, зачем здесь сравнение с ASP.NET.",
+                0.9,
+                "rule",
+            )
+            if self._remember(seen, finding):
+                findings.append(finding)
+
         quote_style_match = self.CODE_QUOTE_RE.search(line)
         if quote_style_match is not None and "`" in line:
             quote = quote_style_match.group(0)
@@ -1922,6 +2019,18 @@ class SpellingAndWordingChecker(BaseChecker):
             if self._remember(seen, finding):
                 findings.append(finding)
         return findings
+
+    def _is_java_project(self, unit: ContentUnit) -> bool:
+        """Определяет Java-проект по имени, README или исходным файлам."""
+
+        if re.search(r"\bjava\b|_jv_|java", unit.name, re.IGNORECASE):
+            return True
+        for file in unit.files:
+            if Path(file.relative_path).suffix.lower() == ".java":
+                return True
+            if file.kind == "readme" and re.search(r"\bjava\b", file.text[:4000], re.IGNORECASE):
+                return True
+        return any(path.suffix.lower() == ".java" for path in unit.root_path.rglob("*") if path.is_file())
 
     def _model_findings(
         self,
@@ -2148,6 +2257,12 @@ class LocalConsistencyChecker(BaseChecker):
     FIELD_LIST_MARKER_RE = re.compile(
         r"(?i)(?:следующ(?:ие|ими)\s+пол(?:я|ями)|пол(?:я|ями)\s*:|following\s+fields|fields\s*:)"
     )
+    FUNCTION_LENGTH_RANGE_RE = re.compile(
+        r"(?P<start>\d{1,3})\s*(?:-|–|—|to|до)\s*(?P<end>\d{1,3})\s*"
+        r"(?:lines?|строк(?:и|ах|ам)?|стр\.)",
+        re.IGNORECASE,
+    )
+    FUNCTION_CONTEXT_RE = re.compile(r"\b(functions?|methods?)\b|(?:функци\w*|метод\w*)", re.IGNORECASE)
 
     def check(self, unit: ContentUnit, entities: list[ExtractedEntity], context: CheckContext) -> list[Finding]:
         del entities, context
@@ -2165,6 +2280,9 @@ class LocalConsistencyChecker(BaseChecker):
             ):
                 if self._remember(seen, finding):
                     findings.append(finding)
+        for finding in self._function_length_range_findings(unit):
+            if self._remember(seen, finding):
+                findings.append(finding)
         return findings
 
     def _sort_direction_findings(
@@ -2309,6 +2427,51 @@ class LocalConsistencyChecker(BaseChecker):
             )
         return findings
 
+    def _function_length_range_findings(self, unit: ContentUnit) -> list[Finding]:
+        """Сравнивает числовые требования к размеру функций между README и материалами."""
+
+        ranges: list[tuple[tuple[int, int], str, int, str]] = []
+        for file in unit.files:
+            if not self._is_instruction_file(file):
+                continue
+            for line_number, text in enumerate(file.text.splitlines(), start=1):
+                if not self.FUNCTION_CONTEXT_RE.search(text):
+                    continue
+                for match in self.FUNCTION_LENGTH_RANGE_RE.finditer(text):
+                    start = int(match.group("start"))
+                    end = int(match.group("end"))
+                    if start > end:
+                        start, end = end, start
+                    ranges.append(((start, end), file.relative_path, line_number, text.strip()))
+        if len({item[0] for item in ranges}) < 2:
+            return []
+
+        first = ranges[0]
+        second = next(item for item in ranges[1:] if item[0] != first[0])
+        quote = f"{first[3][:140]} / {second[3][:140]}"
+        return [
+            self._build_finding(
+                unit,
+                second[1],
+                second[2],
+                second[2],
+                quote,
+                "function_length_range_conflict",
+                (
+                    f"В разных материалах указаны разные ограничения размера функции: "
+                    f"{first[0][0]}-{first[0][1]} строк и {second[0][0]}-{second[0][1]} строк."
+                ),
+                "Оставить одно ограничение размера функции и синхронизировать README, материалы и чек-лист.",
+                0.88,
+                extra={
+                    "first_file": first[1],
+                    "first_line": first[2],
+                    "first_range": list(first[0]),
+                    "second_range": list(second[0]),
+                },
+            )
+        ]
+
     def _sections(self, lines: list[tuple[int, str]]) -> Iterable[list[tuple[int, str]]]:
         """Разбивает README на разделы по Markdown-заголовкам."""
 
@@ -2395,6 +2558,12 @@ class LocalConsistencyChecker(BaseChecker):
 
         name = Path(file.relative_path).name.lower()
         return file.kind == "readme" or name.startswith("readme")
+
+    def _is_instruction_file(self, file: ContentFile) -> bool:
+        """Берёт README и методические материалы, где могут расходиться требования."""
+
+        name = Path(file.relative_path).name.lower()
+        return file.kind in {"readme", "material", "text"} or name.endswith((".md", ".txt"))
 
     def _build_finding(
         self,
@@ -2717,6 +2886,8 @@ success_metrics=true ставь только если есть бизнес-ме
     def check(self, unit: ContentUnit, entities: list[ExtractedEntity], context: CheckContext) -> list[Finding]:
         del entities
         signals = _market_fit_signals(unit, self.signal_patterns)
+        if _market_fit_signal_count(signals) == 0:
+            return []
         finding = self._finding_from_signals(unit, signals, model_item=None, record=None, cache_hit=False)
         if context.model_client is None or finding.verdict == Verdict.PASS:
             return [finding]
@@ -3247,15 +3418,16 @@ class CurriculumRelevanceChecker(BaseChecker):
     allowed_criteria = {Criterion.CORRECTNESS, Criterion.ACTUALITY}
     min_confidence_by_issue_type = {
         "language_material_conflict": 0.62,
+        "language_tooling_conflict": 0.62,
         "inappropriate_tool": 0.65,
         "outdated_approach": 0.72,
         "missing_key_topic": 0.74,
+        "absolute_practice_claim": 0.7,
     }
     review_terms = (
-        "C++ code style",
+        "C++ code style in Java or C# project",
         "ASP.NET",
-        "Makefile",
-        "Google C++ style",
+        "Google C++ style in non-C++ project",
         "C99",
         "C11",
         "finite state machine",
@@ -3281,9 +3453,10 @@ class CurriculumRelevanceChecker(BaseChecker):
     SYSTEM_PROMPT = """Ты эксперт-методолог и проверяешь учебный проект на уместность технологий, подходов и ключевых тем.
 Верни только JSON: {"findings":[{"criterion":"correctness|actuality","issue_type":"inappropriate_tool|outdated_approach|language_material_conflict|missing_key_topic","severity":"info|minor|major","verdict":"warning|fail|unknown","confidence":0.0,"quote":"","file_path":"","line_start":1,"evidence":"","recommendation":""}]}.
 Ищи только методические проблемы, которые требуют внимания: инструмент не подходит цели курса; подход устарел именно как учебная практика; рекомендованный материал противоречит языку проекта; в задании не хватает ключевой темы, без которой студент не поймёт ожидаемое решение.
-Особенно проверь: C++ code style в Java, ASP.NET в Java, Google C++ style для C, C99/C11, finite state machine, debugger, unsigned types, define/include/preprocessor.
+Особенно проверь: C++ code style в Java или C#, ASP.NET в Java, C99/C11, finite state machine, debugger, unsigned types, define/include/preprocessor.
 Не проверяй битые ссылки, версии библиотек, права, язык перевода, орфографию, чек-лист и обычную фактологию: для этого есть отдельные модули.
 Если проблема только в том, что есть более новая версия библиотеки или языка, не создавай находку.
+Не создавай находку только из-за обычного упоминания Makefile, Google C++ Style Guide, debugger, include или preprocessor; нужна явная методическая несовместимость с языком, целью задания или ожидаемым способом решения.
 Не ставь severity='critical'. Если убедительной проблемы нет, верни пустой список findings.
 Все пояснения и рекомендации пиши на русском языке."""
 
@@ -3337,6 +3510,7 @@ class CurriculumRelevanceChecker(BaseChecker):
                 if not stripped:
                     continue
                 signals.extend(self._line_signals(unit, file.relative_path, line_number, stripped, language_hints))
+        signals.extend(self._unit_topic_signals(unit, language_hints))
         return self._dedupe_signals(signals)
 
     def _line_signals(
@@ -3353,8 +3527,8 @@ class CurriculumRelevanceChecker(BaseChecker):
         line_languages = self._line_language_hints(line)
         effective_languages = language_hints | line_languages
         signals: list[dict[str, object]] = []
-        if self.CPP_STYLE_RE.search(line) and {"java", "c"} & effective_languages:
-            target_language = "Java" if "java" in effective_languages else "C"
+        if self.CPP_STYLE_RE.search(line) and "java" in effective_languages:
+            target_language = "Java"
             signals.append(
                 self._signal(
                     "language_material_conflict",
@@ -3365,6 +3539,20 @@ class CurriculumRelevanceChecker(BaseChecker):
                     Severity.MAJOR if target_language == "Java" else Severity.MINOR,
                     f"Рекомендован C++ style guide, хотя проект относится к {target_language}.",
                     "Заменить рекомендацию на стиль и материалы для фактического языка проекта.",
+                    strong=True,
+                )
+            )
+        if self.CPP_STYLE_RE.search(line) and "c" in effective_languages and "cpp" not in effective_languages:
+            signals.append(
+                self._signal(
+                    "language_material_conflict",
+                    file_path,
+                    line_number,
+                    line,
+                    Criterion.CORRECTNESS,
+                    Severity.MINOR,
+                    "В задании по C рекомендован Google C++ Style Guide; это не стандартный ориентир для C.",
+                    "Заменить рекомендацию на согласованный стиль для C или явно объяснить, почему выбран C++ style guide.",
                     strong=True,
                 )
             )
@@ -3391,7 +3579,7 @@ class CurriculumRelevanceChecker(BaseChecker):
                     line,
                     Criterion.CORRECTNESS,
                     Severity.MINOR,
-                    "Для Java-проекта Makefile как обязательный способ сборки требует отдельного методического обоснования.",
+                    "В Java-проекте сборка задана через Makefile без объяснения, почему не используется стандартный Java-инструмент сборки.",
                     "Проверить, почему не используется стандартный для Java инструмент сборки вроде Maven или Gradle, либо явно объяснить учебную причину Makefile.",
                     strong=True,
                 )
@@ -3422,6 +3610,94 @@ class CurriculumRelevanceChecker(BaseChecker):
                     "Строка содержит тему из методического списка наблюдения.",
                     "Проверить, что тема уместна для цели задания и раскрыта на достаточном уровне.",
                     strong=False,
+                )
+            )
+        if re.search(r"(?i)(?:отказаться\s+от\s+использования|avoid|never\s+use).{0,80}\bgoto\b", line):
+            signals.append(
+                self._signal(
+                    "absolute_practice_claim",
+                    file_path,
+                    line_number,
+                    line,
+                    Criterion.CORRECTNESS,
+                    Severity.MINOR,
+                    "Материал формулирует отказ от goto как абсолютное правило; для учебного контекста C это требует пояснения, а не категоричного запрета.",
+                    "Смягчить формулировку: объяснить, почему goto ограничивают в структурном программировании и в каких случаях он встречается в реальном C-коде.",
+                    strong=True,
+                )
+            )
+        return signals
+
+    def _unit_topic_signals(self, unit: ContentUnit, language_hints: set[str]) -> list[dict[str, object]]:
+        """Создаёт сигналы по отсутствующим ключевым темам, когда в проекте есть явные предпосылки."""
+
+        if "c" not in language_hints:
+            return []
+        instruction_text = "\n".join(
+            file.text for file in unit.files if self._is_instruction_file(file)
+        )
+        code_text = self._code_sample_text(unit)
+        combined = f"{instruction_text}\n{code_text}"
+        signals: list[dict[str, object]] = []
+        anchor = self._first_instruction_anchor(unit)
+        if anchor is None:
+            return []
+        file_path, line_number, quote = anchor
+
+        if self._uses_preprocessor(code_text) and not self._explains_preprocessor(instruction_text):
+            signals.append(
+                self._signal(
+                    "missing_key_topic",
+                    file_path,
+                    line_number,
+                    quote,
+                    Criterion.CORRECTNESS,
+                    Severity.MINOR,
+                    "В проекте используются `#define`/`#include`, но в учебном тексте нет отдельного объяснения препроцессора и директив.",
+                    "Добавить короткое объяснение `#define`, `#include` и роли препроцессора перед заданиями, где они используются.",
+                    strong=True,
+                )
+            )
+        if self._looks_like_c_data_types_project(instruction_text) and not self._mentions_unsigned_types(instruction_text):
+            signals.append(
+                self._signal(
+                    "missing_key_topic",
+                    file_path,
+                    line_number,
+                    quote,
+                    Criterion.CORRECTNESS,
+                    Severity.MINOR,
+                    "Проект знакомит с числовыми типами C, но не упоминает беззнаковые типы данных.",
+                    "Добавить пример или пояснение по `unsigned`-типам и ограничениям их применения.",
+                    strong=True,
+                )
+            )
+        if self._looks_like_step_by_step_c_intro(instruction_text) and not self._mentions_debugger(instruction_text):
+            signals.append(
+                self._signal(
+                    "missing_key_topic",
+                    file_path,
+                    line_number,
+                    quote,
+                    Criterion.CORRECTNESS,
+                    Severity.INFO,
+                    "В вводном C-проекте нет упоминания отладчика, хотя задания требуют понимать выполнение программы по шагам.",
+                    "Добавить краткую подсказку по использованию отладчика или отдельное упражнение на пошаговый разбор программы.",
+                    strong=True,
+                )
+            )
+        if self._looks_like_console_game_project(combined) and not self._mentions_state_machine(instruction_text):
+            signals.append(
+                self._signal(
+                    "missing_key_topic",
+                    file_path,
+                    line_number,
+                    quote,
+                    Criterion.CORRECTNESS,
+                    Severity.INFO,
+                    "В проекте с интерактивной логикой/игрой нет пояснения про конечный автомат.",
+                    "Добавить описание конечного автомата как способа моделировать состояния игры или интерактивной программы.",
+                    strong=True,
                 )
             )
         return signals
@@ -3564,6 +3840,8 @@ class CurriculumRelevanceChecker(BaseChecker):
         verdict = _verdict_from_model_value(item.get("verdict"), Verdict.UNKNOWN)
         if verdict == Verdict.PASS:
             return True
+        if self._is_tooling_mention_without_curriculum_conflict(item):
+            return True
         confidence = _parse_confidence(item.get("confidence"))
         issue_type = _model_text(item, ("issue_type",), "methodology")
         threshold = self.min_confidence_by_issue_type.get(issue_type, self.min_model_confidence)
@@ -3573,6 +3851,25 @@ class CurriculumRelevanceChecker(BaseChecker):
             _optional_model_text(item.get(key))
             for key in ("quote", "evidence", "reason", "explanation", "recommendation", "suggestion")
         )
+
+    def _is_tooling_mention_without_curriculum_conflict(self, item: dict[str, Any]) -> bool:
+        """Отбрасывает модельные строки, где инструмент просто упомянут без конфликта."""
+
+        issue_type = _model_text(item, ("issue_type",), "methodology")
+        if issue_type not in {
+            "inappropriate_tool",
+            "outdated_approach",
+            "language_material_conflict",
+            "language_tooling_conflict",
+        }:
+            return False
+        text = " ".join(
+            _optional_model_text(item.get(key)) or ""
+            for key in ("quote", "evidence", "reason", "explanation", "recommendation", "suggestion")
+        ).lower()
+        if "makefile" in text or "google c++ style" in text or "cppguide" in text:
+            return not any(marker in text for marker in (" java", "java-", "asp.net", "c#"))
+        return False
 
     def _dedupe_key(self, finding: Finding) -> tuple[str, int, str, str]:
         """Ключ для удаления дублей между правилами и моделью."""
@@ -3658,6 +3955,94 @@ class CurriculumRelevanceChecker(BaseChecker):
             hints.add("csharp")
         return hints
 
+    def _code_sample_text(self, unit: ContentUnit) -> str:
+        """Собирает небольшой срез C-кода, чтобы понять, какие темы реально используются."""
+
+        chunks: list[str] = []
+        for file in unit.files:
+            if Path(file.relative_path).suffix.lower() in {".c", ".h"}:
+                chunks.append(file.text[:2000])
+        if chunks:
+            return "\n".join(chunks)
+        for path in sorted(unit.root_path.rglob("*")):
+            if not path.is_file() or path.suffix.lower() not in {".c", ".h"}:
+                continue
+            try:
+                if path.stat().st_size > 300_000:
+                    continue
+                chunks.append(path.read_text(encoding="utf-8", errors="ignore")[:2000])
+            except OSError:
+                continue
+            if len(chunks) >= 20:
+                break
+        return "\n".join(chunks)
+
+    def _first_instruction_anchor(self, unit: ContentUnit) -> tuple[str, int, str] | None:
+        """Возвращает первую содержательную строку README как привязку для общих методических сигналов."""
+
+        for file in sorted(unit.files, key=lambda item: _model_context_priority(item.kind, item.relative_path)):
+            if not self._is_instruction_file(file):
+                continue
+            for line_number, line in enumerate(file.text.splitlines(), start=1):
+                stripped = line.strip()
+                if stripped and not stripped.startswith("#"):
+                    return file.relative_path, line_number, stripped[:320]
+        return None
+
+    def _uses_preprocessor(self, code_text: str) -> bool:
+        """Проверяет, используются ли в кодовых примерах директивы препроцессора."""
+
+        return bool(re.search(r"(?m)^\s*#\s*(?:define|include)\b", code_text))
+
+    def _explains_preprocessor(self, instruction_text: str) -> bool:
+        """Отличает простое наличие `#include` в требовании от пояснения темы препроцессора."""
+
+        lowered = instruction_text.lower()
+        if re.search(r"препроцесс|preprocessor|pre-processor|директив[аы]\s+препроцесс", lowered):
+            return True
+        return bool(re.search(r"(?:что\s+такое|what\s+is|explain|объясн).{0,80}(?:#?\s*define|#?\s*include)", lowered))
+
+    def _looks_like_c_data_types_project(self, instruction_text: str) -> bool:
+        """Ищет признаки вводного проекта по типам данных C."""
+
+        lowered = instruction_text.lower()
+        return bool(
+            re.search(r"\b(int|char|float|double)\b", lowered)
+            and re.search(r"(тип(?:ы|ах)?\s+данных|data\s+types?|числ\w*\s+тип|number\s+types?)", lowered)
+        )
+
+    def _mentions_unsigned_types(self, instruction_text: str) -> bool:
+        """Проверяет, раскрыты ли беззнаковые типы."""
+
+        return bool(re.search(r"\bunsigned\b|беззнаков\w*", instruction_text, re.IGNORECASE))
+
+    def _looks_like_step_by_step_c_intro(self, instruction_text: str) -> bool:
+        """Находит вводный C-проект с несколькими заданиями и компиляцией."""
+
+        lowered = instruction_text.lower()
+        return bool(
+            ("gcc" in lowered or "компил" in lowered)
+            and len(re.findall(r"\b(?:quest|task|exercise|задани[ея])\s*0?\d+", lowered)) >= 3
+        )
+
+    def _mentions_debugger(self, instruction_text: str) -> bool:
+        """Проверяет, есть ли в материале отладчик или пошаговое выполнение."""
+
+        return bool(re.search(r"\bdebugger\b|\bgdb\b|отладчик\w*|пошагов\w*\s+выполн", instruction_text, re.IGNORECASE))
+
+    def _looks_like_console_game_project(self, text: str) -> bool:
+        """Определяет задания с простой интерактивной игрой или символьной графикой."""
+
+        return bool(
+            re.search(r"\b(game|pong|console\s+graphics|symbolic\s+graphics|ascii\s+graphics)\b", text, re.IGNORECASE)
+            or re.search(r"символьн\w*\s+график|консольн\w*\s+игр|игр[ауы]\s+.+(?:клавиатур|управлен)", text, re.IGNORECASE)
+        )
+
+    def _mentions_state_machine(self, instruction_text: str) -> bool:
+        """Проверяет, упоминается ли конечный автомат."""
+
+        return bool(re.search(r"finite\s+state\s+machine|state\s+machine|конечн\w*\s+автомат", instruction_text, re.IGNORECASE))
+
     def _is_instruction_file(self, file: ContentFile) -> bool:
         """Ограничивает проверку методическими и заданческими материалами."""
 
@@ -3716,6 +4101,8 @@ class ModelRubricChecker(BaseChecker):
             finding = _finding_from_model_item(unit, self.name, item, self.prompt_version)
             if finding.criterion not in MODEL_RUBRIC_ALLOWED_CRITERIA:
                 continue
+            if not _is_actionable_model_rubric_finding(finding):
+                continue
             findings.append(finding)
         return findings
 
@@ -3737,7 +4124,6 @@ def default_checkers(
         ResourceAvailabilityChecker(),
         LinkChecker(),
         LocalLinkChecker(),
-        ReadabilityChecker(),
         LanguageCoverageChecker(),
         ExamPresenceChecker(),
         ImageQualityChecker(),
@@ -3746,11 +4132,11 @@ def default_checkers(
         DependencyFreshnessChecker(),
         RegionalAvailabilityChecker(),
         TechFreshnessChecker(),
+        CurriculumRelevanceChecker(),
     ]
     if use_model:
         checkers.append(ReadmeFactActualityChecker())
         checkers.append(FactCheckerPerplexity())
-        checkers.append(CurriculumRelevanceChecker())
         checkers.append(ModelRubricChecker())
     return checkers
 
@@ -4057,6 +4443,12 @@ def _merge_market_signals(
     return merged
 
 
+def _market_fit_signal_count(signals: dict[str, dict[str, object]]) -> int:
+    """Считает найденные прикладные сигналы без модельной догадки."""
+
+    return sum(1 for item in signals.values() if bool(item.get("present")))
+
+
 def _market_fit_verdict(score: int) -> tuple[Verdict, Severity]:
     """Назначает базовый вердикт по трём под-оценкам."""
 
@@ -4261,9 +4653,16 @@ def _extract_fact_claims(unit: ContentUnit, limit: int) -> list[dict[str, Any]]:
     for file in ordered_files:
         if file.kind not in {"readme", "material", "text"}:
             continue
+        in_task_section = False
         for line_number, line in enumerate(file.text.splitlines(), start=1):
+            stripped = line.strip()
+            if file.kind == "readme":
+                if README_THEORY_SECTION_RE.search(stripped):
+                    in_task_section = False
+                elif README_TASK_SECTION_RE.search(stripped):
+                    in_task_section = True
             for candidate in _split_claim_line(line):
-                if _is_markdown_navigation_claim(candidate):
+                if _is_factcheck_noise_line(candidate, in_task_section):
                     continue
                 claim = _clean_claim_text(candidate)
                 key = normalize_for_match(claim)
@@ -4305,13 +4704,27 @@ def _looks_like_fact_claim(value: str) -> bool:
         return False
     if lowered.startswith(("http://", "https://", "![", "[")):
         return False
-    if _is_markdown_navigation_claim(value):
-        return False
-    if _is_requirement_claim(value):
+    if _is_factcheck_noise_line(value, in_task_section=False):
         return False
     if len(re.findall(r"\w+", value, flags=re.UNICODE)) < 5:
         return False
     return bool(FACT_DATE_RE.search(value) or FACT_MARKER_RE.search(value) or any(keyword in lowered for keyword in TECH_KEYWORDS))
+
+
+def _is_factcheck_noise_line(value: str, in_task_section: bool) -> bool:
+    """Отсекает строки, которые не являются внешне проверяемым фактом."""
+
+    stripped = value.strip()
+    if not stripped or in_task_section:
+        return True
+    if stripped.startswith("#") or MARKDOWN_TABLE_ROW_RE.match(stripped):
+        return True
+    if README_FEEDBACK_LINE_RE.search(stripped) or README_EXERCISE_OPTION_RE.match(stripped):
+        return True
+    if _is_markdown_navigation_claim(stripped) or _is_reference_pointer_claim(stripped):
+        return True
+    claim = _clean_claim_text(stripped)
+    return _is_requirement_claim(claim) or _is_local_project_spec_claim(claim)
 
 
 def _is_markdown_navigation_claim(value: str) -> bool:
@@ -4323,11 +4736,32 @@ def _is_markdown_navigation_claim(value: str) -> bool:
     return len(re.findall(r"\w+", without_links, flags=re.UNICODE)) <= 3
 
 
+def _is_reference_pointer_claim(value: str) -> bool:
+    """Отсекает короткие указатели на внешнюю ссылку без самостоятельного утверждения."""
+
+    if not REFERENCE_POINTER_RE.search(value):
+        return False
+    without_links = REFERENCE_POINTER_RE.sub("", value)
+    return len(re.findall(r"\w+", without_links, flags=re.UNICODE)) <= 6
+
+
 def _is_requirement_claim(value: str) -> bool:
     """Отсекаем требования курса: их нужно оценивать рубрикой, а не внешним фактчеком."""
 
     lowered = f" {value.lower()} "
-    return any(marker in lowered for marker in REQUIREMENT_CLAIM_MARKERS)
+    return (
+        any(marker in lowered for marker in REQUIREMENT_CLAIM_MARKERS)
+        or bool(LEAD_IMPERATIVE_RE.search(value))
+        or bool(SECOND_PERSON_RE.search(value))
+    )
+
+
+def _is_local_project_spec_claim(value: str) -> bool:
+    """Отсекает локальные требования проекта: их нельзя проверять внешним фактчеком."""
+
+    if FACT_DATE_RE.search(value):
+        return False
+    return bool(LOCAL_PROJECT_SPEC_RE.search(value))
 
 
 def _fact_check_prompt(claim: dict[str, Any]) -> str:
@@ -4392,11 +4826,7 @@ def _readme_fact_candidate_lines(lines: list[str]) -> list[tuple[int, str]]:
 def _is_readme_fact_candidate_line(line: str, in_task_section: bool) -> bool:
     """Отсекает учебные инструкции, дистракторы и локальные требования проекта."""
 
-    if not line or in_task_section:
-        return False
-    if line.startswith("#") or README_FEEDBACK_LINE_RE.search(line):
-        return False
-    if _is_markdown_navigation_claim(line) or README_EXERCISE_OPTION_RE.match(line):
+    if _is_factcheck_noise_line(line, in_task_section):
         return False
     claim = _clean_claim_text(line)
     if _looks_like_fact_claim(claim):
@@ -5052,6 +5482,18 @@ def _finding_from_model_item(
         source=_source_summary(sources),
         prompt_version=prompt_version,
     )
+
+
+def _is_actionable_model_rubric_finding(finding: Finding) -> bool:
+    """Отсекает общие advisory-ответы модели без конкретного проверяемого места."""
+
+    if finding.verdict == Verdict.UNKNOWN:
+        return False
+    if finding.confidence < 0.7:
+        return False
+    if finding.location is None and not finding.quote:
+        return False
+    return True
 
 
 def _enum_or_default(enum_class: type, value: object, default: object) -> object:

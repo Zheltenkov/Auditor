@@ -1,0 +1,5 @@
+﻿slice_name,label,predicted_total,true_positive,false_positive,precision,false_positive_share
+deterministic_rules,Детерминированные правила,9,8,1,0.8889,0.0179
+editorial_rules,Редакторские правила,46,6,40,0.1304,0.7143
+factcheck,Фактчек и актуальность,15,1,14,0.0667,0.25
+methodology,Методические критерии,1,0,1,0.0,0.0179

@@ -4,8 +4,25 @@ from datetime import datetime, timezone
 
 from openpyxl import Workbook
 
-from content_audit.corpus_evaluation import _split_gold_detail_cases, evaluate_corpus_report, write_corpus_evaluation
-from content_audit.domain import AuditReport, ContentUnit, Criterion, Evidence, Finding, RunSummary, Severity, TextLocation, Verdict
+from content_audit.corpus_evaluation import (
+    CorpusEvaluationMatch,
+    _classify_false_negative,
+    _split_gold_detail_cases,
+    evaluate_corpus_report,
+    write_corpus_evaluation,
+)
+from content_audit.domain import (
+    AuditReport,
+    ContentUnit,
+    Criterion,
+    Evidence,
+    Finding,
+    ModelUsageSummary,
+    RunSummary,
+    Severity,
+    TextLocation,
+    Verdict,
+)
 
 
 def test_corpus_evaluation_matches_projects_and_computes_metrics(workspace_tmp_path) -> None:
@@ -28,7 +45,12 @@ def test_corpus_evaluation_matches_projects_and_computes_metrics(workspace_tmp_p
     workbook.save(gold_path)
 
     report = AuditReport(
-        summary=RunSummary(started_at=datetime.now(timezone.utc), input_path=str(workspace_tmp_path)),
+        summary=RunSummary(
+            started_at=datetime.now(timezone.utc),
+            input_path=str(workspace_tmp_path),
+            findings_total=4,
+            model_usage=ModelUsageSummary(calls_total=2, cache_hits=1, total_tokens=1200, cost_usd=0.24),
+        ),
         units=[
             ContentUnit(
                 unit_id="ap1_go_t01__abc",
@@ -127,6 +149,17 @@ def test_corpus_evaluation_matches_projects_and_computes_metrics(workspace_tmp_p
     assert missed.found_text == ""
     assert "не найдено подходящей ошибки" in missed.reason
     assert summary.detailed_false_positive_items == []
+    assert summary.actionable_metrics is not None
+    assert summary.actionable_metrics.predicted_total == 3
+    assert summary.actionable_metrics.true_positive == 3
+    assert summary.actionable_metrics.precision == 1.0
+    assert summary.cost_quality is not None
+    assert summary.cost_quality.cost_per_gold_true_positive == 0.08
+    assert summary.cost_quality.cost_per_prediction == 0.06
+    assert summary.checker_metrics[0].slice_name == "test"
+    assert summary.checker_group_metrics[0].slice_name == "other"
+    assert summary.false_negative_reason_counts == {"deterministic_possible": 1}
+    assert summary.false_negative_analysis[0].reason_code == "deterministic_possible"
 
     output_dir = workspace_tmp_path / "evaluation"
     write_corpus_evaluation(summary, output_dir)
@@ -137,6 +170,9 @@ def test_corpus_evaluation_matches_projects_and_computes_metrics(workspace_tmp_p
     assert "тип совпадения" in main_csv
     assert "причина, почему засчитали" in main_csv
     assert (output_dir / "corpus_evaluation_overview_by_criterion.csv").exists()
+    assert (output_dir / "corpus_evaluation_by_checker.csv").exists()
+    assert (output_dir / "corpus_evaluation_by_checker_group.csv").exists()
+    assert (output_dir / "corpus_false_negative_analysis.csv").exists()
 
 
 def test_corpus_evaluation_splits_only_real_gold_defects() -> None:
@@ -170,6 +206,30 @@ def test_corpus_evaluation_does_not_treat_review_list_number_as_source_line() ->
     assert cases[1]["line_start"] is None
     assert cases[2]["line_start"] == 101
     assert cases[2]["line_end"] == 110
+
+
+def test_false_negative_classifier_does_not_treat_weak_criterion_match_as_near_miss() -> None:
+    match = CorpusEvaluationMatch(
+        project="AP1_Go_T01",
+        project_id="ap1",
+        criterion="readability",
+        label="Грамотность и читаемость текста",
+        gold_row_number=2,
+        gold_line_range="119",
+        gold_text="119 - Input operation без двоеточия",
+        found_finding_id="fnd_other",
+        found_checker="tech_freshness_checker",
+        found_line_range="README.md:50",
+        found_text="Нерелевантная находка того же критерия",
+        match_type="criterion_only",
+        match_score=0.2,
+        counted=False,
+        reason="Совпал только критерий.",
+    )
+
+    reason_code, _label, _next_step = _classify_false_negative(match)
+
+    assert reason_code == "deterministic_possible"
 
 
 def test_corpus_evaluation_matches_missing_artifact_command_output(workspace_tmp_path) -> None:

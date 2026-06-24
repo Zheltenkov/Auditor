@@ -1,0 +1,7 @@
+﻿criterion,label,gold_total,predicted_total,true_positive,false_positive,false_negative,precision,recall,f1_score
+actuality,Актуальность,0,1,0,1,0,0.0,0.0,0.0
+checklist_alignment,Соответствие заданий проекта чек-листу,1,1,1,0,0,1.0,1.0,1.0
+correctness,Точность и корректность,0,1,0,1,0,0.0,0.0,0.0
+image_quality,Качество изображений,0,1,0,1,0,0.0,0.0,0.0
+readability,Грамотность и читаемость текста,0,1,0,1,0,0.0,0.0,0.0
+rights,Оригинальность и права использования ресурсов,0,1,0,1,0,0.0,0.0,0.0

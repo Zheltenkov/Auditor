@@ -1,0 +1,76 @@
+{
+  "started_at": "2026-06-23T19:34:55.678547Z",
+  "finished_at": "2026-06-23T19:34:56.028628Z",
+  "input_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-34-53\\BSA13_RequirementsManagements.ID_1361460-master",
+  "units_total": 1,
+  "files_total": 8,
+  "findings_total": 17,
+  "affected_units_total": 1,
+  "by_severity": {
+    "minor": 11,
+    "info": 6
+  },
+  "by_criterion": {
+    "image_quality": 2,
+    "actuality": 6,
+    "market_fit": 1,
+    "readability": 6,
+    "rights": 1,
+    "checklist_alignment": 1
+  },
+  "by_branch": {
+    "BSA13_RequirementsManagements.ID_1361460-master": 17
+  },
+  "by_unit": {
+    "bsa13_requirementsmanagements_id_1361460_master__a41877f1": 17
+  },
+  "model_usage": {
+    "calls_total": 0,
+    "cache_hits": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "total_tokens": 0,
+    "cost_usd": 0.0,
+    "by_model": {}
+  },
+  "prompt_versions": {},
+  "steps": [
+    {
+      "name": "Загрузка файлов",
+      "status": "ok",
+      "started_at": "2026-06-23T19:34:55.678550Z",
+      "finished_at": "2026-06-23T19:34:55.690921Z",
+      "duration_ms": 12,
+      "detail": "Единиц: 1"
+    },
+    {
+      "name": "Подготовка проверок",
+      "status": "ok",
+      "started_at": "2026-06-23T19:34:55.690950Z",
+      "finished_at": "2026-06-23T19:34:55.698055Z",
+      "duration_ms": 7,
+      "detail": "Модулей: 19, совпадений кода: 0"
+    },
+    {
+      "name": "Извлечение и проверки",
+      "status": "ok",
+      "started_at": "2026-06-23T19:34:55.698089Z",
+      "finished_at": "2026-06-23T19:34:56.026724Z",
+      "duration_ms": 328,
+      "detail": "Сущностей: 24"
+    },
+    {
+      "name": "Сборка отчёта",
+      "status": "ok",
+      "started_at": "2026-06-23T19:34:56.026759Z",
+      "finished_at": "2026-06-23T19:34:56.028573Z",
+      "duration_ms": 1,
+      "detail": "Случаев: 17"
+    }
+  ],
+  "model_used": false,
+  "network_used": false,
+  "warnings": [
+    "Постобработка: 9 языковых дублей схлопнуты в базовые строки."
+  ]
+}

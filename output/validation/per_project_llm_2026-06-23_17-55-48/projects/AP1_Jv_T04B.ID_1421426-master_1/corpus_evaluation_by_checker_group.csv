@@ -1,0 +1,4 @@
+﻿slice_name,label,predicted_total,true_positive,false_positive,precision,false_positive_share
+editorial_rules,Редакторские правила,17,0,17,0.0,0.7391
+factcheck,Фактчек и актуальность,5,0,5,0.0,0.2174
+methodology,Методические критерии,1,0,1,0.0,0.0435

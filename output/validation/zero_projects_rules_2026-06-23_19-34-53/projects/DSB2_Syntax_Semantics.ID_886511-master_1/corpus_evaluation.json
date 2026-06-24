@@ -1,0 +1,495 @@
+{
+  "evaluated_criteria": [
+    "readability"
+  ],
+  "gold_total": 6,
+  "predicted_total": 1,
+  "true_positive": 0,
+  "false_positive": 1,
+  "false_negative": 6,
+  "precision": 0.0,
+  "recall": 0.0,
+  "f1_score": 0.0,
+  "macro_precision": 0.0,
+  "macro_recall": 0.0,
+  "macro_f1_score": 0.0,
+  "overview_gold_total": 1,
+  "overview_predicted_total": 6,
+  "overview_true_positive": 1,
+  "overview_false_positive": 5,
+  "overview_false_negative": 0,
+  "overview_precision": 0.1667,
+  "overview_recall": 1.0,
+  "overview_f1_score": 0.2858,
+  "overview_macro_precision": 0.1667,
+  "overview_macro_recall": 0.1667,
+  "overview_macro_f1_score": 0.1667,
+  "gold_scope_predicted_total": 1,
+  "gold_scope_true_positive": 0,
+  "gold_scope_false_positive": 1,
+  "gold_scope_false_negative": 6,
+  "gold_scope_precision": 0.0,
+  "gold_scope_recall": 0.0,
+  "gold_scope_f1_score": 0.0,
+  "gold_scope_macro_precision": 0.0,
+  "gold_scope_macro_recall": 0.0,
+  "gold_scope_macro_f1_score": 0.0,
+  "per_criterion": [
+    {
+      "criterion": "readability",
+      "label": "Грамотность и читаемость текста",
+      "gold_total": 6,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 6,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    }
+  ],
+  "overview_per_criterion": [
+    {
+      "criterion": "actuality",
+      "label": "Актуальность",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "checklist_alignment",
+      "label": "Соответствие заданий проекта чек-листу",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "market_fit",
+      "label": "Соответствие рынку",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "readability",
+      "label": "Грамотность и читаемость текста",
+      "gold_total": 1,
+      "predicted_total": 1,
+      "true_positive": 1,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0
+    },
+    {
+      "criterion": "rights",
+      "label": "Оригинальность и права использования ресурсов",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    }
+  ],
+  "checker_metrics": [
+    {
+      "slice_name": "spelling_wording_checker",
+      "label": "spelling_wording_checker",
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "precision": 0.0,
+      "false_positive_share": 1.0
+    }
+  ],
+  "checker_group_metrics": [
+    {
+      "slice_name": "editorial_rules",
+      "label": "Редакторские правила",
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "precision": 0.0,
+      "false_positive_share": 1.0
+    }
+  ],
+  "actionable_metrics": {
+    "slice_name": "actionable",
+    "label": "Действенные находки",
+    "predicted_total": 1,
+    "true_positive": 0,
+    "false_positive": 1,
+    "precision": 0.0,
+    "false_positive_share": 1.0
+  },
+  "cost_quality": {
+    "model_calls": 0,
+    "cache_hits": 0,
+    "total_tokens": 0,
+    "cost_usd": 0.0,
+    "cost_per_gold_true_positive": null,
+    "cost_per_prediction": 0.0,
+    "cost_per_actionable_true_positive": null
+  },
+  "false_negative_reason_counts": {
+    "deterministic_possible": 5,
+    "out_of_scope_or_needs_review": 1
+  },
+  "false_negative_analysis": [
+    {
+      "project": "DSB2_Syntax_Semantics.ID_886511-master",
+      "project_id": "dsb2_syntax_semantics_id_886511_master__c68318a6",
+      "criterion": "readability",
+      "label": "Грамотность и читаемость текста",
+      "gold_line_range": "",
+      "gold_text": "Опечатка в упражнении 08, DSB2",
+      "nearest_finding_id": "fnd_3819514acb7e",
+      "nearest_checker": "spelling_wording_checker",
+      "nearest_match_type": "criterion_only",
+      "nearest_score": 0.2323,
+      "reason_code": "deterministic_possible",
+      "reason_label": "Можно ловить правилом",
+      "next_step": "Добавить или расширить детерминированный чекер с тестом на этот паттерн."
+    },
+    {
+      "project": "DSB2_Syntax_Semantics.ID_886511-master",
+      "project_id": "dsb2_syntax_semantics_id_886511_master__c68318a6",
+      "criterion": "readability",
+      "label": "Грамотность и читаемость текста",
+      "gold_line_range": "",
+      "gold_text": ":small_blue_diamond: Description: Проект DSB2_Syntax&Semantics, упражнение 08.",
+      "nearest_finding_id": "fnd_3819514acb7e",
+      "nearest_checker": "spelling_wording_checker",
+      "nearest_match_type": "criterion_only",
+      "nearest_score": 0.15,
+      "reason_code": "deterministic_possible",
+      "reason_label": "Можно ловить правилом",
+      "next_step": "Добавить или расширить детерминированный чекер с тестом на этот паттерн."
+    },
+    {
+      "project": "DSB2_Syntax_Semantics.ID_886511-master",
+      "project_id": "dsb2_syntax_semantics_id_886511_master__c68318a6",
+      "criterion": "readability",
+      "label": "Грамотность и читаемость текста",
+      "gold_line_range": "",
+      "gold_text": "Следуя условию задачи, получаем таблицу с полем Name, где имена записаны на латинице. По заданию требуется создать скрипт, который будет возвращать первый абзац письма: Иван, добро пожаловать ... В письме имя написано уже на русском. Перевод имени с латиницы на русский по заданию не требуется.",
+      "nearest_finding_id": "fnd_3819514acb7e",
+      "nearest_checker": "spelling_wording_checker",
+      "nearest_match_type": "criterion_only",
+      "nearest_score": 0.2308,
+      "reason_code": "out_of_scope_or_needs_review",
+      "reason_label": "Требуется ручной разбор области применимости",
+      "next_step": "Решить, должна ли локальная проверка ловить этот класс ошибок."
+    },
+    {
+      "project": "DSB2_Syntax_Semantics.ID_886511-master",
+      "project_id": "dsb2_syntax_semantics_id_886511_master__c68318a6",
+      "criterion": "readability",
+      "label": "Грамотность и читаемость текста",
+      "gold_line_range": "",
+      "gold_text": "Исправить нумерацию задач на 1, 2, 3.",
+      "nearest_finding_id": "fnd_3819514acb7e",
+      "nearest_checker": "spelling_wording_checker",
+      "nearest_match_type": "criterion_only",
+      "nearest_score": 0.2,
+      "reason_code": "deterministic_possible",
+      "reason_label": "Можно ловить правилом",
+      "next_step": "Добавить или расширить детерминированный чекер с тестом на этот паттерн."
+    },
+    {
+      "project": "DSB2_Syntax_Semantics.ID_886511-master",
+      "project_id": "dsb2_syntax_semantics_id_886511_master__c68318a6",
+      "criterion": "readability",
+      "label": "Грамотность и читаемость текста",
+      "gold_line_range": "",
+      "gold_text": "В тексте задания 1 написано название поля таблицы Email, а в примере E-mail (через дефис). Привести к одному названию.",
+      "nearest_finding_id": "fnd_3819514acb7e",
+      "nearest_checker": "spelling_wording_checker",
+      "nearest_match_type": "criterion_only",
+      "nearest_score": 0.2929,
+      "reason_code": "deterministic_possible",
+      "reason_label": "Можно ловить правилом",
+      "next_step": "Добавить или расширить детерминированный чекер с тестом на этот паттерн."
+    },
+    {
+      "project": "DSB2_Syntax_Semantics.ID_886511-master",
+      "project_id": "dsb2_syntax_semantics_id_886511_master__c68318a6",
+      "criterion": "readability",
+      "label": "Грамотность и читаемость текста",
+      "gold_line_range": "",
+      "gold_text": "В тексте письма допущена опечатка \"... в компании работались ...\" корректно \"работали",
+      "nearest_finding_id": "fnd_3819514acb7e",
+      "nearest_checker": "spelling_wording_checker",
+      "nearest_match_type": "criterion_only",
+      "nearest_score": 0.4444,
+      "reason_code": "deterministic_possible",
+      "reason_label": "Можно ловить правилом",
+      "next_step": "Добавить или расширить детерминированный чекер с тестом на этот паттерн."
+    }
+  ],
+  "gold_items": [
+    {
+      "row_number": 2,
+      "raw_project": "DSB2",
+      "matched_project": "DSB2_Syntax_Semantics.ID_886511-master",
+      "project_id": "dsb2_syntax_semantics_id_886511_master__c68318a6",
+      "raw_problem": "опечатка",
+      "details": "Опечатка в упражнении 08, DSB2\n:small_blue_diamond: Description: Проект DSB2_Syntax&Semantics, упражнение 08.\nСледуя условию задачи, получаем таблицу с полем Name, где имена записаны на латинице. По заданию требуется создать скрипт, который будет возвращать первый абзац письма: Иван, добро пожаловать ... В письме имя написано уже на русском. Перевод имени с латиницы на русский по заданию не требуется.\nИсправить нумерацию задач на 1, 2, 3.\nВ тексте задания 1 написано название поля таблицы Email, а в примере E-mail (через дефис). Привести к одному названию.\nВ тексте письма допущена опечатка \"... в компании работались ...\" корректно \"работали\"",
+      "criteria": [
+        "readability"
+      ]
+    }
+  ],
+  "gold_cases": [
+    {
+      "case_id": "gold_2_readability_1",
+      "row_number": 2,
+      "raw_project": "DSB2",
+      "matched_project": "DSB2_Syntax_Semantics.ID_886511-master",
+      "project_id": "dsb2_syntax_semantics_id_886511_master__c68318a6",
+      "criterion": "readability",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "Опечатка в упражнении 08, DSB2"
+    },
+    {
+      "case_id": "gold_2_readability_2",
+      "row_number": 2,
+      "raw_project": "DSB2",
+      "matched_project": "DSB2_Syntax_Semantics.ID_886511-master",
+      "project_id": "dsb2_syntax_semantics_id_886511_master__c68318a6",
+      "criterion": "readability",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": ":small_blue_diamond: Description: Проект DSB2_Syntax&Semantics, упражнение 08."
+    },
+    {
+      "case_id": "gold_2_readability_3",
+      "row_number": 2,
+      "raw_project": "DSB2",
+      "matched_project": "DSB2_Syntax_Semantics.ID_886511-master",
+      "project_id": "dsb2_syntax_semantics_id_886511_master__c68318a6",
+      "criterion": "readability",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "Следуя условию задачи, получаем таблицу с полем Name, где имена записаны на латинице. По заданию требуется создать скрипт, который будет возвращать первый абзац письма: Иван, добро пожаловать ... В письме имя написано уже на русском. Перевод имени с латиницы на русский по заданию не требуется."
+    },
+    {
+      "case_id": "gold_2_readability_4",
+      "row_number": 2,
+      "raw_project": "DSB2",
+      "matched_project": "DSB2_Syntax_Semantics.ID_886511-master",
+      "project_id": "dsb2_syntax_semantics_id_886511_master__c68318a6",
+      "criterion": "readability",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "Исправить нумерацию задач на 1, 2, 3."
+    },
+    {
+      "case_id": "gold_2_readability_5",
+      "row_number": 2,
+      "raw_project": "DSB2",
+      "matched_project": "DSB2_Syntax_Semantics.ID_886511-master",
+      "project_id": "dsb2_syntax_semantics_id_886511_master__c68318a6",
+      "criterion": "readability",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "В тексте задания 1 написано название поля таблицы Email, а в примере E-mail (через дефис). Привести к одному названию."
+    },
+    {
+      "case_id": "gold_2_readability_6",
+      "row_number": 2,
+      "raw_project": "DSB2",
+      "matched_project": "DSB2_Syntax_Semantics.ID_886511-master",
+      "project_id": "dsb2_syntax_semantics_id_886511_master__c68318a6",
+      "criterion": "readability",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "В тексте письма допущена опечатка \"... в компании работались ...\" корректно \"работали"
+    }
+  ],
+  "matches": [
+    {
+      "project": "DSB2_Syntax_Semantics.ID_886511-master",
+      "project_id": "dsb2_syntax_semantics_id_886511_master__c68318a6",
+      "criterion": "readability",
+      "label": "Грамотность и читаемость текста",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "Опечатка в упражнении 08, DSB2",
+      "found_finding_id": "fnd_3819514acb7e",
+      "found_checker": "spelling_wording_checker",
+      "found_line_range": "README_RUS.md:325",
+      "found_text": "в компании работались | Ошибка согласования: компания не «работалась», в компании люди «работали». | Заменить на «в компании работали». | case",
+      "match_type": "criterion_only",
+      "match_score": 0.2323,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    },
+    {
+      "project": "DSB2_Syntax_Semantics.ID_886511-master",
+      "project_id": "dsb2_syntax_semantics_id_886511_master__c68318a6",
+      "criterion": "readability",
+      "label": "Грамотность и читаемость текста",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": ":small_blue_diamond: Description: Проект DSB2_Syntax&Semantics, упражнение 08.",
+      "found_finding_id": "fnd_3819514acb7e",
+      "found_checker": "spelling_wording_checker",
+      "found_line_range": "README_RUS.md:325",
+      "found_text": "в компании работались | Ошибка согласования: компания не «работалась», в компании люди «работали». | Заменить на «в компании работали». | case",
+      "match_type": "criterion_only",
+      "match_score": 0.15,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    },
+    {
+      "project": "DSB2_Syntax_Semantics.ID_886511-master",
+      "project_id": "dsb2_syntax_semantics_id_886511_master__c68318a6",
+      "criterion": "readability",
+      "label": "Грамотность и читаемость текста",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "Следуя условию задачи, получаем таблицу с полем Name, где имена записаны на латинице. По заданию требуется создать скрипт, который будет возвращать первый абзац письма: Иван, добро пожаловать ... В письме имя написано уже на русском. Перевод имени с латиницы на русский по заданию не требуется.",
+      "found_finding_id": "fnd_3819514acb7e",
+      "found_checker": "spelling_wording_checker",
+      "found_line_range": "README_RUS.md:325",
+      "found_text": "в компании работались | Ошибка согласования: компания не «работалась», в компании люди «работали». | Заменить на «в компании работали». | case",
+      "match_type": "criterion_only",
+      "match_score": 0.2308,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    },
+    {
+      "project": "DSB2_Syntax_Semantics.ID_886511-master",
+      "project_id": "dsb2_syntax_semantics_id_886511_master__c68318a6",
+      "criterion": "readability",
+      "label": "Грамотность и читаемость текста",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "Исправить нумерацию задач на 1, 2, 3.",
+      "found_finding_id": "fnd_3819514acb7e",
+      "found_checker": "spelling_wording_checker",
+      "found_line_range": "README_RUS.md:325",
+      "found_text": "в компании работались | Ошибка согласования: компания не «работалась», в компании люди «работали». | Заменить на «в компании работали». | case",
+      "match_type": "criterion_only",
+      "match_score": 0.2,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    },
+    {
+      "project": "DSB2_Syntax_Semantics.ID_886511-master",
+      "project_id": "dsb2_syntax_semantics_id_886511_master__c68318a6",
+      "criterion": "readability",
+      "label": "Грамотность и читаемость текста",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "В тексте задания 1 написано название поля таблицы Email, а в примере E-mail (через дефис). Привести к одному названию.",
+      "found_finding_id": "fnd_3819514acb7e",
+      "found_checker": "spelling_wording_checker",
+      "found_line_range": "README_RUS.md:325",
+      "found_text": "в компании работались | Ошибка согласования: компания не «работалась», в компании люди «работали». | Заменить на «в компании работали». | case",
+      "match_type": "criterion_only",
+      "match_score": 0.2929,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    },
+    {
+      "project": "DSB2_Syntax_Semantics.ID_886511-master",
+      "project_id": "dsb2_syntax_semantics_id_886511_master__c68318a6",
+      "criterion": "readability",
+      "label": "Грамотность и читаемость текста",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "В тексте письма допущена опечатка \"... в компании работались ...\" корректно \"работали",
+      "found_finding_id": "fnd_3819514acb7e",
+      "found_checker": "spelling_wording_checker",
+      "found_line_range": "README_RUS.md:325",
+      "found_text": "в компании работались | Ошибка согласования: компания не «работалась», в компании люди «работали». | Заменить на «в компании работали». | case",
+      "match_type": "criterion_only",
+      "match_score": 0.4444,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    }
+  ],
+  "detailed_false_positive_items": [
+    {
+      "finding_id": "fnd_3819514acb7e",
+      "project_id": "dsb2_syntax_semantics_id_886511_master__c68318a6",
+      "project": "DSB2_Syntax_Semantics.ID_886511-master",
+      "criterion": "readability",
+      "checker_name": "spelling_wording_checker",
+      "line_start": 325,
+      "line_end": 325,
+      "file_path": "README_RUS.md",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.88,
+      "issue_type": "case",
+      "found_text": "в компании работались | Ошибка согласования: компания не «работалась», в компании люди «работали». | Заменить на «в компании работали». | case"
+    }
+  ],
+  "false_positive_items": [
+    {
+      "project_id": "dsb2_syntax_semantics_id_886511_master__c68318a6",
+      "criterion": "actuality"
+    },
+    {
+      "project_id": "dsb2_syntax_semantics_id_886511_master__c68318a6",
+      "criterion": "checklist_alignment"
+    },
+    {
+      "project_id": "dsb2_syntax_semantics_id_886511_master__c68318a6",
+      "criterion": "correctness"
+    },
+    {
+      "project_id": "dsb2_syntax_semantics_id_886511_master__c68318a6",
+      "criterion": "market_fit"
+    },
+    {
+      "project_id": "dsb2_syntax_semantics_id_886511_master__c68318a6",
+      "criterion": "rights"
+    }
+  ],
+  "false_negative_items": [],
+  "project_mapping": {
+    "DSB2": "DSB2_Syntax_Semantics.ID_886511-master"
+  },
+  "notes": [
+    "Основное сравнение выполняется на уровне атомарных ошибок: проект, критерий, строка/диапазон и текст.",
+    "В строгую метрику не входят диагностические строки: низкоуверенные unknown, непроверенные ссылки и общие ресурсные предупреждения без имени файла.",
+    "Старая метрика проект × критерий сохранена только как обзорная в overview_* полях.",
+    "Excel-разметка нормализуется эвристически из колонок 'Проблема' и 'Детали'."
+  ]
+}

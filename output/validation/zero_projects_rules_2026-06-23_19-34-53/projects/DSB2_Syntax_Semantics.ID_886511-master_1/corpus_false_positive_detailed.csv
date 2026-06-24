@@ -1,0 +1,2 @@
+﻿проект,project_id,критерий,критерий_код,найденная строка/диапазон,найденная ошибка,finding_id,checker
+DSB2_Syntax_Semantics.ID_886511-master,dsb2_syntax_semantics_id_886511_master__c68318a6,Грамотность и читаемость текста,readability,README_RUS.md:325,"в компании работались | Ошибка согласования: компания не «работалась», в компании люди «работали». | Заменить на «в компании работали». | case",fnd_3819514acb7e,spelling_wording_checker

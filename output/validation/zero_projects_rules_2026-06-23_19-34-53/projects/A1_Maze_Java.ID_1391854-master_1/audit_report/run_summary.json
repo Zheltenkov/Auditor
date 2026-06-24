@@ -1,0 +1,77 @@
+{
+  "started_at": "2026-06-23T19:34:54.128373Z",
+  "finished_at": "2026-06-23T19:34:54.517311Z",
+  "input_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-34-53\\A1_Maze_Java.ID_1391854-master_1",
+  "units_total": 1,
+  "files_total": 12,
+  "findings_total": 37,
+  "affected_units_total": 1,
+  "by_severity": {
+    "info": 4,
+    "minor": 32,
+    "major": 1
+  },
+  "by_criterion": {
+    "actuality": 4,
+    "rights": 17,
+    "correctness": 3,
+    "image_quality": 11,
+    "readability": 1,
+    "checklist_alignment": 1
+  },
+  "by_branch": {
+    "A1_Maze_Java.ID_1391854-master (1)": 37
+  },
+  "by_unit": {
+    "a1_maze_java_id_1391854_master__29d502a1": 37
+  },
+  "model_usage": {
+    "calls_total": 0,
+    "cache_hits": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "total_tokens": 0,
+    "cost_usd": 0.0,
+    "by_model": {}
+  },
+  "prompt_versions": {},
+  "steps": [
+    {
+      "name": "Загрузка файлов",
+      "status": "ok",
+      "started_at": "2026-06-23T19:34:54.128377Z",
+      "finished_at": "2026-06-23T19:34:54.146186Z",
+      "duration_ms": 17,
+      "detail": "Единиц: 1"
+    },
+    {
+      "name": "Подготовка проверок",
+      "status": "ok",
+      "started_at": "2026-06-23T19:34:54.146243Z",
+      "finished_at": "2026-06-23T19:34:54.157764Z",
+      "duration_ms": 11,
+      "detail": "Модулей: 19, совпадений кода: 0"
+    },
+    {
+      "name": "Извлечение и проверки",
+      "status": "ok",
+      "started_at": "2026-06-23T19:34:54.157836Z",
+      "finished_at": "2026-06-23T19:34:54.514746Z",
+      "duration_ms": 356,
+      "detail": "Сущностей: 52"
+    },
+    {
+      "name": "Сборка отчёта",
+      "status": "ok",
+      "started_at": "2026-06-23T19:34:54.514764Z",
+      "finished_at": "2026-06-23T19:34:54.517130Z",
+      "duration_ms": 2,
+      "detail": "Случаев: 37"
+    }
+  ],
+  "model_used": false,
+  "network_used": false,
+  "warnings": [
+    "Постобработка: 18 языковых дублей схлопнуты в базовые строки."
+  ]
+}

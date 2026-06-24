@@ -1,0 +1,77 @@
+{
+  "started_at": "2026-06-23T19:35:02.315851Z",
+  "finished_at": "2026-06-23T19:35:02.780570Z",
+  "input_path": "C:\\Users\\zvp\\VS_projects\\Proverka\\.tmp\\zero_projects_rules_2026-06-23_19-34-53\\t05d08-id_239624-master_1",
+  "units_total": 1,
+  "files_total": 17,
+  "findings_total": 10,
+  "affected_units_total": 1,
+  "by_severity": {
+    "minor": 6,
+    "major": 1,
+    "info": 3
+  },
+  "by_criterion": {
+    "rights": 2,
+    "image_quality": 1,
+    "market_fit": 1,
+    "checklist_alignment": 1,
+    "correctness": 2,
+    "actuality": 3
+  },
+  "by_branch": {
+    "t05d08-id_239624-master (1)": 10
+  },
+  "by_unit": {
+    "t05d08_id_239624_master__d6ade4ef": 10
+  },
+  "model_usage": {
+    "calls_total": 0,
+    "cache_hits": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "total_tokens": 0,
+    "cost_usd": 0.0,
+    "by_model": {}
+  },
+  "prompt_versions": {},
+  "steps": [
+    {
+      "name": "Загрузка файлов",
+      "status": "ok",
+      "started_at": "2026-06-23T19:35:02.315854Z",
+      "finished_at": "2026-06-23T19:35:02.344253Z",
+      "duration_ms": 28,
+      "detail": "Единиц: 1"
+    },
+    {
+      "name": "Подготовка проверок",
+      "status": "ok",
+      "started_at": "2026-06-23T19:35:02.344283Z",
+      "finished_at": "2026-06-23T19:35:02.364605Z",
+      "duration_ms": 20,
+      "detail": "Модулей: 19, совпадений кода: 0"
+    },
+    {
+      "name": "Извлечение и проверки",
+      "status": "ok",
+      "started_at": "2026-06-23T19:35:02.364632Z",
+      "finished_at": "2026-06-23T19:35:02.779169Z",
+      "duration_ms": 414,
+      "detail": "Сущностей: 34"
+    },
+    {
+      "name": "Сборка отчёта",
+      "status": "ok",
+      "started_at": "2026-06-23T19:35:02.779190Z",
+      "finished_at": "2026-06-23T19:35:02.780523Z",
+      "duration_ms": 1,
+      "detail": "Случаев: 10"
+    }
+  ],
+  "model_used": false,
+  "network_used": false,
+  "warnings": [
+    "Постобработка: 4 языковых дублей схлопнуты в базовые строки."
+  ]
+}

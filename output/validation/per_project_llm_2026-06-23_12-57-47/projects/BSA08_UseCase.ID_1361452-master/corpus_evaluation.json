@@ -1,0 +1,321 @@
+{
+  "evaluated_criteria": [
+    "checklist_alignment"
+  ],
+  "gold_total": 2,
+  "predicted_total": 7,
+  "true_positive": 0,
+  "false_positive": 7,
+  "false_negative": 2,
+  "precision": 0.0,
+  "recall": 0.0,
+  "f1_score": 0.0,
+  "macro_precision": 0.0,
+  "macro_recall": 0.0,
+  "macro_f1_score": 0.0,
+  "overview_gold_total": 1,
+  "overview_predicted_total": 5,
+  "overview_true_positive": 1,
+  "overview_false_positive": 4,
+  "overview_false_negative": 0,
+  "overview_precision": 0.2,
+  "overview_recall": 1.0,
+  "overview_f1_score": 0.3333,
+  "overview_macro_precision": 0.2,
+  "overview_macro_recall": 0.2,
+  "overview_macro_f1_score": 0.2,
+  "gold_scope_predicted_total": 7,
+  "gold_scope_true_positive": 0,
+  "gold_scope_false_positive": 7,
+  "gold_scope_false_negative": 2,
+  "gold_scope_precision": 0.0,
+  "gold_scope_recall": 0.0,
+  "gold_scope_f1_score": 0.0,
+  "gold_scope_macro_precision": 0.0,
+  "gold_scope_macro_recall": 0.0,
+  "gold_scope_macro_f1_score": 0.0,
+  "per_criterion": [
+    {
+      "criterion": "checklist_alignment",
+      "label": "Соответствие заданий проекта чек-листу",
+      "gold_total": 2,
+      "predicted_total": 7,
+      "true_positive": 0,
+      "false_positive": 7,
+      "false_negative": 2,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    }
+  ],
+  "overview_per_criterion": [
+    {
+      "criterion": "checklist_alignment",
+      "label": "Соответствие заданий проекта чек-листу",
+      "gold_total": 1,
+      "predicted_total": 1,
+      "true_positive": 1,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0
+    },
+    {
+      "criterion": "correctness",
+      "label": "Точность и корректность",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "market_fit",
+      "label": "Соответствие рынку",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "readability",
+      "label": "Грамотность и читаемость текста",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    },
+    {
+      "criterion": "rights",
+      "label": "Оригинальность и права использования ресурсов",
+      "gold_total": 0,
+      "predicted_total": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0
+    }
+  ],
+  "gold_items": [
+    {
+      "row_number": 2,
+      "raw_project": "BSA08",
+      "matched_project": "BSA08_UseCase.ID_1361452-master",
+      "project_id": "bsa08_usecase_id_1361452_master__79f98ef4",
+      "raw_problem": "несоответствие задания чек-листу",
+      "details": "Разнятся рекомендуемые названия в файлах в условии проекта и в чек-листе\n:small_blue_diamond: Description: В проекте BSA08 в readme и readme_rus рекомендуется называть файлы xxx_UC.dox, в чек-листе же xxx_usecase.dox",
+      "criteria": [
+        "checklist_alignment"
+      ]
+    }
+  ],
+  "gold_cases": [
+    {
+      "case_id": "gold_2_checklist_alignment_1",
+      "row_number": 2,
+      "raw_project": "BSA08",
+      "matched_project": "BSA08_UseCase.ID_1361452-master",
+      "project_id": "bsa08_usecase_id_1361452_master__79f98ef4",
+      "criterion": "checklist_alignment",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": "Разнятся рекомендуемые названия в файлах в условии проекта и в чек-листе"
+    },
+    {
+      "case_id": "gold_2_checklist_alignment_2",
+      "row_number": 2,
+      "raw_project": "BSA08",
+      "matched_project": "BSA08_UseCase.ID_1361452-master",
+      "project_id": "bsa08_usecase_id_1361452_master__79f98ef4",
+      "criterion": "checklist_alignment",
+      "line_start": null,
+      "line_end": null,
+      "gold_text": ":small_blue_diamond: Description: В проекте BSA08 в readme и readme_rus рекомендуется называть файлы xxx_UC.dox, в чек-листе же xxx_usecase.dox"
+    }
+  ],
+  "matches": [
+    {
+      "project": "BSA08_UseCase.ID_1361452-master",
+      "project_id": "bsa08_usecase_id_1361452_master__79f98ef4",
+      "criterion": "checklist_alignment",
+      "label": "Соответствие заданий проекта чек-листу",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": "Разнятся рекомендуемые названия в файлах в условии проекта и в чек-листе",
+      "found_finding_id": "fnd_26823b269eda",
+      "found_checker": "checklist_checker",
+      "found_line_range": "check-list.yml",
+      "found_text": "ex04_<product prefix>_use case.docx vs ex04_<product prefix>_US.docx | Чек-лист ожидает файл с именем, которое похоже на ресурс из README или вложений, но не совпадает с ним буквально. | Привести имя ожидаемого файла в README и чек-листе к одному варианту. | expected_file_name_mismatch",
+      "match_type": "criterion_only",
+      "match_score": 0.3333,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    },
+    {
+      "project": "BSA08_UseCase.ID_1361452-master",
+      "project_id": "bsa08_usecase_id_1361452_master__79f98ef4",
+      "criterion": "checklist_alignment",
+      "label": "Соответствие заданий проекта чек-листу",
+      "gold_row_number": 2,
+      "gold_line_range": "",
+      "gold_text": ":small_blue_diamond: Description: В проекте BSA08 в readme и readme_rus рекомендуется называть файлы xxx_UC.dox, в чек-листе же xxx_usecase.dox",
+      "found_finding_id": "fnd_26823b269eda",
+      "found_checker": "checklist_checker",
+      "found_line_range": "check-list.yml",
+      "found_text": "ex04_<product prefix>_use case.docx vs ex04_<product prefix>_US.docx | Чек-лист ожидает файл с именем, которое похоже на ресурс из README или вложений, но не совпадает с ним буквально. | Привести имя ожидаемого файла в README и чек-листе к одному варианту. | expected_file_name_mismatch",
+      "match_type": "criterion_only",
+      "match_score": 0.2105,
+      "counted": false,
+      "reason": "Совпал только проект и критерий; для основной метрики это не засчитывается. Найденная ошибка показана для разбора, но не засчитана."
+    }
+  ],
+  "detailed_false_positive_items": [
+    {
+      "finding_id": "fnd_26823b269eda",
+      "project_id": "bsa08_usecase_id_1361452_master__79f98ef4",
+      "project": "BSA08_UseCase.ID_1361452-master",
+      "criterion": "checklist_alignment",
+      "checker_name": "checklist_checker",
+      "line_start": null,
+      "line_end": null,
+      "file_path": "check-list.yml",
+      "severity": "major",
+      "verdict": "warning",
+      "confidence": 0.84,
+      "issue_type": "expected_file_name_mismatch",
+      "found_text": "ex04_<product prefix>_use case.docx vs ex04_<product prefix>_US.docx | Чек-лист ожидает файл с именем, которое похоже на ресурс из README или вложений, но не совпадает с ним буквально. | Привести имя ожидаемого файла в README и чек-листе к одному варианту. | expected_file_name_mismatch"
+    },
+    {
+      "finding_id": "fnd_26823b269eda",
+      "project_id": "bsa08_usecase_id_1361452_master__79f98ef4",
+      "project": "BSA08_UseCase.ID_1361452-master",
+      "criterion": "checklist_alignment",
+      "checker_name": "checklist_checker",
+      "line_start": null,
+      "line_end": null,
+      "file_path": "check-list.yml",
+      "severity": "major",
+      "verdict": "warning",
+      "confidence": 0.84,
+      "issue_type": "expected_file_name_mismatch",
+      "found_text": "ex04_<product prefix>_use case.docx vs ex04_<product prefix>_US.docx | Чек-лист ожидает файл с именем, которое похоже на ресурс из README или вложений, но не совпадает с ним буквально. | Привести имя ожидаемого файла в README и чек-листе к одному варианту. | expected_file_name_mismatch"
+    },
+    {
+      "finding_id": "fnd_4cd588a718ab",
+      "project_id": "bsa08_usecase_id_1361452_master__79f98ef4",
+      "project": "BSA08_UseCase.ID_1361452-master",
+      "criterion": "checklist_alignment",
+      "checker_name": "checklist_checker",
+      "line_start": null,
+      "line_end": null,
+      "file_path": "check-list.yml",
+      "severity": "minor",
+      "verdict": "warning",
+      "confidence": 0.72,
+      "issue_type": "",
+      "found_text": "Сильных совпадений: 6 из 6; слабых совпадений: 0 из 6; не сопоставлено: 0 из 6. Развёрнутых описаний: 2 из 6. Недостаточно описаны: Exercise 02 — Description  of Use Cases, Exercise 03 — Description of Use Case Flows, Exercise 04 — Description of Use Cases, Exercise 05 — Description of Use Case Flows. | Доработать пункты без критериев приёмки, ожидаемых артефактов или примеров."
+    },
+    {
+      "finding_id": "fnd_5cfbb2c5602f",
+      "project_id": "bsa08_usecase_id_1361452_master__79f98ef4",
+      "project": "BSA08_UseCase.ID_1361452-master",
+      "criterion": "checklist_alignment",
+      "checker_name": "checklist_checker",
+      "line_start": null,
+      "line_end": null,
+      "file_path": "check-list.yml",
+      "severity": "major",
+      "verdict": "warning",
+      "confidence": 0.84,
+      "issue_type": "expected_file_name_mismatch",
+      "found_text": "ex00_<product prefix>_use case.docx vs ex00_<product prefix>_US.docx | Чек-лист ожидает файл с именем, которое похоже на ресурс из README или вложений, но не совпадает с ним буквально. | Привести имя ожидаемого файла в README и чек-листе к одному варианту. | expected_file_name_mismatch"
+    },
+    {
+      "finding_id": "fnd_8b1fc7b0bcc3",
+      "project_id": "bsa08_usecase_id_1361452_master__79f98ef4",
+      "project": "BSA08_UseCase.ID_1361452-master",
+      "criterion": "checklist_alignment",
+      "checker_name": "checklist_checker",
+      "line_start": null,
+      "line_end": null,
+      "file_path": "check-list.yml",
+      "severity": "major",
+      "verdict": "warning",
+      "confidence": 0.84,
+      "issue_type": "expected_file_name_mismatch",
+      "found_text": "ex02_<product prefix>_use case.docx vs x02_<product prefix>_US.docx | Чек-лист ожидает файл с именем, которое похоже на ресурс из README или вложений, но не совпадает с ним буквально. | Привести имя ожидаемого файла в README и чек-листе к одному варианту. | expected_file_name_mismatch"
+    },
+    {
+      "finding_id": "fnd_8b1fc7b0bcc3",
+      "project_id": "bsa08_usecase_id_1361452_master__79f98ef4",
+      "project": "BSA08_UseCase.ID_1361452-master",
+      "criterion": "checklist_alignment",
+      "checker_name": "checklist_checker",
+      "line_start": null,
+      "line_end": null,
+      "file_path": "check-list.yml",
+      "severity": "major",
+      "verdict": "warning",
+      "confidence": 0.84,
+      "issue_type": "expected_file_name_mismatch",
+      "found_text": "ex02_<product prefix>_use case.docx vs x02_<product prefix>_US.docx | Чек-лист ожидает файл с именем, которое похоже на ресурс из README или вложений, но не совпадает с ним буквально. | Привести имя ожидаемого файла в README и чек-листе к одному варианту. | expected_file_name_mismatch"
+    },
+    {
+      "finding_id": "fnd_aba72cc98f14",
+      "project_id": "bsa08_usecase_id_1361452_master__79f98ef4",
+      "project": "BSA08_UseCase.ID_1361452-master",
+      "criterion": "checklist_alignment",
+      "checker_name": "checklist_checker",
+      "line_start": null,
+      "line_end": null,
+      "file_path": "check-list.yml",
+      "severity": "major",
+      "verdict": "warning",
+      "confidence": 0.84,
+      "issue_type": "ungrounded_resource",
+      "found_text": "ex00_<produse caset prefix>_use case.docx | Чек-лист ссылается на ресурс или файл, который не упомянут в README и не найден среди файлов проекта. | Приложить ресурс к проекту или убрать его из чек-листа. | ungrounded_resource"
+    }
+  ],
+  "false_positive_items": [
+    {
+      "project_id": "bsa08_usecase_id_1361452_master__79f98ef4",
+      "criterion": "correctness"
+    },
+    {
+      "project_id": "bsa08_usecase_id_1361452_master__79f98ef4",
+      "criterion": "market_fit"
+    },
+    {
+      "project_id": "bsa08_usecase_id_1361452_master__79f98ef4",
+      "criterion": "readability"
+    },
+    {
+      "project_id": "bsa08_usecase_id_1361452_master__79f98ef4",
+      "criterion": "rights"
+    }
+  ],
+  "false_negative_items": [],
+  "project_mapping": {
+    "BSA08": "BSA08_UseCase.ID_1361452-master"
+  },
+  "notes": [
+    "Основное сравнение выполняется на уровне атомарных ошибок: проект, критерий, строка/диапазон и текст.",
+    "В строгую метрику не входят диагностические строки: низкоуверенные unknown, непроверенные ссылки и общие ресурсные предупреждения без имени файла.",
+    "Старая метрика проект × критерий сохранена только как обзорная в overview_* полях.",
+    "Excel-разметка нормализуется эвристически из колонок 'Проблема' и 'Детали'."
+  ]
+}

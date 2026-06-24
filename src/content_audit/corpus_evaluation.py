@@ -61,6 +61,36 @@ CRITERION_ALIASES: dict[Criterion, tuple[str, ...]] = {
 }
 
 
+CHECKER_GROUPS: dict[str, str] = {
+    "broken_url_syntax_checker": "deterministic_rules",
+    "label_punctuation_checker": "deterministic_rules",
+    "local_consistency_checker": "deterministic_rules",
+    "markdown_structure_checker": "deterministic_rules",
+    "spelling_wording_checker": "editorial_rules",
+    "link_checker": "links_and_resources",
+    "local_link_checker": "links_and_resources",
+    "resource_availability_checker": "links_and_resources",
+    "checklist_checker": "checklist_and_artifacts",
+    "fact_checker_perplexity": "factcheck",
+    "readme_fact_actuality_checker": "factcheck",
+    "tech_freshness_checker": "factcheck",
+    "dependency_freshness_checker": "factcheck",
+    "curriculum_relevance_checker": "methodology",
+    "market_fit_checker": "methodology",
+    "model_rubric_checker": "methodology",
+}
+
+CHECKER_GROUP_LABELS: dict[str, str] = {
+    "deterministic_rules": "Детерминированные правила",
+    "editorial_rules": "Редакторские правила",
+    "links_and_resources": "Ссылки и ресурсы",
+    "checklist_and_artifacts": "Чек-лист и артефакты",
+    "factcheck": "Фактчек и актуальность",
+    "methodology": "Методические критерии",
+    "other": "Прочие проверки",
+}
+
+
 class CorpusEvaluationKey(BaseModel, frozen=True):
     """Ключ сравнения: один проект и один критерий."""
 
@@ -147,6 +177,48 @@ class CriterionMetrics(BaseModel):
     f1_score: float
 
 
+class PredictionSliceMetrics(BaseModel):
+    """Метрики по срезу найденных ошибок: чекер, группа чекеров или действенный слой."""
+
+    slice_name: str
+    label: str
+    predicted_total: int
+    true_positive: int
+    false_positive: int
+    precision: float
+    false_positive_share: float
+
+
+class CostQualityMetrics(BaseModel):
+    """Связка стоимости модельных проверок с качеством результата."""
+
+    model_calls: int
+    cache_hits: int
+    total_tokens: int
+    cost_usd: float
+    cost_per_gold_true_positive: float | None = None
+    cost_per_prediction: float | None = None
+    cost_per_actionable_true_positive: float | None = None
+
+
+class FalseNegativeAnalysisItem(BaseModel):
+    """Одна пропущенная эталонная ошибка с причиной пропуска и следующим шагом."""
+
+    project: str
+    project_id: str
+    criterion: str
+    label: str
+    gold_line_range: str
+    gold_text: str
+    nearest_finding_id: str | None = None
+    nearest_checker: str | None = None
+    nearest_match_type: str
+    nearest_score: float
+    reason_code: str
+    reason_label: str
+    next_step: str
+
+
 class CorpusEvaluationSummary(BaseModel):
     """Итог оценки по корпусу проектов."""
 
@@ -185,6 +257,12 @@ class CorpusEvaluationSummary(BaseModel):
     gold_scope_macro_f1_score: float
     per_criterion: list[CriterionMetrics]
     overview_per_criterion: list[CriterionMetrics]
+    checker_metrics: list[PredictionSliceMetrics] = Field(default_factory=list)
+    checker_group_metrics: list[PredictionSliceMetrics] = Field(default_factory=list)
+    actionable_metrics: PredictionSliceMetrics | None = None
+    cost_quality: CostQualityMetrics | None = None
+    false_negative_reason_counts: dict[str, int] = Field(default_factory=dict)
+    false_negative_analysis: list[FalseNegativeAnalysisItem] = Field(default_factory=list)
     gold_items: list[GoldCorpusItem]
     gold_cases: list[GoldCorpusCase]
     matches: list[CorpusEvaluationMatch]
@@ -234,6 +312,18 @@ def evaluate_corpus_report(report: AuditReport, gold_xlsx_path: Path) -> CorpusE
     detailed_false_negative = len(gold_cases) - detailed_true_positive
     detailed_false_positive = len(detailed_false_positive_items)
     per_criterion = _per_criterion_detail_metrics(gold_cases, predicted_items_in_scope, matches)
+    actionable_metrics = _prediction_slice_metrics(
+        "actionable",
+        "Действенные находки",
+        [item for item in predicted_items_in_scope if _is_actionable_prediction(item)],
+        matched_prediction_ids,
+        detailed_false_positive,
+    )
+    checker_metrics = _checker_metrics(predicted_items_in_scope, matched_prediction_ids, detailed_false_positive)
+    checker_group_metrics = _checker_group_metrics(predicted_items_in_scope, matched_prediction_ids, detailed_false_positive)
+    false_negative_analysis = _false_negative_analysis(matches)
+    false_negative_reason_counts = _false_negative_reason_counts(false_negative_analysis)
+    cost_quality = _cost_quality_metrics(report, detailed_true_positive, actionable_metrics)
 
     overview_gold_keys = {
         CorpusEvaluationKey(project_id=item.project_id, criterion=criterion)
@@ -303,6 +393,12 @@ def evaluate_corpus_report(report: AuditReport, gold_xlsx_path: Path) -> CorpusE
         gold_scope_macro_f1_score=_mean([item.f1_score for item in per_criterion]),
         per_criterion=per_criterion,
         overview_per_criterion=overview_per_criterion,
+        checker_metrics=checker_metrics,
+        checker_group_metrics=checker_group_metrics,
+        actionable_metrics=actionable_metrics,
+        cost_quality=cost_quality,
+        false_negative_reason_counts=false_negative_reason_counts,
+        false_negative_analysis=false_negative_analysis,
         gold_items=gold_items,
         gold_cases=gold_cases,
         matches=matches,
@@ -382,6 +478,9 @@ def write_corpus_evaluation(summary: CorpusEvaluationSummary, output_dir: Path) 
     _write_matches_csv(summary.matches, output_dir / "corpus_evaluation_main.csv")
     _write_metrics_csv(summary, output_dir / "corpus_evaluation_by_criterion.csv")
     _write_overview_metrics_csv(summary, output_dir / "corpus_evaluation_overview_by_criterion.csv")
+    _write_prediction_slice_metrics_csv(summary.checker_metrics, output_dir / "corpus_evaluation_by_checker.csv")
+    _write_prediction_slice_metrics_csv(summary.checker_group_metrics, output_dir / "corpus_evaluation_by_checker_group.csv")
+    _write_false_negative_analysis_csv(summary.false_negative_analysis, output_dir / "corpus_false_negative_analysis.csv")
     _write_detailed_false_positive_csv(summary.detailed_false_positive_items, output_dir / "corpus_false_positive_detailed.csv")
     _write_items_csv(summary.false_negative_items, output_dir / "corpus_false_negative.csv")
     _write_items_csv(summary.false_positive_items, output_dir / "corpus_false_positive.csv")
@@ -927,6 +1026,262 @@ def _per_criterion_detail_metrics(
     return metrics
 
 
+def _checker_metrics(
+    predicted_items: list[PredictedCorpusItem],
+    matched_prediction_ids: set[str],
+    total_false_positive: int,
+) -> list[PredictionSliceMetrics]:
+    """Считает precision по каждому чекеру, у которого были находки в gold-scope."""
+
+    checker_names = sorted({item.checker_name for item in predicted_items})
+    return [
+        _prediction_slice_metrics(
+            checker,
+            checker,
+            [item for item in predicted_items if item.checker_name == checker],
+            matched_prediction_ids,
+            total_false_positive,
+        )
+        for checker in checker_names
+    ]
+
+
+def _checker_group_metrics(
+    predicted_items: list[PredictedCorpusItem],
+    matched_prediction_ids: set[str],
+    total_false_positive: int,
+) -> list[PredictionSliceMetrics]:
+    """Считает precision по группам чекеров, чтобы не смешивать разные типы качества."""
+
+    groups = sorted({_checker_group(item.checker_name) for item in predicted_items})
+    return [
+        _prediction_slice_metrics(
+            group,
+            CHECKER_GROUP_LABELS.get(group, group),
+            [item for item in predicted_items if _checker_group(item.checker_name) == group],
+            matched_prediction_ids,
+            total_false_positive,
+        )
+        for group in groups
+    ]
+
+
+def _prediction_slice_metrics(
+    slice_name: str,
+    label: str,
+    predicted_items: list[PredictedCorpusItem],
+    matched_prediction_ids: set[str],
+    total_false_positive: int,
+) -> PredictionSliceMetrics:
+    """Считает точность для произвольного среза предсказаний."""
+
+    true_positive = sum(1 for item in predicted_items if item.finding_id in matched_prediction_ids)
+    false_positive = len(predicted_items) - true_positive
+    return PredictionSliceMetrics(
+        slice_name=slice_name,
+        label=label,
+        predicted_total=len(predicted_items),
+        true_positive=true_positive,
+        false_positive=false_positive,
+        precision=_safe_ratio(true_positive, true_positive + false_positive),
+        false_positive_share=_safe_ratio(false_positive, total_false_positive),
+    )
+
+
+def _checker_group(checker_name: str) -> str:
+    """Возвращает устойчивую группу чекера для продуктовых метрик."""
+
+    return CHECKER_GROUPS.get(checker_name, "other")
+
+
+def _is_actionable_prediction(item: PredictedCorpusItem) -> bool:
+    """Выделяет находки, которые должны попадать в рабочий фокус методолога."""
+
+    if item.verdict in {"pass", "unknown"}:
+        return False
+    if item.severity in {"critical", "major"}:
+        return True
+    if item.severity == "minor":
+        return _checker_group(item.checker_name) not in {"methodology", "factcheck"}
+    return False
+
+
+def _cost_quality_metrics(
+    report: AuditReport,
+    true_positive: int,
+    actionable_metrics: PredictionSliceMetrics,
+) -> CostQualityMetrics:
+    """Связывает стоимость модельных вызовов с количеством подтверждённых находок."""
+
+    usage = report.summary.model_usage
+    return CostQualityMetrics(
+        model_calls=usage.calls_total,
+        cache_hits=usage.cache_hits,
+        total_tokens=usage.total_tokens,
+        cost_usd=round(float(usage.cost_usd), 6),
+        cost_per_gold_true_positive=_safe_money_ratio(float(usage.cost_usd), true_positive),
+        cost_per_prediction=_safe_money_ratio(float(usage.cost_usd), report.summary.findings_total),
+        cost_per_actionable_true_positive=_safe_money_ratio(float(usage.cost_usd), actionable_metrics.true_positive),
+    )
+
+
+def _false_negative_analysis(matches: list[CorpusEvaluationMatch]) -> list[FalseNegativeAnalysisItem]:
+    """Классифицирует пропуски по причине, чтобы превращать FN в план работ."""
+
+    result: list[FalseNegativeAnalysisItem] = []
+    for match in matches:
+        if match.counted:
+            continue
+        reason_code, reason_label, next_step = _classify_false_negative(match)
+        result.append(
+            FalseNegativeAnalysisItem(
+                project=match.project,
+                project_id=match.project_id,
+                criterion=match.criterion,
+                label=match.label,
+                gold_line_range=match.gold_line_range,
+                gold_text=match.gold_text,
+                nearest_finding_id=match.found_finding_id,
+                nearest_checker=match.found_checker,
+                nearest_match_type=match.match_type,
+                nearest_score=match.match_score,
+                reason_code=reason_code,
+                reason_label=reason_label,
+                next_step=next_step,
+            )
+        )
+    return result
+
+
+def _false_negative_reason_counts(items: list[FalseNegativeAnalysisItem]) -> dict[str, int]:
+    """Считает распределение причин пропусков."""
+
+    counts: dict[str, int] = defaultdict(int)
+    for item in items:
+        counts[item.reason_code] += 1
+    return dict(sorted(counts.items()))
+
+
+def _classify_false_negative(match: CorpusEvaluationMatch) -> tuple[str, str, str]:
+    """Даёт инженерную причину пропуска для одного эталонного случая."""
+
+    text = _normalize_match_text(match.gold_text)
+    if _is_meaningful_near_miss(match):
+        return (
+            "near_miss_matching",
+            "Похожая находка была, но строгий матч её не засчитал",
+            "Проверить пороги сопоставления или критерий/строку у найденной ошибки.",
+        )
+    if _looks_like_deterministic_missing(text, match.criterion):
+        return (
+            "deterministic_possible",
+            "Можно ловить правилом",
+            "Добавить или расширить детерминированный чекер с тестом на этот паттерн.",
+        )
+    if _needs_external_data(text, match.criterion):
+        return (
+            "needs_external_data",
+            "Нужен внешний источник данных",
+            "Подключить метаданные платформы, манифест, статистику прохождения или курируемую базу.",
+        )
+    if _looks_like_model_semantics(text, match.criterion):
+        return (
+            "model_possible",
+            "Нужен смысловой анализ",
+            "Добавить модельный/семантический слой с проверяемым JSON-контрактом и примерами.",
+        )
+    return (
+        "out_of_scope_or_needs_review",
+        "Требуется ручной разбор области применимости",
+        "Решить, должна ли локальная проверка ловить этот класс ошибок.",
+    )
+
+
+def _is_meaningful_near_miss(match: CorpusEvaluationMatch) -> bool:
+    """Отличает близкий промах матчинга от случайной находки того же критерия."""
+
+    if not match.found_finding_id or match.match_type == "missed":
+        return False
+    if match.match_type in {"line_overlap", "near_line_and_text", "text_similarity", "artifact_missing_signal"}:
+        return True
+    return match.match_type == "criterion_only" and match.match_score >= 0.45
+
+
+def _looks_like_deterministic_missing(text: str, criterion: str) -> bool:
+    """Определяет пропуски, которые стоит закрывать правилами."""
+
+    deterministic_markers = (
+        "https",
+        "http",
+        "ссылка",
+        "url",
+        "двоеточ",
+        "нумерац",
+        "пронумер",
+        "кавыч",
+        "опечат",
+        "тафтолог",
+        "тавтолог",
+        "input",
+        "output",
+        "example",
+        "result",
+    )
+    if any(marker in text for marker in deterministic_markers):
+        return True
+    return criterion == Criterion.READABILITY.value and bool(re.search(r"\b\d{1,5}\b", text))
+
+
+def _needs_external_data(text: str, criterion: str) -> bool:
+    """Определяет пропуски, которые нельзя честно закрыть локальным анализом."""
+
+    markers = (
+        "платформ",
+        "репозитор",
+        "обновлен",
+        "обновл",
+        "6мес",
+        "год",
+        "экзамен",
+        "финаль",
+        "время прохождения",
+        "попыт",
+        "доступн на территории",
+        "рф",
+        "лиценз",
+        "права",
+    )
+    return criterion in {Criterion.ACTUALITY.value, Criterion.RIGHTS.value, Criterion.EXAM.value} and any(
+        marker in text for marker in markers
+    )
+
+
+def _looks_like_model_semantics(text: str, criterion: str) -> bool:
+    """Определяет пропуски, где нужна смысловая проверка, а не простое правило."""
+
+    semantic_markers = (
+        "противореч",
+        "не является",
+        "некоррект",
+        "неверн",
+        "по факту",
+        "чеклист",
+        "чек лист",
+        "checklist",
+        "check list",
+        "артефакт",
+        "ожида",
+        "требован",
+        "бизнес",
+        "рын",
+    )
+    return criterion in {
+        Criterion.CORRECTNESS.value,
+        Criterion.CHECKLIST_ALIGNMENT.value,
+        Criterion.MARKET_FIT.value,
+    } or any(marker in text for marker in semantic_markers)
+
+
 def _project_candidates_from_report(report: AuditReport) -> list[_ProjectCandidate]:
     """Создаёт кандидаты сопоставления из единиц отчёта."""
 
@@ -1108,6 +1463,27 @@ def _write_overview_metrics_csv(summary: CorpusEvaluationSummary, output_path: P
             writer.writerow(item.model_dump(mode="json"))
 
 
+def _write_prediction_slice_metrics_csv(items: list[PredictionSliceMetrics], output_path: Path) -> None:
+    """Пишет метрики по чекерам или группам чекеров."""
+
+    with output_path.open("w", encoding="utf-8-sig", newline="") as handle:
+        writer = csv.DictWriter(
+            handle,
+            fieldnames=[
+                "slice_name",
+                "label",
+                "predicted_total",
+                "true_positive",
+                "false_positive",
+                "precision",
+                "false_positive_share",
+            ],
+        )
+        writer.writeheader()
+        for item in items:
+            writer.writerow(item.model_dump(mode="json"))
+
+
 def _write_matches_csv(items: list[CorpusEvaluationMatch], output_path: Path) -> None:
     """Пишет главную таблицу построчного сопоставления."""
 
@@ -1151,6 +1527,49 @@ def _write_matches_csv(items: list[CorpusEvaluationMatch], output_path: Path) ->
                     "засчитано": "да" if item.counted else "нет",
                     "score": item.match_score,
                     "причина, почему засчитали": item.reason,
+                }
+            )
+
+
+def _write_false_negative_analysis_csv(items: list[FalseNegativeAnalysisItem], output_path: Path) -> None:
+    """Пишет пропущенные ошибки с инженерной причиной пропуска."""
+
+    with output_path.open("w", encoding="utf-8-sig", newline="") as handle:
+        writer = csv.DictWriter(
+            handle,
+            fieldnames=[
+                "проект",
+                "project_id",
+                "критерий",
+                "критерий_код",
+                "строка/диапазон",
+                "текст эталонной ошибки",
+                "ближайшая находка",
+                "nearest_checker",
+                "nearest_match_type",
+                "nearest_score",
+                "reason_code",
+                "причина пропуска",
+                "следующий шаг",
+            ],
+        )
+        writer.writeheader()
+        for item in items:
+            writer.writerow(
+                {
+                    "проект": item.project,
+                    "project_id": item.project_id,
+                    "критерий": item.label,
+                    "критерий_код": item.criterion,
+                    "строка/диапазон": item.gold_line_range,
+                    "текст эталонной ошибки": item.gold_text,
+                    "ближайшая находка": item.nearest_finding_id or "",
+                    "nearest_checker": item.nearest_checker or "",
+                    "nearest_match_type": item.nearest_match_type,
+                    "nearest_score": item.nearest_score,
+                    "reason_code": item.reason_code,
+                    "причина пропуска": item.reason_label,
+                    "следующий шаг": item.next_step,
                 }
             )
 
@@ -1235,6 +1654,12 @@ def _safe_ratio(numerator: int, denominator: int) -> float:
     """Делит без исключения на пустом наборе."""
 
     return round(numerator / denominator, 4) if denominator else 0.0
+
+
+def _safe_money_ratio(cost: float, denominator: int) -> float | None:
+    """Считает денежную метрику и явно возвращает None, если делить не на что."""
+
+    return round(cost / denominator, 6) if denominator else None
 
 
 def _f1(true_positive: int, false_positive: int, false_negative: int) -> float:

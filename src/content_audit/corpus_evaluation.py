@@ -290,13 +290,30 @@ class _MatchCandidate:
     reason: str
 
 
-def evaluate_corpus_report(report: AuditReport, gold_xlsx_path: Path) -> CorpusEvaluationSummary:
+def evaluate_corpus_report(
+    report: AuditReport,
+    gold_xlsx_path: Path,
+    *,
+    matcher: str = "strict",
+    judge_backend: str = "offline",
+    judge_model: str | None = None,
+    judge_api_key: str | None = None,
+    judge_topk: int = 6,
+    judge_cache_path: str | None = None,
+    defects_only: bool = False,
+    confidence_floor: float = 0.0,
+    mirror_dedupe: bool = False,
+) -> CorpusEvaluationSummary:
     """Сравнивает отчёт аудита с Excel-разметкой на уровне конкретных эталонных ошибок."""
 
     unit_candidates = _project_candidates_from_report(report)
     units_by_id = {unit.unit_id: unit for unit in report.units}
     gold_items, mapping_notes = load_gold_items(gold_xlsx_path, unit_candidates)
     gold_cases = _gold_cases_from_items(gold_items)
+    if defects_only:
+        from content_audit.aligner import is_opinion
+
+        gold_cases = [case for case in gold_cases if not is_opinion(case.gold_text)]
     predicted_items = _predicted_items_from_report(report, units_by_id)
     evaluated_criteria = sorted({item.criterion for item in gold_cases})
     predicted_items_in_scope = [
@@ -304,7 +321,26 @@ def evaluate_corpus_report(report: AuditReport, gold_xlsx_path: Path) -> CorpusE
         for item in predicted_items
         if item.criterion in evaluated_criteria and _is_strict_evaluation_signal(item)
     ]
-    matches, matched_prediction_ids = _match_gold_cases(gold_cases, predicted_items_in_scope)
+    if confidence_floor > 0.0 or mirror_dedupe or matcher == "anchor_judge":
+        from content_audit import aligner
+
+        predicted_items_in_scope = aligner.confidence_gate(predicted_items_in_scope, confidence_floor)
+        if mirror_dedupe:
+            predicted_items_in_scope = aligner.dedupe_mirror(predicted_items_in_scope)
+    if matcher == "anchor_judge":
+        from content_audit import aligner
+
+        judge = aligner.build_judge(
+            judge_backend,
+            api_key=judge_api_key,
+            model=judge_model,
+            cache_path=judge_cache_path,
+        )
+        matches, matched_prediction_ids = aligner.match_anchor_judge(
+            gold_cases, predicted_items_in_scope, judge, topk=judge_topk
+        )
+    else:
+        matches, matched_prediction_ids = _match_gold_cases(gold_cases, predicted_items_in_scope)
     detailed_false_positive_items = [
         item for item in predicted_items_in_scope if item.finding_id not in matched_prediction_ids
     ]

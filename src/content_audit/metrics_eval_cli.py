@@ -49,7 +49,19 @@ def main(argv: list[str] | None = None) -> int:
 
     report = AuditRunner(settings).run()
     write_report(report, audit_output_dir)
-    summary = evaluate_corpus_report(report, gold_xlsx)
+    summary = evaluate_corpus_report(
+        report,
+        gold_xlsx,
+        matcher=args.matcher,
+        judge_backend=args.judge_backend,
+        judge_model=args.judge_model,
+        judge_api_key=settings.openrouter_api_key,
+        judge_topk=args.judge_topk,
+        judge_cache_path=str(args.judge_cache) if args.judge_cache else None,
+        defects_only=args.defects_only,
+        confidence_floor=args.confidence_floor,
+        mirror_dedupe=args.mirror_dedupe,
+    )
     write_corpus_evaluation(summary, output_dir)
     _print_summary(summary, output_dir)
     return 0
@@ -73,6 +85,24 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--openrouter-model", default=None, help="Модель OpenRouter для общих модельных проверок.")
     parser.add_argument("--openrouter-fact-model", default=None, help="Модель OpenRouter для фактологической проверки.")
     parser.add_argument("--openrouter-tech-model", default=None, help="Модель OpenRouter для проверки технологий.")
+    parser.add_argument(
+        "--matcher",
+        choices=["strict", "anchor_judge"],
+        default="strict",
+        help="Стратегия сопоставления эталона и находок: strict (по строке/тексту) или anchor_judge (якоря + судья).",
+    )
+    parser.add_argument(
+        "--judge-backend",
+        choices=["offline", "openrouter"],
+        default="offline",
+        help="Бэкенд судьи для matcher=anchor_judge: offline (без сети) или openrouter (модель).",
+    )
+    parser.add_argument("--judge-model", default=None, help="Модель OpenRouter для судьи (по умолчанию qwen coder).")
+    parser.add_argument("--judge-topk", type=int, default=6, help="Сколько кандидатов на эталонный кейс отдавать судье.")
+    parser.add_argument("--judge-cache", type=Path, default=None, help="Путь к JSON-кэшу решений судьи.")
+    parser.add_argument("--defects-only", action="store_true", help="Считать recall только по дефектам, без субъективных мнений.")
+    parser.add_argument("--confidence-floor", type=float, default=0.0, help="Отсекать находки ниже этой уверенности (precision).")
+    parser.add_argument("--mirror-dedupe", action="store_true", help="Схлопывать дубли зеркальных файлов RU/EN и README/check-list.")
     return parser
 
 

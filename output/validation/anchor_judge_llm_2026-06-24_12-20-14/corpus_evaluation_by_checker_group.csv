@@ -1,0 +1,7 @@
+﻿slice_name,label,predicted_total,true_positive,false_positive,precision,false_positive_share
+checklist_and_artifacts,Чек-лист и артефакты,33,0,33,0.0,0.0384
+deterministic_rules,Детерминированные правила,31,5,26,0.1613,0.0302
+editorial_rules,Редакторские правила,589,7,582,0.0119,0.6767
+factcheck,Фактчек и актуальность,153,0,153,0.0,0.1779
+links_and_resources,Ссылки и ресурсы,37,0,37,0.0,0.043
+methodology,Методические критерии,29,0,29,0.0,0.0337

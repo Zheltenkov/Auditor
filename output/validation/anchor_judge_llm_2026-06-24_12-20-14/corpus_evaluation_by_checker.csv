@@ -1,0 +1,14 @@
+﻿slice_name,label,predicted_total,true_positive,false_positive,precision,false_positive_share
+broken_url_syntax_checker,broken_url_syntax_checker,1,1,0,1.0,0.0
+checklist_checker,checklist_checker,33,0,33,0.0,0.0384
+curriculum_relevance_checker,curriculum_relevance_checker,29,0,29,0.0,0.0337
+fact_checker_perplexity,fact_checker_perplexity,34,0,34,0.0,0.0395
+label_punctuation_checker,label_punctuation_checker,2,0,2,0.0,0.0023
+link_checker,link_checker,3,0,3,0.0,0.0035
+local_consistency_checker,local_consistency_checker,2,2,0,1.0,0.0
+local_link_checker,local_link_checker,1,0,1,0.0,0.0012
+markdown_structure_checker,markdown_structure_checker,26,2,24,0.0769,0.0279
+readme_fact_actuality_checker,readme_fact_actuality_checker,108,0,108,0.0,0.1256
+resource_availability_checker,resource_availability_checker,33,0,33,0.0,0.0384
+spelling_wording_checker,spelling_wording_checker,589,7,582,0.0119,0.6767
+tech_freshness_checker,tech_freshness_checker,11,0,11,0.0,0.0128

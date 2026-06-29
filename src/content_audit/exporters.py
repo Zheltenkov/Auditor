@@ -10,6 +10,7 @@ from xml.sax.saxutils import escape
 
 from content_audit.domain import CRITERION_LABELS, SEVERITY_LABELS, VERDICT_LABELS, AuditReport, Verdict
 from content_audit.report_formatting import format_finding_explanation, format_finding_fragment
+from content_audit.triage import is_fix_tier
 
 
 def write_report(report: AuditReport, output_path: Path) -> None:
@@ -57,6 +58,7 @@ def _report_rows(report: AuditReport) -> list[dict[str, object]]:
         unit = unit_by_id.get(finding.unit_id)
         rows.append(
             {
+                "Уровень": "К исправлению" if is_fix_tier(finding) else "На просмотр",
                 "Ветка": finding.branch or "",
                 "ID единицы": finding.unit_id,
                 "Название единицы": unit.name if unit else "",
@@ -187,6 +189,7 @@ def _xlsx_columns(fieldnames: list[object]) -> str:
     """Задаёт прикладные ширины колонок для удобного просмотра отчёта."""
 
     width_by_name = {
+        "Уровень": 16,
         "Ветка": 18,
         "ID единицы": 24,
         "Название единицы": 30,
@@ -228,6 +231,7 @@ def _empty_fieldnames() -> list[str]:
     """Возвращаем заголовки даже для пустого отчёта."""
 
     return [
+        "Уровень",
         "Ветка",
         "ID единицы",
         "Название единицы",

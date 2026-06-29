@@ -725,7 +725,7 @@ def _render_head(title: str = "Аудит контента · Панель от�
   --radius: 20px;
   --radius-md: 16px;
   --radius-sm: 12px;
-  --font-sans: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", "Consolas", ui-monospace, monospace;
 }
 * { box-sizing: border-box; }
@@ -758,8 +758,19 @@ body {
   box-shadow: 0 10px 24px rgba(14, 143, 111, .24);
 }
 .glyph img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.brand-title { font-weight: 800; font-size: 15px; }
-.brand-sub { color: var(--muted); font-size: 12px; font-weight: 600; }
+.brand-title {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+.brand-sub {
+  color: var(--muted);
+  font-size: 11.5px;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: 0;
+}
 .top-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 .shell { padding-top: 26px; padding-bottom: 72px; }
 body.login-page {
@@ -889,7 +900,10 @@ input[type="text"]:focus, select:focus { border-color: var(--accent); box-shadow
   display: inline-flex; align-items: center; justify-content: center;
   height: 34px; padding: 0 13px; border-radius: 999px;
   text-decoration: none; color: var(--text); background: var(--surface-strong);
-  border: 1px solid var(--border-strong); font-weight: 800; font-size: 12px;
+  border: 1px solid var(--border-strong);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0;
 }
 .options { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
 .check {

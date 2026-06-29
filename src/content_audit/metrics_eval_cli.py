@@ -24,6 +24,13 @@ def main(argv: list[str] | None = None) -> int:
     audit_output_dir = output_dir / "audit_report"
 
     env_file_values = load_env_file(Path(".env"))
+    from content_audit import aligner as _aligner
+
+    provider_url = _aligner.PROVIDER_URLS[args.provider]
+    if args.provider == "polza":
+        provider_key = get_env_value(("POLZA_AI_API_KEY", "POLZA_API_KEY"), env_file_values)
+    else:
+        provider_key = get_env_value(("OPENROUTER_API_KEY", "OPEN_ROUTER_API_KEY"), env_file_values)
     settings = AuditSettings(
         input_path=metrics_dir,
         output_path=audit_output_dir,
@@ -35,7 +42,9 @@ def main(argv: list[str] | None = None) -> int:
         link_timeout_seconds=args.link_timeout,
         min_image_width=args.min_image_width,
         min_image_height=args.min_image_height,
-        openrouter_api_key=get_env_value(("OPENROUTER_API_KEY", "OPEN_ROUTER_API_KEY"), env_file_values),
+        openrouter_api_key=provider_key,
+        openrouter_base_url=provider_url,
+        lean_checkers=args.lean,
         openrouter_model=args.openrouter_model
         or get_env_value(("OPENROUTER_MODEL", "OPEN_ROUTER_MODEL"), env_file_values)
         or DEFAULT_OPENROUTER_MODEL,
@@ -47,13 +56,14 @@ def main(argv: list[str] | None = None) -> int:
         or DEFAULT_OPENROUTER_TECH_MODEL,
     )
 
+    judge_backend = args.provider if args.judge_backend in ("openrouter", "polza") else args.judge_backend
     report = AuditRunner(settings).run()
     write_report(report, audit_output_dir)
     summary = evaluate_corpus_report(
         report,
         gold_xlsx,
         matcher=args.matcher,
-        judge_backend=args.judge_backend,
+        judge_backend=judge_backend,
         judge_model=args.judge_model,
         judge_api_key=settings.openrouter_api_key,
         judge_topk=args.judge_topk,
@@ -61,6 +71,7 @@ def main(argv: list[str] | None = None) -> int:
         defects_only=args.defects_only,
         confidence_floor=args.confidence_floor,
         mirror_dedupe=args.mirror_dedupe,
+        cap_repetitive=args.cap_repetitive,
     )
     write_corpus_evaluation(summary, output_dir)
     _print_summary(summary, output_dir)
@@ -92,10 +103,16 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Стратегия сопоставления эталона и находок: strict (по строке/тексту) или anchor_judge (якоря + судья).",
     )
     parser.add_argument(
+        "--provider",
+        choices=["openrouter", "polza"],
+        default="openrouter",
+        help="Провайдер LLM для аудита и судьи: openrouter или polza (OpenAI-совместимый).",
+    )
+    parser.add_argument(
         "--judge-backend",
-        choices=["offline", "openrouter"],
+        choices=["offline", "openrouter", "polza"],
         default="offline",
-        help="Бэкенд судьи для matcher=anchor_judge: offline (без сети) или openrouter (модель).",
+        help="Бэкенд судьи для matcher=anchor_judge: offline (без сети), openrouter или polza.",
     )
     parser.add_argument("--judge-model", default=None, help="Модель OpenRouter для судьи (по умолчанию qwen coder).")
     parser.add_argument("--judge-topk", type=int, default=6, help="Сколько кандидатов на эталонный кейс отдавать судье.")
@@ -103,18 +120,25 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--defects-only", action="store_true", help="Считать recall только по дефектам, без субъективных мнений.")
     parser.add_argument("--confidence-floor", type=float, default=0.0, help="Отсекать находки ниже этой уверенности (precision).")
     parser.add_argument("--mirror-dedupe", action="store_true", help="Схлопывать дубли зеркальных файлов RU/EN и README/check-list.")
+    parser.add_argument("--cap-repetitive", type=int, default=0, help="Лимит однотипных readability-придирок на единицу (0 = без лимита).")
+    parser.add_argument("--lean", action="store_true", help="Экономный режим: без дорогого Perplexity-фактчека и нулевых по точности правил.")
     return parser
 
 
 def _find_gold_xlsx(metrics_dir: Path) -> Path:
-    """Находит единственный Excel-файл в папке metrics."""
+    """Находит файл разметки, предпочитая очищенный атомарный (xlsx или csv)."""
 
-    files = sorted(metrics_dir.glob("*.xlsx"))
-    if not files:
-        raise FileNotFoundError(f"В папке {metrics_dir} не найден Excel-файл с разметкой.")
-    if len(files) > 1:
-        raise ValueError(f"В папке {metrics_dir} найдено несколько Excel-файлов, укажите --gold-xlsx.")
-    return files[0]
+    candidates = sorted(metrics_dir.glob("*.xlsx")) + sorted(metrics_dir.glob("*.csv"))
+    if not candidates:
+        raise FileNotFoundError(f"В папке {metrics_dir} не найден файл разметки (.xlsx/.csv).")
+    for keyword in ("очищ", "атомар", "atomic", "clean"):
+        for f in candidates:
+            if keyword in f.name.lower():
+                return f
+    gold = [f for f in candidates if "проект" in f.name.lower() or "gold" in f.name.lower()]
+    if gold:
+        return gold[0]
+    return candidates[0]
 
 
 def _print_summary(summary, output_dir: Path) -> None:

@@ -25,6 +25,7 @@ from urllib.parse import parse_qs, quote, unquote, urlparse
 
 from content_audit.domain import (
     CRITERION_LABELS,
+    ISSUE_KIND_LABELS,
     SEVERITY_LABELS,
     VERDICT_LABELS,
     AuditReport,
@@ -1008,11 +1009,12 @@ input[type="text"]:focus, select:focus { border-color: var(--accent); box-shadow
 }
 table {
   width: 100%;
-  min-width: 2320px;
+  min-width: 2440px;
   table-layout: fixed;
   border-collapse: collapse;
 }
 col.col-criterion { width: 150px; }
+col.col-kind { width: 130px; }
 col.col-verdict { width: 170px; }
 col.col-severity { width: 130px; }
 col.col-file { width: 190px; }
@@ -1504,6 +1506,9 @@ def _criterion_short_label(criterion: Criterion) -> str:
 
     labels = {
         Criterion.ACTUALITY: "Актуальность",
+        Criterion.LINKS: "Ссылки",
+        Criterion.TECHNOLOGY_FRESHNESS: "Технологии",
+        Criterion.FACTS: "Факты",
         Criterion.MARKET_FIT: "Рынок",
         Criterion.RIGHTS: "Права",
         Criterion.CORRECTNESS: "Точность",
@@ -1514,11 +1519,12 @@ def _criterion_short_label(criterion: Criterion) -> str:
         Criterion.LANGUAGE: "Язык",
         Criterion.IMAGE_QUALITY: "Изображения",
     }
-    return labels[criterion]
+    return labels.get(criterion, CRITERION_LABELS[criterion])
 
 
 TABLE_COLUMNS: tuple[tuple[str, str], ...] = (
     ("criterion", "Критерий"),
+    ("kind", "Тип"),
     ("verdict", "Вердикт"),
     ("severity", "Критичность"),
     ("file", "Файл"),
@@ -1553,8 +1559,8 @@ def _render_findings_table(findings: list[Finding]) -> str:
     headers = "\n".join(_render_table_header(key, label) for key, label in TABLE_COLUMNS)
     rows = "\n".join(_render_finding_row(finding) for finding in findings)
     if not rows:
-        rows = '<tr><td colspan="14">По выбранным условиям случаев нет.</td></tr>'
-    rows += '\n<tr id="no-match" class="no-match" style="display:none"><td colspan="14">Под выбранные фильтры ничего не попадает.</td></tr>'
+        rows = '<tr><td colspan="15">По выбранным условиям случаев нет.</td></tr>'
+    rows += '\n<tr id="no-match" class="no-match" style="display:none"><td colspan="15">Под выбранные фильтры ничего не попадает.</td></tr>'
     return f"""
 <section id="findings" class="section">
   <div class="section-head">
@@ -1565,6 +1571,7 @@ def _render_findings_table(findings: list[Finding]) -> str:
     <table id="findings-table" class="findings">
       <colgroup>
         <col class="col-criterion">
+        <col class="col-kind">
         <col class="col-verdict">
         <col class="col-severity">
         <col class="col-file">
@@ -1600,8 +1607,9 @@ def _render_finding_row(finding: Finding) -> str:
     explanation = format_finding_explanation_html(finding, _esc)
     fragment = format_finding_fragment(finding)
     return f"""
-<tr class="frow" data-criterion="{finding.criterion.value}" data-verdict="{finding.verdict.value}" data-severity="{finding.severity.value}">
+<tr class="frow" data-criterion="{finding.criterion.value}" data-kind="{finding.issue_kind.value}" data-verdict="{finding.verdict.value}" data-severity="{finding.severity.value}">
   <td>{_esc(CRITERION_LABELS[finding.criterion])}</td>
+  <td>{_esc(ISSUE_KIND_LABELS[finding.issue_kind])}</td>
   <td>{_pill(VERDICT_LABELS[finding.verdict], f"pill-{finding.verdict.value}")}</td>
   <td>{_pill(SEVERITY_LABELS[finding.severity], f"pill-{finding.severity.value}")}</td>
   <td class="mono">{_esc(file_path)}</td>

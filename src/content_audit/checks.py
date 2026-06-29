@@ -48,6 +48,7 @@ from content_audit.domain import (
     Evidence,
     ExtractedEntity,
     Finding,
+    IssueKind,
     Severity,
     TextLocation,
     Verdict,
@@ -327,7 +328,7 @@ class BrokenUrlSyntaxChecker(BaseChecker):
         return _finding(
             unit,
             self.name,
-            Criterion.ACTUALITY,
+            Criterion.LINKS,
             Severity.MAJOR,
             Verdict.FAIL,
             0.96,
@@ -814,7 +815,7 @@ class LinkChecker(BaseChecker):
                     _finding(
                         unit,
                         self.name,
-                        Criterion.ACTUALITY,
+                        Criterion.LINKS,
                         Severity.INFO,
                         Verdict.UNKNOWN,
                         0.65,
@@ -831,7 +832,7 @@ class LinkChecker(BaseChecker):
                     _finding(
                         unit,
                         self.name,
-                        Criterion.ACTUALITY,
+                        Criterion.LINKS,
                         Severity.INFO,
                         Verdict.UNKNOWN,
                         0.5,
@@ -852,7 +853,7 @@ class LinkChecker(BaseChecker):
                     _finding(
                         unit,
                         self.name,
-                        Criterion.ACTUALITY,
+                        Criterion.LINKS,
                         severity,
                         verdict,
                         0.65,
@@ -868,7 +869,7 @@ class LinkChecker(BaseChecker):
                     _finding(
                         unit,
                         self.name,
-                        Criterion.ACTUALITY,
+                        Criterion.LINKS,
                         Severity.INFO,
                         Verdict.UNKNOWN,
                         0.65,
@@ -885,7 +886,7 @@ class LinkChecker(BaseChecker):
                     _finding(
                         unit,
                         self.name,
-                        Criterion.ACTUALITY,
+                        Criterion.LINKS,
                         severity,
                         Verdict.FAIL,
                         0.9,
@@ -901,7 +902,7 @@ class LinkChecker(BaseChecker):
                     _finding(
                         unit,
                         self.name,
-                        Criterion.ACTUALITY,
+                        Criterion.LINKS,
                         Severity.MINOR,
                         Verdict.WARNING,
                         0.7,
@@ -935,7 +936,7 @@ class LocalLinkChecker(BaseChecker):
                     _finding(
                         unit,
                         self.name,
-                        Criterion.ACTUALITY,
+                        Criterion.LINKS,
                         Severity.MAJOR,
                         Verdict.FAIL,
                         0.95,
@@ -2586,7 +2587,7 @@ class LocalConsistencyChecker(BaseChecker):
         return _finding(
             unit,
             self.name,
-            Criterion.CORRECTNESS,
+            Criterion.FACTS,
             Severity.MINOR,
             Verdict.WARNING,
             confidence,
@@ -3013,7 +3014,7 @@ verdict='unknown' ставь, если источников недостаточ
                     self.prompt_version,
                 )
             except OpenRouterError as exc:
-                findings.append(_external_check_error(unit, self.name, Criterion.CORRECTNESS, exc))
+                findings.append(_external_check_error(unit, self.name, Criterion.FACTS, exc))
                 break
 
             item = _first_result_item(record.get("response"))
@@ -3063,7 +3064,7 @@ verdict='unknown' ставь только для важного утвержде
                     self.prompt_version,
                 )
             except OpenRouterError as exc:
-                findings.append(_external_check_error(unit, self.name, Criterion.CORRECTNESS, exc))
+                findings.append(_external_check_error(unit, self.name, Criterion.FACTS, exc))
                 break
 
             for item in _result_items(record.get("response")):
@@ -3116,7 +3117,7 @@ verdict='unknown' ставь, если источников недостаточ
                     self.prompt_version,
                 )
             except OpenRouterError as exc:
-                findings.append(_external_check_error(unit, self.name, Criterion.ACTUALITY, exc))
+                findings.append(_external_check_error(unit, self.name, Criterion.TECHNOLOGY_FRESHNESS, exc))
                 break
 
             item = _first_result_item(record.get("response"))
@@ -3136,7 +3137,7 @@ verdict='unknown' ставь, если источников недостаточ
         return _finding(
             unit,
             self.name,
-            Criterion.ACTUALITY,
+            Criterion.TECHNOLOGY_FRESHNESS,
             Severity.INFO,
             Verdict.UNKNOWN,
             0.55,
@@ -3217,7 +3218,7 @@ class DependencyFreshnessChecker(BaseChecker):
             return _finding(
                 unit,
                 self.name,
-                Criterion.ACTUALITY,
+                Criterion.TECHNOLOGY_FRESHNESS,
                 Severity.MINOR,
                 Verdict.WARNING,
                 0.8,
@@ -3234,7 +3235,7 @@ class DependencyFreshnessChecker(BaseChecker):
             return _finding(
                 unit,
                 self.name,
-                Criterion.ACTUALITY,
+                Criterion.TECHNOLOGY_FRESHNESS,
                 Severity.INFO,
                 Verdict.UNKNOWN,
                 0.7,
@@ -3253,7 +3254,7 @@ class DependencyFreshnessChecker(BaseChecker):
             return _finding(
                 unit,
                 self.name,
-                Criterion.ACTUALITY,
+                Criterion.TECHNOLOGY_FRESHNESS,
                 Severity.MINOR,
                 Verdict.WARNING,
                 0.85,
@@ -3271,7 +3272,7 @@ class DependencyFreshnessChecker(BaseChecker):
         return _finding(
             unit,
             self.name,
-            Criterion.ACTUALITY,
+            Criterion.TECHNOLOGY_FRESHNESS,
             Severity.INFO,
             Verdict.PASS,
             0.75,
@@ -3309,7 +3310,7 @@ class DependencyFreshnessChecker(BaseChecker):
             return _finding(
                 unit,
                 self.name,
-                Criterion.ACTUALITY,
+                Criterion.TECHNOLOGY_FRESHNESS,
                 Severity.INFO,
                 Verdict.UNKNOWN,
                 0.45,
@@ -3343,7 +3344,7 @@ class DependencyFreshnessChecker(BaseChecker):
                 self.prompt_version,
             )
         except OpenRouterError as exc:
-            return _external_check_error(unit, self.name, Criterion.ACTUALITY, exc)
+            return _external_check_error(unit, self.name, Criterion.TECHNOLOGY_FRESHNESS, exc)
 
         item = _first_result_item(record.get("response"))
         if item is None:
@@ -3358,7 +3359,7 @@ class DependencyFreshnessChecker(BaseChecker):
         return _finding(
             unit,
             self.name,
-            Criterion.ACTUALITY,
+            Criterion.TECHNOLOGY_FRESHNESS,
             Severity.INFO,
             Verdict.UNKNOWN,
             0.55,
@@ -3415,7 +3416,7 @@ class CurriculumRelevanceChecker(BaseChecker):
     prompt_version = "curriculum_relevance_checker:v1"
     model_context_limit = 14000
     min_model_confidence = 0.55
-    allowed_criteria = {Criterion.CORRECTNESS, Criterion.ACTUALITY}
+    allowed_criteria = {Criterion.CORRECTNESS, Criterion.TECHNOLOGY_FRESHNESS}
     min_confidence_by_issue_type = {
         "language_material_conflict": 0.62,
         "language_tooling_conflict": 0.62,
@@ -3451,7 +3452,7 @@ class CurriculumRelevanceChecker(BaseChecker):
     C_LANGUAGE_RE = re.compile(r"(?<![a-zа-яё])c(?![a-zа-яё+#])", re.IGNORECASE)
 
     SYSTEM_PROMPT = """Ты эксперт-методолог и проверяешь учебный проект на уместность технологий, подходов и ключевых тем.
-Верни только JSON: {"findings":[{"criterion":"correctness|actuality","issue_type":"inappropriate_tool|outdated_approach|language_material_conflict|missing_key_topic","severity":"info|minor|major","verdict":"warning|fail|unknown","confidence":0.0,"quote":"","file_path":"","line_start":1,"evidence":"","recommendation":""}]}.
+Верни только JSON: {"findings":[{"criterion":"correctness|technology_freshness","issue_type":"inappropriate_tool|outdated_approach|language_material_conflict|missing_key_topic","severity":"info|minor|major","verdict":"warning|fail|unknown","confidence":0.0,"quote":"","file_path":"","line_start":1,"evidence":"","recommendation":""}]}.
 Ищи только методические проблемы, которые требуют внимания: инструмент не подходит цели курса; подход устарел именно как учебная практика; рекомендованный материал противоречит языку проекта; в задании не хватает ключевой темы, без которой студент не поймёт ожидаемое решение.
 Особенно проверь: C++ code style в Java или C#, ASP.NET в Java, C99/C11, finite state machine, debugger, unsigned types, define/include/preprocessor.
 Не проверяй битые ссылки, версии библиотек, права, язык перевода, орфографию, чек-лист и обычную фактологию: для этого есть отдельные модули.
@@ -3591,7 +3592,7 @@ class CurriculumRelevanceChecker(BaseChecker):
                     file_path,
                     line_number,
                     line,
-                    Criterion.ACTUALITY,
+                    Criterion.TECHNOLOGY_FRESHNESS,
                     Severity.MINOR,
                     "В задании явно упомянут стандарт C99/C11; нужно оценить, соответствует ли он текущей методической политике курса.",
                     "Подтвердить требуемый стандарт C в методических материалах или обновить формулировку до поддерживаемого стандарта.",
@@ -3733,6 +3734,8 @@ class CurriculumRelevanceChecker(BaseChecker):
         """Преобразует сильный правиловой сигнал в строку отчёта."""
 
         criterion = _enum_or_default(Criterion, signal.get("criterion"), Criterion.CORRECTNESS)
+        if criterion == Criterion.ACTUALITY:
+            criterion = Criterion.TECHNOLOGY_FRESHNESS
         if criterion not in self.allowed_criteria:
             criterion = Criterion.CORRECTNESS
         severity = _enum_or_default(Severity, signal.get("severity"), Severity.MINOR)
@@ -3768,6 +3771,8 @@ class CurriculumRelevanceChecker(BaseChecker):
 
         verdict = _verdict_from_model_value(item.get("verdict"), Verdict.UNKNOWN)
         criterion = _enum_or_default(Criterion, item.get("criterion"), Criterion.CORRECTNESS)
+        if criterion == Criterion.ACTUALITY:
+            criterion = Criterion.TECHNOLOGY_FRESHNESS
         if criterion not in self.allowed_criteria:
             criterion = Criterion.CORRECTNESS
         severity = _enum_or_default(Severity, item.get("severity"), _severity_from_verdict(verdict))
@@ -4110,8 +4115,14 @@ class ModelRubricChecker(BaseChecker):
 def default_checkers(
     use_model: bool,
     code_similarity_index: dict[str, list[CodeMatch]] | None = None,
+    lean: bool = False,
 ) -> list[BaseChecker]:
     """Возвращает набор проверок для первого рабочего прототипа."""
+
+    from content_audit.extra_checkers import (
+        CrossFileConsistencyChecker,
+        CourseMaterialRelevanceChecker,
+    )
 
     checkers: list[BaseChecker] = [
         StructureChecker(),
@@ -4133,11 +4144,17 @@ def default_checkers(
         RegionalAvailabilityChecker(),
         TechFreshnessChecker(),
         CurriculumRelevanceChecker(),
+        CrossFileConsistencyChecker(),
+        CourseMaterialRelevanceChecker(),
     ]
     if use_model:
         checkers.append(ReadmeFactActualityChecker())
         checkers.append(FactCheckerPerplexity())
         checkers.append(ModelRubricChecker())
+    if lean:
+        # Убираем дорогие/нулевые по точности правила: фактчек Perplexity, readme-факты, tech-freshness.
+        _drop = {"fact_checker_perplexity", "readme_fact_actuality_checker", "tech_freshness_checker"}
+        checkers = [c for c in checkers if c.name not in _drop]
     return checkers
 
 
@@ -5040,7 +5057,7 @@ def _finding_from_dependency_issue(unit: ContentUnit, checker_name: str, issue: 
     return _finding(
         unit,
         checker_name,
-        Criterion.ACTUALITY,
+        Criterion.TECHNOLOGY_FRESHNESS,
         Severity.MAJOR,
         Verdict.WARNING,
         0.8,
@@ -5081,7 +5098,7 @@ def _finding_from_regional_availability_match(
     return _finding(
         unit,
         checker_name,
-        Criterion.ACTUALITY,
+        Criterion.TECHNOLOGY_FRESHNESS,
         severity,
         Verdict.WARNING if match.rule.status in {"unavailable", "limited"} else Verdict.UNKNOWN,
         0.85,
@@ -5119,7 +5136,7 @@ def _finding_from_dependency_model_item(
     return _finding(
         unit,
         checker_name,
-        Criterion.ACTUALITY,
+        Criterion.TECHNOLOGY_FRESHNESS,
         severity,
         verdict,
         _parse_confidence(item.get("confidence")),
@@ -5168,7 +5185,7 @@ def _finding_from_fact_item(
     return _finding(
         unit,
         checker_name,
-        Criterion.CORRECTNESS,
+        Criterion.FACTS,
         _severity_from_verdict(verdict),
         verdict,
         _parse_confidence(item.get("confidence")),
@@ -5205,7 +5222,7 @@ def _finding_from_readme_fact_item(
     return _finding(
         unit,
         checker_name,
-        Criterion.CORRECTNESS,
+        Criterion.FACTS,
         severity,
         verdict,
         _parse_confidence(item.get("confidence")),
@@ -5259,7 +5276,7 @@ def _finding_from_technology_item(
     return _finding(
         unit,
         checker_name,
-        Criterion.ACTUALITY,
+        Criterion.TECHNOLOGY_FRESHNESS,
         severity,
         verdict,
         _parse_confidence(item.get("confidence")),
@@ -5321,7 +5338,7 @@ def _external_check_error(unit: ContentUnit, checker_name: str, criterion: Crite
         "Повторить проверку после устранения ошибки провайдера или временно отключить модельный контур.",
         True,
         checked_at=datetime.now(timezone.utc),
-        support_status="ошибка проверки" if criterion == Criterion.ACTUALITY else None,
+        support_status="ошибка проверки" if criterion in {Criterion.ACTUALITY, Criterion.TECHNOLOGY_FRESHNESS} else None,
     )
 
 
@@ -5599,14 +5616,18 @@ def _finding(
     latest_version: str | None = None,
     recommended_version: str | None = None,
     prompt_version: str | None = None,
+    issue_kind: IssueKind | None = None,
 ) -> Finding:
     """Создаём найденный случай со стабильным идентификатором."""
 
+    normalized_extra = extra or {}
+    resolved_issue_kind = issue_kind or _infer_issue_kind(checker_name, criterion, verdict, normalized_extra)
     raw = "|".join(
         [
             unit.unit_id,
             checker_name,
             criterion.value,
+            resolved_issue_kind.value,
             severity.value,
             quote or "",
             location.file_path if location else "",
@@ -5619,6 +5640,7 @@ def _finding(
         unit_id=unit.unit_id,
         branch=unit.branch,
         criterion=criterion,
+        issue_kind=resolved_issue_kind,
         severity=severity,
         verdict=verdict,
         confidence=confidence,
@@ -5634,5 +5656,30 @@ def _finding(
         recommendation=recommendation,
         needs_human_review=needs_human_review,
         checker_name=checker_name,
-        extra=extra or {},
+        extra=normalized_extra,
     )
+
+
+def _infer_issue_kind(
+    checker_name: str,
+    criterion: Criterion,
+    verdict: Verdict,
+    extra: dict[str, object],
+) -> IssueKind:
+    """Отделяет обязательные дефекты от методических пожеланий и вопросов к данным."""
+
+    raw = extra.get("issue_kind")
+    if raw:
+        try:
+            return IssueKind(str(raw))
+        except ValueError:
+            pass
+    if verdict == Verdict.UNKNOWN:
+        return IssueKind.QUESTION
+    issue_type = str(extra.get("issue_type") or "")
+    if criterion in {Criterion.WORKLOAD, Criterion.MARKET_FIT, Criterion.EXAM, Criterion.LANGUAGE}:
+        return IssueKind.QUESTION
+    if checker_name in {"curriculum_relevance_checker", "model_rubric_checker"}:
+        if issue_type in {"missing_key_topic", "topic_review", "outdated_approach", "language_tooling_conflict"}:
+            return IssueKind.IMPROVEMENT
+    return IssueKind.DEFECT

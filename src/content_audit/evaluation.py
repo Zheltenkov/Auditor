@@ -224,6 +224,9 @@ def _normalise_criterion(value: Any) -> str:
     text = str(value or "").strip().lower()
     labels = {
         "актуальность": Criterion.ACTUALITY.value,
+        "ссылки": Criterion.LINKS.value,
+        "версии и технологии": Criterion.TECHNOLOGY_FRESHNESS.value,
+        "факты, определения, примеры": Criterion.FACTS.value,
         "точность и корректность": Criterion.CORRECTNESS.value,
         "грамотность и читаемость текста": Criterion.READABILITY.value,
         "качество изображений": Criterion.IMAGE_QUALITY.value,

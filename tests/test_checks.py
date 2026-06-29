@@ -379,7 +379,7 @@ def test_local_consistency_checker_flags_sort_direction_conflict(workspace_tmp_p
     findings = LocalConsistencyChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
 
     assert len(findings) == 1
-    assert findings[0].criterion == Criterion.CORRECTNESS
+    assert findings[0].criterion == Criterion.FACTS
     assert findings[0].location is not None
     assert findings[0].location.line_start == 2
     assert findings[0].location.line_end == 4
@@ -394,7 +394,7 @@ def test_local_consistency_checker_flags_invalid_word_definition(workspace_tmp_p
 
     findings = LocalConsistencyChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
 
-    assert findings[0].criterion == Criterion.CORRECTNESS
+    assert findings[0].criterion == Criterion.FACTS
     assert findings[0].extra["issue_type"] == "invalid_definition"
     assert "последовательность символов" in findings[0].recommendation
 
@@ -552,7 +552,7 @@ def test_technology_checker_creates_actuality_candidate(workspace_tmp_path: Path
 
     findings = TechnologyFreshnessChecker().check(unit, entities, CheckContext(_settings(workspace_tmp_path, project)))
 
-    assert any(finding.criterion == Criterion.ACTUALITY for finding in findings)
+    assert any(finding.criterion == Criterion.TECHNOLOGY_FRESHNESS for finding in findings)
 
 
 def test_technology_checker_ignores_makefile_target_instruction(workspace_tmp_path: Path) -> None:
@@ -1082,7 +1082,7 @@ def test_readme_fact_actuality_checker_only_reads_main_and_russian_readme(worksp
     assert "README.md" in fake_client.user_prompts[0]
     assert "README_RUS.md" in fake_client.user_prompts[1]
     assert all("README_UZB.md" not in prompt for prompt in fake_client.user_prompts)
-    assert findings[0].criterion == Criterion.CORRECTNESS
+    assert findings[0].criterion == Criterion.FACTS
     assert findings[0].source == "https://docs.python.org/3/whatsnew/3.10.html"
     assert findings[0].latest_version == "3.14"
 
@@ -1398,7 +1398,7 @@ def test_regional_availability_checker_uses_curated_ru_rules(workspace_tmp_path:
     findings = RegionalAvailabilityChecker().check(unit, entities, context)
 
     assert {finding.support_status for finding in findings} == {"недоступно в РФ", "ограничено в РФ"}
-    assert all(finding.criterion == Criterion.ACTUALITY for finding in findings)
+    assert all(finding.criterion == Criterion.TECHNOLOGY_FRESHNESS for finding in findings)
     assert any(finding.severity == Severity.MAJOR for finding in findings)
     assert any(finding.source == "https://kb.example/blocked" for finding in findings)
 
@@ -1563,7 +1563,7 @@ def test_broken_url_syntax_checker_flags_backslash_and_missing_slash(workspace_t
     findings = BrokenUrlSyntaxChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
 
     assert [finding.quote for finding in findings] == ["https:/\\new.oprosso.net", "http:/example.com"]
-    assert all(finding.criterion == Criterion.ACTUALITY for finding in findings)
+    assert all(finding.criterion == Criterion.LINKS for finding in findings)
     assert all(finding.severity == Severity.MAJOR for finding in findings)
     assert all(finding.verdict == Verdict.FAIL for finding in findings)
     assert all(finding.needs_human_review is False for finding in findings)

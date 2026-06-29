@@ -16,13 +16,15 @@ class OpenRouterError(RuntimeError):
 class OpenRouterClient:
     """Тонкий клиент для запросов к модели через OpenRouter."""
 
-    def __init__(self, api_key: str, model: str, timeout_seconds: float = 60.0) -> None:
+    def __init__(self, api_key: str, model: str, timeout_seconds: float = 60.0,
+                 base_url: str = "https://openrouter.ai/api/v1/chat/completions") -> None:
         self.api_key = api_key
         self.model = model
         self.timeout_seconds = timeout_seconds
+        self.base_url = base_url
         self.last_call_usage: dict[str, int | float] = {}
 
-    def complete_json(self, system_prompt: str, user_prompt: str, max_retries: int = 2) -> dict[str, Any]:
+    def complete_json(self, system_prompt: str, user_prompt: str, max_retries: int = 2, max_tokens: int | None = None) -> dict[str, Any]:
         """Запрашиваем у модели JSON и разбираем ответ в словарь."""
 
         payload = {
@@ -33,6 +35,8 @@ class OpenRouterClient:
             ],
             "response_format": {"type": "json_object"},
         }
+        if max_tokens is not None:
+            payload["max_tokens"] = max_tokens
         headers = {
             "Authorization": f"Bearer {self.api_key}",
             "Content-Type": "application/json",
@@ -42,7 +46,7 @@ class OpenRouterClient:
         for attempt in range(max_retries + 1):
             try:
                 response = requests.post(
-                    "https://openrouter.ai/api/v1/chat/completions",
+                    self.base_url,
                     headers=headers,
                     json=payload,
                     timeout=self.timeout_seconds,

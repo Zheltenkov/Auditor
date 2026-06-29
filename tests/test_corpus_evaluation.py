@@ -71,7 +71,7 @@ def test_corpus_evaluation_matches_projects_and_computes_metrics(workspace_tmp_p
                 finding_id="f1",
                 unit_id="ap1_go_t01__abc",
                 branch=None,
-                criterion=Criterion.ACTUALITY,
+                criterion=Criterion.LINKS,
                 severity=Severity.MAJOR,
                 verdict=Verdict.FAIL,
                 confidence=0.9,

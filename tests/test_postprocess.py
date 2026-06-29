@@ -75,6 +75,7 @@ def test_postprocess_drops_empty_model_unknown_and_rights_rubric_duplicate() -> 
 def test_postprocess_drops_low_evidence_actuality_unknown() -> None:
     finding = _finding(
         checker_name="tech_freshness_checker",
+        criterion=Criterion.TECHNOLOGY_FRESHNESS,
         verdict=Verdict.UNKNOWN,
         confidence=0.1,
         evidence=[Evidence(title="Актуальность технологии", detail="Недостаточно контекста для определения актуальности.")],

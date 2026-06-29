@@ -14,6 +14,9 @@ class Criterion(StrEnum):
     """Критерии проверки из ТЗ и таблицы приоритетов."""
 
     ACTUALITY = "actuality"
+    LINKS = "links"
+    TECHNOLOGY_FRESHNESS = "technology_freshness"
+    FACTS = "facts"
     MARKET_FIT = "market_fit"
     RIGHTS = "rights"
     CORRECTNESS = "correctness"
@@ -44,6 +47,14 @@ class Verdict(StrEnum):
     PASS = "pass"
 
 
+class IssueKind(StrEnum):
+    """Тип записи для честного разделения дефектов, улучшений и вопросов к данным."""
+
+    DEFECT = "defect"
+    IMPROVEMENT = "improvement"
+    QUESTION = "question"
+
+
 class EntityType(StrEnum):
     """Тип извлечённой сущности."""
 
@@ -57,6 +68,9 @@ class EntityType(StrEnum):
 
 CRITERION_LABELS: dict[Criterion, str] = {
     Criterion.ACTUALITY: "Актуальность",
+    Criterion.LINKS: "Ссылки",
+    Criterion.TECHNOLOGY_FRESHNESS: "Версии и технологии",
+    Criterion.FACTS: "Факты, определения, примеры",
     Criterion.MARKET_FIT: "Соответствие рынку",
     Criterion.RIGHTS: "Оригинальность и права использования ресурсов",
     Criterion.CORRECTNESS: "Точность и корректность",
@@ -83,6 +97,12 @@ VERDICT_LABELS: dict[Verdict, str] = {
     Verdict.PASS: "Проверено",
 }
 
+ISSUE_KIND_LABELS: dict[IssueKind, str] = {
+    IssueKind.DEFECT: "Дефект",
+    IssueKind.IMPROVEMENT: "Улучшение",
+    IssueKind.QUESTION: "Вопрос",
+}
+
 
 class AuditSettings(BaseModel):
     """Настройки одного запуска аудита."""
@@ -101,6 +121,8 @@ class AuditSettings(BaseModel):
     openrouter_model: str | None = None
     openrouter_fact_model: str | None = None
     openrouter_tech_model: str | None = None
+    openrouter_base_url: str | None = None
+    lean_checkers: bool = False
     cache_path: Path | None = None
 
     @field_validator("input_path", "output_path", "cache_path")
@@ -204,6 +226,7 @@ class Finding(BaseModel):
     unit_id: str
     branch: str | None
     criterion: Criterion
+    issue_kind: IssueKind = IssueKind.DEFECT
     severity: Severity
     verdict: Verdict
     confidence: float = Field(ge=0.0, le=1.0)

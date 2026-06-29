@@ -53,6 +53,7 @@ class AuditRunner:
         checkers = default_checkers(
             use_model=self.settings.use_model and model_used,
             code_similarity_index=code_similarity_index,
+            lean=getattr(self.settings, "lean_checkers", False),
         )
         similarity_pairs = sum(len(matches) for matches in code_similarity_index.values())
         _finish_step(steps, "Подготовка проверок", step_started, f"Модулей: {len(checkers)}, совпадений кода: {similarity_pairs}")
@@ -98,7 +99,9 @@ class AuditRunner:
     def _build_named_client(self, model_name: str | None, fallback_model: str) -> OpenRouterClient:
         """Подставляем безопасную модель по умолчанию, если настройка не задана."""
 
-        return OpenRouterClient(api_key=self.settings.openrouter_api_key or "", model=model_name or fallback_model)
+        base_url = getattr(self.settings, "openrouter_base_url", None)
+        kwargs = {"base_url": base_url} if base_url else {}
+        return OpenRouterClient(api_key=self.settings.openrouter_api_key or "", model=model_name or fallback_model, **kwargs)
 
     def _filter_findings(self, findings: list[Finding]) -> list[Finding]:
         """Убираем успешные и, при необходимости, неизвестные случаи."""

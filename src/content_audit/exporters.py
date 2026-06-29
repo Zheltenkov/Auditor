@@ -8,7 +8,7 @@ import zipfile
 from pathlib import Path
 from xml.sax.saxutils import escape
 
-from content_audit.domain import CRITERION_LABELS, SEVERITY_LABELS, VERDICT_LABELS, AuditReport, Verdict
+from content_audit.domain import CRITERION_LABELS, ISSUE_KIND_LABELS, SEVERITY_LABELS, VERDICT_LABELS, AuditReport, Verdict
 from content_audit.report_formatting import format_finding_explanation, format_finding_fragment
 from content_audit.triage import is_fix_tier
 
@@ -63,6 +63,7 @@ def _report_rows(report: AuditReport) -> list[dict[str, object]]:
                 "ID единицы": finding.unit_id,
                 "Название единицы": unit.name if unit else "",
                 "Критерий": CRITERION_LABELS[finding.criterion],
+                "Тип": ISSUE_KIND_LABELS[finding.issue_kind],
                 "Файл": finding.location.file_path if finding.location else "",
                 "Строка": finding.location.line_start if finding.location else "",
                 "Фрагмент": format_finding_fragment(finding),
@@ -194,6 +195,7 @@ def _xlsx_columns(fieldnames: list[object]) -> str:
         "ID единицы": 24,
         "Название единицы": 30,
         "Критерий": 28,
+        "Тип": 14,
         "Файл": 32,
         "Строка": 10,
         "Фрагмент": 42,
@@ -236,6 +238,7 @@ def _empty_fieldnames() -> list[str]:
         "ID единицы",
         "Название единицы",
         "Критерий",
+        "Тип",
         "Файл",
         "Строка",
         "Фрагмент",

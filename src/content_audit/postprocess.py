@@ -94,7 +94,7 @@ def _is_empty_model_result(finding: Finding) -> bool:
 def _is_low_evidence_actuality_unknown(finding: Finding) -> bool:
     """Удаляет проверки актуальности без источников, версий и уверенности."""
 
-    if finding.checker_name != "tech_freshness_checker" or finding.criterion != Criterion.ACTUALITY:
+    if finding.checker_name != "tech_freshness_checker" or finding.criterion != Criterion.TECHNOLOGY_FRESHNESS:
         return False
     if finding.verdict != Verdict.UNKNOWN:
         return False

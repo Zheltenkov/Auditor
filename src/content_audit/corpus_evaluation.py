@@ -23,15 +23,28 @@ DETAILS_COLUMN = "Детали"
 
 
 CRITERION_ALIASES: dict[Criterion, tuple[str, ...]] = {
-    Criterion.ACTUALITY: (
-        "актуаль",
-        "неактуаль",
-        "устар",
+    Criterion.LINKS: (
         "ссылка",
-        "версии ос",
-        "инструмент",
+        "url",
         "api",
         "сервис",
+    ),
+    Criterion.TECHNOLOGY_FRESHNESS: (
+        "устар",
+        "версии ос",
+        "инструмент",
+        "библиотек",
+        "технолог",
+        "фреймворк",
+        "стек",
+    ),
+    Criterion.FACTS: (
+        "факт",
+        "определени",
+        "пример",
+        "логик",
+        "противореч",
+        "неверн",
     ),
     Criterion.READABILITY: (
         "опечат",
@@ -122,6 +135,7 @@ class GoldCorpusCase(BaseModel):
     line_start: int | None = None
     line_end: int | None = None
     gold_text: str
+    file_hint: str | None = None
 
 
 class PredictedCorpusItem(BaseModel):
@@ -303,17 +317,29 @@ def evaluate_corpus_report(
     defects_only: bool = False,
     confidence_floor: float = 0.0,
     mirror_dedupe: bool = False,
+    cap_repetitive: int = 0,
 ) -> CorpusEvaluationSummary:
     """Сравнивает отчёт аудита с Excel-разметкой на уровне конкретных эталонных ошибок."""
 
     unit_candidates = _project_candidates_from_report(report)
     units_by_id = {unit.unit_id: unit for unit in report.units}
-    gold_items, mapping_notes = load_gold_items(gold_xlsx_path, unit_candidates)
-    gold_cases = _gold_cases_from_items(gold_items)
-    if defects_only:
-        from content_audit.aligner import is_opinion
+    from content_audit import gold_atomic
 
-        gold_cases = [case for case in gold_cases if not is_opinion(case.gold_text)]
+    if gold_atomic.is_atomic(gold_xlsx_path):
+        gold_items, gold_cases, opinion_case_ids, mapping_notes = gold_atomic.load_atomic(
+            gold_xlsx_path, unit_candidates
+        )
+    else:
+        gold_items, mapping_notes = load_gold_items(gold_xlsx_path, unit_candidates)
+        gold_cases = _gold_cases_from_items(gold_items)
+        opinion_case_ids = set()
+    if defects_only:
+        if opinion_case_ids:
+            gold_cases = [case for case in gold_cases if case.case_id not in opinion_case_ids]
+        else:
+            from content_audit.aligner import is_opinion
+
+            gold_cases = [case for case in gold_cases if not is_opinion(case.gold_text)]
     predicted_items = _predicted_items_from_report(report, units_by_id)
     evaluated_criteria = sorted({item.criterion for item in gold_cases})
     predicted_items_in_scope = [
@@ -321,12 +347,16 @@ def evaluate_corpus_report(
         for item in predicted_items
         if item.criterion in evaluated_criteria and _is_strict_evaluation_signal(item)
     ]
-    if confidence_floor > 0.0 or mirror_dedupe or matcher == "anchor_judge":
+    if confidence_floor > 0.0 or mirror_dedupe or cap_repetitive > 0 or matcher == "anchor_judge":
         from content_audit import aligner
 
         predicted_items_in_scope = aligner.confidence_gate(predicted_items_in_scope, confidence_floor)
         if mirror_dedupe:
             predicted_items_in_scope = aligner.dedupe_mirror(predicted_items_in_scope)
+        if cap_repetitive > 0:
+            predicted_items_in_scope, _capped = aligner.cap_repetitive(
+                predicted_items_in_scope, per_issue_type=cap_repetitive
+            )
     if matcher == "anchor_judge":
         from content_audit import aligner
 
@@ -553,15 +583,24 @@ def _criteria_from_gold_case(text: str) -> list[str]:
     lowered = str(text or "").lower()
     markers: tuple[tuple[Criterion, tuple[str, ...]], ...] = (
         (
-            Criterion.ACTUALITY,
+            Criterion.LINKS,
             (
                 "сломанная ссылка",
                 "ссылка",
                 "url",
                 "http",
                 "https",
+            ),
+        ),
+        (
+            Criterion.TECHNOLOGY_FRESHNESS,
+            (
                 "устар",
                 "неактуаль",
+                "версии ос",
+                "библиотек",
+                "фреймворк",
+                "стек",
             ),
         ),
         (
@@ -1397,6 +1436,13 @@ def _project_match_score(normalized: str, tokens: set[str], candidate: _ProjectC
 def _criteria_from_gold_row(raw_problem: str, details: str) -> list[str]:
     """Выводит наши критерии из свободного описания проблемы."""
 
+    # The gold sheet already states the criterion in the "Проблема" column;
+    # trust an exact label match before falling back to fuzzy alias matching.
+    label_to_criterion = {label.lower(): criterion for criterion, label in CRITERION_LABELS.items()}
+    direct = label_to_criterion.get(raw_problem.strip().lower())
+    if direct is not None and direct != Criterion.ACTUALITY:
+        return [direct.value]
+
     problem_text = raw_problem.lower()
     detail_text = details.lower()
     criteria: list[Criterion] = []
@@ -1408,7 +1454,9 @@ def _criteria_from_gold_row(raw_problem: str, details: str) -> list[str]:
 
     # Детали добавляют критерии только по сильным маркерам, чтобы не раздувать эталон.
     detail_markers: dict[Criterion, tuple[str, ...]] = {
-        Criterion.ACTUALITY: ("сломанная ссылка", "неактуаль", "устар", "старый стандарт", "версии ос"),
+        Criterion.LINKS: ("сломанная ссылка", "битая ссылка", "неверная ссылка", "url", "http", "https"),
+        Criterion.TECHNOLOGY_FRESHNESS: ("неактуаль", "устар", "старый стандарт", "версии ос", "библиотек", "стек"),
+        Criterion.FACTS: ("факт", "определение", "пример", "таблица вывода", "расхождение"),
         Criterion.CHECKLIST_ALIGNMENT: ("в чеклисте", "в чек-листе", "чеклист", "чек лист"),
         Criterion.READABILITY: ("опечат", "нумерация", "пронумер", "грамматика"),
         Criterion.CORRECTNESS: ("противореч", "некоррект", "по факту", "не является", "отсутствует"),

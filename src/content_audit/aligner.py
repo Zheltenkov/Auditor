@@ -49,8 +49,19 @@ RU_STOP = set(_MARKERS["ru_stop"])
 STOPWORDS = set("the a to of in is on are and not".split()) | RU_STOP
 
 PRESCREEN_MIN = 0.10
-DEFAULT_TOPK = 6
-JUDGE_ACCEPT = 0.55
+DEFAULT_TOPK = 10
+JUDGE_ACCEPT = 0.45
+STRONG_ANCHOR = 0.82  # prescreen score at/above which a match is accepted without the judge
+JUDGE_PROMPT_VERSION = "v2"
+VALIDITY_PROMPT_VERSION = "v2"
+
+# OpenAI-compatible providers. Polza is a drop-in OpenRouter alternative.
+PROVIDER_URLS = {
+    "openrouter": "https://openrouter.ai/api/v1/chat/completions",
+    "polza": "https://polza.ai/api/v1/chat/completions",
+}
+MODEL_BACKENDS = ("openrouter", "polza")
+DEFAULT_JUDGE_MODEL = "openai/gpt-5.4-mini"
 
 URL_RE = re.compile(r"https?:[/\\]+[^\s)>\]\"'|]+", re.IGNORECASE)
 FILE_RE = re.compile(
@@ -182,6 +193,55 @@ def confidence_gate(items: list[PredictedCorpusItem], floor: float) -> list[Pred
     return [it for it in items if it.confidence is None or it.confidence >= floor]
 
 
+_SEVERITY_RANK = {"critical": 3, "major": 2, "minor": 1, "info": 0}
+NOISY_CRITERIA = ("readability",)
+NOISY_SEVERITIES = ("info", "minor")
+
+
+def cap_repetitive(
+    items: list[PredictedCorpusItem],
+    per_issue_type: int = 3,
+    criteria: tuple = NOISY_CRITERIA,
+    severities: tuple = NOISY_SEVERITIES,
+) -> tuple[list[PredictedCorpusItem], int]:
+    """Limit repetitive low-severity nitpicks of the same issue_type per unit.
+
+    Keeps up to `per_issue_type` findings for each (unit, criterion, issue_type)
+    bucket among noisy criteria/severities, preferring higher severity and
+    confidence. Returns (kept, dropped_count). Findings outside the noisy set are
+    always kept. `per_issue_type <= 0` disables capping.
+    """
+
+    order = sorted(
+        items,
+        key=lambda it: (_SEVERITY_RANK.get(it.severity or "", 0), it.confidence or 0.0),
+        reverse=True,
+    )
+    seen_line: set = set()
+    counts: dict = defaultdict(int)
+    kept: list[PredictedCorpusItem] = []
+    dropped = 0
+    for it in order:
+        noisy = it.criterion in criteria and (it.severity in severities)
+        if noisy and it.line_start is not None:
+            # distinct lines are distinct real defects: keep them all, drop only
+            # exact same-line same-issue duplicates.
+            key = (it.project_id, it.criterion, it.issue_type or "", it.line_start)
+            if key in seen_line:
+                dropped += 1
+                continue
+            seen_line.add(key)
+        elif noisy and per_issue_type > 0:
+            # line-less repetition: keep at most per_issue_type per issue type.
+            key = (it.project_id, it.criterion, it.issue_type or "")
+            if counts[key] >= per_issue_type:
+                dropped += 1
+                continue
+            counts[key] += 1
+        kept.append(it)
+    return kept, dropped
+
+
 # --------------- judge backends ---------------
 
 class Judge(Protocol):
@@ -223,10 +283,11 @@ class OfflineJudge:
 class OpenRouterJudge:
     name = "openrouter"
 
-    def __init__(self, api_key: str, model: str, cache_path: str | None = None) -> None:
+    def __init__(self, api_key: str, model: str, cache_path: str | None = None, base_url: str | None = None) -> None:
         from content_audit.openrouter import OpenRouterClient
 
-        self.client = OpenRouterClient(api_key=api_key, model=model)
+        kwargs = {"base_url": base_url} if base_url else {}
+        self.client = OpenRouterClient(api_key=api_key, model=model, **kwargs)
         self.calls = 0
         self.cache_path = Path(cache_path) if cache_path else None
         self.cache: dict = {}
@@ -234,7 +295,7 @@ class OpenRouterJudge:
             self.cache = json.loads(self.cache_path.read_text(encoding="utf-8"))
 
     def _key(self, gold: GoldCorpusCase, pred: PredictedCorpusItem) -> str:
-        raw = (gold.gold_text + "||" + pred.found_text).encode("utf-8")
+        raw = (JUDGE_PROMPT_VERSION + "||" + gold.gold_text + "||" + pred.found_text).encode("utf-8")
         return hashlib.sha1(raw).hexdigest()
 
     def _save(self) -> None:
@@ -257,7 +318,7 @@ class OpenRouterJudge:
         )
         self.calls += 1
         try:
-            data = self.client.complete_json(_PROMPTS["system"], user)
+            data = self.client.complete_json(_PROMPTS["system"], user, max_tokens=600)
         except Exception as exc:  # noqa: BLE001 - одиночный сбой судьи не должен валить весь замер.
             reason = f"judge_error: {str(exc)[:180]}"
             self.cache[key] = {"same_defect": False, "confidence": 0.0, "reason": reason}
@@ -274,10 +335,10 @@ class OpenRouterJudge:
 def build_judge(backend: str, *, api_key: str | None = None, model: str | None = None, cache_path: str | None = None) -> Judge:
     if backend == "offline":
         return OfflineJudge()
-    if backend == "openrouter":
+    if backend in MODEL_BACKENDS:
         if not api_key:
-            raise ValueError("OpenRouter judge requires an API key.")
-        return OpenRouterJudge(api_key, model or "qwen/qwen-2.5-coder-32b-instruct", cache_path)
+            raise ValueError("%s judge requires an API key." % backend)
+        return OpenRouterJudge(api_key, model or DEFAULT_JUDGE_MODEL, cache_path, base_url=PROVIDER_URLS[backend])
     raise ValueError("Unknown judge backend: %s" % backend)
 
 
@@ -290,8 +351,18 @@ def _prescreen(gold: GoldCorpusCase, pred: PredictedCorpusItem) -> float:
         return 1.0
     if _same_missing_artifact_signal(gold.gold_text, pred.found_text):
         return 0.95
+    line_rel = _line_relation(gold.line_start, gold.line_end, pred.line_start, pred.line_end)
+    # File anchor (from the gold "Файл" column) + matching line == same defect.
+    if getattr(gold, "file_hint", None) and pred.file_path:
+        gf = mirror_family(gold.file_hint)
+        pf = mirror_family(pred.file_path)
+        same_file = gf == pf or Path(gold.file_hint).name.lower() == Path(pred.file_path).name.lower()
+        if same_file and line_rel in ("overlap", "near"):
+            return 0.9
+        if same_file and gold.line_start is None:
+            return 0.84  # gold names the file but gives no line; file match alone is strong
     score = content_similarity(gold.gold_text, pred.found_text)
-    if _line_relation(gold.line_start, gold.line_end, pred.line_start, pred.line_end) in ("overlap", "near"):
+    if line_rel in ("overlap", "near"):
         score += 0.1
     return score
 
@@ -349,9 +420,16 @@ def match_anchor_judge(
 
     accepted: list[tuple] = []  # (conf, gold_id, pred_id, same_criterion, reason)
     for gold in gold_cases:
-        scored = [(s, p) for p in by_project.get(gold.project_id, []) for s in (_prescreen(gold, p),) if s >= PRESCREEN_MIN]
-        scored.sort(key=lambda x: x[0], reverse=True)
-        for _, pred in scored[:topk]:
+        scored = [(_prescreen(gold, p), p) for p in by_project.get(gold.project_id, [])]
+        scored = [(s, p) for s, p in scored if s >= PRESCREEN_MIN]
+        # Rerank: same-criterion candidates first, then by prescreen score, so the
+        # right-criterion finding is not crowded out of top-K by lexically similar nitpicks.
+        scored.sort(key=lambda sp: (sp[1].criterion == gold.criterion, sp[0]), reverse=True)
+        for score, pred in scored[:topk]:
+            if score >= STRONG_ANCHOR:
+                # hard anchor (url/file/quote/artifact) == same defect; do not let the judge veto it
+                accepted.append((max(score, 0.9), gold.case_id, pred.finding_id, gold.criterion == pred.criterion, "shared anchor"))
+                continue
             same, conf, reason = judge.same_defect(gold, pred)
             if same and conf >= accept:
                 accepted.append((conf, gold.case_id, pred.finding_id, gold.criterion == pred.criterion, reason))
@@ -379,3 +457,135 @@ def match_anchor_judge(
         else:
             rows.append(_row(gold, None, 0.0, "", False))
     return rows, assigned_p
+
+
+# --------------- validity judge (are the extra findings real defects?) ---------------
+
+# Issue types from high-precision deterministic / structural checkers: when the
+# offline judge sees these it treats the finding as a confident real defect.
+HIGH_PRECISION_ISSUE_TYPES = {
+    "broken_url_syntax", "missing_label_colon", "duplicate_anchor", "duplicate_heading",
+    "sort_direction_conflict", "invalid_definition", "tautology", "repeated_numbered_list_items",
+    "numbered_list_reset", "expected_file_name_mismatch", "artifact_missing_expected_text",
+    "missing_local_resource", "spec_code_output_mismatch", "spec_code_contradiction",
+    "course_language_material_mismatch", "language_material_conflict", "inappropriate_tool",
+    "language_tooling_conflict", "ungrounded_sql_condition", "ungrounded_self_join_order",
+    "suspicious_duplicate_name_result", "missing_label_colon", "case", "typo",
+}
+
+
+class OfflineValidityJudge:
+    """Conservative structural proxy: trusts high-precision deterministic issue types."""
+
+    name = "offline"
+
+    def __init__(self) -> None:
+        self.calls = 0
+
+    def is_valid(self, item: PredictedCorpusItem) -> tuple[bool, float, str]:
+        self.calls += 1
+        it = (item.issue_type or "").strip()
+        if it in HIGH_PRECISION_ISSUE_TYPES:
+            return True, 0.8, "high-precision rule type: %s" % it
+        return False, 0.4, "uncertain (needs model judge)"
+
+
+class OpenRouterValidityJudge:
+    """Asks the model whether a single finding is a real, worth-fixing defect."""
+
+    name = "openrouter"
+
+    def __init__(self, api_key: str, model: str, cache_path: str | None = None, base_url: str | None = None) -> None:
+        from content_audit.openrouter import OpenRouterClient
+
+        kwargs = {"base_url": base_url} if base_url else {}
+        self.client = OpenRouterClient(api_key=api_key, model=model, **kwargs)
+        self.calls = 0
+        self.cache_path = Path(cache_path) if cache_path else None
+        self.cache: dict = {}
+        if self.cache_path and self.cache_path.exists():
+            self.cache = json.loads(self.cache_path.read_text(encoding="utf-8"))
+
+    def _save(self) -> None:
+        if self.cache_path:
+            self.cache_path.parent.mkdir(parents=True, exist_ok=True)
+            self.cache_path.write_text(json.dumps(self.cache, ensure_ascii=False, indent=1), encoding="utf-8")
+
+    def is_valid(self, item: PredictedCorpusItem) -> tuple[bool, float, str]:
+        key = hashlib.sha1((VALIDITY_PROMPT_VERSION + "|" + item.finding_id + "|" + item.found_text).encode("utf-8")).hexdigest()
+        if key in self.cache:
+            v = self.cache[key]
+            return bool(v["valid"]), float(v.get("confidence", 0.6)), v.get("reason", "cache")
+        user = _PROMPTS["validity_user_template"].format(
+            criterion=item.criterion, checker=item.checker_name,
+            severity=item.severity or "", text=item.found_text[:1000],
+        )
+        self.calls += 1
+        data = self.client.complete_json(_PROMPTS["validity_system"], user, max_tokens=400)
+        valid = bool(data.get("valid"))
+        conf = float(data.get("confidence", 0.6) or 0.6)
+        reason = str(data.get("reason", ""))[:200]
+        self.cache[key] = {"valid": valid, "confidence": conf, "reason": reason}
+        self._save()
+        return valid, conf, reason
+
+
+def build_validity_judge(backend: str, *, api_key: str | None = None, model: str | None = None, cache_path: str | None = None):
+    if backend == "offline":
+        return OfflineValidityJudge()
+    if backend in MODEL_BACKENDS:
+        if not api_key:
+            raise ValueError("%s validity judge requires an API key." % backend)
+        return OpenRouterValidityJudge(api_key, model or DEFAULT_JUDGE_MODEL, cache_path, base_url=PROVIDER_URLS[backend])
+    raise ValueError("Unknown validity backend: %s" % backend)
+
+
+def preflight(backend: str, api_key: str | None, model: str | None = None) -> tuple[bool, str]:
+    """One cheap test call to confirm the LLM endpoint answers. Returns (ok, message)."""
+
+    if backend == "offline":
+        return True, "offline backend, no network needed"
+    if backend not in MODEL_BACKENDS:
+        return False, "unknown backend: %s" % backend
+    if not api_key:
+        return False, "no API key for %s" % backend
+    from content_audit.openrouter import OpenRouterClient
+
+    client = OpenRouterClient(api_key=api_key, model=model or DEFAULT_JUDGE_MODEL, base_url=PROVIDER_URLS[backend], timeout_seconds=30.0)
+    try:
+        client.complete_json(
+            "Верни строго JSON.",
+            'Ответь ровно: {"ok": true}',
+            max_tokens=20,
+        )
+        return True, "%s/%s reachable" % (backend, model or DEFAULT_JUDGE_MODEL)
+    except Exception as exc:  # noqa: BLE001
+        return False, "%s unreachable: %s" % (backend, str(exc)[:200])
+
+
+def assess_validity(items: list[PredictedCorpusItem], judge, accept: float = 0.55) -> dict:
+    """Runs the validity judge over extra findings; returns aggregate stats."""
+
+    valid = 0
+    valid_actionable = 0
+    by_checker: dict = defaultdict(lambda: [0, 0])  # checker -> [valid, total]
+    samples: list = []
+    for item in items:
+        ok, conf, reason = judge.is_valid(item)
+        by_checker[item.checker_name][1] += 1
+        if ok and conf >= accept:
+            valid += 1
+            by_checker[item.checker_name][0] += 1
+            if (item.severity or "") in ("major", "critical"):
+                valid_actionable += 1
+            if len(samples) < 15:
+                samples.append((item.checker_name, item.severity, item.found_text[:140], round(conf, 2), reason))
+    return {
+        "total": len(items),
+        "valid": valid,
+        "valid_actionable": valid_actionable,
+        "by_checker": {k: v for k, v in sorted(by_checker.items(), key=lambda kv: kv[1][0], reverse=True)},
+        "samples": samples,
+        "backend": getattr(judge, "name", "?"),
+        "calls": getattr(judge, "calls", 0),
+    }

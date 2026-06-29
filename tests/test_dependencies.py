@@ -58,7 +58,7 @@ def test_dependency_checker_finds_npm_peer_conflict(workspace_tmp_path: Path, mo
 
     compatibility = [finding for finding in findings if finding.support_status == "конфликт ограничений"]
     assert compatibility
-    assert compatibility[0].criterion == Criterion.ACTUALITY
+    assert compatibility[0].criterion == Criterion.TECHNOLOGY_FRESHNESS
     assert compatibility[0].severity == Severity.MAJOR
     assert compatibility[0].verdict == Verdict.WARNING
     assert "react^17.0.0" in compatibility[0].evidence[0].detail

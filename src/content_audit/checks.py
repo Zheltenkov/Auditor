@@ -998,6 +998,12 @@ class ResourceAvailabilityChecker(BaseChecker):
         re.IGNORECASE,
     )
     URL_RE = re.compile(r"https?://\S+", re.IGNORECASE)
+    EXTERNAL_RESOURCE_HINT_RE = re.compile(
+        r"\b(attached|downloadable|external)\s+(?:file|dataset|archive|resource)\b|"
+        r"(\bприкрепл\w*\b|\bприложенн\w*\b|\bвложенн\w*\b|\bданн(?:ый|ые)?\s+файл|"
+        r"\bвнешн\w*\s+файл|\bфайл\s+по\s+ссылк)",
+        re.IGNORECASE,
+    )
     REQUIRED_RESOURCE_RE = re.compile(
         r"\b(provided|attached|given|contains|included|download|load|open|analy[sz]e|dataset|dump|archive|"
         r"capture|image|picture|virtual\s+machine|vm|iso|pcap)\b|"
@@ -1022,6 +1028,7 @@ class ResourceAvailabilityChecker(BaseChecker):
     def check(self, unit: ContentUnit, entities: list[ExtractedEntity], context: CheckContext) -> list[Finding]:
         del entities, context
         available = self._available_resources(unit)
+        external_refs = self._external_resource_refs(unit)
         findings: list[Finding] = []
         seen: set[tuple[str, int, str, str]] = set()
         for file in unit.files:
@@ -1032,7 +1039,7 @@ class ResourceAvailabilityChecker(BaseChecker):
                 if not line:
                     continue
                 line_findings = [
-                    *self._missing_file_findings(unit, file.relative_path, line_number, line, available),
+                    *self._missing_file_findings(unit, file.relative_path, line_number, line, available, external_refs),
                     *self._absolute_path_findings(unit, file.relative_path, line_number, line, available),
                     *self._generic_resource_findings(unit, file.relative_path, line_number, line, available),
                 ]
@@ -1057,16 +1064,21 @@ class ResourceAvailabilityChecker(BaseChecker):
         line_number: int,
         line: str,
         available: set[str],
+        external_refs: set[str],
     ) -> list[Finding]:
         """Ищет явно названные входные ресурсы, которых нет в проекте."""
 
-        if self.URL_RE.search(line) or self._looks_like_output_artifact(line):
+        if self._line_has_external_source(line):
             return []
         if not self.REQUIRED_RESOURCE_RE.search(line):
             return []
 
         findings: list[Finding] = []
         for ref in self._file_refs(line):
+            if self._looks_like_output_ref(line, ref):
+                continue
+            if self._resource_present(ref, external_refs):
+                continue
             if self._resource_present(ref, available):
                 continue
             findings.append(
@@ -1199,6 +1211,54 @@ class ResourceAvailabilityChecker(BaseChecker):
         """Проверяет, приложен ли образ или архив окружения."""
 
         return any(ref.endswith((".ova", ".ovf", ".vmdk", ".qcow2", ".img", ".iso", ".zip", ".rar", ".7z")) for ref in available)
+
+    def _external_resource_refs(self, unit: ContentUnit) -> set[str]:
+        """Собирает ресурсы, которые даны внешней ссылкой или явно приложены платформой."""
+
+        refs: set[str] = set()
+        for file in unit.files:
+            if not self._is_instruction_file(file):
+                continue
+            is_readme = file.kind == "readme" or Path(file.relative_path).name.lower().startswith("readme")
+            for line in file.text.splitlines():
+                line_refs = self._file_refs(line)
+                if not line_refs:
+                    continue
+                if self._line_has_external_source(line) or (is_readme and self.EXTERNAL_RESOURCE_HINT_RE.search(line)):
+                    for ref in line_refs:
+                        normalized = ref.strip().replace("\\", "/").lower()
+                        refs.add(normalized)
+                        refs.add(Path(normalized).name)
+        return refs
+
+    def _line_has_external_source(self, line: str) -> bool:
+        """Понимает, что ресурс в строке уже дан через внешний источник."""
+
+        return bool(self.URL_RE.search(line))
+
+    def _looks_like_output_ref(self, line: str, ref: str) -> bool:
+        """Проверяет, что конкретный файл является результатом, а не входом задания."""
+
+        lowered = line.lower()
+        ref_lower = ref.lower().strip("`")
+        index = lowered.find(ref_lower)
+        if index < 0:
+            index = lowered.find(Path(ref_lower).name)
+        if index < 0:
+            return False
+        before = lowered[max(0, index - 120) : index]
+        after = lowered[index : min(len(lowered), index + len(ref_lower) + 80)]
+        last_output = self._last_match_start(self.OUTPUT_ARTIFACT_RE, before)
+        last_input = self._last_match_start(self.REQUIRED_RESOURCE_RE, before)
+        return last_output >= 0 and last_output >= last_input and "expected" not in after and "ожида" not in after
+
+    def _last_match_start(self, pattern: re.Pattern[str], text: str) -> int:
+        """Возвращает позицию последнего совпадения или -1, если его нет."""
+
+        result = -1
+        for match in pattern.finditer(text):
+            result = match.start()
+        return result
 
     def _environment_guide_findings(self, unit: ContentUnit, available: set[str]) -> list[Finding]:
         """Ловит ситуацию, когда инструкция по ВМ есть, а воспроизводимого образа окружения нет."""

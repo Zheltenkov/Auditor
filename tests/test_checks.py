@@ -490,6 +490,29 @@ def test_resource_availability_checker_flags_missing_required_pcap(workspace_tmp
     assert findings[0].quote == "traffic.pcapng"
 
 
+def test_resource_availability_checker_accepts_linked_input_and_output_file(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "README_RUS.md").write_text(
+        "В прикреплённом файле [ds.csv](https://drive.google.com/file/d/example/view) есть данные о вакансиях.\n"
+        "Разработай скрипт, который открывает файл ds.csv и сохраняет данные в новый файл ds.tsv.\n",
+        encoding="utf-8",
+    )
+    (project / "check-list_RUS.yml").write_text(
+        "sections:\n"
+        "  - questions:\n"
+        "      - name: Работа с файлами\n"
+        "        description: >\n"
+        "          - Запусти скрипт на приложенном файле ds.csv.\n",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=2000)
+
+    findings = ResourceAvailabilityChecker().check(unit, [], CheckContext(_settings(workspace_tmp_path, project)))
+
+    assert findings == []
+
+
 def test_resource_availability_checker_accepts_existing_resource(workspace_tmp_path: Path) -> None:
     project = workspace_tmp_path / "unit"
     project.mkdir()

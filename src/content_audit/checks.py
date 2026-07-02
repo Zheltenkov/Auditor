@@ -2833,7 +2833,8 @@ class RightsAndOriginalityChecker(BaseChecker):
 
         signals: list[RightsSignal] = []
         for query in self._evidence_queries(unit, entities)[: self.max_external_lookups]:
-            prompt = json.dumps(query, ensure_ascii=False, indent=2)
+            prompt_payload = self._serializable_evidence_query(query)
+            prompt = json.dumps(prompt_payload, ensure_ascii=False, indent=2)
             try:
                 record, _cache_hit = _cached_model_json(
                     context,
@@ -2851,6 +2852,7 @@ class RightsAndOriginalityChecker(BaseChecker):
             if not sources:
                 continue
             note = _model_text(item, ("note", "likely_source", "license"), "Поиск нашёл возможный источник ресурса.")
+            location = self._evidence_query_location(query)
             signals.append(
                 RightsSignal(
                     kind=str(query["kind"]),
@@ -2859,14 +2861,51 @@ class RightsAndOriginalityChecker(BaseChecker):
                     title=str(query["title"]),
                     detail=note,
                     recommendation="Передать методологу: подтвердить источник и права по найденным ссылкам.",
-                    quote=query.get("quote"),
-                    location=query.get("location"),
+                    quote=str(query.get("quote") or "") or None,
+                    location=location,
                     source=_source_summary(sources),
                     url=_first_source_url(sources),
                     confidence=_parse_confidence(item.get("confidence")),
                 )
             )
         return signals
+
+    @staticmethod
+    def _serializable_evidence_query(query: dict[str, object]) -> dict[str, object]:
+        """Готовит запрос доказательств к JSON-сериализации для внешней модели."""
+
+        payload = dict(query)
+        location = payload.pop("location", None)
+        if isinstance(location, TextLocation):
+            payload["file_path"] = location.file_path
+            payload["line_start"] = location.line_start
+            payload["line_end"] = location.line_end
+        elif isinstance(location, dict):
+            payload["file_path"] = location.get("file_path")
+            payload["line_start"] = location.get("line_start")
+            payload["line_end"] = location.get("line_end")
+        return payload
+
+    @staticmethod
+    def _evidence_query_location(query: dict[str, object]) -> TextLocation | None:
+        """Восстанавливает локацию запроса после подготовки payload для модели."""
+
+        location = query.get("location")
+        if isinstance(location, TextLocation):
+            return location
+        if isinstance(location, dict):
+            file_path = location.get("file_path")
+            if not file_path:
+                return None
+            line_start = _parse_optional_int(location.get("line_start"))
+            line_end = _parse_optional_int(location.get("line_end"))
+            return TextLocation(file_path=str(file_path), line_start=line_start, line_end=line_end)
+        file_path = query.get("file_path")
+        if not file_path:
+            return None
+        line_start = _parse_optional_int(query.get("line_start"))
+        line_end = _parse_optional_int(query.get("line_end"))
+        return TextLocation(file_path=str(file_path), line_start=line_start, line_end=line_end)
 
     def _evidence_queries(self, unit: ContentUnit, entities: list[ExtractedEntity]) -> list[dict[str, object]]:
         queries: list[dict[str, object]] = []

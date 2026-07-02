@@ -872,6 +872,38 @@ def test_rights_checker_flags_dataset_without_license_terms(workspace_tmp_path: 
     assert findings[0].needs_human_review is True
 
 
+def test_rights_checker_serializes_external_evidence_location(workspace_tmp_path: Path) -> None:
+    project = workspace_tmp_path / "unit"
+    project.mkdir()
+    (project / "LICENSE").write_text("MIT\n", encoding="utf-8")
+    (project / "README.md").write_text(
+        "Используется датасет поездок такси: https://kaggle.com/datasets/example/taxi.\n",
+        encoding="utf-8",
+    )
+    unit = load_unit_files(discover_content_units(project)[0], max_file_bytes=1000)
+    fake_client = _FakeJsonClient(
+        {
+            "likely_source": "Kaggle dataset page",
+            "license": "unknown",
+            "confidence": 0.72,
+            "sources": [{"title": "Kaggle", "url": "https://kaggle.com/datasets/example/taxi"}],
+            "note": "Найден возможный источник датасета, лицензию нужно подтвердить.",
+        }
+    )
+    settings = AuditSettings(input_path=project, output_path=workspace_tmp_path / "out", allow_network=True)
+    context = CheckContext(settings, fact_model_client=fake_client, cache=AuditCache.load(workspace_tmp_path / "rights_cache.json"))
+
+    findings = RightsAndOriginalityChecker().check(unit, [], context)
+
+    external = [finding for finding in findings if finding.source == "https://kaggle.com/datasets/example/taxi"]
+    assert len(external) == 1
+    assert external[0].location is not None
+    assert external[0].location.file_path == "README.md"
+    assert external[0].location.line_start == 1
+    assert '"file_path": "README.md"' in fake_client.user_prompt
+    assert "TextLocation" not in fake_client.user_prompt
+
+
 def test_rights_checker_uses_registry_dependency_license(workspace_tmp_path: Path, monkeypatch) -> None:
     project = workspace_tmp_path / "unit"
     project.mkdir()
